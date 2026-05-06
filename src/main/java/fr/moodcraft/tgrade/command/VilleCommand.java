@@ -3,6 +3,8 @@ package fr.moodcraft.tgrade.command;
 import fr.moodcraft.tgrade.gui.RateGUI;
 import fr.moodcraft.tgrade.gui.ReviewGUI;
 
+import fr.moodcraft.tgrade.manager.PayoutManager;
+
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
@@ -151,6 +153,16 @@ public class VilleCommand implements CommandExecutor {
                     "§7Refus administratif"
             );
 
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville payout"
+            );
+
+            p.sendMessage(
+                    "§7Verser les bourses"
+            );
+
             p.sendMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
@@ -239,7 +251,8 @@ public class VilleCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("validation")
                 || args[0].equalsIgnoreCase("tp")
                 || args[0].equalsIgnoreCase("accepter")
-                || args[0].equalsIgnoreCase("refuser")) {
+                || args[0].equalsIgnoreCase("refuser")
+                || args[0].equalsIgnoreCase("payout")) {
 
             if (!p.hasPermission(
                     "moodtowngrade.staff")) {
@@ -609,6 +622,43 @@ public class VilleCommand implements CommandExecutor {
         }
 
         //
+        // 💰 /ville payout
+        //
+
+        if (args[0].equalsIgnoreCase("payout")) {
+
+            PayoutManager.payoutAll();
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§a💰 Bourses distribuées"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Les récompenses hebdomadaires"
+            );
+
+            p.sendMessage(
+                    "§7ont été versées."
+            );
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
         // 🛡 TOWNY CHECK
         //
 
@@ -766,23 +816,6 @@ public class VilleCommand implements CommandExecutor {
 
                 for (TownSubmission sub : list) {
 
-                    String status;
-
-                    switch (sub.getStatus()) {
-
-                        case APPROVED ->
-                                status =
-                                        "§aPERMIS ACCORDÉ";
-
-                        case REJECTED ->
-                                status =
-                                        "§cREFUS ADMINISTRATIF";
-
-                        default ->
-                                status =
-                                        "§eEN ÉTUDE";
-                    }
-
                     p.sendMessage(
                             "§f#"
                                     + sub.getId()
@@ -801,7 +834,7 @@ public class VilleCommand implements CommandExecutor {
 
                     p.sendMessage(
                             " §7Statut: "
-                                    + status
+                                    + sub.getStatus().getDisplay()
                     );
 
                     p.sendMessage("");
@@ -872,27 +905,4 @@ public class VilleCommand implements CommandExecutor {
 
             p.sendMessage("");
 
-            p.sendMessage(
-                    "§7ID administratif: §f" + id
-            );
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
-
-            return true;
-        }
-
-        //
-        // ❌ UNKNOWN
-        //
-
-        p.sendMessage(
-                "§cSous-commande inconnue."
-        );
-
-        return true;
-    }
-}
+            p.s
