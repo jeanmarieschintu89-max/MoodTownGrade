@@ -6,8 +6,12 @@ import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
+
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.storage.GradeStorage;
+
+import org.bukkit.Bukkit;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,16 +51,26 @@ public class Main extends JavaPlugin {
         //
 
         SubmissionStorage.init();
+
         GradeStorage.init();
+
+        //
+        // 📚 LOAD GRADES
+        //
+
+        GradeManager.loadAll();
 
         //
         // 📜 COMMANDES
         //
 
-        getCommand("ville")
-                .setExecutor(
-                        new VilleCommand()
-                );
+        if (getCommand("ville") != null) {
+
+            getCommand("ville")
+                    .setExecutor(
+                            new VilleCommand()
+                    );
+        }
 
         //
         // 🎨 GUI LISTENER
@@ -92,6 +106,39 @@ public class Main extends JavaPlugin {
                 );
 
         //
+        // 🌍 TOWNY CHECK
+        //
+
+        if (Bukkit.getPluginManager()
+                .getPlugin("Towny") == null) {
+
+            getLogger().severe("");
+
+            getLogger().severe(
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            getLogger().severe(
+                    "Towny introuvable."
+            );
+
+            getLogger().severe(
+                    "MoodTownGrade désactivé."
+            );
+
+            getLogger().severe(
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            getLogger().severe("");
+
+            Bukkit.getPluginManager()
+                    .disablePlugin(this);
+
+            return;
+        }
+
+        //
         // 🌆 CONSOLE
         //
 
@@ -105,13 +152,27 @@ public class Main extends JavaPlugin {
                 "✦ MoodTownGrade activé"
         );
 
+        getLogger().info("");
+
         getLogger().info(
-                "Commission urbaine chargée."
+                "Commission urbaine chargée"
         );
 
         getLogger().info(
-                "Système d'inspection actif."
+                "Système d'inspection actif"
         );
+
+        getLogger().info(
+                "Grades chargés: "
+                        + GradeManager.getAll()
+                        .size()
+        );
+
+        getLogger().info(
+                "Towny détecté avec succès"
+        );
+
+        getLogger().info("");
 
         getLogger().info(
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -127,6 +188,25 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        //
+        // 💾 SAVE ALL
+        //
+
+        GradeManager.getAll()
+                .forEach(
+                        GradeManager::save
+                );
+
+        //
+        // 🧹 CACHE CLEAR
+        //
+
+        GradeManager.clearCache();
+
+        //
+        // 🌆 CONSOLE
+        //
+
         getLogger().info("");
 
         getLogger().info(
@@ -134,11 +214,15 @@ public class Main extends JavaPlugin {
         );
 
         getLogger().info(
-                "MoodTownGrade arrêté."
+                "MoodTownGrade arrêté"
         );
 
         getLogger().info(
-                "Inspection urbaine désactivée."
+                "Inspection urbaine désactivée"
+        );
+
+        getLogger().info(
+                "Sauvegarde terminée"
         );
 
         getLogger().info(
