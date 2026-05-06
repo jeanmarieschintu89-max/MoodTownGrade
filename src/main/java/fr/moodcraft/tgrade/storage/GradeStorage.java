@@ -4,10 +4,14 @@ import fr.moodcraft.tgrade.Main;
 
 import fr.moodcraft.tgrade.model.TownGrade;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GradeStorage {
 
@@ -34,11 +38,16 @@ public class GradeStorage {
                 "grades.yml"
         );
 
+        //
+        // 📂 CREATE
+        //
+
         if (!file.exists()) {
 
             try {
 
-                file.getParentFile().mkdirs();
+                file.getParentFile()
+                        .mkdirs();
 
                 file.createNewFile();
 
@@ -48,8 +57,13 @@ public class GradeStorage {
             }
         }
 
+        //
+        // 📄 LOAD CONFIG
+        //
+
         config =
-                YamlConfiguration.loadConfiguration(file);
+                YamlConfiguration
+                        .loadConfiguration(file);
     }
 
     //
@@ -59,7 +73,12 @@ public class GradeStorage {
     public static void save(TownGrade grade) {
 
         String path =
-                "grades." + grade.getTown();
+                "grades."
+                        + grade.getTown();
+
+        //
+        // 🏛️ NOTES
+        //
 
         config.set(
                 path + ".architecture",
@@ -101,6 +120,33 @@ public class GradeStorage {
                 grade.getVotes()
         );
 
+        //
+        // ✅ FINISHED
+        //
+
+        config.set(
+                path + ".finished",
+                grade.isFinished()
+        );
+
+        //
+        // 💰 STATS
+        //
+
+        config.set(
+                path + ".total",
+                grade.getTotal()
+        );
+
+        config.set(
+                path + ".payout",
+                grade.getPayout()
+        );
+
+        //
+        // 💾 SAVE FILE
+        //
+
         saveFile();
     }
 
@@ -111,10 +157,19 @@ public class GradeStorage {
     public static TownGrade load(String town) {
 
         String path =
-                "grades." + town;
+                "grades."
+                        + town;
+
+        //
+        // 🏙️ CREATE
+        //
 
         TownGrade grade =
                 new TownGrade(town);
+
+        //
+        // 📊 LOAD NOTES
+        //
 
         grade.setArchitecture(
                 config.getInt(
@@ -164,7 +219,76 @@ public class GradeStorage {
                 )
         );
 
+        //
+        // ✅ FINISHED
+        //
+
+        grade.setFinished(
+                config.getBoolean(
+                        path + ".finished"
+                )
+        );
+
         return grade;
+    }
+
+    //
+    // 📚 GET ALL TOWNS
+    //
+
+    public static List<String>
+    getAllTowns() {
+
+        List<String> towns =
+                new ArrayList<>();
+
+        //
+        // 📂 SECTION
+        //
+
+        ConfigurationSection section =
+                config.getConfigurationSection(
+                        "grades"
+                );
+
+        if (section == null) {
+            return towns;
+        }
+
+        //
+        // 📚 KEYS
+        //
+
+        towns.addAll(
+                section.getKeys(false)
+        );
+
+        return towns;
+    }
+
+    //
+    // 🗑️ DELETE
+    //
+
+    public static void delete(String town) {
+
+        config.set(
+                "grades." + town,
+                null
+        );
+
+        saveFile();
+    }
+
+    //
+    // 🔄 RELOAD
+    //
+
+    public static void reload() {
+
+        config =
+                YamlConfiguration
+                        .loadConfiguration(file);
     }
 
     //
