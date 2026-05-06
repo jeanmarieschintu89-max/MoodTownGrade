@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade;
 import fr.moodcraft.tgrade.command.VilleCommand;
 
 import fr.moodcraft.tgrade.listener.GUIListener;
+import fr.moodcraft.tgrade.listener.RateGUIListener;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
@@ -50,7 +51,9 @@ public class Main extends JavaPlugin {
         //
 
         getCommand("ville")
-                .setExecutor(new VilleCommand());
+                .setExecutor(
+                        new VilleCommand()
+                );
 
         //
         // 🎨 GUI LISTENER
@@ -60,6 +63,17 @@ public class Main extends JavaPlugin {
                 .getPluginManager()
                 .registerEvents(
                         new GUIListener(),
+                        this
+                );
+
+        //
+        // 📊 RATE GUI LISTENER
+        //
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new RateGUIListener(),
                         this
                 );
 
