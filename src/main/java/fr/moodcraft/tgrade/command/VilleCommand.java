@@ -13,6 +13,7 @@ import fr.moodcraft.tgrade.towny.TownyHook;
 import com.palmergames.bukkit.towny.object.Town;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -123,6 +124,16 @@ public class VilleCommand implements CommandExecutor {
             p.sendMessage("");
 
             p.sendMessage(
+                    "§e/ville tp <id>"
+            );
+
+            p.sendMessage(
+                    "§7Téléportation inspection"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
                     "§e/ville accepter <id>"
             );
 
@@ -226,6 +237,7 @@ public class VilleCommand implements CommandExecutor {
         //
 
         if (args[0].equalsIgnoreCase("validation")
+                || args[0].equalsIgnoreCase("tp")
                 || args[0].equalsIgnoreCase("accepter")
                 || args[0].equalsIgnoreCase("refuser")) {
 
@@ -311,6 +323,112 @@ public class VilleCommand implements CommandExecutor {
         }
 
         //
+        // 📍 /ville tp
+        //
+
+        if (args[0].equalsIgnoreCase("tp")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/ville tp <id>"
+                );
+
+                return true;
+            }
+
+            String id = args[1];
+
+            TownSubmission sub =
+                    SubmissionStorage.get(id);
+
+            if (sub == null) {
+
+                p.sendMessage(
+                        "§cProjet introuvable."
+                );
+
+                return true;
+            }
+
+            if (Bukkit.getWorld(
+                    sub.getWorld()) == null) {
+
+                p.sendMessage(
+                        "§cMonde introuvable."
+                );
+
+                return true;
+            }
+
+            Location loc =
+                    new Location(
+
+                            Bukkit.getWorld(
+                                    sub.getWorld()
+                            ),
+
+                            sub.getX() + 0.5,
+
+                            sub.getY() + 1,
+
+                            sub.getZ() + 0.5
+                    );
+
+            p.teleport(loc);
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§b🏛 Inspection urbaine"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e"
+                            + sub.getBuildName()
+            );
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + sub.getTown()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Coordonnées:"
+            );
+
+            p.sendMessage(
+                    " §fX: §e" + sub.getX()
+            );
+
+            p.sendMessage(
+                    " §fY: §e" + sub.getY()
+            );
+
+            p.sendMessage(
+                    " §fZ: §e" + sub.getZ()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
         // ✅ /ville accepter
         //
 
@@ -339,23 +457,11 @@ public class VilleCommand implements CommandExecutor {
                 return true;
             }
 
-            //
-            // ✅ STATUS
-            //
-
             sub.setStatus(
                     SubmissionStatus.APPROVED
             );
 
-            //
-            // 💾 SAVE
-            //
-
             SubmissionStorage.save(sub);
-
-            //
-            // 🏛️ MESSAGE STAFF
-            //
 
             p.sendMessage("");
 
@@ -389,10 +495,6 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage("");
-
-            //
-            // 📢 BROADCAST RP
-            //
 
             Bukkit.broadcastMessage("");
 
@@ -464,23 +566,11 @@ public class VilleCommand implements CommandExecutor {
                 return true;
             }
 
-            //
-            // ❌ STATUS
-            //
-
             sub.setStatus(
                     SubmissionStatus.REJECTED
             );
 
-            //
-            // 💾 SAVE
-            //
-
             SubmissionStorage.save(sub);
-
-            //
-            // ✨ MESSAGE
-            //
 
             p.sendMessage("");
 
@@ -558,10 +648,6 @@ public class VilleCommand implements CommandExecutor {
                 return true;
             }
 
-            //
-            // 📏 LIMIT
-            //
-
             if (SubmissionStorage
                     .getTown(town.getName())
                     .size() >= 5) {
@@ -577,19 +663,11 @@ public class VilleCommand implements CommandExecutor {
                     String.join(" ", args)
                             .replaceFirst("projet ", "");
 
-            //
-            // 🆔 RANDOM ID
-            //
-
             String id =
                     UUID.randomUUID()
                             .toString()
                             .substring(0, 4)
                             .toUpperCase();
-
-            //
-            // 🏗 CREATE
-            //
 
             TownSubmission sub =
                     new TownSubmission(
@@ -615,15 +693,7 @@ public class VilleCommand implements CommandExecutor {
                             SubmissionStatus.PENDING
                     );
 
-            //
-            // 💾 SAVE
-            //
-
             SubmissionStorage.save(sub);
-
-            //
-            // ✨ MESSAGE
-            //
 
             p.sendMessage("");
 
@@ -776,10 +846,6 @@ public class VilleCommand implements CommandExecutor {
                 return true;
             }
 
-            //
-            // 🛡 TOWN CHECK
-            //
-
             if (!sub.getTown()
                     .equalsIgnoreCase(
                             town.getName()
@@ -792,15 +858,7 @@ public class VilleCommand implements CommandExecutor {
                 return true;
             }
 
-            //
-            // ❌ DELETE
-            //
-
             SubmissionStorage.delete(id);
-
-            //
-            // ✨ MESSAGE
-            //
 
             p.sendMessage("");
 
