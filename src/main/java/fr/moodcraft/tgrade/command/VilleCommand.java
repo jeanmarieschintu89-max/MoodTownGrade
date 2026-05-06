@@ -1,5 +1,8 @@
 package fr.moodcraft.tgrade.command;
 
+import fr.moodcraft.tgrade.gui.RateGUI;
+import fr.moodcraft.tgrade.gui.ReviewGUI;
+
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
@@ -8,6 +11,8 @@ import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.towny.TownyHook;
 
 import com.palmergames.bukkit.towny.object.Town;
+
+import org.bukkit.Bukkit;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +57,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§6🏛 Commandes Ville"
+                    "§b🏛 Commission Urbaine MoodCraft"
             );
 
             p.sendMessage("");
@@ -62,7 +67,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Soumettre un projet"
+                    "§7Déposer un dossier urbain"
             );
 
             p.sendMessage("");
@@ -72,7 +77,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Voir les projets"
+                    "§7Consulter les projets"
             );
 
             p.sendMessage("");
@@ -82,7 +87,27 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Supprimer un projet"
+                    "§7Supprimer un dossier"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville review <ville>"
+            );
+
+            p.sendMessage(
+                    "§7Inspection urbaine"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville noter <ville>"
+            );
+
+            p.sendMessage(
+                    "§7Commission d'évaluation"
             );
 
             p.sendMessage("");
@@ -92,7 +117,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Voir les projets en attente"
+                    "§7Projets en attente"
             );
 
             p.sendMessage("");
@@ -102,7 +127,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Valider un projet"
+                    "§7Accorder un permis"
             );
 
             p.sendMessage("");
@@ -112,7 +137,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Refuser un projet"
+                    "§7Refus administratif"
             );
 
             p.sendMessage(
@@ -125,6 +150,78 @@ public class VilleCommand implements CommandExecutor {
         }
 
         //
+        // 🏛️ REVIEW GUI
+        //
+
+        if (args[0].equalsIgnoreCase("review")) {
+
+            if (!p.hasPermission(
+                    "moodtowngrade.staff")) {
+
+                p.sendMessage(
+                        "§cAccès refusé."
+                );
+
+                return true;
+            }
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/ville review <ville>"
+                );
+
+                return true;
+            }
+
+            String townName =
+                    args[1];
+
+            ReviewGUI.open(
+                    p,
+                    townName
+            );
+
+            return true;
+        }
+
+        //
+        // 📊 RATE GUI
+        //
+
+        if (args[0].equalsIgnoreCase("noter")) {
+
+            if (!p.hasPermission(
+                    "moodtowngrade.staff")) {
+
+                p.sendMessage(
+                        "§cAccès refusé."
+                );
+
+                return true;
+            }
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/ville noter <ville>"
+                );
+
+                return true;
+            }
+
+            String townName =
+                    args[1];
+
+            RateGUI.open(
+                    p,
+                    townName
+            );
+
+            return true;
+        }
+
+        //
         // 📋 STAFF COMMANDS
         //
 
@@ -132,7 +229,8 @@ public class VilleCommand implements CommandExecutor {
                 || args[0].equalsIgnoreCase("accepter")
                 || args[0].equalsIgnoreCase("refuser")) {
 
-            if (!p.hasPermission("moodtowngrade.staff")) {
+            if (!p.hasPermission(
+                    "moodtowngrade.staff")) {
 
                 p.sendMessage(
                         "§cPermission insuffisante."
@@ -163,7 +261,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§6📋 Projets en attente"
+                    "§b🏛 Dossiers en étude"
             );
 
             p.sendMessage("");
@@ -186,7 +284,7 @@ public class VilleCommand implements CommandExecutor {
                     );
 
                     p.sendMessage(
-                            " §7Ville: §a"
+                            " §7Ville: §b"
                                     + sub.getTown()
                     );
 
@@ -256,7 +354,7 @@ public class VilleCommand implements CommandExecutor {
             SubmissionStorage.save(sub);
 
             //
-            // ✨ MESSAGE
+            // 🏛️ MESSAGE STAFF
             //
 
             p.sendMessage("");
@@ -266,7 +364,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§aProjet validé"
+                    "§a🏛 Permis accordé"
             );
 
             p.sendMessage("");
@@ -277,7 +375,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Ville: §a"
+                    "§7Ville: §b"
                             + sub.getTown()
             );
 
@@ -291,6 +389,48 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage("");
+
+            //
+            // 📢 BROADCAST RP
+            //
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§b🏛 Commission Urbaine"
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Le projet §e"
+                            + sub.getBuildName()
+            );
+
+            Bukkit.broadcastMessage(
+                    "§7vient d'obtenir"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§aun permis officiel."
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Ville: §b"
+                            + sub.getTown()
+            );
+
+            Bukkit.broadcastMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            Bukkit.broadcastMessage("");
 
             return true;
         }
@@ -349,7 +489,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§cProjet refusé"
+                    "§cRefus administratif"
             );
 
             p.sendMessage("");
@@ -360,7 +500,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7Ville: §a"
+                    "§7Ville: §b"
                             + sub.getTown()
             );
 
@@ -492,7 +632,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§6🏛 Projet soumis"
+                    "§b🏛 Dossier transmis"
             );
 
             p.sendMessage("");
@@ -502,15 +642,15 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§7ID: §f" + id
+                    "§7ID administratif: §f" + id
             );
 
             p.sendMessage(
-                    "§7Ville: §a" + town.getName()
+                    "§7Ville: §b" + town.getName()
             );
 
             p.sendMessage(
-                    "§7Statut: §eEN ATTENTE"
+                    "§7Statut: §eEN ÉTUDE"
             );
 
             p.sendMessage(
@@ -540,7 +680,7 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§6🏗 Projets de "
+                    "§b🏛 Dossiers urbains • "
                             + town.getName()
             );
 
@@ -549,7 +689,7 @@ public class VilleCommand implements CommandExecutor {
             if (list.isEmpty()) {
 
                 p.sendMessage(
-                        "§7Aucun projet."
+                        "§7Aucun projet enregistré."
                 );
 
             } else {
@@ -561,13 +701,16 @@ public class VilleCommand implements CommandExecutor {
                     switch (sub.getStatus()) {
 
                         case APPROVED ->
-                                status = "§aVALIDÉ";
+                                status =
+                                        "§aPERMIS ACCORDÉ";
 
                         case REJECTED ->
-                                status = "§cREFUSÉ";
+                                status =
+                                        "§cREFUS ADMINISTRATIF";
 
                         default ->
-                                status = "§eEN ATTENTE";
+                                status =
+                                        "§eEN ÉTUDE";
                     }
 
                     p.sendMessage(
@@ -666,13 +809,13 @@ public class VilleCommand implements CommandExecutor {
             );
 
             p.sendMessage(
-                    "§cProjet supprimé"
+                    "§cDossier supprimé"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7ID: §f" + id
+                    "§7ID administratif: §f" + id
             );
 
             p.sendMessage(
