@@ -1,6 +1,7 @@
 package fr.moodcraft.tgrade;
 
 import fr.moodcraft.tgrade.command.VilleCommand;
+import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.plugin.java.JavaPlugin;
