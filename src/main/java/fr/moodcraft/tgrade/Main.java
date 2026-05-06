@@ -4,6 +4,7 @@ import fr.moodcraft.tgrade.command.VilleCommand;
 
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
+import fr.moodcraft.tgrade.listener.ReviewGUIListener;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.storage.GradeStorage;
@@ -80,12 +81,43 @@ public class Main extends JavaPlugin {
                 );
 
         //
-        // ✅ CONSOLE
+        // 🏛️ REVIEW GUI LISTENER
         //
 
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new ReviewGUIListener(),
+                        this
+                );
+
+        //
+        // 🌆 CONSOLE
+        //
+
+        getLogger().info("");
+
         getLogger().info(
-                "MoodTownGrade chargé ✔"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
         );
+
+        getLogger().info(
+                "✦ MoodTownGrade activé"
+        );
+
+        getLogger().info(
+                "Commission urbaine chargée."
+        );
+
+        getLogger().info(
+                "Système d'inspection actif."
+        );
+
+        getLogger().info(
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        getLogger().info("");
     }
 
     //
@@ -95,8 +127,24 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        getLogger().info("");
+
         getLogger().info(
-                "MoodTownGrade arrêté ✖"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
         );
+
+        getLogger().info(
+                "MoodTownGrade arrêté."
+        );
+
+        getLogger().info(
+                "Inspection urbaine désactivée."
+        );
+
+        getLogger().info(
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        getLogger().info("");
     }
 }
