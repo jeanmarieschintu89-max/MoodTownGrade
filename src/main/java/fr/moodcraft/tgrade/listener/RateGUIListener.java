@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade.listener;
 import fr.moodcraft.tgrade.gui.RateGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.storage.GradeStorage;
 
 import fr.moodcraft.tgrade.model.TownGrade;
 
