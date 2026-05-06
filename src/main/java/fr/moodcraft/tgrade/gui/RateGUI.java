@@ -23,15 +23,19 @@ public class RateGUI {
         TownGrade grade =
                 GradeManager.get(town);
 
+        //
+        // 🏛️ COMMISSION URBAINE
+        //
+
         Inventory inv =
                 Bukkit.createInventory(
                         null,
                         27,
-                        "§8Notation • " + town
+                        "§8✦ §bMoodCraft §8• §7Inspection"
                 );
 
         //
-        // 🏛 ARCHITECTURE
+        // 🏛️ ARCHITECTURE
         //
 
         ItemStack archi =
@@ -41,21 +45,26 @@ public class RateGUI {
                 archi.getItemMeta();
 
         meta.setDisplayName(
-                "§6Architecture"
+                "§6Architecture urbaine"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Qualité générale des bâtiments",
+                "§7Palette, détails et finition.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getArchitecture()
                         + "§7/10",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         archi.setItemMeta(meta);
@@ -63,7 +72,7 @@ public class RateGUI {
         inv.setItem(10, archi);
 
         //
-        // 🎨 STYLE RP
+        // 🎨 COHÉRENCE RP
         //
 
         ItemStack style =
@@ -72,21 +81,26 @@ public class RateGUI {
         meta = style.getItemMeta();
 
         meta.setDisplayName(
-                "§dStyle RP"
+                "§dCohérence architecturale"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Analyse du style global",
+                "§7et de l'identité visuelle.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getStyle()
                         + "§7/6",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         style.setItemMeta(meta);
@@ -103,21 +117,26 @@ public class RateGUI {
         meta = activite.getItemMeta();
 
         meta.setDisplayName(
-                "§eActivité"
+                "§eDynamisme urbain"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Développement récent",
+                "§7activité et expansion.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getActivite()
                         + "§7/8",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         activite.setItemMeta(meta);
@@ -134,21 +153,26 @@ public class RateGUI {
         meta = banque.getItemMeta();
 
         meta.setDisplayName(
-                "§6Banque"
+                "§6Financement municipal"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Stabilité économique",
+                "§7et investissements urbains.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getBanque()
                         + "§7/4",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         banque.setItemMeta(meta);
@@ -165,21 +189,26 @@ public class RateGUI {
         meta = remarquable.getItemMeta();
 
         meta.setDisplayName(
-                "§bBuild remarquable"
+                "§bMonument emblématique"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Projet majeur représentant",
+                "§7la puissance de la ville.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getRemarquable()
                         + "§7/8",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         remarquable.setItemMeta(meta);
@@ -187,7 +216,7 @@ public class RateGUI {
         inv.setItem(14, remarquable);
 
         //
-        // 👥 ORGANISATION RP
+        // 👥 RP
         //
 
         ItemStack rp =
@@ -196,21 +225,26 @@ public class RateGUI {
         meta = rp.getItemMeta();
 
         meta.setDisplayName(
-                "§dOrganisation RP"
+                "§dOrganisation citoyenne"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Structure RP, métiers,",
+                "§7districts et administration.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getRp()
                         + "§7/6",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         rp.setItemMeta(meta);
@@ -227,21 +261,26 @@ public class RateGUI {
         meta = taille.getItemMeta();
 
         meta.setDisplayName(
-                "§aTaille"
+                "§aExpansion territoriale"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Analyse de l'étendue",
+                "§7et des quartiers urbains.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getTaille()
                         + "§7/3",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         taille.setItemMeta(meta);
@@ -258,21 +297,26 @@ public class RateGUI {
         meta = votes.getItemMeta();
 
         meta.setDisplayName(
-                "§2Votes serveur"
+                "§2Investissement communautaire"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Note: §e"
+                "§7Participation au serveur",
+                "§7et soutien communautaire.",
+
+                "",
+
+                "§fInspection: §e"
                         + grade.getVotes()
                         + "§7/5",
 
                 "",
 
-                "§eClique pour augmenter",
-                "§7Retour à 0 après maximum"
+                "§b● §7Clique pour ajuster",
+                "§8Retour à 0 après maximum"
         ));
 
         votes.setItemMeta(meta);
@@ -289,21 +333,51 @@ public class RateGUI {
         meta = total.getItemMeta();
 
         meta.setDisplayName(
-                "§aScore Final"
+                "§aRapport d'inspection"
         );
 
         meta.setLore(List.of(
 
                 "",
 
-                "§7Total: §e"
+                "§7Ville: §b" + town,
+
+                "",
+
+                "§fScore global: §e"
                         + grade.getTotal()
-                        + "§7/50"
+                        + "§7/50",
+
+                "",
+
+                "§8Commission urbaine MoodCraft"
         ));
 
         total.setItemMeta(meta);
 
         inv.setItem(25, total);
+
+        //
+        // 🧱 FILLER
+        //
+
+        ItemStack glass =
+                new ItemStack(
+                        Material.GRAY_STAINED_GLASS_PANE
+                );
+
+        meta = glass.getItemMeta();
+
+        meta.setDisplayName(" ");
+
+        glass.setItemMeta(meta);
+
+        for (int i = 0; i < 27; i++) {
+
+            if (inv.getItem(i) == null) {
+                inv.setItem(i, glass);
+            }
+        }
 
         //
         // ✨ OPEN
