@@ -9,7 +9,6 @@ import fr.moodcraft.tgrade.model.TownGrade;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import org.bukkit.entity.Player;
@@ -60,9 +59,6 @@ public class RateGUIListener implements Listener {
                 item.getItemMeta()
                         .getDisplayName();
 
-        ClickType click =
-                e.getClick();
-
         //
         // 🏛 ARCHITECTURE
         //
@@ -72,26 +68,17 @@ public class RateGUIListener implements Listener {
             int value =
                     grade.getArchitecture();
 
-            if (click.isLeftClick()) {
+            value++;
 
-                if (value < 10) {
-                    grade.setArchitecture(
-                            value + 1
-                    );
-                }
-
-            } else if (click.isRightClick()) {
-
-                if (value > 0) {
-                    grade.setArchitecture(
-                            value - 1
-                    );
-                }
+            if (value > 10) {
+                value = 0;
             }
+
+            grade.setArchitecture(value);
         }
 
         //
-        // 🎨 STYLE
+        // 🎨 STYLE RP
         //
 
         if (name.equals("§dStyle RP")) {
@@ -99,22 +86,13 @@ public class RateGUIListener implements Listener {
             int value =
                     grade.getStyle();
 
-            if (click.isLeftClick()) {
+            value++;
 
-                if (value < 6) {
-                    grade.setStyle(
-                            value + 1
-                    );
-                }
-
-            } else if (click.isRightClick()) {
-
-                if (value > 0) {
-                    grade.setStyle(
-                            value - 1
-                    );
-                }
+            if (value > 6) {
+                value = 0;
             }
+
+            grade.setStyle(value);
         }
 
         //
@@ -126,22 +104,103 @@ public class RateGUIListener implements Listener {
             int value =
                     grade.getActivite();
 
-            if (click.isLeftClick()) {
+            value++;
 
-                if (value < 8) {
-                    grade.setActivite(
-                            value + 1
-                    );
-                }
-
-            } else if (click.isRightClick()) {
-
-                if (value > 0) {
-                    grade.setActivite(
-                            value - 1
-                    );
-                }
+            if (value > 8) {
+                value = 0;
             }
+
+            grade.setActivite(value);
+        }
+
+        //
+        // 💰 BANQUE
+        //
+
+        if (name.equals("§6Banque")) {
+
+            int value =
+                    grade.getBanque();
+
+            value++;
+
+            if (value > 4) {
+                value = 0;
+            }
+
+            grade.setBanque(value);
+        }
+
+        //
+        // 🌟 BUILD REMARQUABLE
+        //
+
+        if (name.equals("§bBuild remarquable")) {
+
+            int value =
+                    grade.getRemarquable();
+
+            value++;
+
+            if (value > 8) {
+                value = 0;
+            }
+
+            grade.setRemarquable(value);
+        }
+
+        //
+        // 👥 ORGANISATION RP
+        //
+
+        if (name.equals("§dOrganisation RP")) {
+
+            int value =
+                    grade.getRp();
+
+            value++;
+
+            if (value > 6) {
+                value = 0;
+            }
+
+            grade.setRp(value);
+        }
+
+        //
+        // 🗺️ TAILLE
+        //
+
+        if (name.equals("§aTaille")) {
+
+            int value =
+                    grade.getTaille();
+
+            value++;
+
+            if (value > 3) {
+                value = 0;
+            }
+
+            grade.setTaille(value);
+        }
+
+        //
+        // 🗳️ VOTES
+        //
+
+        if (name.equals("§2Votes serveur")) {
+
+            int value =
+                    grade.getVotes();
+
+            value++;
+
+            if (value > 5) {
+                value = 0;
+            }
+
+            grade.setVotes(value);
         }
 
         //
