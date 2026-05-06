@@ -3,20 +3,54 @@ package fr.moodcraft.tgrade.model;
 public enum SubmissionStatus {
 
     //
-    // 🟡 EN ATTENTE
+    // 🟡 DOSSIER EN ÉTUDE
     //
 
-    PENDING,
+    PENDING(
+            "§eEN ÉTUDE"
+    ),
 
     //
-    // 🟢 VALIDÉ
+    // 🟢 PERMIS ACCORDÉ
     //
 
-    APPROVED,
+    APPROVED(
+            "§aPERMIS ACCORDÉ"
+    ),
 
     //
-    // 🔴 REFUSÉ
+    // 🔵 INSPECTION FINALE
     //
 
-    REJECTED
+    FINISHED(
+            "§bINSPECTION FINALE"
+    ),
+
+    //
+    // 🔴 REFUS ADMINISTRATIF
+    //
+
+    REJECTED(
+            "§cREFUS ADMINISTRATIF"
+    );
+
+    //
+    // 📄 DISPLAY
+    //
+
+    private final String display;
+
+    SubmissionStatus(String display) {
+
+        this.display = display;
+    }
+
+    //
+    // 🎨 GET DISPLAY
+    //
+
+    public String getDisplay() {
+
+        return display;
+    }
 }
