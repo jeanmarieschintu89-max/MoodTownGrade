@@ -2,6 +2,8 @@ package fr.moodcraft.tgrade.manager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
 
+import fr.moodcraft.tgrade.storage.GradeStorage;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +22,27 @@ public class GradeManager {
 
     public static TownGrade get(String town) {
 
-        return grades.computeIfAbsent(
+        if (grades.containsKey(town)) {
+            return grades.get(town);
+        }
+
+        TownGrade grade =
+                GradeStorage.load(town);
+
+        grades.put(
                 town,
-                TownGrade::new
+                grade
         );
+
+        return grade;
+    }
+
+    //
+    // 💾 SAVE
+    //
+
+    public static void save(TownGrade grade) {
+
+        GradeStorage.save(grade);
     }
 }
