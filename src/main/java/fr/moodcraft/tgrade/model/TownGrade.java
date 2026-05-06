@@ -49,6 +49,58 @@ public class TownGrade {
     }
 
     //
+    // 📈 POURCENTAGE
+    //
+
+    public double getPercentage() {
+
+        return (getTotal() / 50.0) * 100.0;
+    }
+
+    //
+    // 🏅 RANG
+    //
+
+    public String getRank() {
+
+        int total =
+                getTotal();
+
+        if (total <= 10) {
+
+            return
+                    "§8Village abandonné";
+        }
+
+        if (total <= 20) {
+
+            return
+                    "§7Ville rurale";
+        }
+
+        if (total <= 30) {
+
+            return
+                    "§aVille active";
+        }
+
+        if (total <= 40) {
+
+            return
+                    "§bMétropole prospère";
+        }
+
+        if (total <= 49) {
+
+            return
+                    "§6Capitale d'élite";
+        }
+
+        return
+                "§e§lMerveille de MoodCraft";
+    }
+
+    //
     // 💰 BOURSE
     //
 
@@ -57,55 +109,31 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        //
-        // 📉 0 → 10
-        //
-
         if (total <= 10) {
             return 1000;
         }
-
-        //
-        // 📈 11 → 20
-        //
 
         if (total <= 20) {
             return 3000;
         }
 
-        //
-        // 🌆 21 → 30
-        //
-
         if (total <= 30) {
             return 10000;
         }
-
-        //
-        // 🏛️ 31 → 40
-        //
 
         if (total <= 40) {
             return 18000;
         }
 
-        //
-        // 🌟 41 → 49
-        //
-
         if (total <= 49) {
             return 25000;
         }
-
-        //
-        // 👑 50
-        //
 
         return 30000;
     }
 
     //
-    // 🏅 APPRECIATION
+    // 🏛️ APPRECIATION
     //
 
     public String getAppreciation() {
@@ -122,29 +150,41 @@ public class TownGrade {
         if (total <= 20) {
 
             return
-                    "§eEffort minimal";
+                    "§eDéveloppement urbain limité";
         }
 
         if (total <= 30) {
 
             return
-                    "§aVille active";
+                    "§aVille active et organisée";
         }
 
         if (total <= 40) {
 
             return
-                    "§bTrès belle ville";
+                    "§bVille prospère et attractive";
         }
 
         if (total <= 49) {
 
             return
-                    "§6Ville d'élite";
+                    "§6Ville d'élite remarquable";
         }
 
         return
                 "§e§lPerfection absolue";
+    }
+
+    //
+    // 📊 FORMAT SCORE
+    //
+
+    public String getFormattedScore() {
+
+        return
+                "§e"
+                        + getTotal()
+                        + "§7/50";
     }
 
     //
@@ -196,35 +236,59 @@ public class TownGrade {
     //
 
     public void setArchitecture(int architecture) {
-        this.architecture = architecture;
+        this.architecture =
+                Math.max(0,
+                        Math.min(10,
+                                architecture));
     }
 
     public void setStyle(int style) {
-        this.style = style;
+        this.style =
+                Math.max(0,
+                        Math.min(6,
+                                style));
     }
 
     public void setActivite(int activite) {
-        this.activite = activite;
+        this.activite =
+                Math.max(0,
+                        Math.min(8,
+                                activite));
     }
 
     public void setBanque(int banque) {
-        this.banque = banque;
+        this.banque =
+                Math.max(0,
+                        Math.min(4,
+                                banque));
     }
 
     public void setRemarquable(int remarquable) {
-        this.remarquable = remarquable;
+        this.remarquable =
+                Math.max(0,
+                        Math.min(8,
+                                remarquable));
     }
 
     public void setRp(int rp) {
-        this.rp = rp;
+        this.rp =
+                Math.max(0,
+                        Math.min(6,
+                                rp));
     }
 
     public void setTaille(int taille) {
-        this.taille = taille;
+        this.taille =
+                Math.max(0,
+                        Math.min(3,
+                                taille));
     }
 
     public void setVotes(int votes) {
-        this.votes = votes;
+        this.votes =
+                Math.max(0,
+                        Math.min(5,
+                                votes));
     }
 
     public void setFinished(boolean finished) {
