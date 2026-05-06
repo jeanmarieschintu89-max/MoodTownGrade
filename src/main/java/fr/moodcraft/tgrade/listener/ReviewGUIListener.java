@@ -9,6 +9,8 @@ import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.World;
 
 import org.bukkit.entity.Player;
 
@@ -73,6 +75,13 @@ public class ReviewGUIListener implements Listener {
 
             p.closeInventory();
 
+            p.playSound(
+                    p.getLocation(),
+                    Sound.UI_BUTTON_CLICK,
+                    1f,
+                    1f
+            );
+
             return;
         }
 
@@ -82,6 +91,13 @@ public class ReviewGUIListener implements Listener {
 
         if (name.equals(
                 "§6Commission d'évaluation")) {
+
+            p.playSound(
+                    p.getLocation(),
+                    Sound.BLOCK_BEACON_ACTIVATE,
+                    1f,
+                    1f
+            );
 
             RateGUI.open(
                     p,
@@ -98,14 +114,47 @@ public class ReviewGUIListener implements Listener {
         for (TownSubmission sub :
                 SubmissionStorage.getTown(town)) {
 
+            //
+            // ✅ APPROVED ONLY
+            //
+
             if (sub.getStatus()
                     != SubmissionStatus.APPROVED) {
                 continue;
             }
 
+            //
+            // 🏷️ NAME CHECK
+            //
+
             if (!name.equals(
                     "§6" + sub.getBuildName())) {
                 continue;
+            }
+
+            //
+            // 🌍 WORLD CHECK
+            //
+
+            World world =
+                    Bukkit.getWorld(
+                            sub.getWorld()
+                    );
+
+            if (world == null) {
+
+                p.sendMessage(
+                        "§cMonde introuvable."
+                );
+
+                p.playSound(
+                        p.getLocation(),
+                        Sound.ENTITY_VILLAGER_NO,
+                        1f,
+                        1f
+                );
+
+                return;
             }
 
             //
@@ -115,9 +164,7 @@ public class ReviewGUIListener implements Listener {
             Location loc =
                     new Location(
 
-                            Bukkit.getWorld(
-                                    sub.getWorld()
-                            ),
+                            world,
 
                             sub.getX() + 0.5,
 
@@ -127,10 +174,21 @@ public class ReviewGUIListener implements Listener {
                     );
 
             //
-            // ✨ TP
+            // ✨ TELEPORT
             //
 
             p.teleport(loc);
+
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+                    p.getLocation(),
+                    Sound.ENTITY_ENDERMAN_TELEPORT,
+                    1f,
+                    1f
+            );
 
             //
             // 📢 MESSAGE RP
@@ -161,6 +219,24 @@ public class ReviewGUIListener implements Listener {
             p.sendMessage(
                     "§7Ville: §b"
                             + sub.getTown()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Coordonnées:"
+            );
+
+            p.sendMessage(
+                    " §fX: §e" + sub.getX()
+            );
+
+            p.sendMessage(
+                    " §fY: §e" + sub.getY()
+            );
+
+            p.sendMessage(
+                    " §fZ: §e" + sub.getZ()
             );
 
             p.sendMessage("");
