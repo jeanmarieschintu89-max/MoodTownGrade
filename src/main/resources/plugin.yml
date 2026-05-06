@@ -1,7 +1,14 @@
 name: MoodTownGrade
+
 main: fr.moodcraft.tgrade.Main
+
 version: 1.0
+
 api-version: 1.20
+
+author: MoodCraft
+
+description: Systeme de commission urbaine Towny RP
 
 depend:
   - Towny
@@ -9,9 +16,19 @@ depend:
 commands:
 
   ville:
+
     description: Systeme ville MoodCraft
+
+    usage: /ville
+
+    aliases:
+      - tgrade
+      - commission
 
 permissions:
 
   moodtowngrade.staff:
+
+    description: Acces administration MoodTownGrade
+
     default: op
