@@ -44,36 +44,11 @@ public class TownyHook {
     }
 
     //
-    // ⭐ IS ASSISTANT
-    //
-
-    public static boolean isAssistant(Player p) {
-
-        Town town = getTown(p);
-
-        if (town == null) {
-            return false;
-        }
-
-        Resident resident =
-                TownyAPI.getInstance()
-                        .getResident(p);
-
-        if (resident == null) {
-            return false;
-        }
-
-        return town.getAssistants()
-                .contains(resident);
-    }
-
-    //
     // 🛡 CAN MANAGE
     //
 
     public static boolean canManage(Player p) {
 
-        return isMayor(p)
-                || isAssistant(p);
+        return isMayor(p);
     }
 }
