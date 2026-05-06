@@ -11,6 +11,8 @@ import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.storage.GradeStorage;
 
+import fr.moodcraft.tgrade.task.WeeklyResetTask;
+
 import org.bukkit.Bukkit;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,6 +49,39 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
 
         //
+        // 🌍 TOWNY CHECK
+        //
+
+        if (Bukkit.getPluginManager()
+                .getPlugin("Towny") == null) {
+
+            getLogger().severe("");
+
+            getLogger().severe(
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            getLogger().severe(
+                    "Towny introuvable"
+            );
+
+            getLogger().severe(
+                    "MoodTownGrade désactivé"
+            );
+
+            getLogger().severe(
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            getLogger().severe("");
+
+            Bukkit.getPluginManager()
+                    .disablePlugin(this);
+
+            return;
+        }
+
+        //
         // 💾 STORAGE
         //
 
@@ -73,7 +108,7 @@ public class Main extends JavaPlugin {
         }
 
         //
-        // 🎨 GUI LISTENER
+        // 🎨 GUI LISTENERS
         //
 
         getServer()
@@ -83,20 +118,12 @@ public class Main extends JavaPlugin {
                         this
                 );
 
-        //
-        // 📊 RATE GUI LISTENER
-        //
-
         getServer()
                 .getPluginManager()
                 .registerEvents(
                         new RateGUIListener(),
                         this
                 );
-
-        //
-        // 🏛️ REVIEW GUI LISTENER
-        //
 
         getServer()
                 .getPluginManager()
@@ -106,37 +133,23 @@ public class Main extends JavaPlugin {
                 );
 
         //
-        // 🌍 TOWNY CHECK
+        // ⏰ WEEKLY RESET
         //
 
-        if (Bukkit.getPluginManager()
-                .getPlugin("Towny") == null) {
+        long week =
+                20L * 60L * 60L * 24L * 7L;
 
-            getLogger().severe("");
+        Bukkit.getScheduler()
+                .runTaskTimer(
 
-            getLogger().severe(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
+                        this,
 
-            getLogger().severe(
-                    "Towny introuvable."
-            );
+                        new WeeklyResetTask(),
 
-            getLogger().severe(
-                    "MoodTownGrade désactivé."
-            );
+                        week,
 
-            getLogger().severe(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            getLogger().severe("");
-
-            Bukkit.getPluginManager()
-                    .disablePlugin(this);
-
-            return;
-        }
+                        week
+                );
 
         //
         // 🌆 CONSOLE
@@ -170,6 +183,10 @@ public class Main extends JavaPlugin {
 
         getLogger().info(
                 "Towny détecté avec succès"
+        );
+
+        getLogger().info(
+                "Reset hebdomadaire actif"
         );
 
         getLogger().info("");
