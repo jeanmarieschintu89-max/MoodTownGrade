@@ -1,11 +1,26 @@
 name: Build Plugin
 
 on:
+
+  #
+  # 🚀 AUTO BUILD
+  #
+
   push:
     branches:
       - main
 
+  #
+  # 🔍 PR BUILD
+  #
+
   pull_request:
+
+  #
+  # ▶ MANUAL BUTTON
+  #
+
+  workflow_dispatch:
 
 jobs:
 
@@ -42,7 +57,9 @@ jobs:
 
         with:
           path: ~/.m2
+
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+
           restore-keys: |
             ${{ runner.os }}-m2
 
@@ -52,6 +69,13 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package
+
+      #
+      # 📂 VERIFY TARGET
+      #
+
+      - name: Verify build
+        run: ls -la target
 
       #
       # 📤 UPLOAD JAR
