@@ -46,6 +46,7 @@ public class Main extends JavaPlugin {
         //
 
         SubmissionStorage.init();
+        GradeStorage.init();
 
         //
         // 📜 COMMANDES
