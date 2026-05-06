@@ -1,7 +1,9 @@
 package fr.moodcraft.tgrade;
 
 import fr.moodcraft.tgrade.command.VilleCommand;
+
 import fr.moodcraft.tgrade.listener.GUIListener;
+
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,10 +53,23 @@ public class Main extends JavaPlugin {
                 .setExecutor(new VilleCommand());
 
         //
+        // 🎨 GUI LISTENER
+        //
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new GUIListener(),
+                        this
+                );
+
+        //
         // ✅ CONSOLE
         //
 
-        getLogger().info("MoodTownGrade chargé ✔");
+        getLogger().info(
+                "MoodTownGrade chargé ✔"
+        );
     }
 
     //
@@ -64,6 +79,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        getLogger().info("MoodTownGrade arrêté ✖");
+        getLogger().info(
+                "MoodTownGrade arrêté ✖"
+        );
     }
 }
