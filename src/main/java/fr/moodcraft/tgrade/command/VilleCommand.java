@@ -46,24 +46,334 @@ public class VilleCommand implements CommandExecutor {
         if (args.length == 0) {
 
             p.sendMessage("");
-            p.sendMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            p.sendMessage("§6🏛 Commandes Ville");
-            p.sendMessage("");
 
-            p.sendMessage("§e/ville projet <nom>");
-            p.sendMessage("§7Soumettre un projet");
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
 
-            p.sendMessage("");
-
-            p.sendMessage("§e/ville projets");
-            p.sendMessage("§7Voir les projets");
+            p.sendMessage(
+                    "§6🏛 Commandes Ville"
+            );
 
             p.sendMessage("");
 
-            p.sendMessage("§e/ville retirer <id>");
-            p.sendMessage("§7Supprimer un projet");
+            p.sendMessage(
+                    "§e/ville projet <nom>"
+            );
 
-            p.sendMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            p.sendMessage(
+                    "§7Soumettre un projet"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville projets"
+            );
+
+            p.sendMessage(
+                    "§7Voir les projets"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville retirer <id>"
+            );
+
+            p.sendMessage(
+                    "§7Supprimer un projet"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville validation"
+            );
+
+            p.sendMessage(
+                    "§7Voir les projets en attente"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville accepter <id>"
+            );
+
+            p.sendMessage(
+                    "§7Valider un projet"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§e/ville refuser <id>"
+            );
+
+            p.sendMessage(
+                    "§7Refuser un projet"
+            );
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
+        // 📋 STAFF COMMANDS
+        //
+
+        if (args[0].equalsIgnoreCase("validation")
+                || args[0].equalsIgnoreCase("accepter")
+                || args[0].equalsIgnoreCase("refuser")) {
+
+            if (!p.hasPermission("moodtowngrade.staff")) {
+
+                p.sendMessage(
+                        "§cPermission insuffisante."
+                );
+
+                return true;
+            }
+        }
+
+        //
+        // 📋 /ville validation
+        //
+
+        if (args[0].equalsIgnoreCase("validation")) {
+
+            List<TownSubmission> pending =
+                    SubmissionStorage.getAll()
+                            .stream()
+                            .filter(sub ->
+                                    sub.getStatus()
+                                            == SubmissionStatus.PENDING)
+                            .toList();
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§6📋 Projets en attente"
+            );
+
+            p.sendMessage("");
+
+            if (pending.isEmpty()) {
+
+                p.sendMessage(
+                        "§7Aucun projet en attente."
+                );
+
+            } else {
+
+                for (TownSubmission sub : pending) {
+
+                    p.sendMessage(
+                            "§f#"
+                                    + sub.getId()
+                                    + " §8• §e"
+                                    + sub.getBuildName()
+                    );
+
+                    p.sendMessage(
+                            " §7Ville: §a"
+                                    + sub.getTown()
+                    );
+
+                    p.sendMessage(
+                            " §7📍 "
+                                    + sub.getX()
+                                    + " "
+                                    + sub.getY()
+                                    + " "
+                                    + sub.getZ()
+                    );
+
+                    p.sendMessage("");
+                }
+            }
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
+        // ✅ /ville accepter
+        //
+
+        if (args[0].equalsIgnoreCase("accepter")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/ville accepter <id>"
+                );
+
+                return true;
+            }
+
+            String id = args[1];
+
+            TownSubmission sub =
+                    SubmissionStorage.get(id);
+
+            if (sub == null) {
+
+                p.sendMessage(
+                        "§cProjet introuvable."
+                );
+
+                return true;
+            }
+
+            //
+            // ✅ STATUS
+            //
+
+            sub.setStatus(
+                    SubmissionStatus.APPROVED
+            );
+
+            //
+            // 💾 SAVE
+            //
+
+            SubmissionStorage.save(sub);
+
+            //
+            // ✨ MESSAGE
+            //
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§aProjet validé"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e"
+                            + sub.getBuildName()
+            );
+
+            p.sendMessage(
+                    "§7Ville: §a"
+                            + sub.getTown()
+            );
+
+            p.sendMessage(
+                    "§7ID: §f"
+                            + sub.getId()
+            );
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
+        // ❌ /ville refuser
+        //
+
+        if (args[0].equalsIgnoreCase("refuser")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/ville refuser <id>"
+                );
+
+                return true;
+            }
+
+            String id = args[1];
+
+            TownSubmission sub =
+                    SubmissionStorage.get(id);
+
+            if (sub == null) {
+
+                p.sendMessage(
+                        "§cProjet introuvable."
+                );
+
+                return true;
+            }
+
+            //
+            // ❌ STATUS
+            //
+
+            sub.setStatus(
+                    SubmissionStatus.REJECTED
+            );
+
+            //
+            // 💾 SAVE
+            //
+
+            SubmissionStorage.save(sub);
+
+            //
+            // ✨ MESSAGE
+            //
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§cProjet refusé"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e"
+                            + sub.getBuildName()
+            );
+
+            p.sendMessage(
+                    "§7Ville: §a"
+                            + sub.getTown()
+            );
+
+            p.sendMessage(
+                    "§7ID: §f"
+                            + sub.getId()
+            );
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
 
             return true;
         }
@@ -103,6 +413,21 @@ public class VilleCommand implements CommandExecutor {
 
                 p.sendMessage(
                         "§c/ville projet <nom>"
+                );
+
+                return true;
+            }
+
+            //
+            // 📏 LIMIT
+            //
+
+            if (SubmissionStorage
+                    .getTown(town.getName())
+                    .size() >= 5) {
+
+                p.sendMessage(
+                        "§cMaximum 5 projets par semaine."
                 );
 
                 return true;
