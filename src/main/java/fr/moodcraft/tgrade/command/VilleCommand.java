@@ -893,16 +893,39 @@ public class VilleCommand implements CommandExecutor {
 
             SubmissionStorage.delete(id);
 
-            p.sendMessage("");
+               p.sendMessage("");
 
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
+               p.sendMessage(
+        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+);
 
-            p.sendMessage(
-                    "§cDossier supprimé"
-            );
+               p.sendMessage(
+        "§cDossier supprimé"
+);
 
-            p.sendMessage("");
+               p.sendMessage("");
 
-            p.s
+               p.sendMessage(
+        "§7ID administratif: §f" + id
+);
+
+               p.sendMessage(
+        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+);
+
+               p.sendMessage("");
+
+               return true;
+}
+
+//
+// ❌ UNKNOWN
+//
+
+               p.sendMessage(
+        "§cSous-commande inconnue."
+);
+
+               return true;
+    }
+}
