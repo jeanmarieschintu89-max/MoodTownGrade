@@ -6,6 +6,7 @@ import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.storage.GradeStorage;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
