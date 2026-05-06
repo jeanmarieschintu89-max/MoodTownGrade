@@ -3,13 +3,13 @@ package fr.moodcraft.tgrade.model;
 public class TownGrade {
 
     //
-    // 🏙 VILLE
+    // 🏙️ VILLE
     //
 
     private final String town;
 
     //
-    // 🏛 NOTES
+    // 🏛️ NOTES
     //
 
     private int architecture;
@@ -20,6 +20,12 @@ public class TownGrade {
     private int rp;
     private int taille;
     private int votes;
+
+    //
+    // ✅ INSPECTION
+    //
+
+    private boolean finished;
 
     public TownGrade(String town) {
 
@@ -43,7 +49,106 @@ public class TownGrade {
     }
 
     //
-    // 🏙 GETTERS
+    // 💰 BOURSE
+    //
+
+    public int getPayout() {
+
+        int total =
+                getTotal();
+
+        //
+        // 📉 0 → 10
+        //
+
+        if (total <= 10) {
+            return 1000;
+        }
+
+        //
+        // 📈 11 → 20
+        //
+
+        if (total <= 20) {
+            return 3000;
+        }
+
+        //
+        // 🌆 21 → 30
+        //
+
+        if (total <= 30) {
+            return 10000;
+        }
+
+        //
+        // 🏛️ 31 → 40
+        //
+
+        if (total <= 40) {
+            return 18000;
+        }
+
+        //
+        // 🌟 41 → 49
+        //
+
+        if (total <= 49) {
+            return 25000;
+        }
+
+        //
+        // 👑 50
+        //
+
+        return 30000;
+    }
+
+    //
+    // 🏅 APPRECIATION
+    //
+
+    public String getAppreciation() {
+
+        int total =
+                getTotal();
+
+        if (total <= 10) {
+
+            return
+                    "§7Ville inactive ou naissante";
+        }
+
+        if (total <= 20) {
+
+            return
+                    "§eEffort minimal";
+        }
+
+        if (total <= 30) {
+
+            return
+                    "§aVille active";
+        }
+
+        if (total <= 40) {
+
+            return
+                    "§bTrès belle ville";
+        }
+
+        if (total <= 49) {
+
+            return
+                    "§6Ville d'élite";
+        }
+
+        return
+                "§e§lPerfection absolue";
+    }
+
+    //
+    // 🏙️ GETTERS
     //
 
     public String getTown() {
@@ -82,8 +187,12 @@ public class TownGrade {
         return votes;
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
+
     //
-    // ✏ SETTERS
+    // ✏️ SETTERS
     //
 
     public void setArchitecture(int architecture) {
@@ -116,5 +225,9 @@ public class TownGrade {
 
     public void setVotes(int votes) {
         this.votes = votes;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }
