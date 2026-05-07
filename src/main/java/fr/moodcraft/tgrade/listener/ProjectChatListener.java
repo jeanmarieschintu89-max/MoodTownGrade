@@ -59,6 +59,92 @@ public class ProjectChatListener
         e.setCancelled(true);
 
         //
+        // 📛 NAME
+        //
+
+        String name =
+                e.getMessage().trim();
+
+        //
+        // ❌ ANNULER
+        //
+
+        if (name.equalsIgnoreCase(
+                "annuler")) {
+
+            //
+            // 🛑 STOP WAITING
+            //
+
+            ProjectInputManager.stop(
+                    p.getUniqueId()
+            );
+
+            //
+            // 🔔 MAIN THREAD
+            //
+
+            Bukkit.getScheduler()
+                    .runTask(
+
+                            Bukkit.getPluginManager()
+                                    .getPlugin("MoodTownGrade"),
+
+                            () -> {
+
+                                //
+                                // 🔊 SOUND
+                                //
+
+                                p.playSound(
+
+                                        p.getLocation(),
+
+                                        Sound.ENTITY_VILLAGER_NO,
+
+                                        1f,
+
+                                        1f
+                                );
+
+                                //
+                                // 📜 MESSAGE
+                                //
+
+                                p.sendMessage("");
+
+                                p.sendMessage(
+                                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                                );
+
+                                p.sendMessage(
+                                        "§c✦ Création annulée"
+                                );
+
+                                p.sendMessage("");
+
+                                p.sendMessage(
+                                        "§7Le dossier urbain"
+                                );
+
+                                p.sendMessage(
+                                        "§7a été annulé."
+                                );
+
+                                p.sendMessage("");
+
+                                p.sendMessage(
+                                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                                );
+
+                                p.sendMessage("");
+                            }
+                    );
+
+            return;
+        }
+
+        //
         // 🛑 STOP WAITING
         //
 
@@ -88,13 +174,6 @@ public class ProjectChatListener
 
             return;
         }
-
-        //
-        // 📛 NAME
-        //
-
-        String name =
-                e.getMessage().trim();
 
         //
         // ❌ EMPTY
