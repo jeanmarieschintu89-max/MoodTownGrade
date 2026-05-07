@@ -29,7 +29,7 @@ public class UrbanismeMainGUI {
 
                         36,
 
-                        "§8Commission Urbaine"
+                        "§8🏛 Commission Urbaine"
                 );
 
         //
