@@ -2,8 +2,6 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.ClassementGUI;
 import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
-import fr.moodcraft.tgrade.gui.RateGUI;
-import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import org.bukkit.Sound;
@@ -56,32 +54,10 @@ public class UrbanismeAdminListener
                 e.getRawSlot();
 
         //
-        // 📋 PROJETS
+        // 📋 PROJETS + 📝 NOTATION
         //
 
-        if (slot == 13) {
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.UI_BUTTON_CLICK,
-
-                    1f,
-
-                    1.2f
-            );
-
-            PendingProjectsGUI.open(p);
-
-            return;
-        }
-
-        //
-        // 📝 NOTATION
-        //
-
-        if (slot == 22) {
+        if (slot == 13 || slot == 22) {
 
             p.playSound(
 
@@ -94,7 +70,7 @@ public class UrbanismeAdminListener
                     1.1f
             );
 
-            RateGUI.open(p);
+            PendingProjectsGUI.open(p);
 
             return;
         }
@@ -129,11 +105,11 @@ public class UrbanismeAdminListener
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Les financements municipaux"
+                    "§7Le système de financement"
             );
 
             p.sendMessage(
-                    "§7seront bientôt disponibles."
+                    "§7sera bientôt disponible."
             );
 
             p.sendMessage("");
@@ -170,7 +146,7 @@ public class UrbanismeAdminListener
         }
 
         //
-        // 🔙 RETURN
+        // 🔙 RETOUR
         //
 
         if (slot == 40) {
