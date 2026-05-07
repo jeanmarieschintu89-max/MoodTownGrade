@@ -1,6 +1,7 @@
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
+import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
@@ -20,85 +21,183 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import org.bukkit.inventory.ItemStack;
 
-public class GUIListener implements Listener {
+public class GUIListener
+        implements Listener {
+
+    //
+    // 🎮 CLICK
+    //
 
     @EventHandler
-    public void onClick(InventoryClickEvent e) {
+    public void onClick(
+            InventoryClickEvent e
+    ) {
 
-        if (!(e.getWhoClicked() instanceof Player p)) {
+        //
+        // 👤 PLAYER
+        //
+
+        if (!(e.getWhoClicked()
+                instanceof Player p)) {
+
             return;
         }
 
         //
-        // 🏛️ GUI CHECK
+        // 📛 TITLE
         //
 
-        if (!e.getView()
-                .getTitle()
-                .contains("Inspection")) {
+        String title =
+                e.getView().getTitle();
+
+        //
+        // 🏛 INSPECTION ONLY
+        //
+
+        if (!title.contains(
+                "Inspection")) {
+
             return;
         }
+
+        //
+        // ❌ CANCEL
+        //
 
         e.setCancelled(true);
+
+        //
+        // 📦 INVENTORY
+        //
+
+        if (e.getClickedInventory() == null) {
+            return;
+        }
+
+        //
+        // 📦 ITEM
+        //
 
         ItemStack item =
                 e.getCurrentItem();
 
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
-        if (!item.hasItemMeta()) return;
+        if (!item.hasItemMeta()) {
+            return;
+        }
+
+        if (item.getItemMeta()
+                .getDisplayName() == null) {
+
+            return;
+        }
+
+        //
+        // ❌ AIR
+        //
+
+        if (item.getType().isAir()) {
+            return;
+        }
+
+        //
+        // 📛 NAME
+        //
 
         String name =
                 item.getItemMeta()
                         .getDisplayName();
 
         //
+        // 🔊 DEFAULT SOUND
+        //
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.UI_BUTTON_CLICK,
+
+                1f,
+
+                1f
+        );
+
+        //
         // ❌ CLOSE
         //
 
         if (name.equals(
-                "§cFermer l'inspection")) {
+                "§c⬅ Fermer l'Inspection"
+        )) {
 
-            p.closeInventory();
+            //
+            // 🔊 SOUND
+            //
 
             p.playSound(
+
                     p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
+
+                    Sound.BLOCK_CHEST_CLOSE,
+
                     1f,
+
                     1f
             );
+
+            //
+            // 🚀 RETURN
+            //
+
+            UrbanismeAdminGUI.open(p);
 
             return;
         }
 
         //
-        // 📊 NOTATION
+        // ⭐ NOTATION
         //
 
         if (name.equals(
-                "§6Commission d'évaluation")) {
+                "§6⭐ Commission d'Évaluation"
+        )) {
+
+            //
+            // 🏛 GET TOWN
+            //
 
             String town =
-                    item.getItemMeta()
-                            .getLore()
-                            == null
-                            ? ""
-                            : "";
+                    title.replace(
+                            "§8✦ Inspection Nationale",
+                            ""
+                    ).trim();
 
-            String guiTown =
-                    e.getView()
-                            .getTitle();
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                    1f,
+
+                    1.2f
+            );
+
+            //
+            // 🚀 OPEN
+            //
 
             RateGUI.open(
                     p,
-                    guiTown
-            );
-
-            p.playSound(
-                    p.getLocation(),
-                    Sound.BLOCK_BEACON_ACTIVATE,
-                    1f,
-                    1f
+                    town
             );
 
             return;
@@ -109,32 +208,53 @@ public class GUIListener implements Listener {
         //
 
         if (name.equals(
-                "§aRapport urbain")) {
+                "§a✦ Rapport National"
+        )) {
+
+            //
+            // 🔊 SOUND
+            //
 
             p.playSound(
+
                     p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
+
+                    Sound.UI_TOAST_IN,
+
                     1f,
-                    1.2f
+
+                    1f
             );
 
             return;
         }
 
         //
-        // 🏗️ BUILD TP
+        // 🏗 BUILD INSPECTION
         //
 
         for (TownSubmission sub :
                 SubmissionStorage.getAll()) {
 
+            //
+            // ✅ APPROVED ONLY
+            //
+
             if (sub.getStatus()
                     != SubmissionStatus.APPROVED) {
+
                 continue;
             }
 
+            //
+            // 📛 NAME CHECK
+            //
+
             if (!name.equals(
-                    "§6" + sub.getBuildName())) {
+                    "§e✦ "
+                            + sub.getBuildName()
+            )) {
+
                 continue;
             }
 
@@ -143,7 +263,8 @@ public class GUIListener implements Listener {
             //
 
             if (Bukkit.getWorld(
-                    sub.getWorld()) == null) {
+                    sub.getWorld()
+            ) == null) {
 
                 p.sendMessage(
                         "§cMonde introuvable."
@@ -181,14 +302,18 @@ public class GUIListener implements Listener {
             //
 
             p.playSound(
+
                     p.getLocation(),
+
                     Sound.ENTITY_ENDERMAN_TELEPORT,
+
                     1f,
+
                     1f
             );
 
             //
-            // 🏛️ MESSAGE RP
+            // 📜 MESSAGE
             //
 
             p.sendMessage("");
@@ -198,24 +323,27 @@ public class GUIListener implements Listener {
             );
 
             p.sendMessage(
-                    "§b🏛 Commission Urbaine"
+                    "§6✦ Inspection Nationale"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Inspection du projet:"
+                    "§7Projet inspecté:"
             );
 
             p.sendMessage(
-                    " §e" + sub.getBuildName()
+                    "§e" + sub.getBuildName()
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Ville: §b"
-                            + sub.getTown()
+                    "§7Ville:"
+            );
+
+            p.sendMessage(
+                    "§b" + sub.getTown()
             );
 
             p.sendMessage("");
@@ -225,15 +353,21 @@ public class GUIListener implements Listener {
             );
 
             p.sendMessage(
-                    " §fX: §e" + sub.getX()
+                    "§fX: §e" + sub.getX()
             );
 
             p.sendMessage(
-                    " §fY: §e" + sub.getY()
+                    "§fY: §e" + sub.getY()
             );
 
             p.sendMessage(
-                    " §fZ: §e" + sub.getZ()
+                    "§fZ: §e" + sub.getZ()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Inspection terrain active."
             );
 
             p.sendMessage("");
@@ -243,6 +377,10 @@ public class GUIListener implements Listener {
             );
 
             p.sendMessage("");
+
+            //
+            // 🔒 CLOSE
+            //
 
             p.closeInventory();
 
