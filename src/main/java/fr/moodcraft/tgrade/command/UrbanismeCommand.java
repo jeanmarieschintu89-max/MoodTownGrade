@@ -5,8 +5,10 @@ import fr.moodcraft.tgrade.gui.ReviewGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import fr.moodcraft.tgrade.manager.PayoutManager;
+import fr.moodcraft.tgrade.manager.RankingManager;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
@@ -14,9 +16,6 @@ import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.towny.TownyHook;
 
 import com.palmergames.bukkit.towny.object.Town;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -62,6 +61,80 @@ public class UrbanismeCommand
         if (args.length == 0) {
 
             UrbanismeMainGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // 🏆 CLASSEMENT
+        //
+
+        if (args[0].equalsIgnoreCase("classement")) {
+
+            List<TownGrade> top =
+                    RankingManager.getTop();
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§6🏆 Classement National"
+            );
+
+            p.sendMessage("");
+
+            if (top.isEmpty()) {
+
+                p.sendMessage(
+                        "§7Aucune ville classée."
+                );
+
+            } else {
+
+                int pos = 1;
+
+                for (TownGrade grade : top) {
+
+                    p.sendMessage(
+                            "§e#"
+                                    + pos
+                                    + " §b"
+                                    + grade.getTown()
+                    );
+
+                    p.sendMessage(
+                            " §7Score: §e"
+                                    + grade.getTotal()
+                                    + "§7/50"
+                    );
+
+                    p.sendMessage(
+                            " §7Bourse: §a"
+                                    + grade.getPayout()
+                                    + "$"
+                    );
+
+                    p.sendMessage("");
+
+                    pos++;
+
+                    //
+                    // 🛑 TOP 10
+                    //
+
+                    if (pos > 10)
+                        break;
+                }
+            }
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
 
             return true;
         }
