@@ -1,5 +1,6 @@
 package fr.moodcraft.tgrade.listener;
 
+import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import org.bukkit.Sound;
@@ -79,16 +80,14 @@ public class UrbanismeAdminListener
         );
 
         //
-        // 📋 DOSSIERS
+        // 📋 DOSSIERS URBAINS
         //
 
         if (slot == 10) {
 
             p.closeInventory();
 
-            p.performCommand(
-                    "urbanisme validation"
-            );
+            PendingProjectsGUI.open(p);
 
             return;
         }
@@ -179,9 +178,7 @@ public class UrbanismeAdminListener
 
             p.closeInventory();
 
-            p.performCommand(
-                    "urbanisme validation"
-            );
+            PendingProjectsGUI.open(p);
 
             return;
         }
