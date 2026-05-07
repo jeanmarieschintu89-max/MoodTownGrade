@@ -124,20 +124,33 @@ public class PendingProjectsListener
         }
 
         //
+        // 📛 DISPLAY
+        //
+
+        String display =
+                e.getCurrentItem()
+                        .getItemMeta()
+                        .getDisplayName();
+
+        //
+        // ❌ NOT PROJECT
+        //
+
+        if (!display.startsWith(
+                "§f✦ §e")) {
+
+            return;
+        }
+
+        //
         // 📛 NAME
         //
 
         String name =
-                e.getCurrentItem()
-                        .getItemMeta()
-                        .getDisplayName()
-
-                        .replace("§f✦ §e", "")
-                        .replace("§e", "")
-                        .replace("§b", "")
-                        .replace("§6", "")
-                        .replace("§a", "")
-                        .replace("§c", "");
+                display.replace(
+                        "§f✦ §e",
+                        ""
+                );
 
         //
         // 🔍 FIND
