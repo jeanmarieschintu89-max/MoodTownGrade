@@ -206,7 +206,71 @@ public class PendingProjectsListener
         );
 
         //
-        // 🏛 OPEN REVIEW
+        // 🔒 STAFF ONLY
+        //
+
+        if (!p.hasPermission(
+                "moodtowngrade.staff")) {
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§6✦ Consultation du dossier"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e"
+                            + found.getBuildName()
+            );
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + found.getTown()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Statut actuel:"
+            );
+
+            p.sendMessage(
+                    "§e" + found.getStatus().name()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Le système national"
+            );
+
+            p.sendMessage(
+                    "§7d'inspection est réservé"
+            );
+
+            p.sendMessage(
+                    "§7à la Commission Urbaine."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return;
+        }
+
+        //
+        // 🛰 OPEN REVIEW
         //
 
         ProjectReviewGUI.open(
