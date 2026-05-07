@@ -2,6 +2,7 @@ package fr.moodcraft.tgrade;
 
 import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
+import fr.moodcraft.tgrade.listener.ClassementListener;
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
 import fr.moodcraft.tgrade.listener.ProjectChatListener;
@@ -166,6 +167,13 @@ public class Main extends JavaPlugin {
                         this
                 );
 
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new ClassementListener(),
+                        this
+                );
+
         //
         // 💬 CHAT INPUT
         //
@@ -234,6 +242,10 @@ public class Main extends JavaPlugin {
 
         getLogger().info(
                 "💬 Saisie projet interactive active"
+        );
+
+        getLogger().info(
+                "🏆 Classement national actif"
         );
 
         getLogger().info(
