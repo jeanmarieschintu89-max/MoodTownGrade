@@ -1,43 +1,409 @@
-package fr.moodcraft.tgrade.manager;
+package fr.moodcraft.tgrade.listener;
 
-import java.util.HashMap;
-import java.util.Map;
+import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
-import java.util.UUID;
+import fr.moodcraft.tgrade.manager.ProjectInputManager;
 
-public class ProjectInputManager {
+import fr.moodcraft.tgrade.towny.TownyHook;
 
-    //
-    // 🧠 INPUT WAITING
-    //
+import org.bukkit.Sound;
 
-    private static final Map<UUID, Boolean>
-            waiting = new HashMap<>();
+import org.bukkit.entity.Player;
 
-    //
-    // ➕ START
-    //
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-    public static void start(UUID uuid) {
+import org.bukkit.event.inventory.InventoryClickEvent;
 
-        waiting.put(uuid, true);
-    }
+public class UrbanismeMainListener
+        implements Listener {
 
     //
-    // ❌ STOP
+    // 🏛 GUI CLICK
     //
 
-    public static void stop(UUID uuid) {
+    @EventHandler
+    public void click(
+            InventoryClickEvent e
+    ) {
 
-        waiting.remove(uuid);
-    }
+        //
+        // 📛 TITLE
+        //
 
-    //
-    // 🔍 CHECK
-    //
+        if (!e.getView()
+                .getTitle()
+                .equalsIgnoreCase(
+                        "§8✦ Commission Urbaine"
+                )) {
+            return;
+        }
 
-    public static boolean isWaiting(UUID uuid) {
+        //
+        // ❌ CANCEL
+        //
 
-        return waiting.containsKey(uuid);
+        e.setCancelled(true);
+
+        //
+        // 👤 PLAYER
+        //
+
+        if (!(e.getWhoClicked()
+                instanceof Player p))
+            return;
+
+        //
+        // 📦 INVENTORY CHECK
+        //
+
+        if (e.getClickedInventory() == null)
+            return;
+
+        //
+        // 🛑 PLAYER INVENTORY
+        //
+
+        if (e.getRawSlot() >= e.getView()
+                .getTopInventory()
+                .getSize()) {
+
+            return;
+        }
+
+        //
+        // 📦 ITEM
+        //
+
+        if (e.getCurrentItem() == null)
+            return;
+
+        //
+        // 🔘 SLOT
+        //
+
+        int slot =
+                e.getRawSlot();
+
+        //
+        // 🔊 SOUND
+        //
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.UI_BUTTON_CLICK,
+
+                1f,
+
+                1f
+        );
+
+        //
+        // 📜 PROJETS
+        //
+
+        if (slot == 11) {
+
+            //
+            // 🛡 TOWNY CHECK
+            //
+
+            if (!TownyHook.canManage(p)) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§c🏛 Accès refusé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Seuls les maires"
+                );
+
+                p.sendMessage(
+                        "§7et assistants peuvent"
+                );
+
+                p.sendMessage(
+                        "§7gérer les projets urbains."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return;
+            }
+
+            p.closeInventory();
+
+            p.performCommand(
+                    "urbanisme projets"
+            );
+
+            return;
+        }
+
+        //
+        // ➕ SOUMISSION
+        //
+
+        if (slot == 13) {
+
+            //
+            // 🛡 TOWNY CHECK
+            //
+
+            if (!TownyHook.canManage(p)) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§c🏛 Accès refusé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Seuls les maires"
+                );
+
+                p.sendMessage(
+                        "§7et assistants peuvent"
+                );
+
+                p.sendMessage(
+                        "§7déposer des projets."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return;
+            }
+
+            //
+            // 🧠 WAIT INPUT
+            //
+
+            ProjectInputManager.start(
+                    p.getUniqueId()
+            );
+
+            //
+            // 🔒 CLOSE
+            //
+
+            p.closeInventory();
+
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_NOTE_BLOCK_PLING,
+
+                    1f,
+
+                    1.5f
+            );
+
+            //
+            // 📜 MESSAGE
+            //
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§a✦ Création d'un dossier urbain"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Tape maintenant dans le chat"
+            );
+
+            p.sendMessage(
+                    "§7le nom du projet."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8Exemple:"
+            );
+
+            p.sendMessage(
+                    "§eGare Centrale"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§cTape 'annuler'"
+            );
+
+            p.sendMessage(
+                    "§cpour quitter."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return;
+        }
+
+        //
+        // 🏆 CLASSEMENT
+        //
+
+        if (slot == 15) {
+
+            p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                    1f,
+
+                    1f
+            );
+
+            p.performCommand(
+                    "urbanisme classement"
+            );
+
+            return;
+        }
+
+        //
+        // 🔙 MENU PRINCIPAL
+        //
+
+        if (slot == 22) {
+
+            p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    1f
+            );
+
+            return;
+        }
+
+        //
+        // 🛰 ADMIN
+        //
+
+        if (slot == 31) {
+
+            //
+            // 🔒 STAFF CHECK
+            //
+
+            if (!p.hasPermission(
+                    "moodtowngrade.staff")) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                return;
+            }
+
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                    1f,
+
+                    1f
+            );
+
+            //
+            // 🚀 OPEN
+            //
+
+            UrbanismeAdminGUI.open(p);
+        }
     }
 }
