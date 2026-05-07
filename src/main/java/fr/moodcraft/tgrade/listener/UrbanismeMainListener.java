@@ -2,6 +2,8 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
+import fr.moodcraft.tgrade.manager.ProjectInputManager;
+
 import fr.moodcraft.tgrade.towny.TownyHook;
 
 import org.bukkit.Sound;
@@ -212,7 +214,38 @@ public class UrbanismeMainListener
                 return;
             }
 
+            //
+            // 🧠 WAIT INPUT
+            //
+
+            ProjectInputManager.waiting(
+                    p.getUniqueId()
+            );
+
+            //
+            // 🔒 CLOSE
+            //
+
             p.closeInventory();
+
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_NOTE_BLOCK_PLING,
+
+                    1f,
+
+                    1.5f
+            );
+
+            //
+            // 📜 MESSAGE
+            //
 
             p.sendMessage("");
 
@@ -221,37 +254,37 @@ public class UrbanismeMainListener
             );
 
             p.sendMessage(
-                    "§a🏗 Nouveau Projet"
+                    "§a✦ Création d'un dossier urbain"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Place-toi devant"
+                    "§7Tape maintenant dans le chat"
             );
 
             p.sendMessage(
-                    "§7la construction RP."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Commande:"
-            );
-
-            p.sendMessage(
-                    "§e/urbanisme projet <nom>"
+                    "§7le nom du projet."
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§cTout faux dossier"
+                    "§8Exemple:"
             );
 
             p.sendMessage(
-                    "§csera refusé."
+                    "§eGare Centrale"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§cTape 'annuler'"
+            );
+
+            p.sendMessage(
+                    "§cpour quitter."
             );
 
             p.sendMessage("");
