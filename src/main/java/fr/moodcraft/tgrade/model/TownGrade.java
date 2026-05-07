@@ -176,13 +176,50 @@ public class TownGrade {
     }
 
     //
+    // 🎨 SCORE COLOR
+    //
+
+    public String getScoreColor() {
+
+        int total =
+                getTotal();
+
+        if (total <= 10) {
+
+            return "§8";
+        }
+
+        if (total <= 20) {
+
+            return "§7";
+        }
+
+        if (total <= 30) {
+
+            return "§a";
+        }
+
+        if (total <= 40) {
+
+            return "§b";
+        }
+
+        if (total <= 49) {
+
+            return "§6";
+        }
+
+        return "§e§l";
+    }
+
+    //
     // 📊 FORMAT SCORE
     //
 
     public String getFormattedScore() {
 
         return
-                "§e"
+                getScoreColor()
                         + getTotal()
                         + "§7/50";
     }
