@@ -61,6 +61,17 @@ public class UrbanismeMainListener
             return;
 
         //
+        // 🛑 PLAYER INVENTORY
+        //
+
+        if (e.getRawSlot() >= e.getView()
+                .getTopInventory()
+                .getSize()) {
+
+            return;
+        }
+
+        //
         // 📦 ITEM
         //
 
@@ -218,7 +229,7 @@ public class UrbanismeMainListener
             // 🧠 WAIT INPUT
             //
 
-            ProjectInputManager.waiting(
+            ProjectInputManager.start(
                     p.getUniqueId()
             );
 
@@ -342,8 +353,6 @@ public class UrbanismeMainListener
 
                     1f
             );
-
-            p.chat("/menu");
 
             return;
         }
