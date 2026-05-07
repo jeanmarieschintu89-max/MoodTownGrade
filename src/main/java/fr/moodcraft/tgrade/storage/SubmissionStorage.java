@@ -110,6 +110,31 @@ public class SubmissionStorage {
     }
 
     //
+    // 🧹 CLEANUP
+    //
+
+    public static void cleanup() {
+
+        //
+        // 📚 LOOP
+        //
+
+        for (TownSubmission sub :
+                getAll()) {
+
+            //
+            // ❌ DELETE NON-PENDING
+            //
+
+            if (sub.getStatus()
+                    != SubmissionStatus.PENDING) {
+
+                delete(sub.getId());
+            }
+        }
+    }
+
+    //
     // 🗑 CLEAR ALL
     //
 
