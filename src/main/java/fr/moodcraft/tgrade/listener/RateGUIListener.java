@@ -48,7 +48,7 @@ public class RateGUIListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8⭐ Notation Urbaine"
+                        "§8✦ Inspection Nationale"
                 )) {
             return;
         }
