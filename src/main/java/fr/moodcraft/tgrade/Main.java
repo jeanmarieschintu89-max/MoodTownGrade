@@ -4,6 +4,7 @@ import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
+import fr.moodcraft.tgrade.listener.ProjectChatListener;
 import fr.moodcraft.tgrade.listener.ProjectReviewListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
@@ -165,6 +166,13 @@ public class Main extends JavaPlugin {
                         this
                 );
 
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new ProjectChatListener(),
+                        this
+                );
+
         //
         // ⏰ RESET HEBDO
         //
@@ -218,6 +226,10 @@ public class Main extends JavaPlugin {
 
         getLogger().info(
                 "📊 Système de notation actif"
+        );
+
+        getLogger().info(
+                "💬 Saisie projet interactive active"
         );
 
         getLogger().info(
