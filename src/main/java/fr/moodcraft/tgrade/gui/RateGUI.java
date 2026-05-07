@@ -50,11 +50,11 @@ public class RateGUI {
 
                         54,
 
-                        "§8⭐ Notation Urbaine"
+                        "§8Notation Urbaine"
                 );
 
         //
-        // 🌌 FILL
+        // 🌌 GLASS
         //
 
         ItemStack glass =
@@ -71,9 +71,28 @@ public class RateGUI {
 
         glass.setItemMeta(glassMeta);
 
-        for (int i = 0; i < 54; i++) {
+        //
+        // 🧱 BORDERS ONLY
+        //
 
-            inv.setItem(i, glass);
+        int[] borders = {
+
+                0,1,2,3,4,5,6,7,8,
+
+                9,17,
+
+                18,26,
+
+                27,35,
+
+                36,44,
+
+                45,46,47,48,49,50,51,52,53
+        };
+
+        for (int slot : borders) {
+
+            inv.setItem(slot, glass);
         }
 
         //
@@ -94,14 +113,14 @@ public class RateGUI {
 
         infoMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
-
                 "§7Commission nationale",
+
                 "§7d'évaluation urbaine.",
 
                 "",
 
                 "§7Total actuel:",
+
                 "§6"
                         + session.getTotal()
                         + "§7/50"
@@ -138,7 +157,7 @@ public class RateGUI {
 
                 inv,
 
-                11,
+                12,
 
                 Material.PAINTING,
 
@@ -157,7 +176,7 @@ public class RateGUI {
 
                 inv,
 
-                12,
+                14,
 
                 Material.BELL,
 
@@ -176,7 +195,7 @@ public class RateGUI {
 
                 inv,
 
-                13,
+                16,
 
                 Material.GOLD_INGOT,
 
@@ -195,7 +214,7 @@ public class RateGUI {
 
                 inv,
 
-                14,
+                28,
 
                 Material.BRICKS,
 
@@ -214,7 +233,7 @@ public class RateGUI {
 
                 inv,
 
-                15,
+                30,
 
                 Material.WRITABLE_BOOK,
 
@@ -233,7 +252,7 @@ public class RateGUI {
 
                 inv,
 
-                16,
+                32,
 
                 Material.MAP,
 
@@ -252,7 +271,7 @@ public class RateGUI {
 
                 inv,
 
-                19,
+                34,
 
                 Material.DIAMOND,
 
@@ -330,8 +349,6 @@ public class RateGUI {
 
         meta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
-
                 "§7Note actuelle:",
 
                 "§6"
@@ -341,9 +358,9 @@ public class RateGUI {
 
                 "",
 
-                "§e▶ Clique pour augmenter",
+                "§e▶ Augmenter la note",
 
-                "§7Retour à §c0 §7après le maximum"
+                "§7Revient à 0 après max"
         ));
 
         item.setItemMeta(meta);
