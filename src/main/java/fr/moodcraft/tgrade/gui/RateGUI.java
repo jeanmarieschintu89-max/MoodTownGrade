@@ -7,7 +7,6 @@ import fr.moodcraft.tgrade.model.RateSession;
 import fr.moodcraft.tgrade.model.TownGrade;
 
 import org.bukkit.Bukkit;
-
 import org.bukkit.Material;
 
 import org.bukkit.entity.Player;
@@ -21,425 +20,161 @@ import java.util.List;
 
 public class RateGUI {
 
-    //
-    // ⭐ OPEN
-    //
+    public static final int ARCHI = 10;
+    public static final int COHERENCE = 12;
+    public static final int ACTIVITE = 14;
+    public static final int BANQUE = 16;
+
+    public static final int BUILD = 28;
+    public static final int RP = 30;
+    public static final int TAILLE = 32;
+    public static final int VOTES = 34;
+
+    public static final int SAVE = 49;
 
     public static void open(
             Player p,
             String town
     ) {
 
-        //
-        // 📊 EXISTING GRADE
-        //
-
         TownGrade grade =
                 GradeManager.get(town);
 
-        //
-        // 🧠 SESSION
-        //
-
         RateSession session =
                 RateSessionManager.create(
-
                         p.getUniqueId(),
                         town
                 );
 
-        //
-        // 🔄 LOAD CURRENT SCORES
-        //
-
-        session.setArchitecture(
-                grade.getArchitecture()
-        );
-
-        session.setCoherence(
-                grade.getStyle()
-        );
-
-        session.setActivite(
-                grade.getActivite()
-        );
-
-        session.setBanque(
-                grade.getBanque()
-        );
-
-        session.setBuild(
-                grade.getRemarquable()
-        );
-
-        session.setRoleplay(
-                grade.getRp()
-        );
-
-        session.setTaille(
-                grade.getTaille()
-        );
-
-        session.setVotes(
-                grade.getVotes()
-        );
-
-        //
-        // 📦 INVENTORY
-        //
-
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
                         "§8✦ Notation Nationale"
                 );
 
-        //
-        // 🌌 GLASS
-        //
-
-        ItemStack glass =
-                new ItemStack(
-                        Material.BLACK_STAINED_GLASS_PANE
-                );
-
-        ItemMeta glassMeta =
-                glass.getItemMeta();
-
-        glassMeta.setDisplayName(
-                " "
-        );
-
-        glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
-
-        int[] borders = {
-
-                0,1,2,3,4,5,6,7,8,
-
-                9,17,
-
-                18,26,
-
-                27,35,
-
-                36,44,
-
-                45,46,47,48,50,51,52,53
-        };
-
-        for (int slot : borders) {
-
-            inv.setItem(slot, glass);
-        }
-
-        //
-        // 🏛 HEADER
-        //
-
-        ItemStack info =
-                new ItemStack(
-                        Material.NETHER_STAR
-                );
-
-        ItemMeta infoMeta =
-                info.getItemMeta();
-
-        infoMeta.setDisplayName(
-                "§6✦ Inspection de " + town
-        );
-
-        infoMeta.setLore(List.of(
-
-                "§8━━━━━━━━━━━━━━━━",
-
-                "§7Commission Nationale",
-
-                "§7d'évaluation urbaine.",
-
-                "",
-
-                "§7Prestige actuel:",
-                grade.getFormattedScore(),
-
-                "",
-
-                "§7Classement:",
-                grade.getRank(),
-
-                "",
-
-                "§7Appréciation:",
-                grade.getAppreciation(),
-
-                "",
-
-                "§7Financement estimé:",
-                "§a" + grade.getPayout() + "$"
-        ));
-
-        info.setItemMeta(infoMeta);
-
-        inv.setItem(4, info);
-
-        //
-        // 🏗 ARCHITECTURE
-        //
+        fill(inv);
 
         set(
-
                 inv,
-
-                10,
-
+                ARCHI,
                 Material.QUARTZ_BLOCK,
-
-                "§f🏗 Architecture Nationale",
-
+                "§f🏗 Architecture",
                 session.getArchitecture(),
-
-                10,
-
-                "§7Qualité architecturale",
-
-                "§7et cohérence des bâtiments."
+                10
         );
 
-        //
-        // 🎨 COHERENCE
-        //
-
         set(
-
                 inv,
-
-                12,
-
+                COHERENCE,
                 Material.PAINTING,
-
-                "§d🎨 Harmonie Urbaine",
-
+                "§d🎨 Cohérence",
                 session.getCoherence(),
-
-                6,
-
-                "§7Organisation générale",
-
-                "§7et cohérence visuelle."
+                6
         );
 
-        //
-        // ⚡ ACTIVITE
-        //
-
         set(
-
                 inv,
-
-                14,
-
+                ACTIVITE,
                 Material.BELL,
-
-                "§e⚡ Activité Citadine",
-
+                "§e⚡ Activité",
                 session.getActivite(),
-
-                8,
-
-                "§7Présence de joueurs",
-
-                "§7et dynamisme urbain."
+                8
         );
 
-        //
-        // 💰 BANQUE
-        //
-
         set(
-
                 inv,
-
-                16,
-
+                BANQUE,
                 Material.GOLD_INGOT,
-
-                "§6💰 Richesse Municipale",
-
+                "§6💰 Banque",
                 session.getBanque(),
-
-                4,
-
-                "§7Puissance économique",
-
-                "§7de la ville inspectée."
+                4
         );
 
-        //
-        // 🏛 BUILD
-        //
-
         set(
-
                 inv,
-
-                28,
-
+                BUILD,
                 Material.BRICKS,
-
-                "§c🏛 Build Remarquable",
-
+                "§c🏛 Build",
                 session.getBuild(),
-
-                8,
-
-                "§7Présence de structures",
-
-                "§7uniques et mémorables."
+                8
         );
 
-        //
-        // 🎭 RP
-        //
-
         set(
-
                 inv,
-
-                30,
-
+                RP,
                 Material.WRITABLE_BOOK,
-
-                "§a🎭 Immersion RolePlay",
-
+                "§a🎭 RP",
                 session.getRoleplay(),
-
-                6,
-
-                "§7Qualité RP générale",
-
-                "§7de la ville."
+                6
         );
 
-        //
-        // 🌍 TAILLE
-        //
-
         set(
-
                 inv,
-
-                32,
-
+                TAILLE,
                 Material.MAP,
-
-                "§2🌍 Expansion Territoriale",
-
+                "§2🌍 Taille",
                 session.getTaille(),
-
-                3,
-
-                "§7Importance et ampleur",
-
-                "§7du territoire urbain."
+                3
         );
-
-        //
-        // 🗳 VOTES
-        //
 
         set(
-
                 inv,
-
-                34,
-
+                VOTES,
                 Material.DIAMOND,
-
-                "§b🗳 Popularité Nationale",
-
+                "§b🗳 Votes",
                 session.getVotes(),
-
-                5,
-
-                "§7Avis général et",
-
-                "§7attractivité de la ville."
+                5
         );
-
-        //
-        // ✅ SAVE
-        //
 
         ItemStack save =
                 new ItemStack(
                         Material.LIME_CONCRETE
                 );
 
-        ItemMeta saveMeta =
+        ItemMeta meta =
                 save.getItemMeta();
 
-        saveMeta.setDisplayName(
-                "§a✅ Publier l'inspection"
+        meta.setDisplayName(
+                "§a✅ Sauvegarder"
         );
 
-        saveMeta.setLore(List.of(
+        save.setItemMeta(meta);
 
-                "§8━━━━━━━━━━━━━━━━",
-
-                "§7Mettre à jour le rapport",
-
-                "§7officiel de la ville.",
-
-                "",
-
-                "§7Le classement national",
-
-                "§7sera recalculé.",
-
-                "",
-
-                "§a▶ Sauvegarder l'inspection"
-        ));
-
-        save.setItemMeta(saveMeta);
-
-        inv.setItem(49, save);
-
-        //
-        // 🚀 OPEN
-        //
+        inv.setItem(SAVE, save);
 
         p.openInventory(inv);
     }
 
-    //
-    // ⭐ ITEM
-    //
+    private static void fill(
+            Inventory inv
+    ) {
+
+        ItemStack glass =
+                new ItemStack(
+                        Material.BLACK_STAINED_GLASS_PANE
+                );
+
+        ItemMeta meta =
+                glass.getItemMeta();
+
+        meta.setDisplayName(" ");
+
+        glass.setItemMeta(meta);
+
+        for (int i = 0; i < 54; i++) {
+
+            inv.setItem(i, glass);
+        }
+    }
 
     private static void set(
-
             Inventory inv,
-
             int slot,
-
             Material mat,
-
             String name,
-
             int current,
-
-            int max,
-
-            String line1,
-
-            String line2
+            int max
     ) {
 
         ItemStack item =
@@ -452,27 +187,10 @@ public class RateGUI {
 
         meta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
-
-                line1,
-                line2,
-
+                "§7Note:",
+                "§e" + current + "§7/" + max,
                 "",
-
-                "§7Note actuelle:",
-
-                "§6"
-                        + current
-                        + "§7/"
-                        + max,
-
-                "",
-
-                "§e▶ Modifier la note",
-
-                "§7Retour à §c0",
-
-                "§7après le maximum"
+                "§a▶ Cliquer"
         ));
 
         item.setItemMeta(meta);
