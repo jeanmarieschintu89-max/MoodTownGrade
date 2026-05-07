@@ -15,11 +15,15 @@ public class PayoutManager {
 
     public static void payoutAll() {
 
+        //
+        // 🌍 LOOP TOWNS
+        //
+
         for (TownGrade grade :
                 GradeManager.getAll()) {
 
             //
-            // ✅ INSPECTION CHECK
+            // ✅ NOTATION TERMINÉE
             //
 
             if (!grade.isFinished()) {
@@ -27,7 +31,7 @@ public class PayoutManager {
             }
 
             //
-            // 🏙️ TOWN
+            // 🏛 TOWN
             //
 
             Town town =
@@ -36,30 +40,44 @@ public class PayoutManager {
                                     grade.getTown()
                             );
 
+            //
+            // ❌ TOWN NULL
+            //
+
             if (town == null) {
                 continue;
             }
 
             //
-            // 💰 MONEY
+            // 💰 MONTANT
             //
 
             int payout =
                     grade.getPayout();
 
-            try {
+            //
+            // 🏦 DÉPÔT TOWNY
+            //
 
-                //
-                // 🏦 BANK DEPOSIT
-                //
+            try {
 
                 town.getAccount()
                         .deposit(
+
                                 payout,
-                                "MoodTownGrade"
+
+                                "Commission urbaine MoodCraft"
                         );
 
             } catch (Exception e) {
+
+                Bukkit.getConsoleSender()
+                        .sendMessage(
+
+                                "§c[MoodTownGrade] "
+                                        + "Impossible de verser la bourse à "
+                                        + town.getName()
+                        );
 
                 e.printStackTrace();
 
@@ -67,7 +85,7 @@ public class PayoutManager {
             }
 
             //
-            // 📢 BROADCAST
+            // 🔊 BROADCAST
             //
 
             Bukkit.broadcastMessage("");
@@ -77,25 +95,37 @@ public class PayoutManager {
             );
 
             Bukkit.broadcastMessage(
-                    "§b🏛 Commission Urbaine"
+                    "§b🏛 Commission Urbaine Nationale"
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Ville: §b"
-                            + grade.getTown()
+                    "§7Inspection hebdomadaire terminée."
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Ville inspectée: §b"
+                            + town.getName()
             );
 
             Bukkit.broadcastMessage(
-                    "§7Score: §e"
+                    "§7Score obtenu: §6"
                             + grade.getTotal()
                             + "§7/50"
             );
 
+            Bukkit.broadcastMessage("");
+
             Bukkit.broadcastMessage(
-                    "§7Bourse versée: §a"
-                            + payout
+                    "§7Bourse municipale:"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§a+"
+                            + format(payout)
                             + "$"
             );
 
@@ -105,11 +135,44 @@ public class PayoutManager {
                     grade.getAppreciation()
             );
 
+            Bukkit.broadcastMessage("");
+
+            //
+            // 🏆 BONUS ÉLITE
+            //
+
+            if (grade.getTotal() >= 45) {
+
+                Bukkit.broadcastMessage(
+                        "§e✨ Cette ville devient"
+                );
+
+                Bukkit.broadcastMessage(
+                        "§eune référence architecturale nationale."
+                );
+
+                Bukkit.broadcastMessage("");
+            }
+
             Bukkit.broadcastMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
 
             Bukkit.broadcastMessage("");
         }
+    }
+
+    //
+    // 💰 FORMAT
+    //
+
+    private static String format(
+            int value
+    ) {
+
+        return String.format(
+                "%,d",
+                value
+        ).replace(",", " ");
     }
 }
