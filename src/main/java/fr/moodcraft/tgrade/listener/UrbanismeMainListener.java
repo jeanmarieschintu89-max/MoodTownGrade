@@ -1,4 +1,3 @@
-
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
@@ -33,7 +32,7 @@ public class UrbanismeMainListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8Commission Urbaine"
+                        "§8🏛 Commission Urbaine"
                 )) {
             return;
         }
@@ -293,12 +292,23 @@ public class UrbanismeMainListener
         }
 
         //
-        // 🔙 MENU
+        // 🔙 MENU PRINCIPAL
         //
 
         if (slot == 22) {
 
             p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    1f
+            );
 
             p.performCommand("menu");
 
