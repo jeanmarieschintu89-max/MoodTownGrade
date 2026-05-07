@@ -1,16 +1,21 @@
 package fr.moodcraft.tgrade.command;
 
 import fr.moodcraft.tgrade.gui.ClassementGUI;
+import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
 import fr.moodcraft.tgrade.gui.RateGUI;
 import fr.moodcraft.tgrade.gui.ReviewGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.PayoutManager;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+
+import fr.moodcraft.tgrade.task.WeeklyResetTask;
 
 import fr.moodcraft.tgrade.towny.TownyHook;
 
@@ -22,7 +27,6 @@ import org.bukkit.command.CommandSender;
 
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.UUID;
 
 public class UrbanismeCommand
@@ -94,7 +98,10 @@ public class UrbanismeCommand
         if (args[0].equalsIgnoreCase("review")
                 || args[0].equalsIgnoreCase("noter")
                 || args[0].equalsIgnoreCase("validation")
-                || args[0].equalsIgnoreCase("payout")) {
+                || args[0].equalsIgnoreCase("payout")
+                || args[0].equalsIgnoreCase("delete")
+                || args[0].equalsIgnoreCase("resetweek")
+                || args[0].equalsIgnoreCase("resetville")) {
 
             if (!p.hasPermission(
                     "moodtowngrade.staff")) {
@@ -161,6 +168,46 @@ public class UrbanismeCommand
 
             PayoutManager.payoutAll();
 
+            p.sendMessage(
+                    "§aBourses distribuées."
+            );
+
+            return true;
+        }
+
+        //
+        // 🗑 DELETE PROJECT ADMIN
+        //
+
+        if (args[0].equalsIgnoreCase("delete")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme delete <id>"
+                );
+
+                return true;
+            }
+
+            TownSubmission sub =
+                    SubmissionStorage.get(
+                            args[1]
+                    );
+
+            if (sub == null) {
+
+                p.sendMessage(
+                        "§cProjet introuvable."
+                );
+
+                return true;
+            }
+
+            SubmissionStorage.delete(
+                    sub.getId()
+            );
+
             p.sendMessage("");
 
             p.sendMessage(
@@ -168,21 +215,100 @@ public class UrbanismeCommand
             );
 
             p.sendMessage(
-                    "§a💰 Bourses distribuées"
+                    "§c🗑 Projet supprimé"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Toutes les villes"
+                    "§7Projet: §e"
+                            + sub.getBuildName()
             );
 
             p.sendMessage(
-                    "§7éligibles ont reçu"
+                    "§7Ville: §b"
+                            + sub.getTown()
             );
 
             p.sendMessage(
-                    "§7leur financement."
+                    "§7ID: §f"
+                            + sub.getId()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
+        // 🔄 RESET WEEK
+        //
+
+        if (args[0].equalsIgnoreCase("resetweek")) {
+
+            new WeeklyResetTask().run();
+
+            p.sendMessage(
+                    "§aSemaine urbaine réinitialisée."
+            );
+
+            return true;
+        }
+
+        //
+        // 🏛 RESET VILLE
+        //
+
+        if (args[0].equalsIgnoreCase("resetville")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme resetville <ville>"
+                );
+
+                return true;
+            }
+
+            TownGrade grade =
+                    GradeManager.get(args[1]);
+
+            grade.setArchitecture(0);
+            grade.setStyle(0);
+            grade.setActivite(0);
+            grade.setBanque(0);
+            grade.setRemarquable(0);
+            grade.setRp(0);
+            grade.setTaille(0);
+            grade.setVotes(0);
+
+            grade.setFinished(false);
+
+            grade.setPayoutClaimed(false);
+
+            GradeManager.save(grade);
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§c🏛 Ville réinitialisée"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + args[1]
             );
 
             p.sendMessage("");
@@ -359,63 +485,12 @@ public class UrbanismeCommand
         }
 
         //
-        // 📜 PROJETS
+        // 📜 PROJETS GUI
         //
 
         if (args[0].equalsIgnoreCase("projets")) {
 
-            List<TownSubmission> list =
-                    SubmissionStorage.getTown(
-                            town.getName()
-                    );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage(
-                    "§b🏛 Projets urbains"
-            );
-
-            p.sendMessage("");
-
-            if (list.isEmpty()) {
-
-                p.sendMessage(
-                        "§7Aucun projet."
-                );
-
-            } else {
-
-                for (TownSubmission sub : list) {
-
-                    p.sendMessage(
-                            "§e"
-                                    + sub.getBuildName()
-                    );
-
-                    p.sendMessage(
-                            " §7ID: §f"
-                                    + sub.getId()
-                    );
-
-                    p.sendMessage(
-                            " §7Statut: "
-                                    + sub.getStatus()
-                                            .getDisplay()
-                    );
-
-                    p.sendMessage("");
-                }
-            }
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
+            PendingProjectsGUI.open(p);
 
             return true;
         }
