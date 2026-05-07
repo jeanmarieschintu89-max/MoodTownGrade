@@ -23,8 +23,14 @@ import java.util.List;
 
 public class ReviewGUI {
 
-    public static void open(Player p,
-                            String town) {
+    //
+    // 🏛 OPEN
+    //
+
+    public static void open(
+            Player p,
+            String town
+    ) {
 
         //
         // 📊 GRADE
@@ -34,64 +40,183 @@ public class ReviewGUI {
                 GradeManager.get(town);
 
         //
-        // 🏛️ COMMISSION URBAINE
+        // 🏛 INVENTORY
         //
 
         Inventory inv =
                 Bukkit.createInventory(
+
                         null,
+
                         54,
-                        "§8✦ §bMoodCraft §8• §7Inspection"
+
+                        "§8✦ Inspection Nationale"
                 );
 
         //
-        // 📂 PROJETS
+        // 📂 PROJETS VALIDÉS
         //
 
         List<TownSubmission> list =
                 SubmissionStorage.getTown(town);
 
+        //
+        // 🌌 GLASS
+        //
+
+        ItemStack glass =
+                new ItemStack(
+                        Material.BLACK_STAINED_GLASS_PANE
+                );
+
+        ItemMeta glassMeta =
+                glass.getItemMeta();
+
+        glassMeta.setDisplayName(" ");
+
+        glass.setItemMeta(glassMeta);
+
+        //
+        // 🧱 BORDERS
+        //
+
+        int[] borders = {
+
+                0,1,2,3,4,5,6,7,8,
+
+                9,17,
+
+                18,26,
+
+                27,35,
+
+                36,44,
+
+                45,46,47,48,50,51,52,53
+        };
+
+        for (int slot : borders) {
+
+            inv.setItem(slot, glass);
+        }
+
+        //
+        // 🏛 HEADER
+        //
+
+        ItemStack header =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§6✦ Commission d'Inspection"
+        );
+
+        headerMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Ville inspectée: §b"
+                        + town,
+
+                "",
+
+                "§7Prestige actuel:",
+
+                grade.getFormattedScore(),
+
+                "",
+
+                "§7Classement urbain:",
+
+                grade.getRank(),
+
+                "",
+
+                "§e▶ Dossier gouvernemental actif"
+        ));
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(4, header);
+
+        //
+        // 📦 SLOT
+        //
+
         int slot = 10;
+
+        //
+        // 📋 DOSSIERS
+        //
 
         for (TownSubmission sub : list) {
 
             //
-            // ✅ VALIDÉS UNIQUEMENT
+            // ✅ APPROVED ONLY
             //
 
             if (sub.getStatus()
                     != SubmissionStatus.APPROVED) {
+
                 continue;
             }
 
             //
-            // 🏗️ DOSSIER URBAIN
+            // 🛑 LIMIT
+            //
+
+            if (slot >= 44) {
+                break;
+            }
+
+            //
+            // 📘 ITEM
             //
 
             ItemStack item =
-                    new ItemStack(Material.WRITABLE_BOOK);
+                    new ItemStack(
+                            Material.WRITABLE_BOOK
+                    );
 
             ItemMeta meta =
                     item.getItemMeta();
 
             meta.setDisplayName(
-                    "§6" + sub.getBuildName()
+
+                    "§e✦ "
+                            + sub.getBuildName()
             );
 
             List<String> lore =
                     new ArrayList<>();
 
-            lore.add("");
-
             lore.add(
-                    "§7Ville: §b"
-                            + sub.getTown()
+                    "§8━━━━━━━━━━━━━━━━"
             );
 
             lore.add("");
 
             lore.add(
-                    "§7Statut: §aPermis accordé"
+                    "§7Ville:"
+            );
+
+            lore.add(
+                    "§b" + sub.getTown()
+            );
+
+            lore.add("");
+
+            lore.add(
+                    "§7Statut:"
+            );
+
+            lore.add(
+                    "§aPermis de construire accordé"
             );
 
             lore.add("");
@@ -101,21 +226,21 @@ public class ReviewGUI {
             );
 
             lore.add(
-                    " §fX: §e" + sub.getX()
+                    "§fX: §e" + sub.getX()
             );
 
             lore.add(
-                    " §fY: §e" + sub.getY()
+                    "§fY: §e" + sub.getY()
             );
 
             lore.add(
-                    " §fZ: §e" + sub.getZ()
+                    "§fZ: §e" + sub.getZ()
             );
 
             lore.add("");
 
             lore.add(
-                    "§b● §7Clique pour inspecter"
+                    "§b▶ Inspection terrain"
             );
 
             meta.setLore(lore);
@@ -124,15 +249,20 @@ public class ReviewGUI {
 
             inv.setItem(slot, item);
 
+            //
+            // ➡ NEXT SLOT
+            //
+
             slot++;
 
-            //
-            // 🛑 LIMITE GUI
-            //
+            if (slot == 17)
+                slot = 19;
 
-            if (slot >= 44) {
-                break;
-            }
+            if (slot == 26)
+                slot = 28;
+
+            if (slot == 35)
+                slot = 37;
         }
 
         //
@@ -140,27 +270,24 @@ public class ReviewGUI {
         //
 
         ItemStack report =
-                new ItemStack(Material.EMERALD_BLOCK);
+                new ItemStack(
+                        Material.EMERALD_BLOCK
+                );
 
-        ItemMeta meta =
+        ItemMeta reportMeta =
                 report.getItemMeta();
 
-        meta.setDisplayName(
-                "§aRapport urbain"
+        reportMeta.setDisplayName(
+                "§a✦ Rapport National"
         );
 
-        meta.setLore(List.of(
+        reportMeta.setLore(List.of(
 
-                "",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7Ville inspectée: §b"
-                        + town,
+                "§7Évaluation urbaine",
 
-                "",
-
-                "§7Score actuel: §e"
-                        + grade.getTotal()
-                        + "§7/50",
+                "§7officielle MoodCraft.",
 
                 "",
 
@@ -168,49 +295,73 @@ public class ReviewGUI {
                         + grade.getArchitecture()
                         + "§7/10",
 
+                "§7Cohérence: §e"
+                        + grade.getStyle()
+                        + "§7/6",
+
                 "§7Activité: §e"
                         + grade.getActivite()
                         + "§7/8",
 
-                "§7RP: §e"
+                "§7Banque: §e"
+                        + grade.getBanque()
+                        + "§7/4",
+
+                "§7Build: §e"
+                        + grade.getRemarquable()
+                        + "§7/8",
+
+                "§7RolePlay: §e"
                         + grade.getRp()
                         + "§7/6",
 
                 "",
 
-                "§b● §7Inspection active"
+                "§6Prestige total:",
+
+                grade.getFormattedScore()
         ));
 
-        report.setItemMeta(meta);
+        report.setItemMeta(reportMeta);
 
         inv.setItem(49, report);
 
         //
-        // 🏛️ BOUTON NOTATION
+        // ⭐ NOTATION
         //
 
         ItemStack notation =
-                new ItemStack(Material.BEACON);
+                new ItemStack(
+                        Material.BEACON
+                );
 
-        meta = notation.getItemMeta();
+        ItemMeta notationMeta =
+                notation.getItemMeta();
 
-        meta.setDisplayName(
-                "§6Commission d'évaluation"
+        notationMeta.setDisplayName(
+                "§6⭐ Commission d'Évaluation"
         );
 
-        meta.setLore(List.of(
+        notationMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Accéder au système",
+
+                "§7officiel de notation.",
 
                 "",
 
-                "§7Ouvre le système officiel",
-                "§7de notation MoodCraft.",
+                "§7Modification possible",
+
+                "§7jusqu'au reset hebdomadaire.",
 
                 "",
 
-                "§b● §7Clique pour noter"
+                "§6▶ Ouvrir la notation"
         ));
 
-        notation.setItemMeta(meta);
+        notation.setItemMeta(notationMeta);
 
         inv.setItem(45, notation);
 
@@ -219,43 +370,32 @@ public class ReviewGUI {
         //
 
         ItemStack close =
-                new ItemStack(Material.BARRIER);
+                new ItemStack(
+                        Material.BARRIER
+                );
 
-        meta = close.getItemMeta();
+        ItemMeta closeMeta =
+                close.getItemMeta();
 
-        meta.setDisplayName(
-                "§cFermer l'inspection"
+        closeMeta.setDisplayName(
+                "§c⬅ Fermer l'Inspection"
         );
 
-        close.setItemMeta(meta);
+        closeMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Retour au centre",
+
+                "§7administratif."
+        ));
+
+        close.setItemMeta(closeMeta);
 
         inv.setItem(53, close);
 
         //
-        // 🌫️ FILLER
-        //
-
-        ItemStack glass =
-                new ItemStack(
-                        Material.GRAY_STAINED_GLASS_PANE
-                );
-
-        meta = glass.getItemMeta();
-
-        meta.setDisplayName(" ");
-
-        glass.setItemMeta(meta);
-
-        for (int i = 0; i < 54; i++) {
-
-            if (inv.getItem(i) == null) {
-
-                inv.setItem(i, glass);
-            }
-        }
-
-        //
-        // ✨ OPEN
+        // 🚀 OPEN
         //
 
         p.openInventory(inv);
