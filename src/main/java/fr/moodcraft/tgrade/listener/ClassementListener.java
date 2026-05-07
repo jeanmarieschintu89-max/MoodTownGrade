@@ -50,7 +50,25 @@ public class ClassementListener
             return;
 
         //
-        // 📦 NULL
+        // 📦 INVENTORY CHECK
+        //
+
+        if (e.getClickedInventory() == null)
+            return;
+
+        //
+        // 🛑 PLAYER INVENTORY
+        //
+
+        if (e.getRawSlot() >= e.getView()
+                .getTopInventory()
+                .getSize()) {
+
+            return;
+        }
+
+        //
+        // 📦 ITEM CHECK
         //
 
         if (e.getCurrentItem() == null)
@@ -61,7 +79,7 @@ public class ClassementListener
         //
 
         int slot =
-                e.getSlot();
+                e.getRawSlot();
 
         //
         // 🔙 RETOUR
@@ -79,6 +97,16 @@ public class ClassementListener
 
                     1f
             );
+
+            //
+            // 🔒 CLOSE
+            //
+
+            p.closeInventory();
+
+            //
+            // 🏛 OPEN
+            //
 
             UrbanismeMainGUI.open(p);
         }
