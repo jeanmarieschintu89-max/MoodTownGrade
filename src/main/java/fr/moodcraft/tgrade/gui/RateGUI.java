@@ -1,8 +1,10 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
+import fr.moodcraft.tgrade.model.TownGrade;
 
 import org.bukkit.Bukkit;
 
@@ -29,6 +31,13 @@ public class RateGUI {
     ) {
 
         //
+        // 📊 EXISTING GRADE
+        //
+
+        TownGrade grade =
+                GradeManager.get(town);
+
+        //
         // 🧠 SESSION
         //
 
@@ -38,6 +47,42 @@ public class RateGUI {
                         p.getUniqueId(),
                         town
                 );
+
+        //
+        // 🔄 LOAD CURRENT SCORES
+        //
+
+        session.setArchitecture(
+                grade.getArchitecture()
+        );
+
+        session.setCoherence(
+                grade.getStyle()
+        );
+
+        session.setActivite(
+                grade.getActivite()
+        );
+
+        session.setBanque(
+                grade.getBanque()
+        );
+
+        session.setBuild(
+                grade.getRemarquable()
+        );
+
+        session.setRoleplay(
+                grade.getRp()
+        );
+
+        session.setTaille(
+                grade.getTaille()
+        );
+
+        session.setVotes(
+                grade.getVotes()
+        );
 
         //
         // 📦 INVENTORY
@@ -50,7 +95,7 @@ public class RateGUI {
 
                         54,
 
-                        "§8Notation Urbaine"
+                        "§8⭐ Notation Urbaine"
                 );
 
         //
@@ -113,17 +158,23 @@ public class RateGUI {
 
         infoMeta.setLore(List.of(
 
+                "§8━━━━━━━━━━━━━━━━",
+
                 "§7Commission nationale",
 
                 "§7d'évaluation urbaine.",
 
                 "",
 
-                "§7Total actuel:",
+                "§7Prestige actuel:",
 
                 "§6"
                         + session.getTotal()
-                        + "§7/50"
+                        + "§7/50",
+
+                "",
+
+                grade.getRank()
         ));
 
         info.setItemMeta(infoMeta);
@@ -300,9 +351,9 @@ public class RateGUI {
 
         saveMeta.setLore(List.of(
 
-                "§7Enregistrer",
+                "§7Mettre à jour",
 
-                "§7la note finale.",
+                "§7l'évaluation urbaine.",
 
                 "",
 
@@ -349,6 +400,8 @@ public class RateGUI {
 
         meta.setLore(List.of(
 
+                "§8━━━━━━━━━━━━━━━━",
+
                 "§7Note actuelle:",
 
                 "§6"
@@ -360,7 +413,9 @@ public class RateGUI {
 
                 "§e▶ Augmenter la note",
 
-                "§7Revient à 0 après max"
+                "§7Retour à §c0",
+
+                "§7après le maximum"
         ));
 
         item.setItemMeta(meta);
