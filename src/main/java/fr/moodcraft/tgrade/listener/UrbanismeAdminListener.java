@@ -31,7 +31,7 @@ public class UrbanismeAdminListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8Centre Administratif"
+                        "§8✦ Centre National"
                 )) {
             return;
         }
@@ -47,22 +47,33 @@ public class UrbanismeAdminListener
         //
 
         if (!(e.getWhoClicked()
-                instanceof Player p))
+                instanceof Player p)) {
             return;
+        }
 
         //
-        // 📦 INVENTORY CHECK
+        // 📦 INVENTORY
         //
 
-        if (e.getClickedInventory() == null)
+        if (e.getClickedInventory() == null) {
             return;
+        }
 
         //
         // 📦 ITEM
         //
 
-        if (e.getCurrentItem() == null)
+        if (e.getCurrentItem() == null) {
             return;
+        }
+
+        //
+        // ❌ AIR
+        //
+
+        if (e.getCurrentItem().getType().isAir()) {
+            return;
+        }
 
         //
         // 🔘 SLOT
@@ -72,7 +83,7 @@ public class UrbanismeAdminListener
                 e.getRawSlot();
 
         //
-        // 🔊 SOUND
+        // 🔊 DEFAULT SOUND
         //
 
         p.playSound(
@@ -87,12 +98,29 @@ public class UrbanismeAdminListener
         );
 
         //
-        // 📋 PROJETS URBAINS
+        // 📋 INSPECTIONS
         //
 
         if (slot == 13) {
 
-            p.closeInventory();
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                    1f,
+
+                    1.2f
+            );
+
+            //
+            // 🚀 OPEN
+            //
 
             PendingProjectsGUI.open(p);
 
@@ -105,7 +133,76 @@ public class UrbanismeAdminListener
 
         if (slot == 31) {
 
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.ENTITY_PLAYER_LEVELUP,
+
+                    1f,
+
+                    0.8f
+            );
+
+            //
+            // 🔒 CLOSE
+            //
+
             p.closeInventory();
+
+            //
+            // 📜 MESSAGE
+            //
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§2✦ Distribution Nationale"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Initialisation des aides"
+            );
+
+            p.sendMessage(
+                    "§7municipales MoodCraft."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Seules les villes avec"
+            );
+
+            p.sendMessage(
+                    "§e25/50 §7minimum recevront"
+            );
+
+            p.sendMessage(
+                    "§7un financement."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            //
+            // 💰 EXECUTE
+            //
 
             p.performCommand(
                     "urbanisme payout"
@@ -120,7 +217,24 @@ public class UrbanismeAdminListener
 
         if (slot == 33) {
 
-            p.closeInventory();
+            //
+            // 🔊 SOUND
+            //
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                    1f,
+
+                    1f
+            );
+
+            //
+            // 🚀 EXECUTE
+            //
 
             p.performCommand(
                     "urbanisme classement"
@@ -135,6 +249,10 @@ public class UrbanismeAdminListener
 
         if (slot == 40) {
 
+            //
+            // 🔊 SOUND
+            //
+
             p.playSound(
 
                     p.getLocation(),
@@ -145,6 +263,10 @@ public class UrbanismeAdminListener
 
                     1f
             );
+
+            //
+            // 🚀 OPEN
+            //
 
             UrbanismeMainGUI.open(p);
         }
