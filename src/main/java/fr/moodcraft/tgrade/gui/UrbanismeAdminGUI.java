@@ -1,5 +1,11 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
+
+import fr.moodcraft.tgrade.model.SubmissionStatus;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
+
 import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
@@ -30,8 +36,28 @@ public class UrbanismeAdminGUI {
 
                         45,
 
-                        "§8Centre Administratif"
+                        "§8✦ Centre National"
                 );
+
+        //
+        // 📊 STATS
+        //
+
+        long pending =
+                SubmissionStorage.getAll()
+                        .stream()
+                        .filter(sub ->
+                                sub.getStatus()
+                                        == SubmissionStatus.PENDING)
+                        .count();
+
+        long approved =
+                SubmissionStorage.getAll()
+                        .stream()
+                        .filter(sub ->
+                                sub.getStatus()
+                                        == SubmissionStatus.APPROVED)
+                        .count();
 
         //
         // 🌌 GLASS
@@ -52,7 +78,7 @@ public class UrbanismeAdminGUI {
         glass.setItemMeta(glassMeta);
 
         //
-        // 🧱 BORDERS ONLY
+        // 🧱 BORDERS
         //
 
         int[] borders = {
@@ -65,18 +91,57 @@ public class UrbanismeAdminGUI {
 
                 27,35,
 
-                36,44,
-
-                45,46,47,48,49,50,51,52,53
+                36,37,38,39,41,42,43,44
         };
 
         for (int slot : borders) {
 
-            if (slot < 45) {
-
-                inv.setItem(slot, glass);
-            }
+            inv.setItem(slot, glass);
         }
+
+        //
+        // 🏛 HEADER
+        //
+
+        ItemStack header =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§6✦ Centre National d'Urbanisme"
+        );
+
+        headerMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Administration officielle",
+
+                "§7des villes de MoodCraft.",
+
+                "",
+
+                "§7Dossiers en attente: §6"
+                        + pending,
+
+                "§7Projets validés: §a"
+                        + approved,
+
+                "§7Villes inspectées: §b"
+                        + GradeManager.getAll().size(),
+
+                "",
+
+                "§e▶ Réseau administratif national"
+        ));
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(4, header);
 
         //
         // 📋 PROJETS
@@ -90,11 +155,24 @@ public class UrbanismeAdminGUI {
 
                 Material.WRITABLE_BOOK,
 
-                "§e📋 Projets Urbains",
+                "§e📋 Inspection des Projets",
 
-                "§7Consulter les projets",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7de construction RP."
+                "§7Consulter les dossiers",
+
+                "§7urbains transmis à",
+
+                "§7la commission nationale.",
+
+                "",
+
+                "§7Dossiers actifs: §e"
+                        + pending,
+
+                "",
+
+                "§e▶ Ouvrir les inspections"
         );
 
         //
@@ -109,11 +187,23 @@ public class UrbanismeAdminGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§2💰 Versements",
+                "§2💰 Financements Nationaux",
 
-                "§7Distribuer les",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7bourses municipales."
+                "§7Distribuer les aides",
+
+                "§7municipales officielles.",
+
+                "",
+
+                "§7Les villes sous 25/50",
+
+                "§7ne reçoivent aucune aide.",
+
+                "",
+
+                "§a▶ Distribuer les financements"
         );
 
         //
@@ -128,11 +218,23 @@ public class UrbanismeAdminGUI {
 
                 Material.NETHER_STAR,
 
-                "§b🏆 Classement",
+                "§b🏆 Palmarès National",
 
-                "§7Voir le classement",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7national des villes."
+                "§7Classement officiel",
+
+                "§7des villes inspectées.",
+
+                "",
+
+                "§7Consultation du prestige",
+
+                "§7urbain national.",
+
+                "",
+
+                "§b▶ Voir le classement"
         );
 
         //
@@ -147,9 +249,13 @@ public class UrbanismeAdminGUI {
 
                 Material.ARROW,
 
-                "§c⬅ Retour",
+                "§c⬅ Retour Administratif",
 
-                "§7Retour au menu principal."
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Retourner au centre",
+
+                "§7urbain principal."
         );
 
         //
