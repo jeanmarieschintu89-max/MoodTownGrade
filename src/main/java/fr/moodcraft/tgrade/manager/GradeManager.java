@@ -142,6 +142,12 @@ public class GradeManager {
             grade.setFinished(false);
 
             //
+            // 💰 RESET PAYOUT
+            //
+
+            grade.setPayoutClaimed(false);
+
+            //
             // 💾 SAVE
             //
 
