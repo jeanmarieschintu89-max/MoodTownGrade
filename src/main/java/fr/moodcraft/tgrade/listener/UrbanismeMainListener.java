@@ -32,7 +32,7 @@ public class UrbanismeMainListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8🏛 Commission Urbaine"
+                        "§8✦ Commission Urbaine"
                 )) {
             return;
         }
