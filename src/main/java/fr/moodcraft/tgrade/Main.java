@@ -1,10 +1,11 @@
 package fr.moodcraft.tgrade;
 
-import fr.moodcraft.tgrade.command.VilleCommand;
+import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
+import fr.moodcraft.tgrade.listener.UrbanismeMainListener;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
 
@@ -26,6 +27,7 @@ public class Main extends JavaPlugin {
     private static Main instance;
 
     public static Main get() {
+
         return instance;
     }
 
@@ -99,11 +101,11 @@ public class Main extends JavaPlugin {
         // 📜 COMMANDES
         //
 
-        if (getCommand("ville") != null) {
+        if (getCommand("urbanisme") != null) {
 
-            getCommand("ville")
+            getCommand("urbanisme")
                     .setExecutor(
-                            new VilleCommand()
+                            new UrbanismeCommand()
                     );
         }
 
@@ -129,6 +131,13 @@ public class Main extends JavaPlugin {
                 .getPluginManager()
                 .registerEvents(
                         new ReviewGUIListener(),
+                        this
+                );
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new UrbanismeMainListener(),
                         this
                 );
 
