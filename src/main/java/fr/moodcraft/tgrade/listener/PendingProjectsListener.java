@@ -57,17 +57,31 @@ public class PendingProjectsListener
             return;
 
         //
-        // 📦 NULL
+        // 📦 INVENTORY CHECK
+        //
+
+        if (e.getClickedInventory() == null)
+            return;
+
+        //
+        // 📦 ITEM
         //
 
         if (e.getCurrentItem() == null)
             return;
 
         //
+        // 🔘 SLOT
+        //
+
+        int slot =
+                e.getRawSlot();
+
+        //
         // 🔙 RETOUR
         //
 
-        if (e.getSlot() == 49) {
+        if (slot == 49) {
 
             p.playSound(
 
@@ -86,7 +100,7 @@ public class PendingProjectsListener
         }
 
         //
-        // 📛 ITEM
+        // 📛 META
         //
 
         if (!e.getCurrentItem()
@@ -106,7 +120,11 @@ public class PendingProjectsListener
                 e.getCurrentItem()
                         .getItemMeta()
                         .getDisplayName()
-                        .replace("§e", "");
+                        .replace("§e", "")
+                        .replace("§b", "")
+                        .replace("§6", "")
+                        .replace("§a", "")
+                        .replace("§c", "");
 
         //
         // 🔍 FIND
@@ -134,6 +152,17 @@ public class PendingProjectsListener
         //
 
         if (found == null) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.ENTITY_VILLAGER_NO,
+
+                    1f,
+
+                    1f
+            );
 
             p.sendMessage(
                     "§cProjet introuvable."
