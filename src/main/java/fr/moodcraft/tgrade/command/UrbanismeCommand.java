@@ -55,6 +55,18 @@ public class UrbanismeCommand
         }
 
         //
+        // 🏆 /TOPVILLE
+        //
+
+        if (label.equalsIgnoreCase(
+                "topville")) {
+
+            args = new String[] {
+                    "classement"
+            };
+        }
+
+        //
         // 🏛 OPEN GUI
         //
 
@@ -106,9 +118,23 @@ public class UrbanismeCommand
                     );
 
                     p.sendMessage(
+                            " §7Rang: "
+                                    + grade.getRank()
+                    );
+
+                    p.sendMessage(
                             " §7Score: §e"
                                     + grade.getTotal()
                                     + "§7/50"
+                    );
+
+                    p.sendMessage(
+                            " §7Prestige: §6"
+                                    + String.format(
+                                    "%.1f",
+                                    grade.getPercentage()
+                            )
+                                    + "%"
                     );
 
                     p.sendMessage(
@@ -213,9 +239,37 @@ public class UrbanismeCommand
 
             PayoutManager.payoutAll();
 
+            p.sendMessage("");
+
             p.sendMessage(
-                    "§aBourses distribuées."
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
+
+            p.sendMessage(
+                    "§a💰 Bourses distribuées"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Toutes les villes"
+            );
+
+            p.sendMessage(
+                    "§7éligibles ont reçu"
+            );
+
+            p.sendMessage(
+                    "§7leur financement."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
 
             return true;
         }
@@ -359,7 +413,16 @@ public class UrbanismeCommand
             );
 
             p.sendMessage(
+                    "§7Ville: §b"
+                            + town.getName()
+            );
+
+            p.sendMessage(
                     "§7ID: §f" + id
+            );
+
+            p.sendMessage(
+                    "§7Statut: §eEN ATTENTE"
             );
 
             p.sendMessage("");
@@ -480,9 +543,30 @@ public class UrbanismeCommand
                     sub.getId()
             );
 
+            p.sendMessage("");
+
             p.sendMessage(
-                    "§aProjet supprimé."
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
+
+            p.sendMessage(
+                    "§cProjet supprimé"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7ID: §f"
+                            + sub.getId()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
 
             return true;
         }
