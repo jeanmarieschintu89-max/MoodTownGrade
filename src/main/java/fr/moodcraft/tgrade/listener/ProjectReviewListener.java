@@ -39,7 +39,7 @@ public class ProjectReviewListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8✦ Commission Urbaine"
+                        "§8✦ Inspection Nationale"
                 )) {
             return;
         }
