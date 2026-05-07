@@ -166,6 +166,10 @@ public class Main extends JavaPlugin {
                         this
                 );
 
+        //
+        // 💬 CHAT INPUT
+        //
+
         getServer()
                 .getPluginManager()
                 .registerEvents(
