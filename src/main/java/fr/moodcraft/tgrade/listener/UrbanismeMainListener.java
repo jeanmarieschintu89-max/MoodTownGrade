@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
@@ -32,7 +33,7 @@ public class UrbanismeMainListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8🏛 Commission Urbaine"
+                        "§8Commission Urbaine"
                 )) {
             return;
         }
@@ -52,7 +53,14 @@ public class UrbanismeMainListener
             return;
 
         //
-        // 📦 NULL
+        // 📦 INVENTORY CHECK
+        //
+
+        if (e.getClickedInventory() == null)
+            return;
+
+        //
+        // 📦 ITEM
         //
 
         if (e.getCurrentItem() == null)
@@ -63,7 +71,7 @@ public class UrbanismeMainListener
         //
 
         int slot =
-                e.getSlot();
+                e.getRawSlot();
 
         //
         // 🔊 SOUND
@@ -214,17 +222,7 @@ public class UrbanismeMainListener
             );
 
             p.sendMessage(
-                    "§a🏗 Soumission Urbaine"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Utilise:"
-            );
-
-            p.sendMessage(
-                    "§e/urbanisme projet <nom>"
+                    "§a🏗 Nouveau Projet"
             );
 
             p.sendMessage("");
@@ -235,6 +233,26 @@ public class UrbanismeMainListener
 
             p.sendMessage(
                     "§7la construction RP."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Commande:"
+            );
+
+            p.sendMessage(
+                    "§e/urbanisme projet <nom>"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§cTout faux dossier"
+            );
+
+            p.sendMessage(
+                    "§csera refusé."
             );
 
             p.sendMessage("");
@@ -256,10 +274,6 @@ public class UrbanismeMainListener
 
             p.closeInventory();
 
-            //
-            // 🔊 SOUND
-            //
-
             p.playSound(
 
                     p.getLocation(),
@@ -271,13 +285,22 @@ public class UrbanismeMainListener
                     1f
             );
 
-            //
-            // 🚀 COMMAND
-            //
-
             p.performCommand(
                     "urbanisme classement"
             );
+
+            return;
+        }
+
+        //
+        // 🔙 MENU
+        //
+
+        if (slot == 22) {
+
+            p.closeInventory();
+
+            p.performCommand("menu");
 
             return;
         }
