@@ -4,6 +4,7 @@ import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
+import fr.moodcraft.tgrade.listener.ProjectReviewListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
 import fr.moodcraft.tgrade.listener.UrbanismeAdminListener;
@@ -94,7 +95,7 @@ public class Main extends JavaPlugin {
         GradeStorage.init();
 
         //
-        // 📚 LOAD GRADES
+        // 📚 LOAD
         //
 
         GradeManager.loadAll();
@@ -157,6 +158,13 @@ public class Main extends JavaPlugin {
                         this
                 );
 
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new ProjectReviewListener(),
+                        this
+                );
+
         //
         // ⏰ RESET HEBDO
         //
@@ -205,6 +213,10 @@ public class Main extends JavaPlugin {
         );
 
         getLogger().info(
+                "🏗 Validation urbaine active"
+        );
+
+        getLogger().info(
                 "📊 Système de notation actif"
         );
 
@@ -248,7 +260,7 @@ public class Main extends JavaPlugin {
                 );
 
         //
-        // 🧹 CLEAR CACHE
+        // 🧹 CACHE
         //
 
         GradeManager.clearCache();
