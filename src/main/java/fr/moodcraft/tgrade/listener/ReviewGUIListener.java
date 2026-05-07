@@ -61,7 +61,7 @@ public class ReviewGUIListener implements Listener {
                 e.getView()
                         .getTitle()
                         .replace(
-                                "§8✦ §bMoodCraft §8• §7Inspection",
+                                "§8✦ Inspection Nationale",
                                 ""
                         )
                         .trim();
