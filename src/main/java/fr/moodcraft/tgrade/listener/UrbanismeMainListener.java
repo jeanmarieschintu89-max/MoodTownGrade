@@ -2,6 +2,8 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
+import fr.moodcraft.tgrade.towny.TownyHook;
+
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -84,6 +86,58 @@ public class UrbanismeMainListener
 
         if (slot == 11) {
 
+            //
+            // 🛡 TOWNY CHECK
+            //
+
+            if (!TownyHook.canManage(p)) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§c🏛 Accès refusé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Seuls les maires"
+                );
+
+                p.sendMessage(
+                        "§7et assistants peuvent"
+                );
+
+                p.sendMessage(
+                        "§7gérer les projets urbains."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return;
+            }
+
             p.closeInventory();
 
             p.performCommand(
@@ -98,6 +152,58 @@ public class UrbanismeMainListener
         //
 
         if (slot == 13) {
+
+            //
+            // 🛡 TOWNY CHECK
+            //
+
+            if (!TownyHook.canManage(p)) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§c🏛 Accès refusé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Seuls les maires"
+                );
+
+                p.sendMessage(
+                        "§7et assistants peuvent"
+                );
+
+                p.sendMessage(
+                        "§7déposer des projets."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return;
+            }
 
             p.closeInventory();
 
@@ -187,9 +293,30 @@ public class UrbanismeMainListener
 
         if (slot == 31) {
 
+            //
+            // 🔒 STAFF CHECK
+            //
+
             if (!p.hasPermission(
-                    "moodtowngrade.staff"))
+                    "moodtowngrade.staff")) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
                 return;
+            }
+
+            //
+            // 🔊 SOUND
+            //
 
             p.playSound(
 
@@ -201,6 +328,10 @@ public class UrbanismeMainListener
 
                     1f
             );
+
+            //
+            // 🚀 OPEN
+            //
 
             UrbanismeAdminGUI.open(p);
         }
