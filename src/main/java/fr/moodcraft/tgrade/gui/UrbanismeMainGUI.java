@@ -94,7 +94,7 @@ public class UrbanismeMainGUI {
 
                         Material.NETHER_STAR,
 
-                        "§6✦ Commission Urbaine Nationale",
+                        "§8✦ Commission Urbaine"
 
                         "§8━━━━━━━━━━━━━━━━",
 
