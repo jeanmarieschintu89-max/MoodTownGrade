@@ -36,7 +36,7 @@ public class PendingProjectsGUI {
 
                         54,
 
-                        "§8📋 Projets Urbains"
+                        "§8✦ Commission Urbaine"
                 );
 
         //
@@ -82,16 +82,49 @@ public class PendingProjectsGUI {
         }
 
         //
+        // 🏛 HEADER
+        //
+
+        ItemStack header =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§6✦ Commission Nationale"
+        );
+
+        headerMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Inspection des projets",
+
+                "§7urbains de MoodCraft.",
+
+                "",
+
+                "§7Dossiers enregistrés: §e"
+                        + SubmissionStorage.getAll().size(),
+
+                "",
+
+                "§e▶ Administration urbaine"
+        ));
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(4, header);
+
+        //
         // 📂 PROJETS
         //
 
         List<TownSubmission> list =
-                SubmissionStorage.getAll()
-                        .stream()
-                        .filter(sub ->
-                                sub.getStatus()
-                                        == SubmissionStatus.PENDING)
-                        .toList();
+                SubmissionStorage.getAll();
 
         //
         // 📦 SLOT
@@ -103,26 +136,6 @@ public class PendingProjectsGUI {
 
             if (slot >= 44)
                 break;
-
-            //
-            // 📘 ITEM
-            //
-
-            ItemStack item =
-                    new ItemStack(
-                            Material.WRITABLE_BOOK
-                    );
-
-            ItemMeta meta =
-                    item.getItemMeta();
-
-            //
-            // 📛 NAME
-            //
-
-            meta.setDisplayName(
-                    "§e" + sub.getBuildName()
-            );
 
             //
             // 📅 DATE
@@ -138,6 +151,73 @@ public class PendingProjectsGUI {
                     );
 
             //
+            // 📊 STATUS
+            //
+
+            Material material;
+
+            String status;
+
+            String action;
+
+            switch (sub.getStatus()) {
+
+                case APPROVED -> {
+
+                    material =
+                            Material.EMERALD;
+
+                    status =
+                            "§a🟢 Projet validé";
+
+                    action =
+                            "§a▶ Projet approuvé";
+                }
+
+                case REJECTED -> {
+
+                    material =
+                            Material.REDSTONE_BLOCK;
+
+                    status =
+                            "§c🔴 Projet refusé";
+
+                    action =
+                            "§c▶ Dossier fermé";
+                }
+
+                default -> {
+
+                    material =
+                            Material.WRITABLE_BOOK;
+
+                    status =
+                            "§6🟡 En attente";
+
+                    action =
+                            "§e▶ Cliquer pour inspecter";
+                }
+            }
+
+            //
+            // 📘 ITEM
+            //
+
+            ItemStack item =
+                    new ItemStack(material);
+
+            ItemMeta meta =
+                    item.getItemMeta();
+
+            //
+            // 📛 NAME
+            //
+
+            meta.setDisplayName(
+                    "§f✦ §e" + sub.getBuildName()
+            );
+
+            //
             // 📜 LORE
             //
 
@@ -150,8 +230,8 @@ public class PendingProjectsGUI {
 
                     "",
 
-                    "§7Statut:",
-                    "§6En attente",
+                    "§7Statut officiel:",
+                    status,
 
                     "",
 
@@ -162,12 +242,12 @@ public class PendingProjectsGUI {
 
                     "",
 
-                    "§7Date:",
+                    "§7Date dépôt:",
                     "§f" + date,
 
                     "",
 
-                    "§a▶ Cliquer pour inspecter"
+                    action
             ));
 
             item.setItemMeta(meta);
@@ -209,14 +289,26 @@ public class PendingProjectsGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§cAucun projet"
+                    "§c✖ Aucun dossier"
             );
 
             meta.setLore(List.of(
 
-                    "§7Aucun dossier",
+                    "§8━━━━━━━━━━━━━━━━",
 
-                    "§7en attente."
+                    "§7Aucun projet urbain",
+
+                    "§7n'est actuellement",
+
+                    "§7enregistré.",
+
+                    "",
+
+                    "§7La commission nationale",
+
+                    "§7est en attente de",
+
+                    "§7nouveaux dossiers."
             ));
 
             empty.setItemMeta(meta);
@@ -237,14 +329,16 @@ public class PendingProjectsGUI {
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§c⬅ Retour"
+                "§c⬅ Retour administratif"
         );
 
         backMeta.setLore(List.of(
 
-                "§7Retour au centre",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7administratif."
+                "§7Retourner au centre",
+
+                "§7administratif national."
         ));
 
         back.setItemMeta(backMeta);
