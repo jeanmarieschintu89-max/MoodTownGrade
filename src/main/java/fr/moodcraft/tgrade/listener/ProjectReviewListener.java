@@ -1,6 +1,7 @@
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
+import fr.moodcraft.tgrade.gui.RateGUI;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
@@ -118,7 +119,7 @@ public class ProjectReviewListener
                 e.getSlot();
 
         //
-        // 📍 TELEPORT
+        // 📍 INSPECTION COMPLETE
         //
 
         if (slot == 20) {
@@ -132,6 +133,10 @@ public class ProjectReviewListener
 
                 return;
             }
+
+            //
+            // 📍 LOCATION
+            //
 
             Location loc =
                     new Location(
@@ -147,7 +152,15 @@ public class ProjectReviewListener
                             found.getZ() + 0.5
                     );
 
+            //
+            // 🚀 TP
+            //
+
             p.teleport(loc);
+
+            //
+            // 🔊 SOUND
+            //
 
             p.playSound(
 
@@ -160,8 +173,53 @@ public class ProjectReviewListener
                     1f
             );
 
+            //
+            // 📜 MESSAGE
+            //
+
+            p.sendMessage("");
+
             p.sendMessage(
-                    "§aTéléportation vers le projet."
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§a📍 Inspection terrain"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e"
+                            + found.getBuildName()
+            );
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + found.getTown()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Inspection urbaine lancée."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            //
+            // ⭐ OPEN RATE GUI
+            //
+
+            RateGUI.open(
+                    p,
+                    found.getTown()
             );
 
             return;
