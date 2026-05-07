@@ -66,6 +66,17 @@ public class ProjectReviewListener
             return;
 
         //
+        // 🛑 PLAYER INVENTORY
+        //
+
+        if (e.getRawSlot() >= e.getView()
+                .getTopInventory()
+                .getSize()) {
+
+            return;
+        }
+
+        //
         // 📄 INFO ITEM
         //
 
@@ -73,12 +84,16 @@ public class ProjectReviewListener
                 .getItem(13) == null)
             return;
 
+        //
+        // 📛 PROJECT NAME
+        //
+
         String projectName =
                 e.getInventory()
                         .getItem(13)
                         .getItemMeta()
                         .getDisplayName()
-                        .replace("§e", "");
+                        .replace("§f✦ §e", "");
 
         //
         // 🔍 FIND
@@ -103,6 +118,17 @@ public class ProjectReviewListener
         //
 
         if (found == null) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.ENTITY_VILLAGER_NO,
+
+                    1f,
+
+                    1f
+            );
 
             p.sendMessage(
                     "§cProjet introuvable."
@@ -281,6 +307,8 @@ public class ProjectReviewListener
                     "§7être évalué cette semaine."
             );
 
+            Bukkit.broadcastMessage("");
+
             Bukkit.broadcastMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
@@ -375,8 +403,6 @@ public class ProjectReviewListener
 
         if (slot == 40) {
 
-            PendingProjectsGUI.open(p);
-
             p.playSound(
 
                     p.getLocation(),
@@ -387,6 +413,8 @@ public class ProjectReviewListener
 
                     1f
             );
+
+            PendingProjectsGUI.open(p);
         }
     }
 }
