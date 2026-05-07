@@ -17,13 +17,26 @@ public class RateSessionManager {
             sessions = new HashMap<>();
 
     //
-    // ➕ CREATE
+    // ➕ CREATE / GET
     //
 
     public static RateSession create(
             UUID uuid,
             String town
     ) {
+
+        //
+        // 🔍 EXISTING SESSION
+        //
+
+        if (sessions.containsKey(uuid)) {
+
+            return sessions.get(uuid);
+        }
+
+        //
+        // ➕ NEW SESSION
+        //
 
         RateSession session =
                 new RateSession(town);
