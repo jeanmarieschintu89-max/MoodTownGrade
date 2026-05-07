@@ -31,7 +31,7 @@ public class UrbanismeAdminListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8🛰 Centre Administratif"
+                        "§8Centre Administratif"
                 )) {
             return;
         }
@@ -51,7 +51,14 @@ public class UrbanismeAdminListener
             return;
 
         //
-        // 📦 NULL
+        // 📦 INVENTORY CHECK
+        //
+
+        if (e.getClickedInventory() == null)
+            return;
+
+        //
+        // 📦 ITEM
         //
 
         if (e.getCurrentItem() == null)
@@ -62,7 +69,7 @@ public class UrbanismeAdminListener
         //
 
         int slot =
-                e.getSlot();
+                e.getRawSlot();
 
         //
         // 🔊 SOUND
@@ -80,101 +87,10 @@ public class UrbanismeAdminListener
         );
 
         //
-        // 📋 DOSSIERS URBAINS
+        // 📋 PROJETS URBAINS
         //
 
-        if (slot == 10) {
-
-            p.closeInventory();
-
-            PendingProjectsGUI.open(p);
-
-            return;
-        }
-
-        //
-        // ⭐ NOTATION
-        //
-
-        if (slot == 12) {
-
-            p.closeInventory();
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage(
-                    "§6⭐ Notation RP"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Utilise:"
-            );
-
-            p.sendMessage(
-                    "§e/urbanisme noter <ville>"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
-
-            return;
-        }
-
-        //
-        // 📍 INSPECTION
-        //
-
-        if (slot == 14) {
-
-            p.closeInventory();
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage(
-                    "§a📍 Inspection Terrain"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Utilise:"
-            );
-
-            p.sendMessage(
-                    "§e/urbanisme review <ville>"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
-
-            return;
-        }
-
-        //
-        // ✅ VALIDATION
-        //
-
-        if (slot == 16) {
+        if (slot == 13) {
 
             p.closeInventory();
 
@@ -206,33 +122,9 @@ public class UrbanismeAdminListener
 
             p.closeInventory();
 
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            p.performCommand(
+                    "urbanisme classement"
             );
-
-            p.sendMessage(
-                    "§b🏆 Classement National"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Le classement RP"
-            );
-
-            p.sendMessage(
-                    "§7sera disponible bientôt."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
 
             return;
         }
