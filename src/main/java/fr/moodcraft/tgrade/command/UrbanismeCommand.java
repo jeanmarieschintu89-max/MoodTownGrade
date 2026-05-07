@@ -276,8 +276,19 @@ public class UrbanismeCommand
                 return true;
             }
 
+            //
+            // 🏛 VILLE
+            //
+
+            String townName =
+                    args[1];
+
+            //
+            // 📊 RESET GRADE
+            //
+
             TownGrade grade =
-                    GradeManager.get(args[1]);
+                    GradeManager.get(townName);
 
             grade.setArchitecture(0);
             grade.setStyle(0);
@@ -288,11 +299,41 @@ public class UrbanismeCommand
             grade.setTaille(0);
             grade.setVotes(0);
 
+            //
+            // 🔄 RESET STATUS
+            //
+
             grade.setFinished(false);
 
             grade.setPayoutClaimed(false);
 
+            //
+            // 💾 SAVE
+            //
+
             GradeManager.save(grade);
+
+            //
+            // 🗑 DELETE PROJECTS
+            //
+
+            for (TownSubmission sub :
+                    SubmissionStorage.getAll()) {
+
+                if (sub.getTown()
+                        .equalsIgnoreCase(
+                                townName
+                        )) {
+
+                    SubmissionStorage.delete(
+                            sub.getId()
+                    );
+                }
+            }
+
+            //
+            // 📜 MESSAGE
+            //
 
             p.sendMessage("");
 
@@ -308,7 +349,21 @@ public class UrbanismeCommand
 
             p.sendMessage(
                     "§7Ville: §b"
-                            + args[1]
+                            + townName
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7✔ Notes supprimées"
+            );
+
+            p.sendMessage(
+                    "§7✔ Classement supprimé"
+            );
+
+            p.sendMessage(
+                    "§7✔ Projets supprimés"
             );
 
             p.sendMessage("");
