@@ -21,7 +21,7 @@ import java.util.List;
 public class PendingProjectsGUI {
 
     //
-    // 🛰 OPEN
+    // 📋 OPEN
     //
 
     public static void open(Player p) {
@@ -37,7 +37,30 @@ public class PendingProjectsGUI {
                 );
 
         //
-        // 📚 LISTE
+        // 🌌 FILL
+        //
+
+        ItemStack glass =
+                new ItemStack(
+                        Material.BLACK_STAINED_GLASS_PANE
+                );
+
+        ItemMeta glassMeta =
+                glass.getItemMeta();
+
+        glassMeta.setDisplayName(
+                " "
+        );
+
+        glass.setItemMeta(glassMeta);
+
+        for (int i = 0; i < 54; i++) {
+
+            inv.setItem(i, glass);
+        }
+
+        //
+        // 📂 PROJETS
         //
 
         List<TownSubmission> list =
@@ -49,41 +72,14 @@ public class PendingProjectsGUI {
                         .toList();
 
         //
-        // ❌ VIDE
+        // 📦 SLOT START
         //
 
-        if (list.isEmpty()) {
-
-            ItemStack item =
-                    new ItemStack(
-                            Material.BARRIER
-                    );
-
-            ItemMeta meta =
-                    item.getItemMeta();
-
-            meta.setDisplayName(
-                    "§cAucun dossier"
-            );
-
-            item.setItemMeta(meta);
-
-            inv.setItem(22, item);
-
-            p.openInventory(inv);
-
-            return;
-        }
-
-        //
-        // 📦 ITEMS
-        //
-
-        int slot = 0;
+        int slot = 10;
 
         for (TownSubmission sub : list) {
 
-            if (slot >= 45)
+            if (slot >= 44)
                 break;
 
             ItemStack item =
@@ -95,8 +91,7 @@ public class PendingProjectsGUI {
                     item.getItemMeta();
 
             meta.setDisplayName(
-                    "§e"
-                            + sub.getBuildName()
+                    "§e" + sub.getBuildName()
             );
 
             meta.setLore(List.of(
@@ -108,21 +103,19 @@ public class PendingProjectsGUI {
 
                     "",
 
-                    "§7ID: §f"
-                            + sub.getId(),
+                    "§7Statut:",
+                    "§6EN ATTENTE",
 
                     "",
 
-                    "§7📍 "
-                            + sub.getX()
-                            + " "
-                            + sub.getY()
-                            + " "
-                            + sub.getZ(),
+                    "§7Coordonnées:",
+                    "§fX: §e" + sub.getX(),
+                    "§fY: §e" + sub.getY(),
+                    "§fZ: §e" + sub.getZ(),
 
                     "",
 
-                    "§a▶ Clic pour inspecter"
+                    "§e▶ Inspecter le projet"
             ));
 
             item.setItemMeta(meta);
@@ -130,6 +123,19 @@ public class PendingProjectsGUI {
             inv.setItem(slot, item);
 
             slot++;
+
+            //
+            // ⬛ SAUTS
+            //
+
+            if (slot == 17)
+                slot = 19;
+
+            if (slot == 26)
+                slot = 28;
+
+            if (slot == 35)
+                slot = 37;
         }
 
         //
@@ -138,7 +144,7 @@ public class PendingProjectsGUI {
 
         ItemStack back =
                 new ItemStack(
-                        Material.ARROW
+                        Material.BARRIER
                 );
 
         ItemMeta backMeta =
