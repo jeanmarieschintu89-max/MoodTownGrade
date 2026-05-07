@@ -2,6 +2,7 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.ProjectReviewGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
+import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import fr.moodcraft.tgrade.model.TownSubmission;
 
@@ -118,7 +119,19 @@ public class PendingProjectsListener
 
             p.closeInventory();
 
-            UrbanismeAdminGUI.open(p);
+            //
+            // 🛰 STAFF
+            //
+
+            if (p.hasPermission(
+                    "moodtowngrade.staff")) {
+
+                UrbanismeAdminGUI.open(p);
+
+            } else {
+
+                UrbanismeMainGUI.open(p);
+            }
 
             return;
         }
