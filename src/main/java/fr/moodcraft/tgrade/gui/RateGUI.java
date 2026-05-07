@@ -95,7 +95,7 @@ public class RateGUI {
 
                         54,
 
-                        "§8⭐ Notation Urbaine"
+                        "§8✦ Inspection Nationale"
                 );
 
         //
@@ -117,7 +117,7 @@ public class RateGUI {
         glass.setItemMeta(glassMeta);
 
         //
-        // 🧱 BORDERS ONLY
+        // 🧱 BORDERS
         //
 
         int[] borders = {
@@ -132,7 +132,7 @@ public class RateGUI {
 
                 36,44,
 
-                45,46,47,48,49,50,51,52,53
+                45,46,47,48,50,51,52,53
         };
 
         for (int slot : borders) {
@@ -141,7 +141,7 @@ public class RateGUI {
         }
 
         //
-        // 🏛 INFO VILLE
+        // 🏛 HEADER
         //
 
         ItemStack info =
@@ -153,28 +153,36 @@ public class RateGUI {
                 info.getItemMeta();
 
         infoMeta.setDisplayName(
-                "§b🏛 " + town
+                "§6✦ Inspection de " + town
         );
 
         infoMeta.setLore(List.of(
 
                 "§8━━━━━━━━━━━━━━━━",
 
-                "§7Commission nationale",
+                "§7Commission Nationale",
 
                 "§7d'évaluation urbaine.",
 
                 "",
 
                 "§7Prestige actuel:",
-
-                "§6"
-                        + session.getTotal()
-                        + "§7/50",
+                grade.getFormattedScore(),
 
                 "",
 
-                grade.getRank()
+                "§7Classement:",
+                grade.getRank(),
+
+                "",
+
+                "§7Appréciation:",
+                grade.getAppreciation(),
+
+                "",
+
+                "§7Financement estimé:",
+                "§a" + grade.getPayout() + "$"
         ));
 
         info.setItemMeta(infoMeta);
@@ -193,11 +201,15 @@ public class RateGUI {
 
                 Material.QUARTZ_BLOCK,
 
-                "§f🏗 Architecture",
+                "§f🏗 Architecture Nationale",
 
                 session.getArchitecture(),
 
-                10
+                10,
+
+                "§7Qualité architecturale",
+
+                "§7et cohérence des bâtiments."
         );
 
         //
@@ -212,11 +224,15 @@ public class RateGUI {
 
                 Material.PAINTING,
 
-                "§d🎨 Cohérence",
+                "§d🎨 Harmonie Urbaine",
 
                 session.getCoherence(),
 
-                6
+                6,
+
+                "§7Organisation générale",
+
+                "§7et cohérence visuelle."
         );
 
         //
@@ -231,11 +247,15 @@ public class RateGUI {
 
                 Material.BELL,
 
-                "§e⚡ Activité",
+                "§e⚡ Activité Citadine",
 
                 session.getActivite(),
 
-                8
+                8,
+
+                "§7Présence de joueurs",
+
+                "§7et dynamisme urbain."
         );
 
         //
@@ -250,11 +270,15 @@ public class RateGUI {
 
                 Material.GOLD_INGOT,
 
-                "§6💰 Banque",
+                "§6💰 Richesse Municipale",
 
                 session.getBanque(),
 
-                4
+                4,
+
+                "§7Puissance économique",
+
+                "§7de la ville inspectée."
         );
 
         //
@@ -269,11 +293,15 @@ public class RateGUI {
 
                 Material.BRICKS,
 
-                "§c🏛 Build remarquable",
+                "§c🏛 Build Remarquable",
 
                 session.getBuild(),
 
-                8
+                8,
+
+                "§7Présence de structures",
+
+                "§7uniques et mémorables."
         );
 
         //
@@ -288,11 +316,15 @@ public class RateGUI {
 
                 Material.WRITABLE_BOOK,
 
-                "§a🎭 RolePlay",
+                "§a🎭 Immersion RolePlay",
 
                 session.getRoleplay(),
 
-                6
+                6,
+
+                "§7Qualité RP générale",
+
+                "§7de la ville."
         );
 
         //
@@ -307,11 +339,15 @@ public class RateGUI {
 
                 Material.MAP,
 
-                "§2🌍 Taille",
+                "§2🌍 Expansion Territoriale",
 
                 session.getTaille(),
 
-                3
+                3,
+
+                "§7Importance et ampleur",
+
+                "§7du territoire urbain."
         );
 
         //
@@ -326,11 +362,15 @@ public class RateGUI {
 
                 Material.DIAMOND,
 
-                "§b🗳 Votes",
+                "§b🗳 Popularité Nationale",
 
                 session.getVotes(),
 
-                5
+                5,
+
+                "§7Avis général et",
+
+                "§7attractivité de la ville."
         );
 
         //
@@ -346,18 +386,26 @@ public class RateGUI {
                 save.getItemMeta();
 
         saveMeta.setDisplayName(
-                "§a✅ Valider la notation"
+                "§a✅ Publier l'inspection"
         );
 
         saveMeta.setLore(List.of(
 
-                "§7Mettre à jour",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7l'évaluation urbaine.",
+                "§7Mettre à jour le rapport",
+
+                "§7officiel de la ville.",
 
                 "",
 
-                "§e▶ Sauvegarder"
+                "§7Le classement national",
+
+                "§7sera recalculé.",
+
+                "",
+
+                "§a▶ Sauvegarder l'inspection"
         ));
 
         save.setItemMeta(saveMeta);
@@ -387,7 +435,11 @@ public class RateGUI {
 
             int current,
 
-            int max
+            int max,
+
+            String line1,
+
+            String line2
     ) {
 
         ItemStack item =
@@ -402,6 +454,11 @@ public class RateGUI {
 
                 "§8━━━━━━━━━━━━━━━━",
 
+                line1,
+                line2,
+
+                "",
+
                 "§7Note actuelle:",
 
                 "§6"
@@ -411,7 +468,7 @@ public class RateGUI {
 
                 "",
 
-                "§e▶ Augmenter la note",
+                "§e▶ Modifier la note",
 
                 "§7Retour à §c0",
 
