@@ -29,11 +29,11 @@ public class UrbanismeMainGUI {
 
                         36,
 
-                        "§8🏛 Commission Urbaine"
+                        "§8Commission Urbaine"
                 );
 
         //
-        // 🌌 FOND
+        // 🌌 GLASS
         //
 
         ItemStack glass =
@@ -44,9 +44,24 @@ public class UrbanismeMainGUI {
                         " "
                 );
 
-        for (int i = 0; i < 36; i++) {
+        //
+        // 🧱 BORDERS ONLY
+        //
 
-            inv.setItem(i, glass);
+        int[] borders = {
+
+                0,1,2,3,4,5,6,7,8,
+
+                9,17,
+
+                18,26,
+
+                27,28,29,30,31,32,33,34,35
+        };
+
+        for (int slot : borders) {
+
+            inv.setItem(slot, glass);
         }
 
         //
@@ -63,15 +78,9 @@ public class UrbanismeMainGUI {
 
                         "§b📜 Projets Urbains",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§7Voir les projets",
 
-                        "§7Consulter les projets",
-
-                        "§7de votre ville.",
-
-                        "",
-
-                        "§e▶ Ouvrir"
+                        "§7de votre ville."
                 )
         );
 
@@ -89,20 +98,14 @@ public class UrbanismeMainGUI {
 
                         "§a➕ Nouveau Projet",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§7Place-toi devant",
 
-                        "§7Déclarer une nouvelle",
-
-                        "§7construction RP.",
-
-                        "",
-
-                        "§e▶ Soumettre"
+                        "§7la construction RP."
                 )
         );
 
         //
-        // 🏆 SCORE
+        // 🏆 CLASSEMENT
         //
 
         inv.setItem(
@@ -113,17 +116,31 @@ public class UrbanismeMainGUI {
 
                         Material.GOLD_INGOT,
 
-                        "§6🏆 Prestige Ville",
+                        "§6🏆 Classement National",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§7Voir le prestige",
 
-                        "§7Consulter le score",
+                        "§7des villes."
+                )
+        );
 
-                        "§7hebdomadaire RP.",
+        //
+        // 🔙 MENU
+        //
 
-                        "",
+        inv.setItem(
 
-                        "§e▶ Voir"
+                22,
+
+                item(
+
+                        Material.ARROW,
+
+                        "§c⬅ Retour Menu",
+
+                        "§7Retourner au",
+
+                        "§7menu principal."
                 )
         );
 
@@ -144,15 +161,9 @@ public class UrbanismeMainGUI {
 
                             "§c🛰 Administration",
 
-                            "§8━━━━━━━━━━━━━━━━",
+                            "§7Inspection et",
 
-                            "§7Inspection urbaine",
-
-                            "§7et notation.",
-
-                            "",
-
-                            "§e▶ Administration"
+                            "§7gestion urbaine."
                     )
             );
         }
