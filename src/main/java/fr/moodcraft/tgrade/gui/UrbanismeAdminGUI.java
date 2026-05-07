@@ -155,7 +155,7 @@ public class UrbanismeAdminGUI {
 
                 Material.WRITABLE_BOOK,
 
-                "§e📋 Inspection des Projets",
+                "§e✦ Inspection des Projets",
 
                 "§8━━━━━━━━━━━━━━━━",
 
@@ -167,12 +167,53 @@ public class UrbanismeAdminGUI {
 
                 "",
 
-                "§7Dossiers actifs: §e"
+                "§7Dossiers actifs: §6"
                         + pending,
 
                 "",
 
-                "§e▶ Ouvrir les inspections"
+                "§e▶ Accéder aux inspections"
+        );
+
+        //
+        // 📝 NOTATION
+        //
+
+        set(
+
+                inv,
+
+                22,
+
+                Material.ENCHANTED_BOOK,
+
+                "§3✦ Commission de Notation",
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Accès au réseau national",
+
+                "§7d'évaluation architecturale.",
+
+                "",
+
+                "§7Analyse des projets",
+
+                "§7et attribution des notes",
+
+                "§7officielles du territoire.",
+
+                "",
+
+                "§8• §fInspection détaillée",
+
+                "§8• §fValidation urbaine",
+
+                "§8• §fClassement communal",
+
+                "",
+
+                "§b▶ Accéder au centre de notation"
         );
 
         //
@@ -187,7 +228,7 @@ public class UrbanismeAdminGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§2💰 Financements Nationaux",
+                "§2✦ Financements Nationaux",
 
                 "§8━━━━━━━━━━━━━━━━",
 
@@ -197,7 +238,7 @@ public class UrbanismeAdminGUI {
 
                 "",
 
-                "§7Les villes sous 25/50",
+                "§7Les villes sous §625/50",
 
                 "§7ne reçoivent aucune aide.",
 
@@ -218,7 +259,7 @@ public class UrbanismeAdminGUI {
 
                 Material.NETHER_STAR,
 
-                "§b🏆 Palmarès National",
+                "§b✦ Palmarès National",
 
                 "§8━━━━━━━━━━━━━━━━",
 
@@ -234,7 +275,7 @@ public class UrbanismeAdminGUI {
 
                 "",
 
-                "§b▶ Voir le classement"
+                "§b▶ Consulter le classement"
         );
 
         //
@@ -249,7 +290,7 @@ public class UrbanismeAdminGUI {
 
                 Material.ARROW,
 
-                "§c⬅ Retour Administratif",
+                "§c✦ Retour Administratif",
 
                 "§8━━━━━━━━━━━━━━━━",
 
