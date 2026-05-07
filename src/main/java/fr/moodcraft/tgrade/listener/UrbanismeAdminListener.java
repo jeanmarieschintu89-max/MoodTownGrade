@@ -1,10 +1,10 @@
 package fr.moodcraft.tgrade.listener;
 
-import fr.moodcraft.tgrade.gui.AdminGUI;
-import fr.moodcraft.tgrade.gui.ProjectInspectionGUI;
-import fr.moodcraft.tgrade.gui.RankingGUI;
+import fr.moodcraft.tgrade.gui.ClassementGUI;
+import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
 import fr.moodcraft.tgrade.gui.RateGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
+import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import org.bukkit.Sound;
 
@@ -27,165 +27,166 @@ public class UrbanismeAdminListener
         // 🌌 GUI CHECK
         //
 
-        if (e.getView()
+        if (!e.getView()
                 .getTitle()
                 .equals("§8✦ Centre National")) {
+            return;
+        }
 
-            e.setCancelled(true);
+        e.setCancelled(true);
 
-            //
-            // ❌ SECURITY
-            //
+        //
+        // ❌ PLAYER
+        //
 
-            if (!(e.getWhoClicked()
-                    instanceof Player p)) {
-                return;
-            }
+        if (!(e.getWhoClicked()
+                instanceof Player p)) {
+            return;
+        }
 
-            //
-            // ❌ NULL
-            //
+        //
+        // ❌ NULL
+        //
 
-            if (e.getCurrentItem() == null) {
-                return;
-            }
+        if (e.getCurrentItem() == null) {
+            return;
+        }
 
-            int slot =
-                    e.getRawSlot();
+        int slot =
+                e.getRawSlot();
 
-            //
-            // 📋 INSPECTIONS
-            //
+        //
+        // 📋 PROJETS
+        //
 
-            if (slot == 13) {
+        if (slot == 13) {
 
-                p.playSound(
+            p.playSound(
 
-                        p.getLocation(),
+                    p.getLocation(),
 
-                        Sound.UI_BUTTON_CLICK,
+                    Sound.UI_BUTTON_CLICK,
 
-                        1f,
+                    1f,
 
-                        1.2f
-                );
+                    1.2f
+            );
 
-                ProjectInspectionGUI.open(p);
+            PendingProjectsGUI.open(p);
 
-                return;
-            }
+            return;
+        }
 
-            //
-            // 📝 NOTATION
-            //
+        //
+        // 📝 NOTATION
+        //
 
-            if (slot == 22) {
+        if (slot == 22) {
 
-                p.playSound(
+            p.playSound(
 
-                        p.getLocation(),
+                    p.getLocation(),
 
-                        Sound.UI_BUTTON_CLICK,
+                    Sound.UI_BUTTON_CLICK,
 
-                        1f,
+                    1f,
 
-                        1.1f
-                );
+                    1.1f
+            );
 
-                RateGUI.open(p);
+            RateGUI.open(p);
 
-                return;
-            }
+            return;
+        }
 
-            //
-            // 💰 PAYOUT
-            //
+        //
+        // 💰 PAYOUT
+        //
 
-            if (slot == 31) {
+        if (slot == 31) {
 
-                p.playSound(
+            p.playSound(
 
-                        p.getLocation(),
+                    p.getLocation(),
 
-                        Sound.BLOCK_BEACON_ACTIVATE,
+                    Sound.BLOCK_BEACON_ACTIVATE,
 
-                        1f,
+                    1f,
 
-                        1f
-                );
+                    1f
+            );
 
-                p.sendMessage("");
+            p.sendMessage("");
 
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
 
-                p.sendMessage(
-                        "§2✦ Distribution Nationale"
-                );
+            p.sendMessage(
+                    "§2✦ Distribution Nationale"
+            );
 
-                p.sendMessage("");
+            p.sendMessage("");
 
-                p.sendMessage(
-                        "§7Les financements municipaux"
-                );
+            p.sendMessage(
+                    "§7Les financements municipaux"
+            );
 
-                p.sendMessage(
-                        "§7seront bientôt disponibles."
-                );
+            p.sendMessage(
+                    "§7seront bientôt disponibles."
+            );
 
-                p.sendMessage("");
+            p.sendMessage("");
 
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
 
-                p.sendMessage("");
+            p.sendMessage("");
 
-                return;
-            }
+            return;
+        }
 
-            //
-            // 🏆 RANKING
-            //
+        //
+        // 🏆 CLASSEMENT
+        //
 
-            if (slot == 33) {
+        if (slot == 33) {
 
-                p.playSound(
+            p.playSound(
 
-                        p.getLocation(),
+                    p.getLocation(),
 
-                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
 
-                        1f,
+                    1f,
 
-                        1f
-                );
+                    1f
+            );
 
-                RankingGUI.open(p);
+            ClassementGUI.open(p);
 
-                return;
-            }
+            return;
+        }
 
-            //
-            // 🔙 RETURN
-            //
+        //
+        // 🔙 RETURN
+        //
 
-            if (slot == 40) {
+        if (slot == 40) {
 
-                p.playSound(
+            p.playSound(
 
-                        p.getLocation(),
+                    p.getLocation(),
 
-                        Sound.UI_BUTTON_CLICK,
+                    Sound.UI_BUTTON_CLICK,
 
-                        1f,
+                    1f,
 
-                        0.8f
-                );
+                    0.8f
+            );
 
-                AdminGUI.open(p);
-            }
+            UrbanismeMainGUI.open(p);
         }
     }
 }
