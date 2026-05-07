@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.manager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
@@ -27,6 +28,14 @@ public class PayoutManager {
             //
 
             if (!grade.isFinished()) {
+                continue;
+            }
+
+            //
+            // 💰 DÉJÀ PAYÉ
+            //
+
+            if (grade.isPayoutClaimed()) {
                 continue;
             }
 
@@ -68,6 +77,16 @@ public class PayoutManager {
 
                                 "Commission urbaine MoodCraft"
                         );
+
+                //
+                // ✅ CLAIMED
+                //
+
+                grade.setPayoutClaimed(
+                        true
+                );
+
+                GradeManager.save(grade);
 
             } catch (Exception e) {
 
@@ -112,9 +131,13 @@ public class PayoutManager {
             );
 
             Bukkit.broadcastMessage(
-                    "§7Score obtenu: §6"
-                            + grade.getTotal()
-                            + "§7/50"
+                    "§7Rang national: "
+                            + grade.getRank()
+            );
+
+            Bukkit.broadcastMessage(
+                    "§7Score obtenu: "
+                            + grade.getFormattedScore()
             );
 
             Bukkit.broadcastMessage("");
