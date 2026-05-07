@@ -11,6 +11,7 @@ import fr.moodcraft.tgrade.towny.TownyHook;
 
 import com.palmergames.bukkit.towny.object.Town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -74,9 +75,16 @@ public class ProjectChatListener
 
         if (town == null) {
 
-            p.sendMessage(
-                    "§cAucune ville détectée."
-            );
+            Bukkit.getScheduler()
+                    .runTask(
+
+                            Bukkit.getPluginManager()
+                                    .getPlugin("MoodTownGrade"),
+
+                            () -> p.sendMessage(
+                                    "§cAucune ville détectée."
+                            )
+                    );
 
             return;
         }
@@ -86,7 +94,80 @@ public class ProjectChatListener
         //
 
         String name =
-                e.getMessage();
+                e.getMessage().trim();
+
+        //
+        // ❌ EMPTY
+        //
+
+        if (name.isEmpty()) {
+
+            Bukkit.getScheduler()
+                    .runTask(
+
+                            Bukkit.getPluginManager()
+                                    .getPlugin("MoodTownGrade"),
+
+                            () -> p.sendMessage(
+                                    "§cNom de projet invalide."
+                            )
+                    );
+
+            return;
+        }
+
+        //
+        // ❌ TOO LONG
+        //
+
+        if (name.length() > 32) {
+
+            Bukkit.getScheduler()
+                    .runTask(
+
+                            Bukkit.getPluginManager()
+                                    .getPlugin("MoodTownGrade"),
+
+                            () -> p.sendMessage(
+                                    "§cMaximum 32 caractères."
+                            )
+                    );
+
+            return;
+        }
+
+        //
+        // 📊 LIMIT
+        //
+
+        long pending =
+                SubmissionStorage.getTown(
+                        town.getName()
+                ).stream()
+                        .filter(sub ->
+                                sub.getStatus()
+                                        == SubmissionStatus.PENDING)
+                        .count();
+
+        //
+        // ❌ MAX PROJECTS
+        //
+
+        if (pending >= 5) {
+
+            Bukkit.getScheduler()
+                    .runTask(
+
+                            Bukkit.getPluginManager()
+                                    .getPlugin("MoodTownGrade"),
+
+                            () -> p.sendMessage(
+                                    "§cMaximum 5 projets en attente."
+                            )
+                    );
+
+            return;
+        }
 
         //
         // 🆔 ID
@@ -133,65 +214,83 @@ public class ProjectChatListener
         SubmissionStorage.save(sub);
 
         //
-        // 🔊 SOUND
+        // 🔔 MAIN THREAD
         //
 
-        p.playSound(
+        Bukkit.getScheduler()
+                .runTask(
 
-                p.getLocation(),
+                        Bukkit.getPluginManager()
+                                .getPlugin("MoodTownGrade"),
 
-                Sound.UI_TOAST_CHALLENGE_COMPLETE,
+                        () -> {
 
-                1f,
+                            //
+                            // 🔊 SOUND
+                            //
 
-                1f
-        );
+                            p.playSound(
 
-        //
-        // 📜 MESSAGE
-        //
+                                    p.getLocation(),
 
-        p.sendMessage("");
+                                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
 
-        p.sendMessage(
-                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
+                                    1f,
 
-        p.sendMessage(
-                "§a🏗 Projet enregistré"
-        );
+                                    1f
+                            );
 
-        p.sendMessage("");
+                            //
+                            // 📜 MESSAGE
+                            //
 
-        p.sendMessage(
-                "§7Projet: §e" + name
-        );
+                            p.sendMessage("");
 
-        p.sendMessage(
-                "§7Ville: §b"
-                        + town.getName()
-        );
+                            p.sendMessage(
+                                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                            );
 
-        p.sendMessage(
-                "§7ID: §f" + id
-        );
+                            p.sendMessage(
+                                    "§a🏗 Projet enregistré"
+                            );
 
-        p.sendMessage("");
+                            p.sendMessage("");
 
-        p.sendMessage(
-                "§7Le projet a été transmis"
-        );
+                            p.sendMessage(
+                                    "§7Projet: §e" + name
+                            );
 
-        p.sendMessage(
-                "§7à la commission urbaine."
-        );
+                            p.sendMessage(
+                                    "§7Ville: §b"
+                                            + town.getName()
+                            );
 
-        p.sendMessage("");
+                            p.sendMessage(
+                                    "§7ID: §f" + id
+                            );
 
-        p.sendMessage(
-                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
+                            p.sendMessage(
+                                    "§7Statut: §6EN ATTENTE"
+                            );
 
-        p.sendMessage("");
+                            p.sendMessage("");
+
+                            p.sendMessage(
+                                    "§7Le projet a été transmis"
+                            );
+
+                            p.sendMessage(
+                                    "§7à la commission urbaine."
+                            );
+
+                            p.sendMessage("");
+
+                            p.sendMessage(
+                                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                            );
+
+                            p.sendMessage("");
+                        }
+                );
     }
 }
