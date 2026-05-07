@@ -48,7 +48,7 @@ public class RateGUIListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8⭐ Notation Urbaine"
+                        "§8Notation Urbaine"
                 )) {
             return;
         }
@@ -60,16 +60,43 @@ public class RateGUIListener
         e.setCancelled(true);
 
         //
+        // 🔄 FORCE BEDROCK REFRESH
+        //
+
+        p.updateInventory();
+
+        //
+        // 📦 INVENTORY CHECK
+        //
+
+        if (e.getClickedInventory() == null)
+            return;
+
+        //
+        // ❌ INVALID SLOT
+        //
+
+        if (e.getRawSlot() < 0)
+            return;
+
+        //
         // 📦 ITEM
         //
 
         ItemStack item =
-                e.getCurrentItem();
+                e.getClickedInventory()
+                        .getItem(
+                                e.getRawSlot()
+                        );
 
         if (item == null)
             return;
 
         if (!item.hasItemMeta())
+            return;
+
+        if (item.getItemMeta()
+                .getDisplayName() == null)
             return;
 
         //
@@ -293,6 +320,12 @@ public class RateGUIListener
             grade.setVotes(
                     session.getVotes()
             );
+
+            //
+            // ✅ FINISHED
+            //
+
+            grade.setFinished(true);
 
             //
             // 💾 SAVE
