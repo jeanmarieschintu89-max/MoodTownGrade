@@ -16,6 +16,9 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.List;
 
 public class PendingProjectsGUI {
@@ -37,7 +40,7 @@ public class PendingProjectsGUI {
                 );
 
         //
-        // 🌌 FILL
+        // 🌌 GLASS
         //
 
         ItemStack glass =
@@ -54,9 +57,28 @@ public class PendingProjectsGUI {
 
         glass.setItemMeta(glassMeta);
 
-        for (int i = 0; i < 54; i++) {
+        //
+        // 🧱 BORDERS
+        //
 
-            inv.setItem(i, glass);
+        int[] borders = {
+
+                0,1,2,3,4,5,6,7,8,
+
+                9,17,
+
+                18,26,
+
+                27,35,
+
+                36,44,
+
+                45,46,47,48,50,51,52,53
+        };
+
+        for (int slot : borders) {
+
+            inv.setItem(slot, glass);
         }
 
         //
@@ -72,7 +94,7 @@ public class PendingProjectsGUI {
                         .toList();
 
         //
-        // 📦 SLOT START
+        // 📦 SLOT
         //
 
         int slot = 10;
@@ -82,6 +104,10 @@ public class PendingProjectsGUI {
             if (slot >= 44)
                 break;
 
+            //
+            // 📘 ITEM
+            //
+
             ItemStack item =
                     new ItemStack(
                             Material.WRITABLE_BOOK
@@ -90,21 +116,42 @@ public class PendingProjectsGUI {
             ItemMeta meta =
                     item.getItemMeta();
 
+            //
+            // 📛 NAME
+            //
+
             meta.setDisplayName(
                     "§e" + sub.getBuildName()
             );
+
+            //
+            // 📅 DATE
+            //
+
+            String date =
+                    new SimpleDateFormat(
+                            "dd/MM/yyyy"
+                    ).format(
+                            new Date(
+                                    sub.getTimestamp()
+                            )
+                    );
+
+            //
+            // 📜 LORE
+            //
 
             meta.setLore(List.of(
 
                     "§8━━━━━━━━━━━━━━━━",
 
-                    "§7Ville: §b"
-                            + sub.getTown(),
+                    "§7Ville:",
+                    "§b" + sub.getTown(),
 
                     "",
 
                     "§7Statut:",
-                    "§6EN ATTENTE",
+                    "§6En attente",
 
                     "",
 
@@ -115,17 +162,26 @@ public class PendingProjectsGUI {
 
                     "",
 
-                    "§e▶ Inspecter le projet"
+                    "§7Date:",
+                    "§f" + date,
+
+                    "",
+
+                    "§a▶ Cliquer pour inspecter"
             ));
 
             item.setItemMeta(meta);
 
             inv.setItem(slot, item);
 
+            //
+            // ➡ SLOT NEXT
+            //
+
             slot++;
 
             //
-            // ⬛ SAUTS
+            // ⬛ SKIPS
             //
 
             if (slot == 17)
@@ -139,20 +195,57 @@ public class PendingProjectsGUI {
         }
 
         //
+        // ❌ EMPTY
+        //
+
+        if (list.isEmpty()) {
+
+            ItemStack empty =
+                    new ItemStack(
+                            Material.BARRIER
+                    );
+
+            ItemMeta meta =
+                    empty.getItemMeta();
+
+            meta.setDisplayName(
+                    "§cAucun projet"
+            );
+
+            meta.setLore(List.of(
+
+                    "§7Aucun dossier",
+
+                    "§7en attente."
+            ));
+
+            empty.setItemMeta(meta);
+
+            inv.setItem(22, empty);
+        }
+
+        //
         // 🔙 RETOUR
         //
 
         ItemStack back =
                 new ItemStack(
-                        Material.BARRIER
+                        Material.ARROW
                 );
 
         ItemMeta backMeta =
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§cRetour"
+                "§c⬅ Retour"
         );
+
+        backMeta.setLore(List.of(
+
+                "§7Retour au centre",
+
+                "§7administratif."
+        ));
 
         back.setItemMeta(backMeta);
 
