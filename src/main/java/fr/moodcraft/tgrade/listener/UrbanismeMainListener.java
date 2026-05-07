@@ -343,7 +343,7 @@ public class UrbanismeMainListener
                     1f
             );
 
-            p.performCommand("menu");
+            p.chat("/menu");
 
             return;
         }
