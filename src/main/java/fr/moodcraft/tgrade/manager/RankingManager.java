@@ -15,9 +15,25 @@ public class RankingManager {
     public static List<TownGrade> getTop() {
 
         List<TownGrade> list =
-                new ArrayList<>(
-                        GradeManager.getAll()
-                );
+                new ArrayList<>();
+
+        //
+        // 📚 LOAD
+        //
+
+        for (TownGrade grade :
+                GradeManager.getAll()) {
+
+            //
+            // ✅ FINISHED ONLY
+            //
+
+            if (!grade.isFinished()) {
+                continue;
+            }
+
+            list.add(grade);
+        }
 
         //
         // 📊 SORT
@@ -31,5 +47,47 @@ public class RankingManager {
         );
 
         return list;
+    }
+
+    //
+    // 🥇 POSITION
+    //
+
+    public static int getPosition(
+            String town
+    ) {
+
+        List<TownGrade> top =
+                getTop();
+
+        for (int i = 0;
+             i < top.size();
+             i++) {
+
+            if (top.get(i)
+                    .getTown()
+                    .equalsIgnoreCase(town)) {
+
+                return i + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    //
+    // 👑 BEST CITY
+    //
+
+    public static TownGrade getBest() {
+
+        List<TownGrade> top =
+                getTop();
+
+        if (top.isEmpty()) {
+            return null;
+        }
+
+        return top.get(0);
     }
 }
