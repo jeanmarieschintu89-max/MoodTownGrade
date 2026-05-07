@@ -48,7 +48,7 @@ public class RateGUIListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8Notation Urbaine"
+                        "§8⭐ Notation Urbaine"
                 )) {
             return;
         }
@@ -279,7 +279,7 @@ public class RateGUIListener
         }
 
         //
-        // ✅ SAVE FINAL
+        // ✅ SAVE
         //
 
         if (name.equals(
@@ -320,12 +320,6 @@ public class RateGUIListener
             grade.setVotes(
                     session.getVotes()
             );
-
-            //
-            // ✅ FINISHED
-            //
-
-            grade.setFinished(true);
 
             //
             // 💾 SAVE
@@ -373,7 +367,7 @@ public class RateGUIListener
             );
 
             p.sendMessage(
-                    "§a🏛 Inspection sauvegardée"
+                    "§a📊 Évaluation mise à jour"
             );
 
             p.sendMessage("");
@@ -383,7 +377,7 @@ public class RateGUIListener
             );
 
             p.sendMessage(
-                    "§7Score final: §6"
+                    "§7Score actuel: §6"
                             + session.getTotal()
                             + "§7/50"
             );
@@ -391,7 +385,7 @@ public class RateGUIListener
             p.sendMessage("");
 
             p.sendMessage(
-                    "§aRapport enregistré."
+                    "§7Classement hebdomadaire actualisé."
             );
 
             p.sendMessage(
@@ -417,7 +411,7 @@ public class RateGUIListener
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Inspection terminée pour"
+                    "§7Évaluation mise à jour pour"
             );
 
             Bukkit.broadcastMessage(
@@ -427,7 +421,7 @@ public class RateGUIListener
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Score obtenu: §6"
+                    "§7Prestige actuel: §6"
                             + session.getTotal()
                             + "§7/50"
             );
