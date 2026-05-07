@@ -1,5 +1,6 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ import java.util.List;
 public class ProjectReviewGUI {
 
     //
-    // 🛰 OPEN
+    // 🏛 OPEN
     //
 
     public static void open(
@@ -37,7 +38,30 @@ public class ProjectReviewGUI {
                 );
 
         //
-        // 📄 INFOS
+        // 🌌 FILL
+        //
+
+        ItemStack glass =
+                new ItemStack(
+                        Material.BLACK_STAINED_GLASS_PANE
+                );
+
+        ItemMeta glassMeta =
+                glass.getItemMeta();
+
+        glassMeta.setDisplayName(
+                " "
+        );
+
+        glass.setItemMeta(glassMeta);
+
+        for (int i = 0; i < 45; i++) {
+
+            inv.setItem(i, glass);
+        }
+
+        //
+        // 📋 INFO PROJET
         //
 
         ItemStack info =
@@ -49,34 +73,46 @@ public class ProjectReviewGUI {
                 info.getItemMeta();
 
         infoMeta.setDisplayName(
-                "§e"
-                        + sub.getBuildName()
+                "§e" + sub.getBuildName()
         );
+
+        String status;
+
+        switch (sub.getStatus()) {
+
+            case APPROVED ->
+                    status = "§aAPPROUVÉ";
+
+            case REJECTED ->
+                    status = "§cREFUSÉ";
+
+            default ->
+                    status = "§6EN ATTENTE";
+        }
 
         infoMeta.setLore(List.of(
 
                 "§8━━━━━━━━━━━━━━━━",
 
-                "§7Ville: §b"
-                        + sub.getTown(),
+                "§7Ville:",
+                "§b" + sub.getTown(),
 
                 "",
 
-                "§7ID: §f"
-                        + sub.getId(),
+                "§7Coordonnées:",
+                "§fX: §e" + sub.getX(),
+                "§fY: §e" + sub.getY(),
+                "§fZ: §e" + sub.getZ(),
 
                 "",
 
-                "§7📍 "
-                        + sub.getX()
-                        + " "
-                        + sub.getY()
-                        + " "
-                        + sub.getZ(),
+                "§7Statut:",
+                status,
 
                 "",
 
-                "§7Statut: §eEN ÉTUDE"
+                "§7ID:",
+                "§f" + sub.getId()
         ));
 
         info.setItemMeta(infoMeta);
@@ -84,7 +120,7 @@ public class ProjectReviewGUI {
         inv.setItem(13, info);
 
         //
-        // 📍 TP
+        // 📍 TELEPORT
         //
 
         ItemStack tp =
@@ -96,14 +132,17 @@ public class ProjectReviewGUI {
                 tp.getItemMeta();
 
         tpMeta.setDisplayName(
-                "§bTéléportation"
+                "§b📍 Téléportation"
         );
 
         tpMeta.setLore(List.of(
 
-                "§7Inspection terrain",
+                "§7Téléportation vers",
+                "§7le projet urbain.",
+
                 "",
-                "§a▶ Cliquer"
+
+                "§e▶ Inspecter"
         ));
 
         tp.setItemMeta(tpMeta);
@@ -111,58 +150,64 @@ public class ProjectReviewGUI {
         inv.setItem(20, tp);
 
         //
-        // ✅ ACCEPTER
+        // ✅ APPROUVER
         //
 
-        ItemStack accept =
+        ItemStack approve =
                 new ItemStack(
                         Material.LIME_CONCRETE
                 );
 
-        ItemMeta acceptMeta =
-                accept.getItemMeta();
+        ItemMeta approveMeta =
+                approve.getItemMeta();
 
-        acceptMeta.setDisplayName(
-                "§aValider Projet"
+        approveMeta.setDisplayName(
+                "§a✅ Approuver"
         );
 
-        acceptMeta.setLore(List.of(
+        approveMeta.setLore(List.of(
 
-                "§7Accorder le permis",
+                "§7Valider officiellement",
+                "§7le projet urbain.",
+
                 "",
-                "§a▶ Validation"
+
+                "§e▶ Accorder permis"
         ));
 
-        accept.setItemMeta(acceptMeta);
+        approve.setItemMeta(approveMeta);
 
-        inv.setItem(24, accept);
+        inv.setItem(24, approve);
 
         //
         // ❌ REFUSER
         //
 
-        ItemStack deny =
+        ItemStack reject =
                 new ItemStack(
                         Material.RED_CONCRETE
                 );
 
-        ItemMeta denyMeta =
-                deny.getItemMeta();
+        ItemMeta rejectMeta =
+                reject.getItemMeta();
 
-        denyMeta.setDisplayName(
-                "§cRefuser Projet"
+        rejectMeta.setDisplayName(
+                "§c❌ Refuser"
         );
 
-        denyMeta.setLore(List.of(
+        rejectMeta.setLore(List.of(
 
-                "§7Refus administratif",
+                "§7Refuser le projet",
+                "§7administrativement.",
+
                 "",
-                "§c▶ Refuser"
+
+                "§e▶ Refuser dossier"
         ));
 
-        deny.setItemMeta(denyMeta);
+        reject.setItemMeta(rejectMeta);
 
-        inv.setItem(26, deny);
+        inv.setItem(26, reject);
 
         //
         // 🔙 RETOUR
@@ -170,7 +215,7 @@ public class ProjectReviewGUI {
 
         ItemStack back =
                 new ItemStack(
-                        Material.ARROW
+                        Material.BARRIER
                 );
 
         ItemMeta backMeta =
