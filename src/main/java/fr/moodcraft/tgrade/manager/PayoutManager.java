@@ -1,4 +1,3 @@
-
 package fr.moodcraft.tgrade.manager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
@@ -7,6 +6,9 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+
+import org.bukkit.entity.Player;
 
 public class PayoutManager {
 
@@ -17,14 +19,14 @@ public class PayoutManager {
     public static void payoutAll() {
 
         //
-        // 🌍 LOOP TOWNS
+        // 🌍 LOOP
         //
 
         for (TownGrade grade :
                 GradeManager.getAll()) {
 
             //
-            // ✅ NOTATION TERMINÉE
+            // ✅ INSPECTION FINIE
             //
 
             if (!grade.isFinished()) {
@@ -32,10 +34,67 @@ public class PayoutManager {
             }
 
             //
-            // 💰 DÉJÀ PAYÉ
+            // 💰 ALREADY CLAIMED
             //
 
             if (grade.isPayoutClaimed()) {
+                continue;
+            }
+
+            //
+            // ❌ MINIMUM 25/50
+            //
+
+            if (grade.getTotal() < 25) {
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                Bukkit.broadcastMessage(
+                        "§6✦ Commission Urbaine Nationale"
+                );
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§7Ville inspectée: §b"
+                                + grade.getTown()
+                );
+
+                Bukkit.broadcastMessage(
+                        "§7Prestige urbain: "
+                                + grade.getFormattedScore()
+                );
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§cFinancement refusé"
+                );
+
+                Bukkit.broadcastMessage(
+                        "§7Score minimum requis: §e25/50"
+                );
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                Bukkit.broadcastMessage("");
+
+                //
+                // 🔒 CLAIMED
+                //
+
+                grade.setPayoutClaimed(true);
+
+                GradeManager.save(grade);
+
                 continue;
             }
 
@@ -50,7 +109,7 @@ public class PayoutManager {
                             );
 
             //
-            // ❌ TOWN NULL
+            // ❌ NULL
             //
 
             if (town == null) {
@@ -58,14 +117,14 @@ public class PayoutManager {
             }
 
             //
-            // 💰 MONTANT
+            // 💰 PAYOUT
             //
 
             int payout =
                     grade.getPayout();
 
             //
-            // 🏦 DÉPÔT TOWNY
+            // 🏦 DEPOSIT
             //
 
             try {
@@ -75,7 +134,7 @@ public class PayoutManager {
 
                                 payout,
 
-                                "Commission urbaine MoodCraft"
+                                "Financement urbain MoodCraft"
                         );
 
                 //
@@ -104,7 +163,7 @@ public class PayoutManager {
             }
 
             //
-            // 🔊 BROADCAST
+            // 📢 BROADCAST
             //
 
             Bukkit.broadcastMessage("");
@@ -114,13 +173,13 @@ public class PayoutManager {
             );
 
             Bukkit.broadcastMessage(
-                    "§b🏛 Commission Urbaine Nationale"
+                    "§6✦ Commission Urbaine Nationale"
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Inspection hebdomadaire terminée."
+                    "§7Inspection hebdomadaire finalisée."
             );
 
             Bukkit.broadcastMessage("");
@@ -131,19 +190,19 @@ public class PayoutManager {
             );
 
             Bukkit.broadcastMessage(
-                    "§7Rang national: "
-                            + grade.getRank()
+                    "§7Prestige urbain: "
+                            + grade.getFormattedScore()
             );
 
             Bukkit.broadcastMessage(
-                    "§7Score obtenu: "
-                            + grade.getFormattedScore()
+                    "§7Classement national: "
+                            + grade.getRank()
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Bourse municipale:"
+                    "§7Financement accordé:"
             );
 
             Bukkit.broadcastMessage(
@@ -158,30 +217,49 @@ public class PayoutManager {
                     grade.getAppreciation()
             );
 
-            Bukkit.broadcastMessage("");
-
             //
-            // 🏆 BONUS ÉLITE
+            // 🏆 ELITE BONUS
             //
 
             if (grade.getTotal() >= 45) {
 
+                Bukkit.broadcastMessage("");
+
                 Bukkit.broadcastMessage(
-                        "§e✨ Cette ville devient"
+                        "§e✦ Cette ville devient"
                 );
 
                 Bukkit.broadcastMessage(
                         "§eune référence architecturale nationale."
                 );
-
-                Bukkit.broadcastMessage("");
             }
+
+            Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
 
             Bukkit.broadcastMessage("");
+
+            //
+            // 🔊 PLAY SOUND
+            //
+
+            for (Player online :
+                    Bukkit.getOnlinePlayers()) {
+
+                online.playSound(
+
+                        online.getLocation(),
+
+                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                        0.8f,
+
+                        1f
+                );
+            }
         }
     }
 
