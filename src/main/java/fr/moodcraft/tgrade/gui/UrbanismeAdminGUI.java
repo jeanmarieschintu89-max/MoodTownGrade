@@ -30,11 +30,11 @@ public class UrbanismeAdminGUI {
 
                         45,
 
-                        "§8🛰 Centre Administratif"
+                        "§8Centre Administratif"
                 );
 
         //
-        // 🌌 FILL
+        // 🌌 GLASS
         //
 
         ItemStack glass =
@@ -51,9 +51,31 @@ public class UrbanismeAdminGUI {
 
         glass.setItemMeta(glassMeta);
 
-        for (int i = 0; i < 45; i++) {
+        //
+        // 🧱 BORDERS ONLY
+        //
 
-            inv.setItem(i, glass);
+        int[] borders = {
+
+                0,1,2,3,4,5,6,7,8,
+
+                9,17,
+
+                18,26,
+
+                27,35,
+
+                36,44,
+
+                45,46,47,48,49,50,51,52,53
+        };
+
+        for (int slot : borders) {
+
+            if (slot < 45) {
+
+                inv.setItem(slot, glass);
+            }
         }
 
         //
@@ -64,68 +86,15 @@ public class UrbanismeAdminGUI {
 
                 inv,
 
-                10,
+                13,
 
                 Material.WRITABLE_BOOK,
 
                 "§e📋 Projets Urbains",
 
-                "§7Voir les dossiers",
-                "§7en attente."
-        );
+                "§7Consulter les projets",
 
-        //
-        // ⭐ NOTATION
-        //
-
-        set(
-
-                inv,
-
-                12,
-
-                Material.GOLD_INGOT,
-
-                "§6⭐ Notation RP",
-
-                "§7Noter les villes",
-                "§7du serveur."
-        );
-
-        //
-        // 📍 INSPECTION
-        //
-
-        set(
-
-                inv,
-
-                14,
-
-                Material.COMPASS,
-
-                "§a📍 Inspection Terrain",
-
-                "§7Inspection rapide",
-                "§7des constructions."
-        );
-
-        //
-        // ✅ VALIDATION
-        //
-
-        set(
-
-                inv,
-
-                16,
-
-                Material.LIME_CONCRETE,
-
-                "§a✅ Validation",
-
-                "§7Valider ou refuser",
-                "§7les projets."
+                "§7de construction RP."
         );
 
         //
@@ -140,10 +109,11 @@ public class UrbanismeAdminGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§2💰 Payout",
+                "§2💰 Versements",
 
                 "§7Distribuer les",
-                "§7récompenses."
+
+                "§7bourses municipales."
         );
 
         //
@@ -160,8 +130,9 @@ public class UrbanismeAdminGUI {
 
                 "§b🏆 Classement",
 
-                "§7Classement national",
-                "§7des villes."
+                "§7Voir le classement",
+
+                "§7national des villes."
         );
 
         //
@@ -176,7 +147,7 @@ public class UrbanismeAdminGUI {
 
                 Material.ARROW,
 
-                "§cRetour",
+                "§c⬅ Retour",
 
                 "§7Retour au menu principal."
         );
