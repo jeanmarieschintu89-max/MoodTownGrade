@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
@@ -22,10 +23,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class RateGUIListener
         implements Listener {
-
-    //
-    // ⭐ CLICK
-    //
 
     @EventHandler
     public void onClick(
@@ -60,12 +57,6 @@ public class RateGUIListener
         e.setCancelled(true);
 
         //
-        // 🔄 BEDROCK REFRESH
-        //
-
-        p.updateInventory();
-
-        //
         // 📦 INVENTORY CHECK
         //
 
@@ -88,10 +79,7 @@ public class RateGUIListener
         //
 
         ItemStack item =
-                e.getClickedInventory()
-                        .getItem(
-                                e.getRawSlot()
-                        );
+                e.getCurrentItem();
 
         if (item == null)
             return;
@@ -150,7 +138,7 @@ public class RateGUIListener
         }
 
         //
-        // 🎨 COHÉRENCE
+        // 🎨 HARMONIE
         //
 
         if (name.equals(
@@ -226,7 +214,7 @@ public class RateGUIListener
         }
 
         //
-        // 🎭 ROLEPLAY
+        // 🎭 RP
         //
 
         if (name.equals(
@@ -283,234 +271,90 @@ public class RateGUIListener
         }
 
         //
-        // ✅ SAVE
+        // 🔄 REFRESH GUI
         //
 
-        if (name.equals(
+        if (!name.equals(
                 "§a✅ Publier l'inspection"
         )) {
 
-            //
-            // 📊 GRADE
-            //
+            Bukkit.getScheduler().runTaskLater(
 
-            TownGrade grade =
-                    GradeManager.get(town);
+                    fr.moodcraft.tgrade.Main.get(),
 
-            //
-            // 💾 SAVE VALUES
-            //
+                    () -> RateGUI.open(
+                            p,
+                            town
+                    ),
 
-            grade.setArchitecture(
-                    session.getArchitecture()
+                    1L
             );
-
-            grade.setStyle(
-                    session.getCoherence()
-            );
-
-            grade.setActivite(
-                    session.getActivite()
-            );
-
-            grade.setBanque(
-                    session.getBanque()
-            );
-
-            grade.setRemarquable(
-                    session.getBuild()
-            );
-
-            grade.setRp(
-                    session.getRoleplay()
-            );
-
-            grade.setTaille(
-                    session.getTaille()
-            );
-
-            grade.setVotes(
-                    session.getVotes()
-            );
-
-            //
-            // ✅ FINISHED
-            //
-
-            grade.setFinished(true);
-
-            //
-            // 💾 SAVE
-            //
-
-            GradeManager.save(grade);
-
-            //
-            // 🧹 REMOVE SESSION
-            //
-
-            RateSessionManager.remove(
-                    p.getUniqueId()
-            );
-
-            //
-            // 🔒 CLOSE
-            //
-
-            p.closeInventory();
-
-            //
-            // 🔊 SUCCESS SOUND
-            //
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
-                    1f,
-
-                    1f
-            );
-
-            //
-            // 📜 STAFF MESSAGE
-            //
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage(
-                    "§6✦ Rapport National Enregistré"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Ville inspectée: §b"
-                            + town
-            );
-
-            p.sendMessage(
-                    "§7Prestige urbain: §e"
-                            + session.getTotal()
-                            + "§7/50"
-            );
-
-            p.sendMessage(
-                    "§7Classement actuel: "
-                            + grade.getRank()
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§aÉvaluation synchronisée."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
-
-            //
-            // 📢 NATIONAL BROADCAST
-            //
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            Bukkit.broadcastMessage(
-                    "§6✦ Commission Urbaine Nationale"
-            );
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§7Inspection mise à jour pour"
-            );
-
-            Bukkit.broadcastMessage(
-                    "§b" + town
-            );
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§7Prestige urbain: §e"
-                            + session.getTotal()
-                            + "§7/50"
-            );
-
-            Bukkit.broadcastMessage(
-                    "§7Classement: "
-                            + grade.getRank()
-            );
-
-            //
-            // 🏆 ELITE
-            //
-
-            if (session.getTotal() >= 45) {
-
-                Bukkit.broadcastMessage("");
-
-                Bukkit.broadcastMessage(
-                        "§e✦ Cette ville rejoint"
-                );
-
-                Bukkit.broadcastMessage(
-                        "§ele cercle des métropoles d'élite."
-                );
-            }
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            Bukkit.broadcastMessage("");
-
-            //
-            // 🔊 GLOBAL SOUND
-            //
-
-            Bukkit.getOnlinePlayers()
-                    .forEach(online ->
-
-                            online.playSound(
-
-                                    online.getLocation(),
-
-                                    Sound.BLOCK_BEACON_ACTIVATE,
-
-                                    0.7f,
-
-                                    1.2f
-                            )
-                    );
 
             return;
         }
 
         //
-        // 🔄 REFRESH GUI
+        // ✅ SAVE
         //
 
-        RateGUI.open(
-                p,
-                town
+        TownGrade grade =
+                GradeManager.get(town);
+
+        grade.setArchitecture(
+                session.getArchitecture()
+        );
+
+        grade.setStyle(
+                session.getCoherence()
+        );
+
+        grade.setActivite(
+                session.getActivite()
+        );
+
+        grade.setBanque(
+                session.getBanque()
+        );
+
+        grade.setRemarquable(
+                session.getBuild()
+        );
+
+        grade.setRp(
+                session.getRoleplay()
+        );
+
+        grade.setTaille(
+                session.getTaille()
+        );
+
+        grade.setVotes(
+                session.getVotes()
+        );
+
+        grade.setFinished(true);
+
+        GradeManager.save(grade);
+
+        RateSessionManager.remove(
+                p.getUniqueId()
+        );
+
+        p.closeInventory();
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                1f,
+
+                1f
+        );
+
+        p.sendMessage(
+                "§aInspection sauvegardée."
         );
     }
 
