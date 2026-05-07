@@ -1,4 +1,4 @@
-package fr.moodcraft.tgrade.util;
+package fr.moodcraft.tgrade.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
