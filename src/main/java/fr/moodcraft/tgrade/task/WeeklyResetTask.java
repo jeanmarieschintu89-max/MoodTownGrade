@@ -1,6 +1,8 @@
 package fr.moodcraft.tgrade.task;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.manager.PayoutManager;
+import fr.moodcraft.tgrade.manager.RankingManager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
 
@@ -19,11 +21,100 @@ public class WeeklyResetTask
     public void run() {
 
         //
+        // 🏆 BEST CITY
+        //
+
+        TownGrade best =
+                RankingManager.getBest();
+
+        //
+        // 💰 PAYOUTS
+        //
+
+        PayoutManager.payoutAll();
+
+        //
+        // 📢 FIN SAISON
+        //
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(
+                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        Bukkit.broadcastMessage(
+                "§6🏛 Fin de semaine urbaine"
+        );
+
+        Bukkit.broadcastMessage("");
+
+        //
+        // 👑 BEST CITY
+        //
+
+        if (best != null) {
+
+            Bukkit.broadcastMessage(
+                    "§7Ville dominante:"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§e👑 "
+                            + best.getTown()
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Prestige final:"
+            );
+
+            Bukkit.broadcastMessage(
+                    best.getFormattedScore()
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    best.getRank()
+            );
+
+            Bukkit.broadcastMessage("");
+        }
+
+        Bukkit.broadcastMessage(
+                "§7Les bourses municipales"
+        );
+
+        Bukkit.broadcastMessage(
+                "§7ont été distribuées."
+        );
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(
+                "§7Archivage des inspections..."
+        );
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(
+                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        Bukkit.broadcastMessage("");
+
+        //
         // 🧹 RESET NOTES
         //
 
         for (TownGrade grade :
                 GradeManager.getAll()) {
+
+            //
+            // 📊 RESET NOTES
+            //
 
             grade.setArchitecture(0);
 
@@ -41,7 +132,13 @@ public class WeeklyResetTask
 
             grade.setVotes(0);
 
+            //
+            // 🔄 RESET
+            //
+
             grade.setFinished(false);
+
+            grade.setPayoutClaimed(false);
 
             //
             // 💾 SAVE
@@ -51,13 +148,13 @@ public class WeeklyResetTask
         }
 
         //
-        // 🗑 DELETE PROJECTS
+        // 🧹 CLEAN PROJECTS
         //
 
-        SubmissionStorage.clearAll();
+        SubmissionStorage.cleanup();
 
         //
-        // 📢 BROADCAST
+        // 📢 NEW WEEK
         //
 
         Bukkit.broadcastMessage("");
@@ -73,15 +170,21 @@ public class WeeklyResetTask
         Bukkit.broadcastMessage("");
 
         Bukkit.broadcastMessage(
-                "§7Les inspections ont été archivées."
+                "§7Les inspections précédentes"
         );
 
         Bukkit.broadcastMessage(
-                "§7Les nouveaux projets peuvent"
+                "§7ont été archivées."
+        );
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(
+                "§7Les villes peuvent déposer"
         );
 
         Bukkit.broadcastMessage(
-                "§7désormais être déposés."
+                "§7de nouveaux projets urbains."
         );
 
         Bukkit.broadcastMessage("");
