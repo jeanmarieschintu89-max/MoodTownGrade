@@ -110,6 +110,28 @@ public class SubmissionStorage {
     }
 
     //
+    // 🗑 CLEAR ALL
+    //
+
+    public static void clearAll() {
+
+        //
+        // ❌ DELETE SECTION
+        //
+
+        config.set(
+                "submissions",
+                null
+        );
+
+        //
+        // 💾 SAVE
+        //
+
+        saveFile();
+    }
+
+    //
     // 📚 GET ALL
     //
 
