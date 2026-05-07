@@ -21,8 +21,33 @@ public class MessageManager {
     public static final String LINE =
             "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
+    public static final String BIG_LINE =
+            "§0§m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
     public static final String PREFIX =
             "§6✦ §eMoodCraft §8• ";
+
+    //
+    // 🖼 GUI TITLES
+    //
+
+    public static final String GUI_MAIN =
+            "§8✦ Commission Urbaine";
+
+    public static final String GUI_ADMIN =
+            "§8✦ Centre Administratif";
+
+    public static final String GUI_PROJECTS =
+            "§8✦ Dossiers Urbains";
+
+    public static final String GUI_RATE =
+            "§8⭐ Notation Urbaine";
+
+    public static final String GUI_CLASSEMENT =
+            "§8🏆 Classement National";
+
+    public static final String GUI_REVIEW =
+            "§8✦ Inspection Nationale";
 
     //
     // 📩 SIMPLE
@@ -75,6 +100,28 @@ public class MessageManager {
 
         p.sendMessage(
                 "§c✦ " + message
+        );
+
+        p.sendMessage(LINE);
+
+        p.sendMessage("");
+    }
+
+    //
+    // ⚠ WARNING
+    //
+
+    public static void warning(
+            Player p,
+            String message
+    ) {
+
+        p.sendMessage("");
+
+        p.sendMessage(LINE);
+
+        p.sendMessage(
+                "§e✦ " + message
         );
 
         p.sendMessage(LINE);
@@ -150,7 +197,46 @@ public class MessageManager {
     }
 
     //
-    // 💰 MONEY FORMAT
+    // 🏛 NATIONAL
+    //
+
+    public static void national(
+            String title,
+            String... lines
+    ) {
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(BIG_LINE);
+
+        Bukkit.broadcastMessage(
+                "§6✦ Commission Urbaine Nationale"
+        );
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(
+                "§e" + title
+        );
+
+        Bukkit.broadcastMessage("");
+
+        for (String line : lines) {
+
+            Bukkit.broadcastMessage(
+                    "§7" + line
+            );
+        }
+
+        Bukkit.broadcastMessage("");
+
+        Bukkit.broadcastMessage(BIG_LINE);
+
+        Bukkit.broadcastMessage("");
+    }
+
+    //
+    // 💰 MONEY
     //
 
     public static String money(
@@ -162,12 +248,13 @@ public class MessageManager {
                         Locale.FRANCE
                 );
 
-        return format.format(amount)
+        return "§a"
+                + format.format(amount)
                 + "$";
     }
 
     //
-    // ⭐ SCORE FORMAT
+    // ⭐ SCORE
     //
 
     public static String score(
@@ -182,7 +269,7 @@ public class MessageManager {
     }
 
     //
-    // 🏆 PRESTIGE COLOR
+    // 🏆 PRESTIGE
     //
 
     public static String prestige(
@@ -234,6 +321,33 @@ public class MessageManager {
     }
 
     //
+    // 📜 DIVIDED LORE
+    //
+
+    public static List<String> dividedLore(
+            String... lines
+    ) {
+
+        List<String> lore =
+                new ArrayList<>();
+
+        lore.add("§8━━━━━━━━━━━━━━━━");
+
+        lore.add("");
+
+        for (String line : lines) {
+
+            lore.add(
+                    "§7" + line
+            );
+        }
+
+        lore.add("");
+
+        return lore;
+    }
+
+    //
     // 🔊 SUCCESS SOUND
     //
 
@@ -274,6 +388,26 @@ public class MessageManager {
     }
 
     //
+    // ⚠ WARNING SOUND
+    //
+
+    public static void warningSound(
+            Player p
+    ) {
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.BLOCK_NOTE_BLOCK_BASS,
+
+                1f,
+
+                0.8f
+        );
+    }
+
+    //
     // 🔘 CLICK SOUND
     //
 
@@ -290,6 +424,46 @@ public class MessageManager {
                 1f,
 
                 1.2f
+        );
+    }
+
+    //
+    // ✨ OPEN SOUND
+    //
+
+    public static void openSound(
+            Player p
+    ) {
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.BLOCK_ENDER_CHEST_OPEN,
+
+                0.8f,
+
+                1f
+        );
+    }
+
+    //
+    // 🔒 CLOSE SOUND
+    //
+
+    public static void closeSound(
+            Player p
+    ) {
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.BLOCK_CHEST_CLOSE,
+
+                0.8f,
+
+                1f
         );
     }
 }
