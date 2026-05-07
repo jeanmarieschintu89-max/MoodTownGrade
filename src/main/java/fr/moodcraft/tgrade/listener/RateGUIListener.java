@@ -9,7 +9,6 @@ import fr.moodcraft.tgrade.manager.RateSessionManager;
 import fr.moodcraft.tgrade.model.RateSession;
 import fr.moodcraft.tgrade.model.TownGrade;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -19,81 +18,31 @@ import org.bukkit.event.Listener;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import org.bukkit.inventory.ItemStack;
-
 public class RateGUIListener
         implements Listener {
 
     @EventHandler
-    public void onClick(
+    public void click(
             InventoryClickEvent e
     ) {
-
-        //
-        // 👤 PLAYER
-        //
 
         if (!(e.getWhoClicked()
                 instanceof Player p)) {
             return;
         }
 
-        //
-        // 📛 GUI
-        //
-
         if (!e.getView()
                 .getTitle()
-                .equalsIgnoreCase(
-                        "§8✦ Notation Nationale"
-                )) {
+                .equals("§8✦ Notation Nationale")) {
             return;
         }
-
-        //
-        // ❌ CANCEL
-        //
 
         e.setCancelled(true);
 
-        //
-        // 📦 INVENTORY CHECK
-        //
-
-        if (e.getClickedInventory() == null)
-            return;
-
-        //
-        // 🛑 PLAYER INVENTORY
-        //
-
-        if (e.getRawSlot() >= e.getView()
-                .getTopInventory()
-                .getSize()) {
-
+        if (e.getRawSlot() < 0
+                || e.getRawSlot() > 53) {
             return;
         }
-
-        //
-        // 📦 ITEM
-        //
-
-        ItemStack item =
-                e.getCurrentItem();
-
-        if (item == null)
-            return;
-
-        if (!item.hasItemMeta())
-            return;
-
-        if (item.getItemMeta()
-                .getDisplayName() == null)
-            return;
-
-        //
-        // 🧠 SESSION
-        //
 
         RateSession session =
                 RateSessionManager.get(
@@ -103,278 +52,162 @@ public class RateGUIListener
         if (session == null)
             return;
 
-        //
-        // 🏛 TOWN
-        //
+        int slot =
+                e.getRawSlot();
 
-        String town =
-                session.getTown();
+        switch (slot) {
 
-        //
-        // 📛 NAME
-        //
+            case RateGUI.ARCHI ->
+                    session.setArchitecture(
+                            next(
+                                    session.getArchitecture(),
+                                    10
+                            )
+                    );
 
-        String name =
-                item.getItemMeta()
-                        .getDisplayName();
+            case RateGUI.COHERENCE ->
+                    session.setCoherence(
+                            next(
+                                    session.getCoherence(),
+                                    6
+                            )
+                    );
 
-        //
-        // 🏗 ARCHITECTURE
-        //
+            case RateGUI.ACTIVITE ->
+                    session.setActivite(
+                            next(
+                                    session.getActivite(),
+                                    8
+                            )
+                    );
 
-        if (name.equals(
-                "§f🏗 Architecture Nationale"
-        )) {
+            case RateGUI.BANQUE ->
+                    session.setBanque(
+                            next(
+                                    session.getBanque(),
+                                    4
+                            )
+                    );
 
-            int value =
-                    session.getArchitecture() + 1;
+            case RateGUI.BUILD ->
+                    session.setBuild(
+                            next(
+                                    session.getBuild(),
+                                    8
+                            )
+                    );
 
-            if (value > 10)
-                value = 0;
+            case RateGUI.RP ->
+                    session.setRoleplay(
+                            next(
+                                    session.getRoleplay(),
+                                    6
+                            )
+                    );
 
-            session.setArchitecture(value);
+            case RateGUI.TAILLE ->
+                    session.setTaille(
+                            next(
+                                    session.getTaille(),
+                                    3
+                            )
+                    );
 
-            playClick(p);
+            case RateGUI.VOTES ->
+                    session.setVotes(
+                            next(
+                                    session.getVotes(),
+                                    5
+                            )
+                    );
+
+            case RateGUI.SAVE -> {
+
+                TownGrade grade =
+                        GradeManager.get(
+                                session.getTown()
+                        );
+
+                grade.setArchitecture(
+                        session.getArchitecture()
+                );
+
+                grade.setStyle(
+                        session.getCoherence()
+                );
+
+                grade.setActivite(
+                        session.getActivite()
+                );
+
+                grade.setBanque(
+                        session.getBanque()
+                );
+
+                grade.setRemarquable(
+                        session.getBuild()
+                );
+
+                grade.setRp(
+                        session.getRoleplay()
+                );
+
+                grade.setTaille(
+                        session.getTaille()
+                );
+
+                grade.setVotes(
+                        session.getVotes()
+                );
+
+                grade.setFinished(true);
+
+                GradeManager.save(grade);
+
+                p.closeInventory();
+
+                p.sendMessage(
+                        "§aInspection sauvegardée."
+                );
+
+                p.playSound(
+                        p.getLocation(),
+                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
+                        1f,
+                        1f
+                );
+
+                return;
+            }
+
+            default -> {
+                return;
+            }
         }
-
-        //
-        // 🎨 HARMONIE
-        //
-
-        if (name.equals(
-                "§d🎨 Harmonie Urbaine"
-        )) {
-
-            int value =
-                    session.getCoherence() + 1;
-
-            if (value > 6)
-                value = 0;
-
-            session.setCoherence(value);
-
-            playClick(p);
-        }
-
-        //
-        // ⚡ ACTIVITÉ
-        //
-
-        if (name.equals(
-                "§e⚡ Activité Citadine"
-        )) {
-
-            int value =
-                    session.getActivite() + 1;
-
-            if (value > 8)
-                value = 0;
-
-            session.setActivite(value);
-
-            playClick(p);
-        }
-
-        //
-        // 💰 BANQUE
-        //
-
-        if (name.equals(
-                "§6💰 Richesse Municipale"
-        )) {
-
-            int value =
-                    session.getBanque() + 1;
-
-            if (value > 4)
-                value = 0;
-
-            session.setBanque(value);
-
-            playClick(p);
-        }
-
-        //
-        // 🏛 BUILD
-        //
-
-        if (name.equals(
-                "§c🏛 Build Remarquable"
-        )) {
-
-            int value =
-                    session.getBuild() + 1;
-
-            if (value > 8)
-                value = 0;
-
-            session.setBuild(value);
-
-            playClick(p);
-        }
-
-        //
-        // 🎭 RP
-        //
-
-        if (name.equals(
-                "§a🎭 Immersion RolePlay"
-        )) {
-
-            int value =
-                    session.getRoleplay() + 1;
-
-            if (value > 6)
-                value = 0;
-
-            session.setRoleplay(value);
-
-            playClick(p);
-        }
-
-        //
-        // 🌍 TAILLE
-        //
-
-        if (name.equals(
-                "§2🌍 Expansion Territoriale"
-        )) {
-
-            int value =
-                    session.getTaille() + 1;
-
-            if (value > 3)
-                value = 0;
-
-            session.setTaille(value);
-
-            playClick(p);
-        }
-
-        //
-        // 🗳 VOTES
-        //
-
-        if (name.equals(
-                "§b🗳 Popularité Nationale"
-        )) {
-
-            int value =
-                    session.getVotes() + 1;
-
-            if (value > 5)
-                value = 0;
-
-            session.setVotes(value);
-
-            playClick(p);
-        }
-
-        //
-        // 🔄 REFRESH GUI
-        //
-
-        if (!name.equals(
-                "§a✅ Publier l'inspection"
-        )) {
-
-            Bukkit.getScheduler().runTaskLater(
-
-                    fr.moodcraft.tgrade.Main.get(),
-
-                    () -> RateGUI.open(
-                            p,
-                            town
-                    ),
-
-                    1L
-            );
-
-            return;
-        }
-
-        //
-        // ✅ SAVE
-        //
-
-        TownGrade grade =
-                GradeManager.get(town);
-
-        grade.setArchitecture(
-                session.getArchitecture()
-        );
-
-        grade.setStyle(
-                session.getCoherence()
-        );
-
-        grade.setActivite(
-                session.getActivite()
-        );
-
-        grade.setBanque(
-                session.getBanque()
-        );
-
-        grade.setRemarquable(
-                session.getBuild()
-        );
-
-        grade.setRp(
-                session.getRoleplay()
-        );
-
-        grade.setTaille(
-                session.getTaille()
-        );
-
-        grade.setVotes(
-                session.getVotes()
-        );
-
-        grade.setFinished(true);
-
-        GradeManager.save(grade);
-
-        RateSessionManager.remove(
-                p.getUniqueId()
-        );
-
-        p.closeInventory();
 
         p.playSound(
-
                 p.getLocation(),
-
-                Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
+                Sound.UI_BUTTON_CLICK,
                 1f,
-
                 1f
         );
 
-        p.sendMessage(
-                "§aInspection sauvegardée."
+        RateGUI.open(
+                p,
+                session.getTown()
         );
     }
 
-    //
-    // 🔊 CLICK SOUND
-    //
-
-    private void playClick(
-            Player p
+    private int next(
+            int current,
+            int max
     ) {
 
-        p.playSound(
+        current++;
 
-                p.getLocation(),
+        if (current > max)
+            current = 0;
 
-                Sound.UI_BUTTON_CLICK,
-
-                1f,
-
-                1.2f
-        );
+        return current;
     }
 }
