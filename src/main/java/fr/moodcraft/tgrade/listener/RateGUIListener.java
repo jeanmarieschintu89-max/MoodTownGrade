@@ -60,7 +60,7 @@ public class RateGUIListener
         e.setCancelled(true);
 
         //
-        // 🔄 FORCE BEDROCK REFRESH
+        // 🔄 BEDROCK REFRESH
         //
 
         p.updateInventory();
@@ -70,13 +70,6 @@ public class RateGUIListener
         //
 
         if (e.getClickedInventory() == null)
-            return;
-
-        //
-        // ❌ INVALID SLOT
-        //
-
-        if (e.getRawSlot() < 0)
             return;
 
         //
@@ -146,7 +139,7 @@ public class RateGUIListener
         }
 
         //
-        // 🎨 COHERENCE
+        // 🎨 COHÉRENCE
         //
 
         if (name.equals(
@@ -165,7 +158,7 @@ public class RateGUIListener
         }
 
         //
-        // ⚡ ACTIVITE
+        // ⚡ ACTIVITÉ
         //
 
         if (name.equals(
@@ -222,7 +215,7 @@ public class RateGUIListener
         }
 
         //
-        // 🎭 RP
+        // 🎭 ROLEPLAY
         //
 
         if (name.equals(
@@ -286,8 +279,16 @@ public class RateGUIListener
                 "§a✅ Valider la notation"
         )) {
 
+            //
+            // 📊 GRADE
+            //
+
             TownGrade grade =
                     GradeManager.get(town);
+
+            //
+            // 💾 SAVE VALUES
+            //
 
             grade.setArchitecture(
                     session.getArchitecture()
@@ -322,6 +323,12 @@ public class RateGUIListener
             );
 
             //
+            // ✅ FINISHED
+            //
+
+            grade.setFinished(true);
+
+            //
             // 💾 SAVE
             //
 
@@ -342,7 +349,7 @@ public class RateGUIListener
             p.closeInventory();
 
             //
-            // 🔊 SOUND
+            // 🔊 SUCCESS SOUND
             //
 
             p.playSound(
@@ -357,7 +364,7 @@ public class RateGUIListener
             );
 
             //
-            // 📜 MESSAGE
+            // 📜 STAFF MESSAGE
             //
 
             p.sendMessage("");
@@ -367,26 +374,34 @@ public class RateGUIListener
             );
 
             p.sendMessage(
-                    "§a📊 Évaluation mise à jour"
+                    "§6✦ Rapport National Enregistré"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Ville: §b" + town
+                    "§7Ville inspectée: §b"
+                            + town
             );
 
             p.sendMessage(
-                    "§7Score actuel: §6"
+                    "§7Prestige urbain: §e"
                             + session.getTotal()
                             + "§7/50"
             );
 
+            p.sendMessage(
+                    "§7Classement actuel: "
+                            + grade.getRank()
+            );
+
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Classement hebdomadaire actualisé."
+                    "§aÉvaluation synchronisée."
             );
+
+            p.sendMessage("");
 
             p.sendMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -395,7 +410,7 @@ public class RateGUIListener
             p.sendMessage("");
 
             //
-            // 📢 BROADCAST
+            // 📢 NATIONAL BROADCAST
             //
 
             Bukkit.broadcastMessage("");
@@ -405,13 +420,13 @@ public class RateGUIListener
             );
 
             Bukkit.broadcastMessage(
-                    "§b🏛 Commission Urbaine"
+                    "§6✦ Commission Urbaine Nationale"
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Évaluation mise à jour pour"
+                    "§7Inspection mise à jour pour"
             );
 
             Bukkit.broadcastMessage(
@@ -421,10 +436,34 @@ public class RateGUIListener
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Prestige actuel: §6"
+                    "§7Prestige urbain: §e"
                             + session.getTotal()
                             + "§7/50"
             );
+
+            Bukkit.broadcastMessage(
+                    "§7Classement: "
+                            + grade.getRank()
+            );
+
+            //
+            // 🏆 ELITE
+            //
+
+            if (session.getTotal() >= 45) {
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§e✦ Cette ville rejoint"
+                );
+
+                Bukkit.broadcastMessage(
+                        "§ele cercle des métropoles d'élite."
+                );
+            }
+
+            Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -432,11 +471,30 @@ public class RateGUIListener
 
             Bukkit.broadcastMessage("");
 
+            //
+            // 🔊 GLOBAL SOUND
+            //
+
+            Bukkit.getOnlinePlayers()
+                    .forEach(online ->
+
+                            online.playSound(
+
+                                    online.getLocation(),
+
+                                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                                    0.7f,
+
+                                    1.2f
+                            )
+                    );
+
             return;
         }
 
         //
-        // 🔄 REFRESH
+        // 🔄 REFRESH GUI
         //
 
         RateGUI.open(
@@ -446,7 +504,7 @@ public class RateGUIListener
     }
 
     //
-    // 🔊 SOUND
+    // 🔊 CLICK SOUND
     //
 
     private void playClick(
