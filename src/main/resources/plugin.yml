@@ -4,7 +4,7 @@ main: fr.moodcraft.tgrade.Main
 
 version: 1.0
 
-api-version: 1.20
+api-version: "1.20"
 
 author: MoodCraft
 
@@ -15,15 +15,17 @@ depend:
 
 commands:
 
-  ville:
+  urbanisme:
 
-    description: Systeme ville MoodCraft
+    description: Commission urbaine MoodCraft
 
-    usage: /ville
+    usage: /urbanisme
 
     aliases:
       - tgrade
       - commission
+      - urbain
+      - mairie
 
 permissions:
 
