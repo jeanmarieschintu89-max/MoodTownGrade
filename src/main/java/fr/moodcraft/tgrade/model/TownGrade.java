@@ -27,6 +27,12 @@ public class TownGrade {
 
     private boolean finished;
 
+    //
+    // 💰 PAYOUT
+    //
+
+    private boolean payoutClaimed;
+
     public TownGrade(String town) {
 
         this.town = town;
@@ -268,6 +274,11 @@ public class TownGrade {
         return finished;
     }
 
+    public boolean isPayoutClaimed() {
+
+        return payoutClaimed;
+    }
+
     //
     // ✏️ SETTERS
     //
@@ -330,5 +341,13 @@ public class TownGrade {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public void setPayoutClaimed(
+            boolean payoutClaimed
+    ) {
+
+        this.payoutClaimed =
+                payoutClaimed;
     }
 }
