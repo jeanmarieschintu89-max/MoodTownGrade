@@ -95,7 +95,7 @@ public class RateGUI {
 
                         54,
 
-                        "§8✦ Inspection Nationale"
+                        "§8✦ Notation Nationale"
                 );
 
         //
