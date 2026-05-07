@@ -36,7 +36,7 @@ public class PendingProjectsGUI {
 
                         54,
 
-                        "§8✦ Commission Urbaine"
+                        "§8✦ Dossiers Urbains"
                 );
 
         //
