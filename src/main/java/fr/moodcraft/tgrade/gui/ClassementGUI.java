@@ -34,7 +34,7 @@ public class ClassementGUI {
 
                         54,
 
-                        "§8🏆 Classement National"
+                        "§8✦ Classement National"
                 );
 
         //
@@ -78,6 +78,66 @@ public class ClassementGUI {
         }
 
         //
+        // 👑 HEADER
+        //
+
+        TownGrade best =
+                RankingManager.getBest();
+
+        ItemStack header =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§6✦ Palmarès National"
+        );
+
+        if (best != null) {
+
+            headerMeta.setLore(List.of(
+
+                    "§8━━━━━━━━━━━━━━━━",
+
+                    "§7Capitale architecturale:",
+
+                    "§e👑 " + best.getTown(),
+
+                    "",
+
+                    "§7Prestige national:",
+                    best.getFormattedScore(),
+
+                    "",
+
+                    "§7Titre actuel:",
+                    best.getRank(),
+
+                    "",
+
+                    "§e▶ Commission Urbaine MoodCraft"
+            ));
+
+        } else {
+
+            headerMeta.setLore(List.of(
+
+                    "§8━━━━━━━━━━━━━━━━",
+
+                    "§7Aucune ville classée",
+
+                    "§7pour cette semaine."
+            ));
+        }
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(4, header);
+
+        //
         // 🏆 TOP
         //
 
@@ -97,21 +157,48 @@ public class ClassementGUI {
             // 🥇 MATERIAL
             //
 
-            Material mat =
-                    switch (pos) {
+            Material mat;
 
-                        case 1 ->
-                                Material.NETHER_STAR;
+            String podium;
 
-                        case 2 ->
-                                Material.DIAMOND;
+            switch (pos) {
 
-                        case 3 ->
-                                Material.EMERALD;
+                case 1 -> {
 
-                        default ->
-                                Material.GOLD_INGOT;
-                    };
+                    mat =
+                            Material.NETHER_STAR;
+
+                    podium =
+                            "§6🥇 Première Nation";
+                }
+
+                case 2 -> {
+
+                    mat =
+                            Material.DIAMOND;
+
+                    podium =
+                            "§7🥈 Deuxième Nation";
+                }
+
+                case 3 -> {
+
+                    mat =
+                            Material.EMERALD;
+
+                    podium =
+                            "§6🥉 Troisième Nation";
+                }
+
+                default -> {
+
+                    mat =
+                            Material.GOLD_INGOT;
+
+                    podium =
+                            "§e#" + pos;
+                }
+            }
 
             //
             // 📦 ITEM
@@ -125,9 +212,8 @@ public class ClassementGUI {
 
             meta.setDisplayName(
 
-                    "§6#"
-                            + pos
-                            + " §b"
+                    podium
+                            + " §8• §b"
                             + grade.getTown()
             );
 
@@ -135,17 +221,17 @@ public class ClassementGUI {
 
                     "§8━━━━━━━━━━━━━━━━",
 
-                    "§7Prestige:",
+                    "§7Prestige urbain:",
                     grade.getRank(),
 
                     "",
 
-                    "§7Score:",
+                    "§7Inspection nationale:",
                     grade.getFormattedScore(),
 
                     "",
 
-                    "§7Bourse:",
+                    "§7Financement obtenu:",
                     "§a"
                             + format(
                             grade.getPayout()
@@ -154,8 +240,16 @@ public class ClassementGUI {
 
                     "",
 
-                    "§7Appréciation:",
-                    grade.getAppreciation()
+                    "§7Appréciation officielle:",
+                    grade.getAppreciation(),
+
+                    "",
+
+                    "§7Inspection validée par",
+
+                    "§7la Commission Urbaine",
+
+                    "§7Nationale de MoodCraft."
             ));
 
             item.setItemMeta(meta);
@@ -181,6 +275,38 @@ public class ClassementGUI {
         }
 
         //
+        // ❌ EMPTY
+        //
+
+        if (top.isEmpty()) {
+
+            ItemStack empty =
+                    new ItemStack(
+                            Material.BARRIER
+                    );
+
+            ItemMeta meta =
+                    empty.getItemMeta();
+
+            meta.setDisplayName(
+                    "§c✖ Aucun classement"
+            );
+
+            meta.setLore(List.of(
+
+                    "§8━━━━━━━━━━━━━━━━",
+
+                    "§7Aucune ville n'a encore",
+
+                    "§7été inspectée cette semaine."
+            ));
+
+            empty.setItemMeta(meta);
+
+            inv.setItem(22, empty);
+        }
+
+        //
         // 🔙 RETOUR
         //
 
@@ -193,14 +319,16 @@ public class ClassementGUI {
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§c⬅ Retour"
+                "§c⬅ Retour administratif"
         );
 
         backMeta.setLore(List.of(
 
-                "§7Retour au menu",
+                "§8━━━━━━━━━━━━━━━━",
 
-                "§7principal."
+                "§7Retourner au centre",
+
+                "§7urbain national."
         ));
 
         back.setItemMeta(backMeta);
