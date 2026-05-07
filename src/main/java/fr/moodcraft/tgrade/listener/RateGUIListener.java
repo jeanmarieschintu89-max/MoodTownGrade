@@ -73,6 +73,17 @@ public class RateGUIListener
             return;
 
         //
+        // 🛑 PLAYER INVENTORY
+        //
+
+        if (e.getRawSlot() >= e.getView()
+                .getTopInventory()
+                .getSize()) {
+
+            return;
+        }
+
+        //
         // 📦 ITEM
         //
 
@@ -124,7 +135,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§f🏗 Architecture"
+                "§f🏗 Architecture Nationale"
         )) {
 
             int value =
@@ -143,7 +154,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§d🎨 Cohérence"
+                "§d🎨 Harmonie Urbaine"
         )) {
 
             int value =
@@ -162,7 +173,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§e⚡ Activité"
+                "§e⚡ Activité Citadine"
         )) {
 
             int value =
@@ -181,7 +192,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§6💰 Banque"
+                "§6💰 Richesse Municipale"
         )) {
 
             int value =
@@ -200,7 +211,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§c🏛 Build remarquable"
+                "§c🏛 Build Remarquable"
         )) {
 
             int value =
@@ -219,7 +230,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§a🎭 RolePlay"
+                "§a🎭 Immersion RolePlay"
         )) {
 
             int value =
@@ -238,7 +249,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§2🌍 Taille"
+                "§2🌍 Expansion Territoriale"
         )) {
 
             int value =
@@ -257,7 +268,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§b🗳 Votes"
+                "§b🗳 Popularité Nationale"
         )) {
 
             int value =
@@ -276,7 +287,7 @@ public class RateGUIListener
         //
 
         if (name.equals(
-                "§a✅ Valider la notation"
+                "§a✅ Publier l'inspection"
         )) {
 
             //
