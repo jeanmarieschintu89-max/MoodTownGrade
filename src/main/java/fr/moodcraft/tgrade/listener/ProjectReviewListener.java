@@ -119,7 +119,7 @@ public class ProjectReviewListener
                 e.getSlot();
 
         //
-        // 📍 INSPECTION COMPLETE
+        // 📍 INSPECTION
         //
 
         if (slot == 20) {
@@ -213,15 +213,6 @@ public class ProjectReviewListener
 
             p.sendMessage("");
 
-            //
-            // ⭐ OPEN RATE GUI
-            //
-
-            RateGUI.open(
-                    p,
-                    found.getTown()
-            );
-
             return;
         }
 
@@ -280,11 +271,30 @@ public class ProjectReviewListener
                     "§ala Commission Urbaine."
             );
 
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Le projet peut désormais"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§7être évalué cette semaine."
+            );
+
             Bukkit.broadcastMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             );
 
             Bukkit.broadcastMessage("");
+
+            //
+            // ⭐ OPEN RATE GUI
+            //
+
+            RateGUI.open(
+                    p,
+                    found.getTown()
+            );
 
             return;
         }
@@ -295,11 +305,13 @@ public class ProjectReviewListener
 
         if (slot == 26) {
 
-            found.setStatus(
-                    SubmissionStatus.REJECTED
-            );
+            //
+            // 🗑 DELETE DIRECT
+            //
 
-            SubmissionStorage.save(found);
+            SubmissionStorage.delete(
+                    found.getId()
+            );
 
             p.closeInventory();
 
@@ -334,6 +346,16 @@ public class ProjectReviewListener
             p.sendMessage(
                     "§7Ville: §b"
                             + found.getTown()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Le dossier a été archivé"
+            );
+
+            p.sendMessage(
+                    "§7par la commission urbaine."
             );
 
             p.sendMessage("");
