@@ -249,40 +249,35 @@ public class UrbanismeMainListener
         }
 
         //
-        // 🏆 SCORE
+        // 🏆 CLASSEMENT
         //
 
         if (slot == 15) {
 
             p.closeInventory();
 
-            p.sendMessage("");
+            //
+            // 🔊 SOUND
+            //
 
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                    1f,
+
+                    1f
             );
 
-            p.sendMessage(
-                    "§6🏆 Prestige Urbain"
+            //
+            // 🚀 COMMAND
+            //
+
+            p.performCommand(
+                    "urbanisme classement"
             );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Le système de classement"
-            );
-
-            p.sendMessage(
-                    "§7sera disponible bientôt."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
 
             return;
         }
