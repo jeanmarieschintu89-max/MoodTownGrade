@@ -27,6 +27,12 @@ commands:
       - urbain
       - mairie
 
+  topville:
+
+    description: Classement national des villes
+
+    usage: /topville
+
 permissions:
 
   moodtowngrade.staff:
