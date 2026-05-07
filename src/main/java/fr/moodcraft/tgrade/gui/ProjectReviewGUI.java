@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.List;
 
 public class ProjectReviewGUI {
@@ -34,11 +37,11 @@ public class ProjectReviewGUI {
 
                         45,
 
-                        "§8🏛 Inspection Projet"
+                        "§8✦ Inspection Nationale"
                 );
 
         //
-        // 🌌 FILL
+        // 🌌 GLASS
         //
 
         ItemStack glass =
@@ -55,64 +58,157 @@ public class ProjectReviewGUI {
 
         glass.setItemMeta(glassMeta);
 
-        for (int i = 0; i < 45; i++) {
+        //
+        // 🧱 BORDERS
+        //
 
-            inv.setItem(i, glass);
+        int[] borders = {
+
+                0,1,2,3,4,5,6,7,8,
+
+                9,17,
+
+                18,26,
+
+                27,35,
+
+                36,37,38,39,41,42,43,44
+        };
+
+        for (int slot : borders) {
+
+            inv.setItem(slot, glass);
         }
 
         //
-        // 📋 INFO PROJET
+        // 📊 STATUS
+        //
+
+        String status;
+
+        Material statusMaterial;
+
+        switch (sub.getStatus()) {
+
+            case APPROVED -> {
+
+                status =
+                        "§a🟢 Projet validé";
+
+                statusMaterial =
+                        Material.EMERALD;
+            }
+
+            case REJECTED -> {
+
+                status =
+                        "§c🔴 Projet refusé";
+
+                statusMaterial =
+                        Material.REDSTONE_BLOCK;
+            }
+
+            default -> {
+
+                status =
+                        "§6🟡 Inspection en attente";
+
+                statusMaterial =
+                        Material.GOLD_BLOCK;
+            }
+        }
+
+        //
+        // 📅 DATE
+        //
+
+        String date =
+                new SimpleDateFormat(
+                        "dd/MM/yyyy"
+                ).format(
+                        new Date(
+                                sub.getTimestamp()
+                        )
+                );
+
+        //
+        // 🏛 HEADER
+        //
+
+        ItemStack header =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§6✦ Commission Nationale"
+        );
+
+        headerMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Inspection officielle",
+
+                "§7des constructions RP.",
+
+                "",
+
+                "§7Statut dossier:",
+                status
+        ));
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(4, header);
+
+        //
+        // 📋 DOSSIER
         //
 
         ItemStack info =
                 new ItemStack(
-                        Material.WRITABLE_BOOK
+                        statusMaterial
                 );
 
         ItemMeta infoMeta =
                 info.getItemMeta();
 
         infoMeta.setDisplayName(
-                "§e" + sub.getBuildName()
+                "§f✦ §e" + sub.getBuildName()
         );
-
-        String status;
-
-        switch (sub.getStatus()) {
-
-            case APPROVED ->
-                    status = "§aAPPROUVÉ";
-
-            case REJECTED ->
-                    status = "§cREFUSÉ";
-
-            default ->
-                    status = "§6EN ATTENTE";
-        }
 
         infoMeta.setLore(List.of(
 
                 "§8━━━━━━━━━━━━━━━━",
 
-                "§7Ville:",
+                "§7Ville inspectée:",
                 "§b" + sub.getTown(),
 
                 "",
 
-                "§7Coordonnées:",
+                "§7Coordonnées terrain:",
                 "§fX: §e" + sub.getX(),
                 "§fY: §e" + sub.getY(),
                 "§fZ: §e" + sub.getZ(),
 
                 "",
 
-                "§7Statut:",
-                status,
+                "§7Date dépôt:",
+                "§f" + date,
 
                 "",
 
-                "§7ID:",
-                "§f" + sub.getId()
+                "§7Identifiant:",
+                "§f#" + sub.getId(),
+
+                "",
+
+                "§7État administratif:",
+                status
         ));
 
         info.setItemMeta(infoMeta);
@@ -120,7 +216,7 @@ public class ProjectReviewGUI {
         inv.setItem(13, info);
 
         //
-        // 📍 TELEPORT
+        // 📍 INSPECTION
         //
 
         ItemStack tp =
@@ -132,17 +228,26 @@ public class ProjectReviewGUI {
                 tp.getItemMeta();
 
         tpMeta.setDisplayName(
-                "§b📍 Téléportation"
+                "§b📍 Inspection terrain"
         );
 
         tpMeta.setLore(List.of(
 
+                "§8━━━━━━━━━━━━━━━━",
+
                 "§7Téléportation vers",
-                "§7le projet urbain.",
+
+                "§7la construction déclarée.",
 
                 "",
 
-                "§e▶ Inspecter"
+                "§7Début de l'inspection",
+
+                "§7urbaine officielle.",
+
+                "",
+
+                "§e▶ Lancer inspection"
         ));
 
         tp.setItemMeta(tpMeta);
@@ -162,17 +267,26 @@ public class ProjectReviewGUI {
                 approve.getItemMeta();
 
         approveMeta.setDisplayName(
-                "§a✅ Approuver"
+                "§a✅ Accorder le permis"
         );
 
         approveMeta.setLore(List.of(
 
+                "§8━━━━━━━━━━━━━━━━",
+
                 "§7Valider officiellement",
-                "§7le projet urbain.",
+
+                "§7la conformité du projet.",
 
                 "",
 
-                "§e▶ Accorder permis"
+                "§7Le dossier sera reconnu",
+
+                "§7par la commission nationale.",
+
+                "",
+
+                "§a▶ Valider le projet"
         ));
 
         approve.setItemMeta(approveMeta);
@@ -192,17 +306,26 @@ public class ProjectReviewGUI {
                 reject.getItemMeta();
 
         rejectMeta.setDisplayName(
-                "§c❌ Refuser"
+                "§c❌ Classer le dossier"
         );
 
         rejectMeta.setLore(List.of(
 
+                "§8━━━━━━━━━━━━━━━━",
+
                 "§7Refuser le projet",
+
                 "§7administrativement.",
 
                 "",
 
-                "§e▶ Refuser dossier"
+                "§7Le dossier sera retiré",
+
+                "§7des inspections urbaines.",
+
+                "",
+
+                "§c▶ Fermer le dossier"
         ));
 
         reject.setItemMeta(rejectMeta);
@@ -215,15 +338,24 @@ public class ProjectReviewGUI {
 
         ItemStack back =
                 new ItemStack(
-                        Material.BARRIER
+                        Material.ARROW
                 );
 
         ItemMeta backMeta =
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§cRetour"
+                "§c⬅ Retour administratif"
         );
+
+        backMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Retour au centre",
+
+                "§7de gestion urbaine."
+        ));
 
         back.setItemMeta(backMeta);
 
