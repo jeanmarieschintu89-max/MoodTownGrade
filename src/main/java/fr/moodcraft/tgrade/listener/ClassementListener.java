@@ -1,6 +1,5 @@
 package fr.moodcraft.tgrade.listener;
 
-import fr.moodcraft.tgrade.gui.ClassementGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import org.bukkit.Sound;
@@ -51,14 +50,7 @@ public class ClassementListener
             return;
 
         //
-        // 📦 INVENTORY CHECK
-        //
-
-        if (e.getClickedInventory() == null)
-            return;
-
-        //
-        // 📦 ITEM
+        // 📦 NULL
         //
 
         if (e.getCurrentItem() == null)
@@ -69,7 +61,7 @@ public class ClassementListener
         //
 
         int slot =
-                e.getRawSlot();
+                e.getSlot();
 
         //
         // 🔙 RETOUR
