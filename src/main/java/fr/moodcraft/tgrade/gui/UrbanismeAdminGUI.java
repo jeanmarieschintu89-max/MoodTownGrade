@@ -163,3 +163,4 @@ public class UrbanismeAdminGUI {
                 "§7Classement national",
                 "§7des villes."
         );
+);
