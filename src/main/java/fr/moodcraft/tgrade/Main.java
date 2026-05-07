@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade;
 import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
 import fr.moodcraft.tgrade.listener.GUIListener;
+import fr.moodcraft.tgrade.listener.PendingProjectsListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
 import fr.moodcraft.tgrade.listener.UrbanismeAdminListener;
@@ -149,6 +150,13 @@ public class Main extends JavaPlugin {
                         this
                 );
 
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new PendingProjectsListener(),
+                        this
+                );
+
         //
         // ⏰ RESET HEBDO
         //
@@ -190,6 +198,10 @@ public class Main extends JavaPlugin {
 
         getLogger().info(
                 "🛰 Centre administratif opérationnel"
+        );
+
+        getLogger().info(
+                "📋 Inspection de projets active"
         );
 
         getLogger().info(
