@@ -30,7 +30,7 @@ public class ClassementListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8🏆 Classement National"
+                        "§8✦ Classement National"
                 )) {
             return;
         }
