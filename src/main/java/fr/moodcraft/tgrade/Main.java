@@ -5,12 +5,13 @@ import fr.moodcraft.tgrade.command.UrbanismeCommand;
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
+import fr.moodcraft.tgrade.listener.UrbanismeAdminListener;
 import fr.moodcraft.tgrade.listener.UrbanismeMainListener;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
 
-import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.storage.GradeStorage;
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import fr.moodcraft.tgrade.task.WeeklyResetTask;
 
@@ -110,7 +111,7 @@ public class Main extends JavaPlugin {
         }
 
         //
-        // 🎨 GUI LISTENERS
+        // 🎨 LISTENERS
         //
 
         getServer()
@@ -141,8 +142,15 @@ public class Main extends JavaPlugin {
                         this
                 );
 
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new UrbanismeAdminListener(),
+                        this
+                );
+
         //
-        // ⏰ WEEKLY RESET
+        // ⏰ RESET HEBDO
         //
 
         long week =
@@ -177,25 +185,29 @@ public class Main extends JavaPlugin {
         getLogger().info("");
 
         getLogger().info(
-                "Commission urbaine chargée"
+                "🏛 Commission urbaine chargée"
         );
 
         getLogger().info(
-                "Système d'inspection actif"
+                "🛰 Centre administratif opérationnel"
         );
 
         getLogger().info(
-                "Grades chargés: "
+                "📊 Système de notation actif"
+        );
+
+        getLogger().info(
+                "📚 Grades chargés: "
                         + GradeManager.getAll()
                         .size()
         );
 
         getLogger().info(
-                "Towny détecté avec succès"
+                "🌍 Towny détecté avec succès"
         );
 
         getLogger().info(
-                "Reset hebdomadaire actif"
+                "⏰ Reset hebdomadaire actif"
         );
 
         getLogger().info("");
@@ -215,7 +227,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
 
         //
-        // 💾 SAVE ALL
+        // 💾 SAVE
         //
 
         GradeManager.getAll()
@@ -224,7 +236,7 @@ public class Main extends JavaPlugin {
                 );
 
         //
-        // 🧹 CACHE CLEAR
+        // 🧹 CLEAR CACHE
         //
 
         GradeManager.clearCache();
