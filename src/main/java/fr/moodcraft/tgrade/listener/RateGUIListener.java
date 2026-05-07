@@ -3,7 +3,9 @@ package fr.moodcraft.tgrade.listener;
 import fr.moodcraft.tgrade.gui.RateGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.manager.RateSessionManager;
 
+import fr.moodcraft.tgrade.model.RateSession;
 import fr.moodcraft.tgrade.model.TownGrade;
 
 import org.bukkit.Bukkit;
@@ -18,113 +20,138 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import org.bukkit.inventory.ItemStack;
 
-public class RateGUIListener implements Listener {
+public class RateGUIListener
+        implements Listener {
+
+    //
+    // ⭐ CLICK
+    //
 
     @EventHandler
-    public void onClick(InventoryClickEvent e) {
+    public void onClick(
+            InventoryClickEvent e
+    ) {
 
-        if (!(e.getWhoClicked() instanceof Player p)) {
+        //
+        // 👤 PLAYER
+        //
+
+        if (!(e.getWhoClicked()
+                instanceof Player p)) {
             return;
         }
 
         //
-        // 🏛️ GUI CHECK
+        // 📛 GUI
         //
 
         if (!e.getView()
                 .getTitle()
-                .contains("Inspection")) {
+                .equalsIgnoreCase(
+                        "§8⭐ Notation Urbaine"
+                )) {
             return;
         }
 
+        //
+        // ❌ CANCEL
+        //
+
         e.setCancelled(true);
+
+        //
+        // 📦 ITEM
+        //
 
         ItemStack item =
                 e.getCurrentItem();
 
-        if (item == null) return;
+        if (item == null)
+            return;
 
-        if (!item.hasItemMeta()) return;
+        if (!item.hasItemMeta())
+            return;
 
         //
-        // 🏙️ TOWN
+        // 🧠 SESSION
+        //
+
+        RateSession session =
+                RateSessionManager.get(
+                        p.getUniqueId()
+                );
+
+        if (session == null)
+            return;
+
+        //
+        // 🏛 TOWN
         //
 
         String town =
-                e.getView()
-                        .getTitle()
-                        .replace(
-                                "§8✦ §bMoodCraft §8• §7Inspection",
-                                ""
-                        )
-                        .trim();
+                session.getTown();
 
-        TownGrade grade =
-                GradeManager.get(town);
+        //
+        // 📛 NAME
+        //
 
         String name =
                 item.getItemMeta()
                         .getDisplayName();
 
         //
-        // 🏛️ ARCHITECTURE
+        // 🏗 ARCHITECTURE
         //
 
         if (name.equals(
-                "§6Architecture urbaine")) {
+                "§f🏗 Architecture"
+        )) {
 
             int value =
-                    grade.getArchitecture();
+                    session.getArchitecture() + 1;
 
-            value++;
-
-            if (value > 10) {
+            if (value > 10)
                 value = 0;
-            }
 
-            grade.setArchitecture(value);
+            session.setArchitecture(value);
 
             playClick(p);
         }
 
         //
-        // 🎨 STYLE
+        // 🎨 COHERENCE
         //
 
         if (name.equals(
-                "§dCohérence architecturale")) {
+                "§d🎨 Cohérence"
+        )) {
 
             int value =
-                    grade.getStyle();
+                    session.getCoherence() + 1;
 
-            value++;
-
-            if (value > 6) {
+            if (value > 6)
                 value = 0;
-            }
 
-            grade.setStyle(value);
+            session.setCoherence(value);
 
             playClick(p);
         }
 
         //
-        // 📈 ACTIVITÉ
+        // ⚡ ACTIVITE
         //
 
         if (name.equals(
-                "§eDynamisme urbain")) {
+                "§e⚡ Activité"
+        )) {
 
             int value =
-                    grade.getActivite();
+                    session.getActivite() + 1;
 
-            value++;
-
-            if (value > 8) {
+            if (value > 8)
                 value = 0;
-            }
 
-            grade.setActivite(value);
+            session.setActivite(value);
 
             playClick(p);
         }
@@ -134,112 +161,156 @@ public class RateGUIListener implements Listener {
         //
 
         if (name.equals(
-                "§6Financement municipal")) {
+                "§6💰 Banque"
+        )) {
 
             int value =
-                    grade.getBanque();
+                    session.getBanque() + 1;
 
-            value++;
-
-            if (value > 4) {
+            if (value > 4)
                 value = 0;
-            }
 
-            grade.setBanque(value);
+            session.setBanque(value);
 
             playClick(p);
         }
 
         //
-        // 🌟 MONUMENT
+        // 🏛 BUILD
         //
 
         if (name.equals(
-                "§bMonument emblématique")) {
+                "§c🏛 Build remarquable"
+        )) {
 
             int value =
-                    grade.getRemarquable();
+                    session.getBuild() + 1;
 
-            value++;
-
-            if (value > 8) {
+            if (value > 8)
                 value = 0;
-            }
 
-            grade.setRemarquable(value);
+            session.setBuild(value);
 
             playClick(p);
         }
 
         //
-        // 👥 RP
+        // 🎭 RP
         //
 
         if (name.equals(
-                "§dOrganisation citoyenne")) {
+                "§a🎭 RolePlay"
+        )) {
 
             int value =
-                    grade.getRp();
+                    session.getRoleplay() + 1;
 
-            value++;
-
-            if (value > 6) {
+            if (value > 6)
                 value = 0;
-            }
 
-            grade.setRp(value);
+            session.setRoleplay(value);
 
             playClick(p);
         }
 
         //
-        // 🗺️ TAILLE
+        // 🌍 TAILLE
         //
 
         if (name.equals(
-                "§aExpansion territoriale")) {
+                "§2🌍 Taille"
+        )) {
 
             int value =
-                    grade.getTaille();
+                    session.getTaille() + 1;
 
-            value++;
-
-            if (value > 3) {
+            if (value > 3)
                 value = 0;
-            }
 
-            grade.setTaille(value);
+            session.setTaille(value);
 
             playClick(p);
         }
 
         //
-        // 🗳️ VOTES
+        // 🗳 VOTES
         //
 
         if (name.equals(
-                "§2Investissement communautaire")) {
+                "§b🗳 Votes"
+        )) {
 
             int value =
-                    grade.getVotes();
+                    session.getVotes() + 1;
 
-            value++;
-
-            if (value > 5) {
+            if (value > 5)
                 value = 0;
-            }
 
-            grade.setVotes(value);
+            session.setVotes(value);
 
             playClick(p);
         }
 
         //
-        // 📊 RAPPORT FINAL
+        // ✅ SAVE FINAL
         //
 
         if (name.equals(
-                "§aRapport d'inspection")) {
+                "§a✅ Valider la notation"
+        )) {
+
+            TownGrade grade =
+                    GradeManager.get(town);
+
+            grade.setArchitecture(
+                    session.getArchitecture()
+            );
+
+            grade.setStyle(
+                    session.getCoherence()
+            );
+
+            grade.setActivite(
+                    session.getActivite()
+            );
+
+            grade.setBanque(
+                    session.getBanque()
+            );
+
+            grade.setRemarquable(
+                    session.getBuild()
+            );
+
+            grade.setRp(
+                    session.getRoleplay()
+            );
+
+            grade.setTaille(
+                    session.getTaille()
+            );
+
+            grade.setVotes(
+                    session.getVotes()
+            );
+
+            //
+            // 💾 SAVE
+            //
+
+            GradeManager.save(grade);
+
+            //
+            // 🧹 REMOVE SESSION
+            //
+
+            RateSessionManager.remove(
+                    p.getUniqueId()
+            );
+
+            //
+            // 🔒 CLOSE
+            //
 
             p.closeInventory();
 
@@ -248,14 +319,18 @@ public class RateGUIListener implements Listener {
             //
 
             p.playSound(
+
                     p.getLocation(),
+
                     Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
                     1f,
+
                     1f
             );
 
             //
-            // 📢 MESSAGE
+            // 📜 MESSAGE
             //
 
             p.sendMessage("");
@@ -265,7 +340,7 @@ public class RateGUIListener implements Listener {
             );
 
             p.sendMessage(
-                    "§b🏛 Inspection terminée"
+                    "§a🏛 Inspection sauvegardée"
             );
 
             p.sendMessage("");
@@ -275,15 +350,15 @@ public class RateGUIListener implements Listener {
             );
 
             p.sendMessage(
-                    "§7Score final: §e"
-                            + grade.getTotal()
+                    "§7Score final: §6"
+                            + session.getTotal()
                             + "§7/50"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§aRapport sauvegardé."
+                    "§aRapport enregistré."
             );
 
             p.sendMessage(
@@ -319,8 +394,8 @@ public class RateGUIListener implements Listener {
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Score obtenu: §e"
-                            + grade.getTotal()
+                    "§7Score obtenu: §6"
+                            + session.getTotal()
                             + "§7/50"
             );
 
@@ -332,12 +407,6 @@ public class RateGUIListener implements Listener {
 
             return;
         }
-
-        //
-        // 💾 SAVE
-        //
-
-        GradeManager.save(grade);
 
         //
         // 🔄 REFRESH
@@ -353,12 +422,18 @@ public class RateGUIListener implements Listener {
     // 🔊 SOUND
     //
 
-    private void playClick(Player p) {
+    private void playClick(
+            Player p
+    ) {
 
         p.playSound(
+
                 p.getLocation(),
+
                 Sound.UI_BUTTON_CLICK,
+
                 1f,
+
                 1.2f
         );
     }
