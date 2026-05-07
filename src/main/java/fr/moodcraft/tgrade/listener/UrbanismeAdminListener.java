@@ -1,7 +1,10 @@
 package fr.moodcraft.tgrade.listener;
 
-import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
-import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
+import fr.moodcraft.tgrade.gui.AdminGUI;
+import fr.moodcraft.tgrade.gui.ProjectInspectionGUI;
+import fr.moodcraft.tgrade.gui.RankingGUI;
+import fr.moodcraft.tgrade.gui.RateGUI;
+import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
 import org.bukkit.Sound;
 
@@ -15,260 +18,174 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class UrbanismeAdminListener
         implements Listener {
 
-    //
-    // 🛰 CLICK
-    //
-
     @EventHandler
     public void click(
             InventoryClickEvent e
     ) {
 
         //
-        // 📛 TITLE
+        // 🌌 GUI CHECK
         //
 
-        if (!e.getView()
+        if (e.getView()
                 .getTitle()
-                .equalsIgnoreCase(
-                        "§8✦ Centre National"
-                )) {
-            return;
-        }
+                .equals("§8✦ Centre National")) {
 
-        //
-        // ❌ CANCEL
-        //
-
-        e.setCancelled(true);
-
-        //
-        // 👤 PLAYER
-        //
-
-        if (!(e.getWhoClicked()
-                instanceof Player p)) {
-            return;
-        }
-
-        //
-        // 📦 INVENTORY
-        //
-
-        if (e.getClickedInventory() == null) {
-            return;
-        }
-
-        //
-        // 📦 ITEM
-        //
-
-        if (e.getCurrentItem() == null) {
-            return;
-        }
-
-        //
-        // ❌ AIR
-        //
-
-        if (e.getCurrentItem().getType().isAir()) {
-            return;
-        }
-
-        //
-        // 🔘 SLOT
-        //
-
-        int slot =
-                e.getRawSlot();
-
-        //
-        // 🔊 DEFAULT SOUND
-        //
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.UI_BUTTON_CLICK,
-
-                1f,
-
-                1f
-        );
-
-        //
-        // 📋 INSPECTIONS
-        //
-
-        if (slot == 13) {
+            e.setCancelled(true);
 
             //
-            // 🔊 SOUND
+            // ❌ SECURITY
             //
 
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.BLOCK_BEACON_ACTIVATE,
-
-                    1f,
-
-                    1.2f
-            );
+            if (!(e.getWhoClicked()
+                    instanceof Player p)) {
+                return;
+            }
 
             //
-            // 🚀 OPEN
+            // ❌ NULL
             //
 
-            PendingProjectsGUI.open(p);
+            if (e.getCurrentItem() == null) {
+                return;
+            }
 
-            return;
-        }
-
-        //
-        // 💰 PAYOUT
-        //
-
-        if (slot == 31) {
+            int slot =
+                    e.getRawSlot();
 
             //
-            // 🔊 SOUND
+            // 📋 INSPECTIONS
             //
 
-            p.playSound(
+            if (slot == 13) {
 
-                    p.getLocation(),
+                p.playSound(
 
-                    Sound.ENTITY_PLAYER_LEVELUP,
+                        p.getLocation(),
 
-                    1f,
+                        Sound.UI_BUTTON_CLICK,
 
-                    0.8f
-            );
+                        1f,
 
-            //
-            // 🔒 CLOSE
-            //
+                        1.2f
+                );
 
-            p.closeInventory();
+                ProjectInspectionGUI.open(p);
 
-            //
-            // 📜 MESSAGE
-            //
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage(
-                    "§2✦ Distribution Nationale"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Initialisation des aides"
-            );
-
-            p.sendMessage(
-                    "§7municipales MoodCraft."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Seules les villes avec"
-            );
-
-            p.sendMessage(
-                    "§e25/50 §7minimum recevront"
-            );
-
-            p.sendMessage(
-                    "§7un financement."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
+                return;
+            }
 
             //
-            // 💰 EXECUTE
+            // 📝 NOTATION
             //
 
-            p.performCommand(
-                    "urbanisme payout"
-            );
+            if (slot == 22) {
 
-            return;
-        }
+                p.playSound(
 
-        //
-        // 🏆 CLASSEMENT
-        //
+                        p.getLocation(),
 
-        if (slot == 33) {
+                        Sound.UI_BUTTON_CLICK,
 
-            //
-            // 🔊 SOUND
-            //
+                        1f,
 
-            p.playSound(
+                        1.1f
+                );
 
-                    p.getLocation(),
+                RateGUI.open(p);
 
-                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
-                    1f,
-
-                    1f
-            );
+                return;
+            }
 
             //
-            // 🚀 EXECUTE
+            // 💰 PAYOUT
             //
 
-            p.performCommand(
-                    "urbanisme classement"
-            );
+            if (slot == 31) {
 
-            return;
-        }
+                p.playSound(
 
-        //
-        // 🔙 RETOUR
-        //
+                        p.getLocation(),
 
-        if (slot == 40) {
+                        Sound.BLOCK_BEACON_ACTIVATE,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§2✦ Distribution Nationale"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Les financements municipaux"
+                );
+
+                p.sendMessage(
+                        "§7seront bientôt disponibles."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return;
+            }
 
             //
-            // 🔊 SOUND
+            // 🏆 RANKING
             //
 
-            p.playSound(
+            if (slot == 33) {
 
-                    p.getLocation(),
+                p.playSound(
 
-                    Sound.BLOCK_CHEST_CLOSE,
+                        p.getLocation(),
 
-                    1f,
+                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
 
-                    1f
-            );
+                        1f,
+
+                        1f
+                );
+
+                RankingGUI.open(p);
+
+                return;
+            }
 
             //
-            // 🚀 OPEN
+            // 🔙 RETURN
             //
 
-            UrbanismeMainGUI.open(p);
+            if (slot == 40) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.UI_BUTTON_CLICK,
+
+                        1f,
+
+                        0.8f
+                );
+
+                AdminGUI.open(p);
+            }
         }
     }
 }
