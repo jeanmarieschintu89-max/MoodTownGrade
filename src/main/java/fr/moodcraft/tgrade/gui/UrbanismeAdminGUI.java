@@ -163,4 +163,65 @@ public class UrbanismeAdminGUI {
                 "§7Classement national",
                 "§7des villes."
         );
-);
+
+        //
+        // 🔙 RETOUR
+        //
+
+        set(
+
+                inv,
+
+                40,
+
+                Material.ARROW,
+
+                "§cRetour",
+
+                "§7Retour au menu principal."
+        );
+
+        //
+        // 🚀 OPEN
+        //
+
+        p.openInventory(inv);
+    }
+
+    //
+    // 🛠 ITEM
+    //
+
+    private static void set(
+
+            Inventory inv,
+
+            int slot,
+
+            Material mat,
+
+            String name,
+
+            String... lore
+    ) {
+
+        ItemStack item =
+                new ItemStack(mat);
+
+        ItemMeta meta =
+                item.getItemMeta();
+
+        meta.setDisplayName(name);
+
+        meta.setLore(
+                List.of(lore)
+        );
+
+        item.setItemMeta(meta);
+
+        inv.setItem(
+                slot,
+                item
+        );
+    }
+}
