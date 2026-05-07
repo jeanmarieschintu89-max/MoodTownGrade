@@ -1,9 +1,11 @@
 package fr.moodcraft.tgrade.gui;
 
-import fr.moodcraft.tgrade.manager.GradeManager;
-import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.manager.RateSessionManager;
+
+import fr.moodcraft.tgrade.model.RateSession;
 
 import org.bukkit.Bukkit;
+
 import org.bukkit.Material;
 
 import org.bukkit.entity.Player;
@@ -17,372 +19,335 @@ import java.util.List;
 
 public class RateGUI {
 
-    public static void open(Player p,
-                            String town) {
+    //
+    // ⭐ OPEN
+    //
 
-        TownGrade grade =
-                GradeManager.get(town);
+    public static void open(
+            Player p,
+            String town
+    ) {
 
         //
-        // 🏛️ COMMISSION URBAINE
+        // 🧠 SESSION
+        //
+
+        RateSession session =
+                RateSessionManager.create(
+
+                        p.getUniqueId(),
+                        town
+                );
+
+        //
+        // 📦 INVENTORY
         //
 
         Inventory inv =
                 Bukkit.createInventory(
+
                         null,
-                        27,
-                        "§8✦ §bMoodCraft §8• §7Inspection"
+
+                        54,
+
+                        "§8⭐ Notation Urbaine"
                 );
 
         //
-        // 🏛️ ARCHITECTURE
+        // 🌌 FILL
         //
 
-        ItemStack archi =
-                new ItemStack(Material.QUARTZ_BLOCK);
+        ItemStack glass =
+                new ItemStack(
+                        Material.BLACK_STAINED_GLASS_PANE
+                );
 
-        ItemMeta meta =
-                archi.getItemMeta();
+        ItemMeta glassMeta =
+                glass.getItemMeta();
 
-        meta.setDisplayName(
-                "§6Architecture urbaine"
+        glassMeta.setDisplayName(
+                " "
         );
 
-        meta.setLore(List.of(
+        glass.setItemMeta(glassMeta);
 
-                "",
+        for (int i = 0; i < 54; i++) {
 
-                "§7Qualité générale des bâtiments",
-                "§7Palette, détails et finition.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getArchitecture()
-                        + "§7/10",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
-
-        archi.setItemMeta(meta);
-
-        inv.setItem(10, archi);
+            inv.setItem(i, glass);
+        }
 
         //
-        // 🎨 COHÉRENCE RP
+        // 🏛 INFO VILLE
         //
 
-        ItemStack style =
-                new ItemStack(Material.PAINTING);
+        ItemStack info =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
 
-        meta = style.getItemMeta();
+        ItemMeta infoMeta =
+                info.getItemMeta();
 
-        meta.setDisplayName(
-                "§dCohérence architecturale"
+        infoMeta.setDisplayName(
+                "§b🏛 " + town
         );
 
-        meta.setLore(List.of(
+        infoMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Commission nationale",
+                "§7d'évaluation urbaine.",
 
                 "",
 
-                "§7Analyse du style global",
-                "§7et de l'identité visuelle.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getStyle()
-                        + "§7/6",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
+                "§7Total actuel:",
+                "§6"
+                        + session.getTotal()
+                        + "§7/50"
         ));
 
-        style.setItemMeta(meta);
+        info.setItemMeta(infoMeta);
 
-        inv.setItem(11, style);
+        inv.setItem(4, info);
 
         //
-        // 📈 ACTIVITÉ
+        // 🏗 ARCHITECTURE
         //
 
-        ItemStack activite =
-                new ItemStack(Material.BELL);
+        set(
 
-        meta = activite.getItemMeta();
+                inv,
 
-        meta.setDisplayName(
-                "§eDynamisme urbain"
+                10,
+
+                Material.QUARTZ_BLOCK,
+
+                "§f🏗 Architecture",
+
+                session.getArchitecture(),
+
+                10
         );
 
-        meta.setLore(List.of(
+        //
+        // 🎨 COHERENCE
+        //
 
-                "",
+        set(
 
-                "§7Développement récent",
-                "§7activité et expansion.",
+                inv,
 
-                "",
+                11,
 
-                "§fInspection: §e"
-                        + grade.getActivite()
-                        + "§7/8",
+                Material.PAINTING,
 
-                "",
+                "§d🎨 Cohérence",
 
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
+                session.getCoherence(),
 
-        activite.setItemMeta(meta);
+                6
+        );
 
-        inv.setItem(12, activite);
+        //
+        // ⚡ ACTIVITE
+        //
+
+        set(
+
+                inv,
+
+                12,
+
+                Material.BELL,
+
+                "§e⚡ Activité",
+
+                session.getActivite(),
+
+                8
+        );
 
         //
         // 💰 BANQUE
         //
 
-        ItemStack banque =
-                new ItemStack(Material.GOLD_INGOT);
+        set(
 
-        meta = banque.getItemMeta();
+                inv,
 
-        meta.setDisplayName(
-                "§6Financement municipal"
+                13,
+
+                Material.GOLD_INGOT,
+
+                "§6💰 Banque",
+
+                session.getBanque(),
+
+                4
         );
 
-        meta.setLore(List.of(
-
-                "",
-
-                "§7Stabilité économique",
-                "§7et investissements urbains.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getBanque()
-                        + "§7/4",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
-
-        banque.setItemMeta(meta);
-
-        inv.setItem(13, banque);
-
         //
-        // 🌟 BUILD REMARQUABLE
+        // 🏛 BUILD
         //
 
-        ItemStack remarquable =
-                new ItemStack(Material.BEACON);
+        set(
 
-        meta = remarquable.getItemMeta();
+                inv,
 
-        meta.setDisplayName(
-                "§bMonument emblématique"
+                14,
+
+                Material.BRICKS,
+
+                "§c🏛 Build remarquable",
+
+                session.getBuild(),
+
+                8
         );
 
-        meta.setLore(List.of(
-
-                "",
-
-                "§7Projet majeur représentant",
-                "§7la puissance de la ville.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getRemarquable()
-                        + "§7/8",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
-
-        remarquable.setItemMeta(meta);
-
-        inv.setItem(14, remarquable);
-
         //
-        // 👥 RP
+        // 🎭 RP
         //
 
-        ItemStack rp =
-                new ItemStack(Material.WRITABLE_BOOK);
+        set(
 
-        meta = rp.getItemMeta();
+                inv,
 
-        meta.setDisplayName(
-                "§dOrganisation citoyenne"
+                15,
+
+                Material.WRITABLE_BOOK,
+
+                "§a🎭 RolePlay",
+
+                session.getRoleplay(),
+
+                6
         );
 
-        meta.setLore(List.of(
-
-                "",
-
-                "§7Structure RP, métiers,",
-                "§7districts et administration.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getRp()
-                        + "§7/6",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
-
-        rp.setItemMeta(meta);
-
-        inv.setItem(15, rp);
-
         //
-        // 🗺️ TAILLE
+        // 🌍 TAILLE
         //
 
-        ItemStack taille =
-                new ItemStack(Material.MAP);
+        set(
 
-        meta = taille.getItemMeta();
+                inv,
 
-        meta.setDisplayName(
-                "§aExpansion territoriale"
+                16,
+
+                Material.MAP,
+
+                "§2🌍 Taille",
+
+                session.getTaille(),
+
+                3
         );
 
-        meta.setLore(List.of(
-
-                "",
-
-                "§7Analyse de l'étendue",
-                "§7et des quartiers urbains.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getTaille()
-                        + "§7/3",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
-
-        taille.setItemMeta(meta);
-
-        inv.setItem(16, taille);
-
         //
-        // 🗳️ VOTES
+        // 🗳 VOTES
         //
 
-        ItemStack votes =
-                new ItemStack(Material.EMERALD);
+        set(
 
-        meta = votes.getItemMeta();
+                inv,
 
-        meta.setDisplayName(
-                "§2Investissement communautaire"
+                19,
+
+                Material.DIAMOND,
+
+                "§b🗳 Votes",
+
+                session.getVotes(),
+
+                5
         );
 
-        meta.setLore(List.of(
-
-                "",
-
-                "§7Participation au serveur",
-                "§7et soutien communautaire.",
-
-                "",
-
-                "§fInspection: §e"
-                        + grade.getVotes()
-                        + "§7/5",
-
-                "",
-
-                "§b● §7Clique pour ajuster",
-                "§8Retour à 0 après maximum"
-        ));
-
-        votes.setItemMeta(meta);
-
-        inv.setItem(22, votes);
-
         //
-        // 📊 SCORE FINAL
+        // ✅ SAVE
         //
 
-        ItemStack total =
-                new ItemStack(Material.EMERALD_BLOCK);
-
-        meta = total.getItemMeta();
-
-        meta.setDisplayName(
-                "§aRapport d'inspection"
-        );
-
-        meta.setLore(List.of(
-
-                "",
-
-                "§7Ville: §b" + town,
-
-                "",
-
-                "§fScore global: §e"
-                        + grade.getTotal()
-                        + "§7/50",
-
-                "",
-
-                "§8Commission urbaine MoodCraft"
-        ));
-
-        total.setItemMeta(meta);
-
-        inv.setItem(25, total);
-
-        //
-        // 🧱 FILLER
-        //
-
-        ItemStack glass =
+        ItemStack save =
                 new ItemStack(
-                        Material.GRAY_STAINED_GLASS_PANE
+                        Material.LIME_CONCRETE
                 );
 
-        meta = glass.getItemMeta();
+        ItemMeta saveMeta =
+                save.getItemMeta();
 
-        meta.setDisplayName(" ");
+        saveMeta.setDisplayName(
+                "§a✅ Valider la notation"
+        );
 
-        glass.setItemMeta(meta);
+        saveMeta.setLore(List.of(
 
-        for (int i = 0; i < 27; i++) {
+                "§7Enregistrer",
 
-            if (inv.getItem(i) == null) {
-                inv.setItem(i, glass);
-            }
-        }
+                "§7la note finale.",
+
+                "",
+
+                "§e▶ Sauvegarder"
+        ));
+
+        save.setItemMeta(saveMeta);
+
+        inv.setItem(49, save);
 
         //
-        // ✨ OPEN
+        // 🚀 OPEN
         //
 
         p.openInventory(inv);
+    }
+
+    //
+    // ⭐ ITEM
+    //
+
+    private static void set(
+
+            Inventory inv,
+
+            int slot,
+
+            Material mat,
+
+            String name,
+
+            int current,
+
+            int max
+    ) {
+
+        ItemStack item =
+                new ItemStack(mat);
+
+        ItemMeta meta =
+                item.getItemMeta();
+
+        meta.setDisplayName(name);
+
+        meta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Note actuelle:",
+
+                "§6"
+                        + current
+                        + "§7/"
+                        + max,
+
+                "",
+
+                "§e▶ Clique pour augmenter",
+
+                "§7Retour à §c0 §7après le maximum"
+        ));
+
+        item.setItemMeta(meta);
+
+        inv.setItem(slot, item);
     }
 }
