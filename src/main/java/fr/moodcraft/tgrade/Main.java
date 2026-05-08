@@ -5,6 +5,7 @@ import fr.moodcraft.tgrade.command.UrbanismeCommand;
 import fr.moodcraft.tgrade.listener.CitizenTownListListener;
 import fr.moodcraft.tgrade.listener.CitizenVoteListener;
 import fr.moodcraft.tgrade.listener.ClassementListener;
+import fr.moodcraft.tgrade.listener.EvaluationManagerListener;
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.MayorTownListListener;
 import fr.moodcraft.tgrade.listener.MayorVoteListener;
@@ -48,15 +49,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        //
-        // 📌 INSTANCE
-        //
-
         instance = this;
-
-        //
-        // 📂 CONFIG
-        //
 
         saveDefaultConfig();
 
@@ -68,23 +61,10 @@ public class Main extends JavaPlugin {
                 .getPlugin("Towny") == null) {
 
             getLogger().severe("");
-
-            getLogger().severe(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            getLogger().severe(
-                    "Towny introuvable"
-            );
-
-            getLogger().severe(
-                    "MoodTownGrade désactivé"
-            );
-
-            getLogger().severe(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
+            getLogger().severe("----- MoodTownGrade -----");
+            getLogger().severe("Towny introuvable.");
+            getLogger().severe("Plugin désactivé.");
+            getLogger().severe("-------------------------");
             getLogger().severe("");
 
             Bukkit.getPluginManager()
@@ -98,9 +78,7 @@ public class Main extends JavaPlugin {
         //
 
         SubmissionStorage.init();
-
         GradeStorage.init();
-
         VoteStorage.init();
 
         //
@@ -121,112 +99,48 @@ public class Main extends JavaPlugin {
                     );
         }
 
+        if (getCommand("topville") != null) {
+
+            getCommand("topville")
+                    .setExecutor(
+                            new UrbanismeCommand()
+                    );
+        }
+
+        if (getCommand("projet") != null) {
+
+            getCommand("projet")
+                    .setExecutor(
+                            new UrbanismeCommand()
+                    );
+        }
+
+        if (getCommand("vprojet") != null) {
+
+            getCommand("vprojet")
+                    .setExecutor(
+                            new UrbanismeCommand()
+                    );
+        }
+
         //
         // 🎨 LISTENERS
         //
 
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new GUIListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new RateGUIListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new ReviewGUIListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new UrbanismeMainListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new UrbanismeAdminListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new PendingProjectsListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new ProjectReviewListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new ClassementListener(),
-                        this
-                );
-
-        //
-        // 👥 VOTES CITOYENS
-        //
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new CitizenVoteListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new CitizenTownListListener(),
-                        this
-                );
-
-        //
-        // 👑 VOTES MAIRES
-        //
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new MayorVoteListener(),
-                        this
-                );
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new MayorTownListListener(),
-                        this
-                );
-
-        //
-        // 💬 CHAT INPUT
-        //
-
-        getServer()
-                .getPluginManager()
-                .registerEvents(
-                        new ProjectChatListener(),
-                        this
-                );
+        getServer().getPluginManager().registerEvents(new GUIListener(), this);
+        getServer().getPluginManager().registerEvents(new RateGUIListener(), this);
+        getServer().getPluginManager().registerEvents(new ReviewGUIListener(), this);
+        getServer().getPluginManager().registerEvents(new UrbanismeMainListener(), this);
+        getServer().getPluginManager().registerEvents(new UrbanismeAdminListener(), this);
+        getServer().getPluginManager().registerEvents(new EvaluationManagerListener(), this);
+        getServer().getPluginManager().registerEvents(new PendingProjectsListener(), this);
+        getServer().getPluginManager().registerEvents(new ProjectReviewListener(), this);
+        getServer().getPluginManager().registerEvents(new ClassementListener(), this);
+        getServer().getPluginManager().registerEvents(new CitizenVoteListener(), this);
+        getServer().getPluginManager().registerEvents(new CitizenTownListListener(), this);
+        getServer().getPluginManager().registerEvents(new MayorVoteListener(), this);
+        getServer().getPluginManager().registerEvents(new MayorTownListListener(), this);
+        getServer().getPluginManager().registerEvents(new ProjectChatListener(), this);
 
         //
         // ⏰ RESET HEBDO
@@ -252,73 +166,16 @@ public class Main extends JavaPlugin {
         //
 
         getLogger().info("");
-
-        getLogger().info(
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
-
-        getLogger().info(
-                "✦ MoodTownGrade activé"
-        );
-
-        getLogger().info("");
-
-        getLogger().info(
-                "🏛 Commission urbaine chargée"
-        );
-
-        getLogger().info(
-                "🛰 Centre administratif opérationnel"
-        );
-
-        getLogger().info(
-                "📋 Inspection de projets active"
-        );
-
-        getLogger().info(
-                "🏗 Validation urbaine active"
-        );
-
-        getLogger().info(
-                "📊 Système de notation actif"
-        );
-
-        getLogger().info(
-                "👥 Vote citoyen actif"
-        );
-
-        getLogger().info(
-                "👑 Conseil des maires actif"
-        );
-
-        getLogger().info(
-                "💬 Saisie projet interactive active"
-        );
-
-        getLogger().info(
-                "🏆 Classement national actif"
-        );
-
-        getLogger().info(
-                "📚 Grades chargés: "
-                        + GradeManager.getAll()
-                        .size()
-        );
-
-        getLogger().info(
-                "🌍 Towny détecté avec succès"
-        );
-
-        getLogger().info(
-                "⏰ Reset hebdomadaire actif"
-        );
-
-        getLogger().info("");
-
-        getLogger().info(
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
-
+        getLogger().info("----- MoodTownGrade -----");
+        getLogger().info("Commission urbaine chargée.");
+        getLogger().info("Centre national opérationnel.");
+        getLogger().info("Votes citoyens actifs.");
+        getLogger().info("Conseil des maires actif.");
+        getLogger().info("Classement national actif.");
+        getLogger().info("Grades chargés: " + GradeManager.getAll().size());
+        getLogger().info("Towny détecté.");
+        getLogger().info("Reset hebdomadaire actif.");
+        getLogger().info("-------------------------");
         getLogger().info("");
     }
 
@@ -329,47 +186,18 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        //
-        // 💾 SAVE
-        //
-
         GradeManager.getAll()
                 .forEach(
                         GradeManager::save
                 );
 
-        //
-        // 🧹 CACHE
-        //
-
         GradeManager.clearCache();
 
-        //
-        // 🌆 CONSOLE
-        //
-
         getLogger().info("");
-
-        getLogger().info(
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
-
-        getLogger().info(
-                "MoodTownGrade arrêté"
-        );
-
-        getLogger().info(
-                "Inspection urbaine désactivée"
-        );
-
-        getLogger().info(
-                "Sauvegarde terminée"
-        );
-
-        getLogger().info(
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
-
+        getLogger().info("----- MoodTownGrade -----");
+        getLogger().info("Plugin arrêté.");
+        getLogger().info("Sauvegarde terminée.");
+        getLogger().info("-------------------------");
         getLogger().info("");
     }
 }
