@@ -1,8 +1,9 @@
 package fr.moodcraft.tgrade.listener;
 
-import fr.moodcraft.tgrade.gui.MayorTownListGUI;
 import fr.moodcraft.tgrade.gui.MayorVoteGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
+
+import org.bukkit.Material;
 
 import org.bukkit.Sound;
 
@@ -67,10 +68,28 @@ public class MayorTownListListener
         }
 
         //
+        // ❌ AIR
+        //
+
+        if (e.getCurrentItem()
+                .getType()
+                .isAir()) {
+
+            return;
+        }
+
+        //
+        // 🔘 SLOT
+        //
+
+        int slot =
+                e.getRawSlot();
+
+        //
         // 🔙 RETOUR
         //
 
-        if (e.getRawSlot() == 49) {
+        if (slot == 49) {
 
             p.playSound(
 
@@ -89,6 +108,58 @@ public class MayorTownListListener
         }
 
         //
+        // 🌌 BORDURES
+        //
+
+        Material mat =
+                e.getCurrentItem()
+                        .getType();
+
+        if (mat
+                == Material.BLACK_STAINED_GLASS_PANE) {
+
+            return;
+        }
+
+        //
+        // ❌ BARRIER
+        //
+
+        if (mat
+                == Material.BARRIER) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    1f
+            );
+
+            return;
+        }
+
+        //
+        // 📛 ITEM META
+        //
+
+        if (!e.getCurrentItem()
+                .hasItemMeta()) {
+
+            return;
+        }
+
+        if (e.getCurrentItem()
+                .getItemMeta()
+                .getDisplayName() == null) {
+
+            return;
+        }
+
+        //
         // 📛 ITEM NAME
         //
 
@@ -96,6 +167,16 @@ public class MayorTownListListener
                 e.getCurrentItem()
                         .getItemMeta()
                         .getDisplayName();
+
+        //
+        // 🏙️ INVALID
+        //
+
+        if (!name.startsWith(
+                "§6✦ ")) {
+
+            return;
+        }
 
         //
         // 🏙️ TOWN
