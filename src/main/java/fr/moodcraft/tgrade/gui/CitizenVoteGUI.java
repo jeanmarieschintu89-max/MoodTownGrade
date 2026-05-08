@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
@@ -145,27 +146,29 @@ public class CitizenVoteGUI {
 
                 Material.NETHER_STAR,
 
-                "§b✦ Vote Citoyen",
+                "§e✦ Registre Citoyen",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Avis Citoyen §8-----",
 
                 "§7Ville: §b" + town,
 
                 "",
 
-                "§7Score national:",
-
-                " §e"
-                        + NationalScoreCalculator
-                        .getFinalScore(town)
-
+                "§7Prestige national: §e"
+                        + String.format(
+                        "%.1f",
+                        NationalScoreCalculator
+                                .getFinalScore(town)
+                )
                         + "§7/50",
+
+                "§7Votes enregistrés: §b"
+                        + NationalScoreCalculator
+                        .getCitizenCount(town),
 
                 "",
 
-                "§7Votes citoyens: §b"
-                        + NationalScoreCalculator
-                        .getCitizenCount(town)
+                "§e▶ Influence populaire"
         );
 
         //
@@ -180,7 +183,9 @@ public class CitizenVoteGUI {
 
                 Material.QUARTZ_BLOCK,
 
-                "§f🏗 Beauté",
+                "§f✦ Beauté",
+
+                "§7Qualité visuelle de la ville.",
 
                 vote.getBeaute()
         );
@@ -197,7 +202,9 @@ public class CitizenVoteGUI {
 
                 Material.LANTERN,
 
-                "§e🌆 Ambiance",
+                "§e✦ Ambiance",
+
+                "§7Vie, lumière et identité urbaine.",
 
                 vote.getAmbiance()
         );
@@ -214,7 +221,9 @@ public class CitizenVoteGUI {
 
                 Material.BELL,
 
-                "§6⚡ Activité",
+                "§6✦ Activité",
+
+                "§7Présence et dynamisme local.",
 
                 vote.getActivite()
         );
@@ -231,7 +240,9 @@ public class CitizenVoteGUI {
 
                 Material.COMPASS,
 
-                "§b🧭 Originalité",
+                "§b✦ Originalité",
+
+                "§7Créativité et singularité du projet.",
 
                 vote.getOriginalite()
         );
@@ -248,7 +259,9 @@ public class CitizenVoteGUI {
 
                 Material.REDSTONE,
 
-                "§c❤️ Popularité",
+                "§c✦ Popularité",
+
+                "§7Appréciation générale citoyenne.",
 
                 vote.getPopularite()
         );
@@ -265,17 +278,17 @@ public class CitizenVoteGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§a✦ Sauvegarder le vote",
+                "§a✔ Valider le vote",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Registre National §8-----",
 
-                "§7Enregistrer votre",
+                "§7Enregistrer votre avis",
 
-                "§7avis citoyen officiel.",
+                "§7dans le dossier citoyen.",
 
                 "",
 
-                "§a▶ Valider le vote"
+                "§a▶ Sauvegarder"
         );
 
         //
@@ -299,6 +312,8 @@ public class CitizenVoteGUI {
 
             String name,
 
+            String description,
+
             int value
     ) {
 
@@ -312,7 +327,11 @@ public class CitizenVoteGUI {
 
                 name,
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Critère Citoyen §8-----",
+
+                description,
+
+                "",
 
                 "§7Note actuelle: §e"
                         + value
@@ -320,7 +339,7 @@ public class CitizenVoteGUI {
 
                 "",
 
-                "§e▶ Cliquer pour modifier"
+                "§e▶ Cliquer pour ajuster"
         );
     }
 
