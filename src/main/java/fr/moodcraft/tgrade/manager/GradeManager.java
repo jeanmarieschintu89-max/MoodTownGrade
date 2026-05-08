@@ -23,16 +23,20 @@ public class GradeManager {
 
     public static TownGrade get(String town) {
 
+        if (town == null) {
+            return null;
+        }
+
+        String key =
+                town.toLowerCase();
+
         //
         // 📂 CACHE
         //
 
-        if (grades.containsKey(
-                town.toLowerCase())) {
+        if (grades.containsKey(key)) {
 
-            return grades.get(
-                    town.toLowerCase()
-            );
+            return grades.get(key);
         }
 
         //
@@ -47,7 +51,7 @@ public class GradeManager {
         //
 
         grades.put(
-                town.toLowerCase(),
+                key,
                 grade
         );
 
@@ -59,6 +63,12 @@ public class GradeManager {
     //
 
     public static void save(TownGrade grade) {
+
+        if (grade == null
+                || grade.getTown() == null) {
+
+            return;
+        }
 
         //
         // 📥 CACHE
@@ -93,8 +103,14 @@ public class GradeManager {
 
     public static void loadAll() {
 
+        grades.clear();
+
         for (String town :
                 GradeStorage.getAllTowns()) {
+
+            if (town == null) {
+                continue;
+            }
 
             TownGrade grade =
                     GradeStorage.load(town);
@@ -115,41 +131,17 @@ public class GradeManager {
         for (TownGrade grade :
                 grades.values()) {
 
-            //
-            // 📊 RESET NOTES
-            //
-
             grade.setArchitecture(0);
-
             grade.setStyle(0);
-
             grade.setActivite(0);
-
             grade.setBanque(0);
-
             grade.setRemarquable(0);
-
             grade.setRp(0);
-
             grade.setTaille(0);
-
             grade.setVotes(0);
 
-            //
-            // 🔄 RESET STATUS
-            //
-
             grade.setFinished(false);
-
-            //
-            // 💰 RESET PAYOUT
-            //
-
             grade.setPayoutClaimed(false);
-
-            //
-            // 💾 SAVE
-            //
 
             save(grade);
         }
@@ -186,8 +178,10 @@ public class GradeManager {
                 continue;
             }
 
-            if (grade.getTotal()
-                    > best.getTotal()) {
+            if (NationalScoreCalculator
+                    .getFinalScore(grade.getTown())
+                    > NationalScoreCalculator
+                    .getFinalScore(best.getTown())) {
 
                 best = grade;
             }
