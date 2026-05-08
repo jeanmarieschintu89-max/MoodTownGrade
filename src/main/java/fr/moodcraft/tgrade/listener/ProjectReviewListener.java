@@ -1,7 +1,6 @@
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
-import fr.moodcraft.tgrade.gui.RateGUI;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
@@ -282,29 +281,15 @@ public class ProjectReviewListener
                         "§8----- §6Commission Urbaine §8-----"
                 );
                 p.sendMessage(
-                        "§fProjet déjà validé."
+                        "§fProjet déjà approuvé."
                 );
                 p.sendMessage(
-                        "§7Projet: §e"
-                                + found.getBuildName()
+                        "§7Les votes citoyens et municipaux"
                 );
                 p.sendMessage(
-                        "§7Ville: §b"
-                                + found.getTown()
-                );
-                p.sendMessage(
-                        "§eLe barème peut encore être révisé."
+                        "§7continuent pendant la semaine."
                 );
                 p.sendMessage("");
-
-                //
-                // ⭐ OPEN NOTES
-                //
-
-                RateGUI.open(
-                        p,
-                        found.getTown()
-                );
 
                 return;
             }
@@ -337,7 +322,7 @@ public class ProjectReviewListener
                     "§8----- §6Commission Urbaine §8-----"
             );
             Bukkit.broadcastMessage(
-                    "§fUn projet urbain vient d'être accepté."
+                    "§fPermis urbain accordé."
             );
             Bukkit.broadcastMessage(
                     "§7Projet: §e"
@@ -348,18 +333,9 @@ public class ProjectReviewListener
                             + found.getTown()
             );
             Bukkit.broadcastMessage(
-                    "§a✔ Dossier inscrit aux registres nationaux."
+                    "§a✔ Le projet est ouvert aux votes cette semaine."
             );
             Bukkit.broadcastMessage("");
-
-            //
-            // ⭐ OPEN RATE GUI
-            //
-
-            RateGUI.open(
-                    p,
-                    found.getTown()
-            );
 
             return;
         }
