@@ -4,6 +4,12 @@ import fr.moodcraft.tgrade.gui.ClassementGUI;
 import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
+
+import fr.moodcraft.tgrade.model.TownGrade;
+
+import org.bukkit.Bukkit;
+
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -76,7 +82,7 @@ public class UrbanismeAdminListener
         }
 
         //
-        // 💰 PAYOUT
+        // 💰 DISTRIBUTION NATIONALE
         //
 
         if (slot == 31) {
@@ -92,6 +98,97 @@ public class UrbanismeAdminListener
                     1f
             );
 
+            int paid = 0;
+
+            double total = 0;
+
+            //
+            // 📚 LOOP VILLES
+            //
+
+            for (TownGrade grade :
+                    GradeManager.getAll()) {
+
+                //
+                // ❌ NON VALIDÉ
+                //
+
+                if (!grade.isFinished()) {
+                    continue;
+                }
+
+                //
+                // ❌ DÉJÀ PAYÉ
+                //
+
+                if (grade.isPayoutClaimed()) {
+                    continue;
+                }
+
+                //
+                // 💰 CALCUL SUBVENTION
+                //
+
+                double amount =
+                        grade.getTotal() * 850;
+
+                //
+                // ❌ SÉCURITÉ
+                //
+
+                if (amount <= 0) {
+                    continue;
+                }
+
+                //
+                // 👑 MAIRE
+                //
+
+                String mayor =
+                        grade.getMayor();
+
+                if (mayor == null
+                        || mayor.isEmpty()) {
+                    continue;
+                }
+
+                //
+                // 🏦 VAULT CHECK
+                //
+
+                if (fr.moodcraft.bridge.util.VaultHook.economy != null) {
+
+                    Bukkit.getOfflinePlayer(
+                            mayor
+                    );
+
+                    fr.moodcraft.bridge.util.VaultHook.economy.depositPlayer(
+
+                            Bukkit.getOfflinePlayer(
+                                    mayor
+                            ),
+
+                            amount
+                    );
+                }
+
+                //
+                // ✅ CLAIMED
+                //
+
+                grade.setPayoutClaimed(true);
+
+                GradeManager.save(grade);
+
+                paid++;
+
+                total += amount;
+            }
+
+            //
+            // 📢 RAPPORT
+            //
+
             p.sendMessage("");
 
             p.sendMessage(
@@ -99,20 +196,30 @@ public class UrbanismeAdminListener
             );
 
             p.sendMessage(
-                    "§2✦ Distribution Nationale"
+                    "§6✦ Distribution Nationale"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Le système de financement"
+                    "§7Subventions distribuées: §e"
+                            + paid
             );
 
             p.sendMessage(
-                    "§7sera bientôt disponible."
+                    "§7Budget total versé: §a"
+                            + String.format(
+                            "%,.0f",
+                            total
+                    )
+                            + "€"
             );
 
             p.sendMessage("");
+
+            p.sendMessage(
+                    "§a✔ Commission budgétaire validée"
+            );
 
             p.sendMessage(
                     "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
