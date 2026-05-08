@@ -228,41 +228,27 @@ public class UrbanismeAdminListener
             //
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§6✦ Distribution Nationale"
+                    "§fFinancements nationaux distribués."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§7Subventions distribuées: §e"
+                    "§7Villes financées: §e"
                             + paid
             );
-
             p.sendMessage(
-                    "§7Budget national versé: §a"
+                    "§7Budget versé: §a"
                             + String.format(
                             "%,.0f",
                             total
                     )
                             + "€"
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§a✔ Commission budgétaire validée"
+                    "§a✔ Commission budgétaire validée."
             );
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             p.sendMessage("");
 
             return;
