@@ -31,10 +31,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 
-    //
-    // 🌍 INSTANCE
-    //
-
     private static Main instance;
 
     public static Main get() {
@@ -42,20 +38,12 @@ public class Main extends JavaPlugin {
         return instance;
     }
 
-    //
-    // 🚀 ENABLE
-    //
-
     @Override
     public void onEnable() {
 
         instance = this;
 
         saveDefaultConfig();
-
-        //
-        // 🌍 TOWNY CHECK
-        //
 
         if (Bukkit.getPluginManager()
                 .getPlugin("Towny") == null) {
@@ -73,29 +61,20 @@ public class Main extends JavaPlugin {
             return;
         }
 
-        //
-        // 💾 STORAGE
-        //
-
         SubmissionStorage.init();
         GradeStorage.init();
         VoteStorage.init();
 
-        //
-        // 📚 LOAD
-        //
-
         GradeManager.loadAll();
 
-        //
-        // 📜 COMMANDES
-        //
+        UrbanismeCommand urbanismeCommand =
+                new UrbanismeCommand();
 
         if (getCommand("urbanisme") != null) {
 
             getCommand("urbanisme")
                     .setExecutor(
-                            new UrbanismeCommand()
+                            urbanismeCommand
                     );
         }
 
@@ -103,29 +82,9 @@ public class Main extends JavaPlugin {
 
             getCommand("topville")
                     .setExecutor(
-                            new UrbanismeCommand()
+                            urbanismeCommand
                     );
         }
-
-        if (getCommand("projet") != null) {
-
-            getCommand("projet")
-                    .setExecutor(
-                            new UrbanismeCommand()
-                    );
-        }
-
-        if (getCommand("vprojet") != null) {
-
-            getCommand("vprojet")
-                    .setExecutor(
-                            new UrbanismeCommand()
-                    );
-        }
-
-        //
-        // 🎨 LISTENERS
-        //
 
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new RateGUIListener(), this);
@@ -142,10 +101,6 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MayorTownListListener(), this);
         getServer().getPluginManager().registerEvents(new ProjectChatListener(), this);
 
-        //
-        // ⏰ RESET HEBDO
-        //
-
         long week =
                 20L * 60L * 60L * 24L * 7L;
 
@@ -161,10 +116,6 @@ public class Main extends JavaPlugin {
                         week
                 );
 
-        //
-        // 🌆 CONSOLE
-        //
-
         getLogger().info("");
         getLogger().info("----- MoodTownGrade -----");
         getLogger().info("Commission urbaine chargée.");
@@ -178,10 +129,6 @@ public class Main extends JavaPlugin {
         getLogger().info("-------------------------");
         getLogger().info("");
     }
-
-    //
-    // 🔻 DISABLE
-    //
 
     @Override
     public void onDisable() {
