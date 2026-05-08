@@ -16,6 +16,7 @@ import fr.moodcraft.tgrade.manager.GradeManager;
 
 import fr.moodcraft.tgrade.storage.GradeStorage;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.storage.VoteStorage;
 
 import fr.moodcraft.tgrade.task.WeeklyResetTask;
 
@@ -95,6 +96,8 @@ public class Main extends JavaPlugin {
         SubmissionStorage.init();
 
         GradeStorage.init();
+
+        VoteStorage.init();
 
         //
         // 📚 LOAD
