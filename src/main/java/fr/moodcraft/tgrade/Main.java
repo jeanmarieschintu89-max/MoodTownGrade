@@ -2,6 +2,7 @@ package fr.moodcraft.tgrade;
 
 import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
+import fr.moodcraft.tgrade.listener.CitizenVoteListener;
 import fr.moodcraft.tgrade.listener.ClassementListener;
 import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
@@ -178,6 +179,17 @@ public class Main extends JavaPlugin {
                 );
 
         //
+        // 👥 VOTE CITOYEN
+        //
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new CitizenVoteListener(),
+                        this
+                );
+
+        //
         // 💬 CHAT INPUT
         //
 
@@ -241,6 +253,10 @@ public class Main extends JavaPlugin {
 
         getLogger().info(
                 "📊 Système de notation actif"
+        );
+
+        getLogger().info(
+                "👥 Vote citoyen actif"
         );
 
         getLogger().info(
