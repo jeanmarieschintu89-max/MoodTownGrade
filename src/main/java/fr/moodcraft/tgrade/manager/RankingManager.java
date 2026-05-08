@@ -17,16 +17,8 @@ public class RankingManager {
         List<TownGrade> list =
                 new ArrayList<>();
 
-        //
-        // 📚 LOAD
-        //
-
         for (TownGrade grade :
                 GradeManager.getAll()) {
-
-            //
-            // ✅ VILLES VALIDÉES
-            //
 
             if (!grade.isFinished()) {
                 continue;
@@ -35,17 +27,15 @@ public class RankingManager {
             list.add(grade);
         }
 
-        //
-        // 📊 SORT PRESTIGE
-        //
-
         list.sort(
 
                 Comparator.comparingDouble(
-                        grade -> NationalScoreCalculator
-                                .getFinalScore(
-                                        grade.getTown()
-                                )
+
+                        (TownGrade grade) ->
+                                NationalScoreCalculator
+                                        .getFinalScore(
+                                                grade.getTown()
+                                        )
                 ).reversed()
         );
 
@@ -166,32 +156,26 @@ public class RankingManager {
     ) {
 
         if (score >= 47) {
-
             return "§6👑 Capitale Impériale";
         }
 
         if (score >= 42) {
-
             return "§e✦ Métropole Nationale";
         }
 
         if (score >= 36) {
-
             return "§a✦ Grande Ville Prestigieuse";
         }
 
         if (score >= 30) {
-
             return "§b✦ Ville Reconnue";
         }
 
         if (score >= 22) {
-
             return "§2✦ Ville Émergente";
         }
 
         if (score >= 15) {
-
             return "§e✦ Commune en Développement";
         }
 
