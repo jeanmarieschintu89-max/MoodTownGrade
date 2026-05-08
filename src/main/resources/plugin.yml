@@ -22,6 +22,12 @@ commands:
       - commission
       - urbain
       - mairie
+      - projet
+      - projets
+      - tprojet
+      - tprojets
+      - vprojet
+      - vprojets
 
   topville:
     description: Classement national des villes
