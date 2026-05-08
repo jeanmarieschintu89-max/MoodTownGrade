@@ -78,7 +78,8 @@ public class ClassementGUI {
                 );
 
         top.sort(
-                Comparator.comparingDouble(
+
+                Comparator.<TownGrade>comparingDouble(
                         grade -> NationalScoreCalculator
                                 .getFinalScore(
                                         grade.getTown()
