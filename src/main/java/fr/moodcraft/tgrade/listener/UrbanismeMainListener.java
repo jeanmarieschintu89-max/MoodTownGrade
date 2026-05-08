@@ -150,10 +150,76 @@ public class UrbanismeMainListener
         }
 
         //
+        // 🛰 ADMINISTRATION NATIONALE
+        //
+
+        if (slot == 24) {
+
+            if (!p.hasPermission(
+                    "moodtowngrade.staff")) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
+                p.sendMessage(
+                        "§cAccès refusé."
+                );
+                p.sendMessage(
+                        "§7Ce centre est réservé à l'administration nationale."
+                );
+                p.sendMessage("");
+
+                return;
+            }
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                    1f,
+
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§fOuverture du Centre National."
+            );
+            p.sendMessage(
+                    "§7Accès aux registres administratifs."
+            );
+            p.sendMessage(
+                    "§a✔ Session administrative ouverte."
+            );
+            p.sendMessage("");
+
+            UrbanismeAdminGUI.open(p);
+
+            return;
+        }
+
+        //
         // ➕ SOUMISSION
         //
 
-        if (slot == 29) {
+        if (slot == 30) {
 
             if (!TownyHook.canManage(p)) {
 
@@ -225,7 +291,7 @@ public class UrbanismeMainListener
         // 👑 CONSEIL DES MAIRES
         //
 
-        if (slot == 31) {
+        if (slot == 32) {
 
             if (!TownyHook.canManage(p)) {
 
@@ -267,77 +333,6 @@ public class UrbanismeMainListener
             );
 
             MayorTownListGUI.open(p);
-
-            return;
-        }
-
-        //
-        // ❌ ADMIN WITHOUT PERM
-        //
-
-        if (slot == 33
-                && !p.hasPermission(
-                "moodtowngrade.staff")) {
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.ENTITY_VILLAGER_NO,
-
-                    1f,
-
-                    1f
-            );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cAccès refusé."
-            );
-            p.sendMessage(
-                    "§7Ce centre est réservé à l'administration nationale."
-            );
-            p.sendMessage("");
-
-            return;
-        }
-
-        //
-        // 🛰 ADMIN
-        //
-
-        if (slot == 33) {
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.BLOCK_BEACON_ACTIVATE,
-
-                    1f,
-
-                    1f
-            );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§fOuverture du Centre National."
-            );
-            p.sendMessage(
-                    "§7Accès aux registres administratifs."
-            );
-            p.sendMessage(
-                    "§a✔ Session administrative ouverte."
-            );
-            p.sendMessage("");
-
-            UrbanismeAdminGUI.open(p);
 
             return;
         }
