@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
@@ -167,25 +168,29 @@ public class RateGUIListener
                 p.closeInventory();
 
                 p.sendMessage("");
-                p.sendMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                p.sendMessage("§6✦ Inspection Validée");
-                p.sendMessage("");
-                p.sendMessage("§7Ville inspectée:");
-                p.sendMessage(" §b" + session.getTown());
-                p.sendMessage("");
-                p.sendMessage("§7Note de la commission:");
-                p.sendMessage(" §e" + staff + "§7/50");
-                p.sendMessage("");
-                p.sendMessage("§7Prestige national:");
-                p.sendMessage(" §e" + national + "§7/50");
-                p.sendMessage("");
-                p.sendMessage("§7Influences actuelles:");
-                p.sendMessage(" §6🏛 Staff: §e" + staff);
-                p.sendMessage(" §6👑 Maires: §e" + mayors);
-                p.sendMessage(" §6👥 Citoyens: §e" + citizens);
-                p.sendMessage("");
-                p.sendMessage("§a✔ Notes enregistrées");
-                p.sendMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
+                p.sendMessage(
+                        "§fInspection nationale validée."
+                );
+                p.sendMessage(
+                        "§7Ville: §b" + session.getTown()
+                );
+                p.sendMessage(
+                        "§7Commission: §e" + staff + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Prestige national: §e" + national + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Influences: §6Staff §e" + staff
+                                + " §8| §6Maires §e" + mayors
+                                + " §8| §6Citoyens §e" + citizens
+                );
+                p.sendMessage(
+                        "§a✔ Notes inscrites aux registres nationaux."
+                );
                 p.sendMessage("");
 
                 p.playSound(
