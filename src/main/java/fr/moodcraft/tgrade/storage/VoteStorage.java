@@ -403,6 +403,52 @@ public class VoteStorage {
     }
 
     //
+    // 🧹 CLEAR ALL
+    //
+
+    public static void clearAll() {
+
+        if (staffConfig != null) {
+
+            staffConfig.set(
+                    "votes",
+                    null
+            );
+
+            save(
+                    staffConfig,
+                    staffFile
+            );
+        }
+
+        if (mayorConfig != null) {
+
+            mayorConfig.set(
+                    "votes",
+                    null
+            );
+
+            save(
+                    mayorConfig,
+                    mayorFile
+            );
+        }
+
+        if (citizenConfig != null) {
+
+            citizenConfig.set(
+                    "votes",
+                    null
+            );
+
+            save(
+                    citizenConfig,
+                    citizenFile
+            );
+        }
+    }
+
+    //
     // 💾 SAVE FILE
     //
 
