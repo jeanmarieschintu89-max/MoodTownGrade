@@ -1,4 +1,3 @@
-
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
@@ -464,6 +463,36 @@ public class ClassementGUI {
             return "§aAvis: ville reconnue, développement urbain encourageant.";
         }
 
-        if (score <= 35)
-}
+        if (score <= 35) {
+            return "§bAvis: ville solide, organisation municipale visible.";
+        }
+
+        if (score <= 40) {
+            return "§bAvis: métropole attractive, note urbaine confirmée.";
+        }
+
+        if (score <= 45) {
+            return "§6Avis: cité majeure, référence nationale montante.";
+        }
+
+        if (score <= 49) {
+            return "§6Avis: capitale d'élite, dossier remarquable.";
+        }
+
+        return "§e§lAvis: merveille nationale inscrite au sommet de MoodCraft.";
+    }
+
+    //
+    // 💰 FORMAT
+    //
+
+    private static String format(
+            int value
+    ) {
+
+        return String.format(
+                "%,d",
+                value
+        ).replace(",", " ");
+    }
 }
