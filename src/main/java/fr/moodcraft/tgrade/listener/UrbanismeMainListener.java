@@ -118,10 +118,6 @@ public class UrbanismeMainListener
 
         if (slot == 20) {
 
-            //
-            // 🛡 TOWNY CHECK
-            //
-
             if (!TownyHook.canManage(p)) {
 
                 p.playSound(
@@ -202,10 +198,6 @@ public class UrbanismeMainListener
 
         if (slot == 30) {
 
-            //
-            // 🛡 TOWNY CHECK
-            //
-
             if (!TownyHook.canManage(p)) {
 
                 p.playSound(
@@ -234,23 +226,11 @@ public class UrbanismeMainListener
                 return;
             }
 
-            //
-            // 🧠 WAIT INPUT
-            //
-
             ProjectInputManager.start(
                     p.getUniqueId()
             );
 
-            //
-            // 🔒 CLOSE
-            //
-
             p.closeInventory();
-
-            //
-            // 🔊 SOUND
-            //
 
             p.playSound(
 
@@ -262,10 +242,6 @@ public class UrbanismeMainListener
 
                     1.5f
             );
-
-            //
-            // 📜 MESSAGE
-            //
 
             p.sendMessage("");
             p.sendMessage(
@@ -293,10 +269,6 @@ public class UrbanismeMainListener
         //
 
         if (slot == 32) {
-
-            //
-            // 🛡 TOWNY CHECK
-            //
 
             if (!TownyHook.canManage(p)) {
 
@@ -326,10 +298,6 @@ public class UrbanismeMainListener
                 return;
             }
 
-            //
-            // 🔊 SOUND
-            //
-
             p.playSound(
 
                     p.getLocation(),
@@ -340,10 +308,6 @@ public class UrbanismeMainListener
 
                     1f
             );
-
-            //
-            // 🚀 OPEN
-            //
 
             MayorTownListGUI.open(p);
 
@@ -388,4 +352,50 @@ public class UrbanismeMainListener
         // 🛰 ADMIN
         //
 
-        if (
+        if (slot == 34) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                    1f,
+
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§fOuverture du Centre National."
+            );
+            p.sendMessage(
+                    "§7Accès aux registres administratifs."
+            );
+            p.sendMessage(
+                    "§a✔ Session administrative ouverte."
+            );
+            p.sendMessage("");
+
+            UrbanismeAdminGUI.open(p);
+
+            return;
+        }
+
+        //
+        // 🔙 RETOUR
+        //
+
+        if (slot == 49) {
+
+            p.closeInventory();
+
+            p.performCommand(
+                    "menu"
+            );
+        }
+    }
+}
