@@ -63,20 +63,21 @@ public class TownyHook {
             Player p
     ) {
 
-        Town town =
-                getTown(p);
-
         Resident resident =
                 getResident(p);
 
-        if (town == null
-                || resident == null) {
+        if (resident == null) {
 
             return false;
         }
 
-        return town.getAssistants()
-                .contains(resident);
+        //
+        // 🏛 TOWNY RANK
+        //
+
+        return resident.hasTownRank(
+                "assistant"
+        );
     }
 
     //
