@@ -1,9 +1,9 @@
-
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
@@ -59,66 +59,42 @@ public class RateGUIListener
 
             case RateGUI.ARCHI ->
                     session.setArchitecture(
-                            next(
-                                    session.getArchitecture(),
-                                    10
-                            )
+                            next(session.getArchitecture(), 10)
                     );
 
             case RateGUI.COHERENCE ->
                     session.setCoherence(
-                            next(
-                                    session.getCoherence(),
-                                    6
-                            )
+                            next(session.getCoherence(), 6)
                     );
 
             case RateGUI.ACTIVITE ->
                     session.setActivite(
-                            next(
-                                    session.getActivite(),
-                                    8
-                            )
+                            next(session.getActivite(), 8)
                     );
 
             case RateGUI.BANQUE ->
                     session.setBanque(
-                            next(
-                                    session.getBanque(),
-                                    4
-                            )
+                            next(session.getBanque(), 4)
                     );
 
             case RateGUI.BUILD ->
                     session.setBuild(
-                            next(
-                                    session.getBuild(),
-                                    8
-                            )
+                            next(session.getBuild(), 8)
                     );
 
             case RateGUI.RP ->
                     session.setRoleplay(
-                            next(
-                                    session.getRoleplay(),
-                                    6
-                            )
+                            next(session.getRoleplay(), 6)
                     );
 
             case RateGUI.TAILLE ->
                     session.setTaille(
-                            next(
-                                    session.getTaille(),
-                                    3
-                            )
+                            next(session.getTaille(), 3)
                     );
 
             case RateGUI.VOTES ->
                     session.setVotes(
-                            next(
-                                    session.getVotes(),
-                                    5
-                            )
+                            next(session.getVotes(), 5)
                     );
 
             case RateGUI.SAVE -> {
@@ -164,11 +140,53 @@ public class RateGUIListener
 
                 GradeManager.save(grade);
 
+                double national =
+                        NationalScoreCalculator
+                                .getFinalScore(
+                                        session.getTown()
+                                );
+
+                double staff =
+                        NationalScoreCalculator
+                                .getStaffScore(
+                                        session.getTown()
+                                );
+
+                double mayors =
+                        NationalScoreCalculator
+                                .getMayorScore(
+                                        session.getTown()
+                                );
+
+                double citizens =
+                        NationalScoreCalculator
+                                .getCitizenScore(
+                                        session.getTown()
+                                );
+
                 p.closeInventory();
 
-                p.sendMessage(
-                        "§aInspection sauvegardée."
-                );
+                p.sendMessage("");
+                p.sendMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                p.sendMessage("§6✦ Inspection Validée");
+                p.sendMessage("");
+                p.sendMessage("§7Ville inspectée:");
+                p.sendMessage(" §b" + session.getTown());
+                p.sendMessage("");
+                p.sendMessage("§7Note de la commission:");
+                p.sendMessage(" §e" + staff + "§7/50");
+                p.sendMessage("");
+                p.sendMessage("§7Prestige national:");
+                p.sendMessage(" §e" + national + "§7/50");
+                p.sendMessage("");
+                p.sendMessage("§7Influences actuelles:");
+                p.sendMessage(" §6🏛 Staff: §e" + staff);
+                p.sendMessage(" §6👑 Maires: §e" + mayors);
+                p.sendMessage(" §6👥 Citoyens: §e" + citizens);
+                p.sendMessage("");
+                p.sendMessage("§a✔ Notes enregistrées");
+                p.sendMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                p.sendMessage("");
 
                 p.playSound(
                         p.getLocation(),
