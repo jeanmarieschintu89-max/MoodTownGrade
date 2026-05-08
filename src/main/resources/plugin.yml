@@ -1,18 +1,3 @@
-name: MoodTownGrade
-
-main: fr.moodcraft.tgrade.Main
-
-version: 1.0
-
-api-version: "1.20"
-
-author: MoodCraft
-
-description: Systeme de commission urbaine Towny RP
-
-depend:
-  - Towny
-
 commands:
 
   urbanisme:
@@ -33,10 +18,22 @@ commands:
 
     usage: /topville
 
-permissions:
+  projet:
 
-  moodtowngrade.staff:
+    description: Ouvrir les projets municipaux
 
-    description: Acces administration MoodTownGrade
+    usage: /projet
 
-    default: op
+    aliases:
+      - projets
+      - tprojet
+      - tprojets
+
+  vprojet:
+
+    description: Votes citoyens des projets
+
+    usage: /vprojet
+
+    aliases:
+      - vprojets
