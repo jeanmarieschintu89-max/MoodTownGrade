@@ -11,49 +11,87 @@ import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 
+import org.bukkit.Sound;
+
+import org.bukkit.entity.Player;
+
 public class WeeklyResetTask
         implements Runnable {
 
     @Override
     public void run() {
 
+        //
+        // 👑 VILLE DOMINANTE
+        //
+
         TownGrade best =
                 RankingManager.getBest();
 
+        //
+        // 💰 DISTRIBUTION
+        //
+
         PayoutManager.payoutAll();
 
+        //
+        // 📢 FIN DE SAISON
+        //
+
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Bukkit.broadcastMessage("§6✦ Fin de Saison Urbaine");
-        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage(
+                "§8----- §6Commission Urbaine §8-----"
+        );
+        Bukkit.broadcastMessage(
+                "§fFin de la saison urbaine nationale."
+        );
+
+        //
+        // 👑 BEST CITY
+        //
 
         if (best != null) {
 
             double national =
-                    NationalScoreCalculator.getFinalScore(
-                            best.getTown()
-                    );
+                    NationalScoreCalculator
+                            .getFinalScore(
+                                    best.getTown()
+                            );
 
-            Bukkit.broadcastMessage("§7Ville dominante:");
-            Bukkit.broadcastMessage(" §e👑 " + best.getTown());
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Prestige national:");
-            Bukkit.broadcastMessage(" §e" + national + "§7/50");
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Classe urbaine:");
-            Bukkit.broadcastMessage(" " + best.getRank());
-            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage(
+                    "§7Capitale dominante: §e"
+                            + best.getTown()
+            );
+
+            Bukkit.broadcastMessage(
+                    "§7Prestige national: §e"
+                            + national
+                            + "§7/50"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§7Classe urbaine: "
+                            + best.getRank()
+            );
+
+            Bukkit.broadcastMessage(
+                    best.getAppreciation()
+            );
         }
 
-        Bukkit.broadcastMessage("§a✦ Fonds Urbains Distribués");
+        Bukkit.broadcastMessage(
+                "§a✔ Financements nationaux distribués."
+        );
+
+        Bukkit.broadcastMessage(
+                "§7Archivage des registres urbains en cours..."
+        );
+
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§7Les villes validées ont reçu");
-        Bukkit.broadcastMessage("§7leurs aides de développement.");
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§7Archivage des projets et votes...");
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Bukkit.broadcastMessage("");
+
+        //
+        // 🔄 RESET NOTES
+        //
 
         for (TownGrade grade :
                 GradeManager.getAll()) {
@@ -73,21 +111,55 @@ public class WeeklyResetTask
             GradeManager.save(grade);
         }
 
+        //
+        // 🗂 CLEANUP DOSSIERS
+        //
+
         SubmissionStorage.cleanup();
 
+        //
+        // 📢 NOUVELLE SAISON
+        //
+
+        Bukkit.broadcastMessage(
+                "§8----- §6Commission Urbaine §8-----"
+        );
+
+        Bukkit.broadcastMessage(
+                "§fNouvelle semaine urbaine ouverte."
+        );
+
+        Bukkit.broadcastMessage(
+                "§7Les municipalités peuvent déposer"
+        );
+
+        Bukkit.broadcastMessage(
+                "§7de nouveaux projets et inspections."
+        );
+
+        Bukkit.broadcastMessage(
+                "§e▶ Votes citoyens et gouvernementaux réactivés."
+        );
+
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Bukkit.broadcastMessage("§b✦ Nouvelle Semaine Urbaine");
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§7Les projets précédents ont été");
-        Bukkit.broadcastMessage("§7archivés par la commission.");
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§7Les villes peuvent maintenant");
-        Bukkit.broadcastMessage("§7déposer de nouveaux projets.");
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§e▶ Votes et inspections réouverts");
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Bukkit.broadcastMessage("");
+
+        //
+        // 🔊 SOUND
+        //
+
+        for (Player online :
+                Bukkit.getOnlinePlayers()) {
+
+            online.playSound(
+
+                    online.getLocation(),
+
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                    0.8f,
+
+                    1f
+            );
+        }
     }
 }
