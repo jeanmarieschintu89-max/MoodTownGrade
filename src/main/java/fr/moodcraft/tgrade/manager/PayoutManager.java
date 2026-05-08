@@ -42,10 +42,38 @@ public class PayoutManager {
             }
 
             //
+            // 🌍 SCORES
+            //
+
+            double national =
+                    NationalScoreCalculator
+                            .getFinalScore(
+                                    grade.getTown()
+                            );
+
+            double staff =
+                    NationalScoreCalculator
+                            .getStaffScore(
+                                    grade.getTown()
+                            );
+
+            double mayors =
+                    NationalScoreCalculator
+                            .getMayorScore(
+                                    grade.getTown()
+                            );
+
+            double citizens =
+                    NationalScoreCalculator
+                            .getCitizenScore(
+                                    grade.getTown()
+                            );
+
+            //
             // ❌ MINIMUM 25/50
             //
 
-            if (grade.getTotal() < 25) {
+            if (national < 25) {
 
                 Bukkit.broadcastMessage("");
 
@@ -54,29 +82,61 @@ public class PayoutManager {
                 );
 
                 Bukkit.broadcastMessage(
-                        "§6✦ Commission Urbaine Nationale"
+                        "§c✦ Fonds Nationaux Refusés"
                 );
 
                 Bukkit.broadcastMessage("");
 
                 Bukkit.broadcastMessage(
-                        "§7Ville inspectée: §b"
-                                + grade.getTown()
+                        "§7Municipalité concernée:"
                 );
 
                 Bukkit.broadcastMessage(
-                        "§7Prestige urbain: "
-                                + grade.getFormattedScore()
+                        " §b" + grade.getTown()
                 );
 
                 Bukkit.broadcastMessage("");
 
                 Bukkit.broadcastMessage(
-                        "§cFinancement refusé"
+                        "§7Prestige national:"
                 );
 
                 Bukkit.broadcastMessage(
-                        "§7Score minimum requis: §e25/50"
+                        " §e" + national + "§7/50"
+                );
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§7Influence urbaine:"
+                );
+
+                Bukkit.broadcastMessage(
+                        " §6🏛 Staff: §e" + staff
+                );
+
+                Bukkit.broadcastMessage(
+                        " §6👑 Maires: §e" + mayors
+                );
+
+                Bukkit.broadcastMessage(
+                        " §6👥 Citoyens: §e" + citizens
+                );
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§cLe seuil minimum de financement"
+                );
+
+                Bukkit.broadcastMessage(
+                        "§cnational n'a pas été atteint."
+                );
+
+                Bukkit.broadcastMessage("");
+
+                Bukkit.broadcastMessage(
+                        "§7Minimum requis: §e25/50"
                 );
 
                 Bukkit.broadcastMessage("");
@@ -134,7 +194,7 @@ public class PayoutManager {
 
                                 payout,
 
-                                "Financement urbain MoodCraft"
+                                "Fonds Nationaux MoodCraft"
                         );
 
                 //
@@ -153,7 +213,7 @@ public class PayoutManager {
                         .sendMessage(
 
                                 "§c[MoodTownGrade] "
-                                        + "Impossible de verser la bourse à "
+                                        + "Impossible de verser les fonds à "
                                         + town.getName()
                         );
 
@@ -173,42 +233,73 @@ public class PayoutManager {
             );
 
             Bukkit.broadcastMessage(
-                    "§6✦ Commission Urbaine Nationale"
+                    "§a✦ Fonds Nationaux Urbains"
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Inspection hebdomadaire finalisée."
+                    "§7Une aide gouvernementale vient"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§7d'être attribuée à la ville:"
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Ville inspectée: §b"
-                            + town.getName()
-            );
-
-            Bukkit.broadcastMessage(
-                    "§7Prestige urbain: "
-                            + grade.getFormattedScore()
-            );
-
-            Bukkit.broadcastMessage(
-                    "§7Classement national: "
-                            + grade.getRank()
+                    " §b" + town.getName()
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Financement accordé:"
+                    "§7Subvention accordée:"
             );
 
             Bukkit.broadcastMessage(
-                    "§a+"
+                    " §a+"
                             + format(payout)
                             + "$"
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Prestige national:"
+            );
+
+            Bukkit.broadcastMessage(
+                    " §e" + national + "§7/50"
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Réputation gouvernementale:"
+            );
+
+            Bukkit.broadcastMessage(
+                    " §6🏛 Staff: §e" + staff
+            );
+
+            Bukkit.broadcastMessage(
+                    " §6👑 Maires: §e" + mayors
+            );
+
+            Bukkit.broadcastMessage(
+                    " §6👥 Citoyens: §e" + citizens
+            );
+
+            Bukkit.broadcastMessage("");
+
+            Bukkit.broadcastMessage(
+                    "§7Classe urbaine:"
+            );
+
+            Bukkit.broadcastMessage(
+                    " " + grade.getRank()
             );
 
             Bukkit.broadcastMessage("");
@@ -221,16 +312,20 @@ public class PayoutManager {
             // 🏆 ELITE BONUS
             //
 
-            if (grade.getTotal() >= 45) {
+            if (national >= 45) {
 
                 Bukkit.broadcastMessage("");
 
                 Bukkit.broadcastMessage(
-                        "§e✦ Cette ville devient"
+                        "§6👑 Distinction Architecturale"
                 );
 
                 Bukkit.broadcastMessage(
-                        "§eune référence architecturale nationale."
+                        "§7Cette ville rejoint les"
+                );
+
+                Bukkit.broadcastMessage(
+                        "§7références nationales de MoodCraft."
                 );
             }
 
