@@ -147,25 +147,27 @@ public class MayorVoteGUI {
 
                 "§6✦ Conseil des Maires",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Gouvernance §8-----",
 
                 "§7Ville: §b" + town,
 
                 "",
 
-                "§7Score national:",
-
-                " §e"
-                        + NationalScoreCalculator
-                        .getFinalScore(town)
-
+                "§7Prestige national: §e"
+                        + String.format(
+                        "%.1f",
+                        NationalScoreCalculator
+                                .getFinalScore(town)
+                )
                         + "§7/50",
+
+                "§7Votes du conseil: §6"
+                        + NationalScoreCalculator
+                        .getMayorCount(town),
 
                 "",
 
-                "§7Votes maires: §6"
-                        + NationalScoreCalculator
-                        .getMayorCount(town)
+                "§6▶ Influence municipale"
         );
 
         //
@@ -180,7 +182,9 @@ public class MayorVoteGUI {
 
                 Material.QUARTZ_BLOCK,
 
-                "§f🏗 Beauté",
+                "§f✦ Beauté",
+
+                "§7Qualité visuelle de la ville.",
 
                 vote.getBeaute()
         );
@@ -197,7 +201,9 @@ public class MayorVoteGUI {
 
                 Material.LANTERN,
 
-                "§e🌆 Ambiance",
+                "§e✦ Ambiance",
+
+                "§7Atmosphère et identité locale.",
 
                 vote.getAmbiance()
         );
@@ -214,7 +220,9 @@ public class MayorVoteGUI {
 
                 Material.BELL,
 
-                "§6⚡ Activité",
+                "§6✦ Activité",
+
+                "§7Dynamisme municipal observé.",
 
                 vote.getActivite()
         );
@@ -231,7 +239,9 @@ public class MayorVoteGUI {
 
                 Material.COMPASS,
 
-                "§b🧭 Originalité",
+                "§b✦ Originalité",
+
+                "§7Singularité du développement urbain.",
 
                 vote.getOriginalite()
         );
@@ -248,7 +258,9 @@ public class MayorVoteGUI {
 
                 Material.REDSTONE,
 
-                "§c❤️ Popularité",
+                "§c✦ Popularité",
+
+                "§7Reconnaissance politique de la ville.",
 
                 vote.getPopularite()
         );
@@ -265,9 +277,9 @@ public class MayorVoteGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§a✦ Sauvegarder le vote",
+                "§a✔ Valider le vote",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Registre National §8-----",
 
                 "§7Enregistrer l'avis",
 
@@ -275,7 +287,7 @@ public class MayorVoteGUI {
 
                 "",
 
-                "§a▶ Valider le vote"
+                "§a▶ Sauvegarder"
         );
 
         //
@@ -299,6 +311,8 @@ public class MayorVoteGUI {
 
             String name,
 
+            String description,
+
             int value
     ) {
 
@@ -312,7 +326,11 @@ public class MayorVoteGUI {
 
                 name,
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Critère du Conseil §8-----",
+
+                description,
+
+                "",
 
                 "§7Note actuelle: §e"
                         + value
@@ -320,7 +338,7 @@ public class MayorVoteGUI {
 
                 "",
 
-                "§e▶ Cliquer pour modifier"
+                "§e▶ Cliquer pour ajuster"
         );
     }
 
