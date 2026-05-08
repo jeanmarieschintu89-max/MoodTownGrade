@@ -1,426 +1,254 @@
-package fr.moodcraft.tgrade.model;
+package fr.moodcraft.tgrade.listener;
 
-public class TownGrade {
+import fr.moodcraft.tgrade.gui.RateGUI;
 
-    //
-    // 🏙️ VILLE
-    //
+import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
+import fr.moodcraft.tgrade.manager.RateSessionManager;
 
-    private final String town;
+import fr.moodcraft.tgrade.model.RateSession;
+import fr.moodcraft.tgrade.model.StaffVote;
+import fr.moodcraft.tgrade.model.TownGrade;
 
-    //
-    // 🏛️ NOTES
-    //
+import fr.moodcraft.tgrade.storage.VoteStorage;
 
-    private int architecture;
-    private int style;
-    private int activite;
-    private int banque;
-    private int remarquable;
-    private int rp;
-    private int taille;
-    private int votes;
+import org.bukkit.Sound;
 
-    //
-    // ✅ INSPECTION
-    //
+import org.bukkit.entity.Player;
 
-    private boolean finished;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-    //
-    // 💰 PAYOUT
-    //
+import org.bukkit.event.inventory.InventoryClickEvent;
 
-    private boolean payoutClaimed;
+public class RateGUIListener
+        implements Listener {
 
-    //
-    // 🔒 DOSSIER VERROUILLÉ
-    //
-
-    private boolean locked;
-
-    //
-    // 📊 NOTE FINALE
-    //
-
-    private double finalScore;
-
-    public TownGrade(String town) {
-
-        this.town = town;
-    }
-
-    //
-    // 📊 TOTAL
-    //
-
-    public int getTotal() {
-
-        return architecture
-                + style
-                + activite
-                + banque
-                + remarquable
-                + rp
-                + taille
-                + votes;
-    }
-
-    //
-    // 📈 POURCENTAGE
-    //
-
-    public double getPercentage() {
-
-        return (getTotal() / 50.0) * 100.0;
-    }
-
-    //
-    // 🏅 RANG
-    //
-
-    public String getRank() {
-
-        int total =
-                getTotal();
-
-        if (total <= 10) {
-
-            return
-                    "§8✦ Hameau en friche";
-        }
-
-        if (total <= 20) {
-
-            return
-                    "§7✦ Commune rurale";
-        }
-
-        if (total <= 30) {
-
-            return
-                    "§a✦ Ville reconnue";
-        }
-
-        if (total <= 40) {
-
-            return
-                    "§b✦ Métropole prospère";
-        }
-
-        if (total <= 49) {
-
-            return
-                    "§6✦ Capitale d'élite";
-        }
-
-        return
-                "§e§l✦ Merveille Nationale";
-    }
-
-    //
-    // 💰 BOURSE
-    //
-
-    public int getPayout() {
-
-        int total =
-                getTotal();
-
-        if (total <= 10) {
-            return 2500;
-        }
-
-        if (total <= 20) {
-            return 5000;
-        }
-
-        if (total <= 25) {
-            return 7500;
-        }
-
-        if (total <= 30) {
-            return 10000;
-        }
-
-        if (total <= 35) {
-            return 15000;
-        }
-
-        if (total <= 40) {
-            return 20000;
-        }
-
-        if (total <= 45) {
-            return 25000;
-        }
-
-        if (total <= 49) {
-            return 30000;
-        }
-
-        return 40000;
-    }
-
-    //
-    // 🏛️ APPRECIATION
-    //
-
-    public String getAppreciation() {
-
-        int total =
-                getTotal();
-
-        if (total <= 10) {
-
-            return
-                    "§7Avis: aide minimale accordée pour lancer le développement.";
-        }
-
-        if (total <= 20) {
-
-            return
-                    "§7Avis: commune en construction, soutien national modéré.";
-        }
-
-        if (total <= 25) {
-
-            return
-                    "§eAvis: dossier fragile mais recevable pour un financement.";
-        }
-
-        if (total <= 30) {
-
-            return
-                    "§aAvis: ville reconnue, développement urbain encourageant.";
-        }
-
-        if (total <= 35) {
-
-            return
-                    "§bAvis: ville solide, organisation municipale visible.";
-        }
-
-        if (total <= 40) {
-
-            return
-                    "§bAvis: métropole attractive, prestige urbain confirmé.";
-        }
-
-        if (total <= 45) {
-
-            return
-                    "§6Avis: cité majeure, référence nationale montante.";
-        }
-
-        if (total <= 49) {
-
-            return
-                    "§6Avis: capitale d'élite, dossier remarquable.";
-        }
-
-        return
-                "§e§lAvis: merveille nationale inscrite au sommet de MoodCraft.";
-    }
-
-    //
-    // 🎨 SCORE COLOR
-    //
-
-    public String getScoreColor() {
-
-        int total =
-                getTotal();
-
-        if (total <= 10) {
-
-            return "§8";
-        }
-
-        if (total <= 20) {
-
-            return "§7";
-        }
-
-        if (total <= 25) {
-
-            return "§e";
-        }
-
-        if (total <= 30) {
-
-            return "§a";
-        }
-
-        if (total <= 40) {
-
-            return "§b";
-        }
-
-        if (total <= 49) {
-
-            return "§6";
-        }
-
-        return "§e§l";
-    }
-
-    //
-    // 📊 FORMAT SCORE
-    //
-
-    public String getFormattedScore() {
-
-        return
-                getScoreColor()
-                        + getTotal()
-                        + "§7/50";
-    }
-
-    //
-    // 🏙️ GETTERS
-    //
-
-    public String getTown() {
-        return town;
-    }
-
-    public int getArchitecture() {
-        return architecture;
-    }
-
-    public int getStyle() {
-        return style;
-    }
-
-    public int getActivite() {
-        return activite;
-    }
-
-    public int getBanque() {
-        return banque;
-    }
-
-    public int getRemarquable() {
-        return remarquable;
-    }
-
-    public int getRp() {
-        return rp;
-    }
-
-    public int getTaille() {
-        return taille;
-    }
-
-    public int getVotes() {
-        return votes;
-    }
-
-    public boolean isFinished() {
-        return finished;
-    }
-
-    public boolean isPayoutClaimed() {
-
-        return payoutClaimed;
-    }
-
-    public boolean isLocked() {
-
-        return locked;
-    }
-
-    public double getFinalScore() {
-
-        return finalScore;
-    }
-
-    //
-    // ✏️ SETTERS
-    //
-
-    public void setArchitecture(int architecture) {
-        this.architecture =
-                Math.max(0,
-                        Math.min(10,
-                                architecture));
-    }
-
-    public void setStyle(int style) {
-        this.style =
-                Math.max(0,
-                        Math.min(6,
-                                style));
-    }
-
-    public void setActivite(int activite) {
-        this.activite =
-                Math.max(0,
-                        Math.min(8,
-                                activite));
-    }
-
-    public void setBanque(int banque) {
-        this.banque =
-                Math.max(0,
-                        Math.min(4,
-                                banque));
-    }
-
-    public void setRemarquable(int remarquable) {
-        this.remarquable =
-                Math.max(0,
-                        Math.min(8,
-                                remarquable));
-    }
-
-    public void setRp(int rp) {
-        this.rp =
-                Math.max(0,
-                        Math.min(6,
-                                rp));
-    }
-
-    public void setTaille(int taille) {
-        this.taille =
-                Math.max(0,
-                        Math.min(3,
-                                taille));
-    }
-
-    public void setVotes(int votes) {
-        this.votes =
-                Math.max(0,
-                        Math.min(5,
-                                votes));
-    }
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
-
-    public void setPayoutClaimed(
-            boolean payoutClaimed
+    @EventHandler
+    public void click(
+            InventoryClickEvent e
     ) {
 
-        this.payoutClaimed =
-                payoutClaimed;
+        if (!(e.getWhoClicked()
+                instanceof Player p)) {
+            return;
+        }
+
+        if (!e.getView()
+                .getTitle()
+                .equals("§8✦ Notation Nationale")) {
+            return;
+        }
+
+        e.setCancelled(true);
+
+        if (e.getRawSlot() < 0
+                || e.getRawSlot() > 53) {
+            return;
+        }
+
+        RateSession session =
+                RateSessionManager.get(
+                        p.getUniqueId()
+                );
+
+        if (session == null)
+            return;
+
+        //
+        // 🔒 DOSSIER VERROUILLÉ
+        //
+
+        TownGrade grade =
+                GradeManager.get(
+                        session.getTown()
+                );
+
+        if (grade != null
+                && grade.isLocked()) {
+
+            p.playSound(
+                    p.getLocation(),
+                    Sound.ENTITY_VILLAGER_NO,
+                    1f,
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cLes notations sont clôturées."
+            );
+            p.sendMessage(
+                    "§7Le dossier national est verrouillé."
+            );
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + session.getTown()
+            );
+            p.sendMessage("");
+
+            p.closeInventory();
+
+            return;
+        }
+
+        int slot =
+                e.getRawSlot();
+
+        switch (slot) {
+
+            case RateGUI.ARCHI ->
+                    session.setArchitecture(
+                            next(session.getArchitecture(), 10)
+                    );
+
+            case RateGUI.COHERENCE ->
+                    session.setCoherence(
+                            next(session.getCoherence(), 6)
+                    );
+
+            case RateGUI.ACTIVITE ->
+                    session.setActivite(
+                            next(session.getActivite(), 8)
+                    );
+
+            case RateGUI.BANQUE ->
+                    session.setBanque(
+                            next(session.getBanque(), 4)
+                    );
+
+            case RateGUI.BUILD ->
+                    session.setBuild(
+                            next(session.getBuild(), 8)
+                    );
+
+            case RateGUI.RP ->
+                    session.setRoleplay(
+                            next(session.getRoleplay(), 6)
+                    );
+
+            case RateGUI.TAILLE ->
+                    session.setTaille(
+                            next(session.getTaille(), 3)
+                    );
+
+            case RateGUI.VOTES ->
+                    session.setVotes(
+                            next(session.getVotes(), 5)
+                    );
+
+            case RateGUI.SAVE -> {
+
+                StaffVote vote =
+                        new StaffVote(
+                                p.getUniqueId(),
+                                session.getTown()
+                        );
+
+                vote.setArchitecture(
+                        session.getArchitecture()
+                );
+
+                vote.setStyle(
+                        session.getCoherence()
+                );
+
+                vote.setActivite(
+                        session.getActivite()
+                );
+
+                vote.setBanque(
+                        session.getBanque()
+                );
+
+                vote.setRemarquable(
+                        session.getBuild()
+                );
+
+                vote.setRp(
+                        session.getRoleplay()
+                );
+
+                vote.setTaille(
+                        session.getTaille()
+                );
+
+                vote.setVotes(
+                        session.getVotes()
+                );
+
+                VoteStorage.saveStaffVote(vote);
+
+                double staff =
+                        NationalScoreCalculator
+                                .getStaffScore(
+                                        session.getTown()
+                                );
+
+                p.closeInventory();
+
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
+                p.sendMessage(
+                        "§fVote staff enregistré."
+                );
+                p.sendMessage(
+                        "§7Ville: §b"
+                                + session.getTown()
+                );
+                p.sendMessage(
+                        "§7Moyenne Commission: §e"
+                                + staff
+                                + "§7/50"
+                );
+                p.sendMessage(
+                        "§a✔ Le dossier reste ouvert aux votes."
+                );
+                p.sendMessage("");
+
+                p.playSound(
+                        p.getLocation(),
+                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
+                        1f,
+                        1f
+                );
+
+                return;
+            }
+
+            default -> {
+                return;
+            }
+        }
+
+        p.playSound(
+                p.getLocation(),
+                Sound.UI_BUTTON_CLICK,
+                1f,
+                1f
+        );
+
+        RateGUI.open(
+                p,
+                session.getTown()
+        );
     }
 
-    public void setLocked(
-            boolean locked
+    private int next(
+            int current,
+            int max
     ) {
 
-        this.locked =
-                locked;
-    }
+        current++;
 
-    public void setFinalScore(
-            double finalScore
-    ) {
+        if (current > max)
+            current = 0;
 
-        this.finalScore =
-                finalScore;
+        return current;
     }
 }
