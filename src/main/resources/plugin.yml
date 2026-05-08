@@ -32,6 +32,10 @@ commands:
     description: Classement national des villes
     usage: /topville
 
+  vprojetsreset:
+    description: Reset national des projets urbains
+    permission: moodtowngrade.staff
+
 permissions:
 
   moodtowngrade.staff:
