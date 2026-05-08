@@ -4,6 +4,8 @@ import fr.moodcraft.tgrade.Main;
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
+import org.bukkit.Bukkit;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -62,6 +64,12 @@ public class SubmissionStorage {
 
     public static void save(TownSubmission sub) {
 
+        if (sub == null
+                || sub.getId() == null) {
+
+            return;
+        }
+
         String path =
                 "submissions." + sub.getId();
 
@@ -101,6 +109,10 @@ public class SubmissionStorage {
 
     public static void delete(String id) {
 
+        if (id == null) {
+            return;
+        }
+
         config.set(
                 "submissions." + id,
                 null
@@ -115,16 +127,8 @@ public class SubmissionStorage {
 
     public static void cleanup() {
 
-        //
-        // 📚 LOOP
-        //
-
         for (TownSubmission sub :
                 getAll()) {
-
-            //
-            // ❌ DELETE NON-PENDING
-            //
 
             if (sub.getStatus()
                     != SubmissionStatus.PENDING) {
@@ -140,18 +144,10 @@ public class SubmissionStorage {
 
     public static void clearAll() {
 
-        //
-        // ❌ DELETE SECTION
-        //
-
         config.set(
                 "submissions",
                 null
         );
-
-        //
-        // 💾 SAVE
-        //
 
         saveFile();
     }
@@ -165,7 +161,10 @@ public class SubmissionStorage {
         List<TownSubmission> list =
                 new ArrayList<>();
 
-        if (!config.contains("submissions")) {
+        if (config == null
+                || !config.contains("submissions")
+                || config.getConfigurationSection("submissions") == null) {
+
             return list;
         }
 
@@ -176,35 +175,70 @@ public class SubmissionStorage {
             String path =
                     "submissions." + id;
 
-            TownSubmission sub =
-                    new TownSubmission(
+            try {
 
-                            id,
+                String town =
+                        config.getString(path + ".town");
 
-                            config.getString(path + ".town"),
+                String build =
+                        config.getString(path + ".build");
 
-                            config.getString(path + ".build"),
+                String world =
+                        config.getString(path + ".world");
 
-                            config.getString(path + ".world"),
+                String player =
+                        config.getString(path + ".player");
 
-                            config.getInt(path + ".x"),
+                String status =
+                        config.getString(path + ".status");
 
-                            config.getInt(path + ".y"),
+                if (town == null
+                        || build == null
+                        || world == null
+                        || player == null
+                        || status == null) {
 
-                            config.getInt(path + ".z"),
+                    Bukkit.getConsoleSender()
+                            .sendMessage(
+                                    "§c[MoodTownGrade] Dossier urbain ignoré: " + id
+                            );
 
-                            UUID.fromString(
-                                    config.getString(path + ".player")
-                            ),
+                    continue;
+                }
 
-                            config.getLong(path + ".timestamp"),
+                TownSubmission sub =
+                        new TownSubmission(
 
-                            SubmissionStatus.valueOf(
-                                    config.getString(path + ".status")
-                            )
-                    );
+                                id,
 
-            list.add(sub);
+                                town,
+
+                                build,
+
+                                world,
+
+                                config.getInt(path + ".x"),
+
+                                config.getInt(path + ".y"),
+
+                                config.getInt(path + ".z"),
+
+                                UUID.fromString(player),
+
+                                config.getLong(path + ".timestamp"),
+
+                                SubmissionStatus.valueOf(status)
+                        );
+
+                list.add(sub);
+
+            } catch (Exception ex) {
+
+                Bukkit.getConsoleSender()
+                        .sendMessage(
+                                "§c[MoodTownGrade] Dossier urbain corrompu ignoré: " + id
+                        );
+            }
         }
 
         return list;
@@ -218,6 +252,10 @@ public class SubmissionStorage {
 
         List<TownSubmission> list =
                 new ArrayList<>();
+
+        if (town == null) {
+            return list;
+        }
 
         for (TownSubmission sub : getAll()) {
 
@@ -236,6 +274,10 @@ public class SubmissionStorage {
     //
 
     public static TownSubmission get(String id) {
+
+        if (id == null) {
+            return null;
+        }
 
         for (TownSubmission sub : getAll()) {
 
