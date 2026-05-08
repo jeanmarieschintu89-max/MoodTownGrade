@@ -13,10 +13,23 @@ import org.bukkit.entity.Player;
 public class PayoutManager {
 
     //
+    // 📊 REPORT
+    //
+
+    public record PayoutReport(
+            int paid,
+            double total
+    ) {}
+
+    //
     // 💰 PAYOUT
     //
 
-    public static void payoutAll() {
+    public static PayoutReport payoutAll() {
+
+        int paid = 0;
+
+        double total = 0;
 
         for (TownGrade grade :
                 GradeManager.getAll()) {
@@ -66,6 +79,10 @@ public class PayoutManager {
             int payout =
                     grade.getPayout();
 
+            if (payout <= 0) {
+                continue;
+            }
+
             try {
 
                 town.getAccount()
@@ -84,7 +101,7 @@ public class PayoutManager {
 
                 Bukkit.getConsoleSender()
                         .sendMessage(
-                                "§c[MoodTownGrade] Impossible de verser les fonds à "
+                                "§c[MoodTownGrade] Paiement impossible pour "
                                         + town.getName()
                         );
 
@@ -92,6 +109,10 @@ public class PayoutManager {
 
                 continue;
             }
+
+            paid++;
+
+            total += payout;
 
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(
@@ -106,10 +127,10 @@ public class PayoutManager {
             Bukkit.broadcastMessage(
                     "§7Subvention: §a+"
                             + format(payout)
-                            + "$"
+                            + "€"
             );
             Bukkit.broadcastMessage(
-                    "§7Prestige national: §e"
+                    "§7Note nationale: §e"
                             + national
                             + "§7/50"
             );
@@ -138,6 +159,142 @@ public class PayoutManager {
             );
             Bukkit.broadcastMessage("");
 
+            Player mayor =
+                    town.getMayor()
+                            .getPlayer();
+
+            if (mayor != null
+                    && mayor.isOnline()) {
+
+                mayor.sendMessage("");
+                mayor.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
+                mayor.sendMessage(
+                        "§fVotre ville a obtenu un financement national."
+                );
+                mayor.sendMessage(
+                        "§7Ville: §b" + town.getName()
+                );
+                mayor.sendMessage(
+                        "§7Subvention: §a+"
+                                + format(payout)
+                                + "€"
+                );
+                mayor.sendMessage(
+                        "§7Note nationale: §e"
+                                + national
+                                + "§7/50"
+                );
+                mayor.sendMessage(
+                        "§7Classe urbaine: "
+                                + grade.getRank()
+                );
+                mayor.sendMessage(
+                        "§a✔ Fonds transférés vers la banque municipale."
+                );
+                mayor.sendMessage("");
+
+                mayor.playSound(
+
+                        mayor.getLocation(),
+
+                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                        1f,
+
+                        1f
+                );
+            }
+
+            //
+            // 👥 MESSAGE AUX HABITANTS
+            //
+
+            for (Player online :
+                    Bukkit.getOnlinePlayers()) {
+
+                try {
+
+                    if (TownyAPI.getInstance()
+                            .getResident(
+                                    online.getName()
+                            ) == null) {
+
+                        continue;
+                    }
+
+                    Town playerTown =
+                            TownyAPI.getInstance()
+                                    .getResident(
+                                            online.getName()
+                                    )
+                                    .getTownOrNull();
+
+                    if (playerTown == null) {
+                        continue;
+                    }
+
+                    if (!playerTown.getName()
+                            .equalsIgnoreCase(
+                                    town.getName()
+                            )) {
+
+                        continue;
+                    }
+
+                    if (mayor != null
+                            && online.getUniqueId()
+                            .equals(
+                                    mayor.getUniqueId()
+                            )) {
+
+                        continue;
+                    }
+
+                    online.sendMessage("");
+                    online.sendMessage(
+                            "§8----- §6Commission Urbaine §8-----"
+                    );
+                    online.sendMessage(
+                            "§fVotre ville a reçu un financement national."
+                    );
+                    online.sendMessage(
+                            "§7Ville: §b" + town.getName()
+                    );
+                    online.sendMessage(
+                            "§7Subvention municipale: §a+"
+                                    + format(payout)
+                                    + "€"
+                    );
+                    online.sendMessage(
+                            "§7Note nationale: §e"
+                                    + national
+                                    + "§7/50"
+                    );
+                    online.sendMessage(
+                            "§a✔ Développement urbain approuvé."
+                    );
+                    online.sendMessage("");
+
+                    online.playSound(
+
+                            online.getLocation(),
+
+                            Sound.BLOCK_BEACON_ACTIVATE,
+
+                            0.8f,
+
+                            1.2f
+                    );
+
+                } catch (Exception ignored) {}
+            }
+
+            //
+            // 🔊 SON GLOBAL
+            //
+
             for (Player online :
                     Bukkit.getOnlinePlayers()) {
 
@@ -153,6 +310,11 @@ public class PayoutManager {
                 );
             }
         }
+
+        return new PayoutReport(
+                paid,
+                total
+        );
     }
 
     //
@@ -160,11 +322,11 @@ public class PayoutManager {
     //
 
     private static String format(
-            int value
+            double value
     ) {
 
         return String.format(
-                "%,d",
+                "%,.0f",
                 value
         ).replace(",", " ");
     }
