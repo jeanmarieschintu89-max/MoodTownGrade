@@ -61,10 +61,10 @@ public class UrbanismeAdminListener
                 e.getRawSlot();
 
         //
-        // 📋 PROJETS + 📝 NOTATION
+        // 📋 DOSSIERS URBAINS
         //
 
-        if (slot == 13 || slot == 22) {
+        if (slot == 13) {
 
             p.playSound(
 
@@ -78,6 +78,28 @@ public class UrbanismeAdminListener
             );
 
             PendingProjectsGUI.open(p);
+
+            return;
+        }
+
+        //
+        // ⭐ ÉVALUATIONS NATIONALES
+        //
+
+        if (slot == 22) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.BLOCK_BEACON_ACTIVATE,
+
+                    1f,
+
+                    1f
+            );
+
+            ClassementGUI.open(p);
 
             return;
         }
