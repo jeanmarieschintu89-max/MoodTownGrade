@@ -77,13 +77,14 @@ public class ClassementGUI {
                         RankingManager.getTop()
                 );
 
+        //
+        // 📊 TRI SCORE FINAL FIGÉ
+        //
+
         top.sort(
 
-                Comparator.<TownGrade>comparingDouble(
-                        grade -> NationalScoreCalculator
-                                .getFinalScore(
-                                        grade.getTown()
-                                )
+                Comparator.comparingDouble(
+                        TownGrade::getFinalScore
                 ).reversed()
         );
 
@@ -109,10 +110,7 @@ public class ClassementGUI {
                     top.get(0);
 
             double national =
-                    NationalScoreCalculator
-                            .getFinalScore(
-                                    best.getTown()
-                            );
+                    best.getFinalScore();
 
             headerMeta.setLore(List.of(
 
@@ -183,11 +181,12 @@ public class ClassementGUI {
                                     grade.getTown()
                             );
 
+            //
+            // 🔒 SCORE FIGÉ
+            //
+
             double national =
-                    NationalScoreCalculator
-                            .getFinalScore(
-                                    grade.getTown()
-                            );
+                    grade.getFinalScore();
 
             Material mat;
 
