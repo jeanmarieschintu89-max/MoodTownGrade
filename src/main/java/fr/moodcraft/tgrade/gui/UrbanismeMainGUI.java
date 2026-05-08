@@ -6,6 +6,8 @@ import fr.moodcraft.tgrade.model.SubmissionStatus;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
+import fr.moodcraft.tgrade.towny.TownyHook;
+
 import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
@@ -223,60 +225,67 @@ public class UrbanismeMainGUI {
         );
 
         //
-        // ➕ SOUMISSION
+        // 👑 GOUVERNANCE
         //
 
-        inv.setItem(
+        if (TownyHook.canManage(p)) {
 
-                30,
+            //
+            // ➕ SOUMISSION
+            //
 
-                item(
+            inv.setItem(
 
-                        Material.NETHER_STAR,
+                    30,
 
-                        "§a➕ Déposer un Projet",
+                    item(
 
-                        "§8━━━━━━━━━━━━━━━━",
+                            Material.NETHER_STAR,
 
-                        "§7Proposer une nouvelle",
+                            "§a➕ Déposer un Projet",
 
-                        "§7construction RP pour",
+                            "§8━━━━━━━━━━━━━━━━",
 
-                        "§7votre municipalité.",
+                            "§7Proposer une nouvelle",
 
-                        "",
+                            "§7construction RP pour",
 
-                        "§a▶ Créer un projet"
-                )
-        );
+                            "§7votre municipalité.",
 
-        //
-        // 👑 CONSEIL DES MAIRES
-        //
+                            "",
 
-        inv.setItem(
+                            "§a▶ Créer un projet"
+                    )
+            );
 
-                32,
+            //
+            // 👑 CONSEIL DES MAIRES
+            //
 
-                item(
+            inv.setItem(
 
-                        Material.GOLD_BLOCK,
+                    32,
 
-                        "§6✦ Conseil des Maires",
+                    item(
 
-                        "§8━━━━━━━━━━━━━━━━",
+                            Material.GOLD_BLOCK,
 
-                        "§7Votes et influence",
+                            "§6✦ Conseil des Maires",
 
-                        "§7des municipalités",
+                            "§8━━━━━━━━━━━━━━━━",
 
-                        "§7de MoodCraft.",
+                            "§7Votes et influence",
 
-                        "",
+                            "§7des municipalités",
 
-                        "§6▶ Accéder au conseil"
-                )
-        );
+                            "§7de MoodCraft.",
+
+                            "",
+
+                            "§6▶ Accéder au conseil"
+                    )
+            );
+        }
 
         //
         // 🛰 STAFF
