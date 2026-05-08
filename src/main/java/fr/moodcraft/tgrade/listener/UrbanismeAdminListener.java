@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade.listener;
 import fr.moodcraft.tgrade.gui.ClassementGUI;
 import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
+import fr.moodcraft.tgrade.gui.EvaluationManagerGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
 
