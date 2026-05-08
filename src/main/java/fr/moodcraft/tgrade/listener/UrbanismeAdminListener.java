@@ -8,7 +8,8 @@ import fr.moodcraft.tgrade.manager.GradeManager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
 
-import org.bukkit.Bukkit;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Town;
 
 import org.bukkit.Sound;
 
@@ -126,7 +127,7 @@ public class UrbanismeAdminListener
                 }
 
                 //
-                // 💰 BOURSE OFFICIELLE
+                // 💰 BOURSE
                 //
 
                 double amount =
@@ -141,41 +142,53 @@ public class UrbanismeAdminListener
                 }
 
                 //
-                // 👑 MAIRE
+                // 🏙 TOWN
                 //
 
-                String mayor =
-                        Bukkit.getOfflinePlayer(
-                                grade.getTown()
-                        ).getName();
+                Town town;
 
-                //
-                // ❌ MAIRE INTROUVABLE
-                //
+                try {
 
-                if (mayor == null
-                        || mayor.isEmpty()) {
+                    town = TownyAPI
+                            .getInstance()
+                            .getTown(
+                                    grade.getTown()
+                            );
+
+                } catch (Exception ex) {
+
                     continue;
                 }
 
                 //
-                // 🏦 VAULT CHECK
+                // ❌ TOWN INTROUVABLE
                 //
 
-                if (fr.moodcraft.bridge.util.VaultHook.economy != null) {
-
-                    fr.moodcraft.bridge.util.VaultHook.economy.depositPlayer(
-
-                            Bukkit.getOfflinePlayer(
-                                    mayor
-                            ),
-
-                            amount
-                    );
+                if (town == null) {
+                    continue;
                 }
 
                 //
-                // ✅ CLAIMED
+                // 🏦 VERSEMENT
+                //
+
+                try {
+
+                    town.getAccount()
+                            .deposit(
+
+                                    amount,
+
+                                    "Subvention Nationale"
+                            );
+
+                } catch (Exception ex) {
+
+                    continue;
+                }
+
+                //
+                // ✅ PAYÉ
                 //
 
                 grade.setPayoutClaimed(true);
