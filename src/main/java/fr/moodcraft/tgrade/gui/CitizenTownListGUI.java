@@ -90,6 +90,48 @@ public class CitizenTownListGUI {
         }
 
         //
+        // 🏛 HEADER
+        //
+
+        ItemStack header =
+                new ItemStack(
+                        Material.BOOK
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§e✦ Votes Citoyens"
+        );
+
+        headerMeta.setLore(List.of(
+
+                "§8----- §6Participation §8-----",
+
+                "§7Consultez les villes",
+
+                "§7validées par la Commission.",
+
+                "",
+
+                "§7Votre avis influence",
+
+                "§7le §ePrestige National§7.",
+
+                "",
+
+                "§e▶ Registre citoyen"
+        ));
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(
+                4,
+                header
+        );
+
+        //
         // 🏙 VILLES VALIDÉES
         //
 
@@ -129,12 +171,12 @@ public class CitizenTownListGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§c✦ Aucun projet inspecté"
+                    "§c✖ Aucun projet inspecté"
             );
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Registre Citoyen §8-----",
 
                     "§7Aucune municipalité",
 
@@ -146,7 +188,7 @@ public class CitizenTownListGUI {
 
                     "§7Les villes apparaîtront",
 
-                    "§7ici après inspection.",
+                    "§7après inspection.",
 
                     "",
 
@@ -176,9 +218,9 @@ public class CitizenTownListGUI {
                     "§c⬅ Retour"
             );
 
-            back.setLore(List.of(
+            backMeta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Commission Urbaine §8-----",
 
                     "§7Retourner au menu",
 
@@ -305,30 +347,30 @@ public class CitizenTownListGUI {
                     item.getItemMeta();
 
             meta.setDisplayName(
-                    "§b✦ " + town
+                    "§f✦ §b" + town
             );
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Ville Validée §8-----",
 
-                    "§7Prestige national:",
-
-                    " §e"
+                    "§7Prestige national: §e"
                             + String.format("%.1f", score)
                             + "§7/50",
-
-                    "",
 
                     "§7Votes citoyens: §b"
                             + citizens,
 
-                    "",
-
-                    "§7Classement actuel: §6#"
+                    "§7Classement: §6#"
                             + (position == -1
                             ? "Non classé"
                             : position),
+
+                    "",
+
+                    "§7Votre avis peut modifier",
+
+                    "§7l'influence populaire.",
 
                     "",
 
@@ -363,7 +405,7 @@ public class CitizenTownListGUI {
 
         backMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Commission Urbaine §8-----",
 
                 "§7Retourner au menu",
 
