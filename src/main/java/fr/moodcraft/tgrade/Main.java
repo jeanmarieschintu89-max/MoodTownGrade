@@ -1,6 +1,7 @@
 package fr.moodcraft.tgrade;
 
 import fr.moodcraft.tgrade.command.UrbanismeCommand;
+import fr.moodcraft.tgrade.command.VProjetsResetCommand;
 
 import fr.moodcraft.tgrade.listener.CitizenTownListListener;
 import fr.moodcraft.tgrade.listener.CitizenVoteListener;
@@ -86,6 +87,14 @@ public class Main extends JavaPlugin {
                     );
         }
 
+        if (getCommand("vprojetsreset") != null) {
+
+            getCommand("vprojetsreset")
+                    .setExecutor(
+                            new VProjetsResetCommand()
+                    );
+        }
+
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new RateGUIListener(), this);
         getServer().getPluginManager().registerEvents(new ReviewGUIListener(), this);
@@ -123,6 +132,7 @@ public class Main extends JavaPlugin {
         getLogger().info("Votes citoyens actifs.");
         getLogger().info("Conseil des maires actif.");
         getLogger().info("Classement national actif.");
+        getLogger().info("Commande vprojetsreset active.");
         getLogger().info("Grades chargés: " + GradeManager.getAll().size());
         getLogger().info("Towny détecté.");
         getLogger().info("Reset hebdomadaire actif.");
