@@ -1,8 +1,9 @@
 package fr.moodcraft.tgrade.listener;
 
-import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
 import fr.moodcraft.tgrade.gui.CitizenVoteGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
+
+import org.bukkit.Material;
 
 import org.bukkit.Sound;
 
@@ -67,10 +68,28 @@ public class CitizenTownListListener
         }
 
         //
+        // ❌ AIR
+        //
+
+        if (e.getCurrentItem()
+                .getType()
+                .isAir()) {
+
+            return;
+        }
+
+        //
+        // 🔘 SLOT
+        //
+
+        int slot =
+                e.getRawSlot();
+
+        //
         // 🔙 RETOUR
         //
 
-        if (e.getRawSlot() == 49) {
+        if (slot == 49) {
 
             p.playSound(
 
@@ -89,13 +108,71 @@ public class CitizenTownListListener
         }
 
         //
+        // 🌌 BORDURES
+        //
+
+        Material mat =
+                e.getCurrentItem()
+                        .getType();
+
+        if (mat
+                == Material.BLACK_STAINED_GLASS_PANE) {
+
+            return;
+        }
+
+        //
+        // ❌ BARRIER
+        //
+
+        if (mat
+                == Material.BARRIER) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    1f
+            );
+
+            return;
+        }
+
+        //
         // 📛 ITEM NAME
         //
+
+        if (!e.getCurrentItem()
+                .hasItemMeta()) {
+
+            return;
+        }
+
+        if (e.getCurrentItem()
+                .getItemMeta()
+                .getDisplayName() == null) {
+
+            return;
+        }
 
         String name =
                 e.getCurrentItem()
                         .getItemMeta()
                         .getDisplayName();
+
+        //
+        // 🏙️ INVALID
+        //
+
+        if (!name.startsWith(
+                "§b✦ ")) {
+
+            return;
+        }
 
         //
         // 🏙️ TOWN
