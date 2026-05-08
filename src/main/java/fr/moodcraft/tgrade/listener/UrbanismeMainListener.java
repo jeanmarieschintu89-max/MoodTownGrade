@@ -136,35 +136,15 @@ public class UrbanismeMainListener
                 );
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§c🏛 Accès refusé"
+                        "§cAccès refusé."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Seuls les maires"
+                        "§7Seuls les maires et assistants peuvent gérer les projets urbains."
                 );
-
-                p.sendMessage(
-                        "§7et assistants peuvent"
-                );
-
-                p.sendMessage(
-                        "§7gérer les projets urbains."
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
-
                 p.sendMessage("");
 
                 return;
@@ -240,35 +220,15 @@ public class UrbanismeMainListener
                 );
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§c🏛 Accès refusé"
+                        "§cAccès refusé."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Seuls les maires"
+                        "§7Seuls les maires et assistants peuvent déposer des projets."
                 );
-
-                p.sendMessage(
-                        "§7et assistants peuvent"
-                );
-
-                p.sendMessage(
-                        "§7déposer des projets."
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
-
                 p.sendMessage("");
 
                 return;
@@ -308,51 +268,21 @@ public class UrbanismeMainListener
             //
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§a✦ Nouveau Projet"
+                    "§fNouveau dossier urbain ouvert."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§7Tape dans le chat le nom"
+                    "§7Tapez dans le chat le nom du projet."
             );
-
             p.sendMessage(
-                    "§7de votre projet urbain."
+                    "§7Exemple: §eGare Centrale"
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§8Exemple:"
+                    "§cTapez §fannuler §cpour quitter."
             );
-
-            p.sendMessage(
-                    "§eGare Centrale"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§cTape 'annuler'"
-            );
-
-            p.sendMessage(
-                    "§cpour quitter."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             p.sendMessage("");
 
             return;
@@ -382,35 +312,15 @@ public class UrbanismeMainListener
                 );
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§c👑 Accès refusé"
+                        "§cAccès refusé."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Seuls les maires"
+                        "§7Seuls les maires et assistants peuvent accéder au conseil."
                 );
-
-                p.sendMessage(
-                        "§7et assistants municipaux"
-                );
-
-                p.sendMessage(
-                        "§7peuvent accéder au conseil."
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
-
                 p.sendMessage("");
 
                 return;
@@ -459,6 +369,18 @@ public class UrbanismeMainListener
                     1f
             );
 
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cAccès refusé."
+            );
+            p.sendMessage(
+                    "§7Ce centre est réservé à l'administration nationale."
+            );
+            p.sendMessage("");
+
             return;
         }
 
@@ -466,35 +388,4 @@ public class UrbanismeMainListener
         // 🛰 ADMIN
         //
 
-        if (slot == 34) {
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.BLOCK_BEACON_ACTIVATE,
-
-                    1f,
-
-                    1f
-            );
-
-            UrbanismeAdminGUI.open(p);
-
-            return;
-        }
-
-        //
-        // 🔙 RETOUR
-        //
-
-        if (slot == 49) {
-
-            p.closeInventory();
-
-            p.performCommand(
-                    "menu"
-            );
-        }
-    }
-}
+        if (
