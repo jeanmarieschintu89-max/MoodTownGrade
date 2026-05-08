@@ -1,11 +1,22 @@
+
+name: MoodTownGrade
+
+version: 1.0
+
+main: fr.moodcraft.tgrade.Main
+
+api-version: '1.21'
+
+author: MoodCraft
+
+depend:
+  - Towny
+
 commands:
 
   urbanisme:
-
     description: Commission urbaine MoodCraft
-
     usage: /urbanisme
-
     aliases:
       - tgrade
       - commission
@@ -13,27 +24,27 @@ commands:
       - mairie
 
   topville:
-
     description: Classement national des villes
-
     usage: /topville
 
   projet:
-
     description: Ouvrir les projets municipaux
-
     usage: /projet
-
     aliases:
       - projets
       - tprojet
       - tprojets
 
   vprojet:
-
     description: Votes citoyens des projets
-
     usage: /vprojet
-
     aliases:
       - vprojets
+
+permissions:
+
+  moodtowngrade.staff:
+    default: op
+
+  moodtowngrade.admin:
+    default: op
