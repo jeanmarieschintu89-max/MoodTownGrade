@@ -155,6 +155,18 @@ public class EvaluationManagerListener
                     1f
             );
 
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cVille introuvable."
+            );
+            p.sendMessage(
+                    "§7Le dossier national n'existe plus."
+            );
+            p.sendMessage("");
+
             return;
         }
 
@@ -172,6 +184,25 @@ public class EvaluationManagerListener
 
                 1f
         );
+
+        //
+        // 📜 MESSAGE
+        //
+
+        p.sendMessage("");
+        p.sendMessage(
+                "§8----- §6Commission Urbaine §8-----"
+        );
+        p.sendMessage(
+                "§fOuverture du dossier d'évaluation."
+        );
+        p.sendMessage(
+                "§7Ville: §b" + town
+        );
+        p.sendMessage(
+                "§a✔ Registre national chargé."
+        );
+        p.sendMessage("");
 
         //
         // ⭐ OPEN RATE GUI
