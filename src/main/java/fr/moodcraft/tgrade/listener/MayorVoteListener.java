@@ -2,10 +2,12 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.MayorVoteGUI;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.MayorVoteManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.MayorVote;
+import fr.moodcraft.tgrade.model.TownGrade;
 
 import org.bukkit.Sound;
 
@@ -77,6 +79,45 @@ public class MayorVoteListener
             return;
         }
 
+        //
+        // 🔒 DOSSIER CLOTURÉ
+        //
+
+        TownGrade grade =
+                GradeManager.get(
+                        town
+                );
+
+        if (grade != null
+                && grade.isLocked()) {
+
+            p.closeInventory();
+
+            p.playSound(
+                    p.getLocation(),
+                    Sound.ENTITY_VILLAGER_NO,
+                    1f,
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cLes votes municipaux sont clôturés."
+            );
+            p.sendMessage(
+                    "§7Ville: §b" + town
+            );
+            p.sendMessage(
+                    "§7Le registre national est verrouillé."
+            );
+            p.sendMessage("");
+
+            return;
+        }
+
         MayorVote vote =
                 MayorVoteManager.getVote(
                         p.getUniqueId(),
@@ -134,9 +175,17 @@ public class MayorVoteListener
                         NationalScoreCalculator
                                 .getFinalScore(town);
 
+                double staff =
+                        NationalScoreCalculator
+                                .getStaffScore(town);
+
                 double mayors =
                         NationalScoreCalculator
                                 .getMayorScore(town);
+
+                double citizens =
+                        NationalScoreCalculator
+                                .getCitizenScore(town);
 
                 p.closeInventory();
 
@@ -151,10 +200,16 @@ public class MayorVoteListener
                         "§7Ville: §b" + town
                 );
                 p.sendMessage(
-                        "§7Influence des maires: §e" + mayors + "§7/50"
+                        "§7Commission: §e" + staff + "§7/50"
                 );
                 p.sendMessage(
-                        "§7Prestige national: §e" + national + "§7/50"
+                        "§7Conseil des maires: §e" + mayors + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Votes citoyens: §e" + citizens + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Note nationale: §6" + national + "§7/50"
                 );
                 p.sendMessage(
                         "§a✔ Avis municipal archivé au registre national."
