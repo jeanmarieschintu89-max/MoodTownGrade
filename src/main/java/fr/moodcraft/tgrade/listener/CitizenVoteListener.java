@@ -145,61 +145,76 @@ public class CitizenVoteListener
             // 🏗 BEAUTÉ
             //
 
-            case CitizenVoteGUI.BEAUTE ->
+            case CitizenVoteGUI.BEAUTE -> {
 
-                    vote.setBeaute(
-                            next(
-                                    vote.getBeaute()
-                            )
-                    );
+                vote.setBeaute(
+                        next(
+                                vote.getBeaute()
+                        )
+                );
+
+                CitizenVoteManager.saveVote(vote);
+            }
 
             //
             // 🌆 AMBIANCE
             //
 
-            case CitizenVoteGUI.AMBIANCE ->
+            case CitizenVoteGUI.AMBIANCE -> {
 
-                    vote.setAmbiance(
-                            next(
-                                    vote.getAmbiance()
-                            )
-                    );
+                vote.setAmbiance(
+                        next(
+                                vote.getAmbiance()
+                        )
+                );
+
+                CitizenVoteManager.saveVote(vote);
+            }
 
             //
             // ⚡ ACTIVITÉ
             //
 
-            case CitizenVoteGUI.ACTIVITE ->
+            case CitizenVoteGUI.ACTIVITE -> {
 
-                    vote.setActivite(
-                            next(
-                                    vote.getActivite()
-                            )
-                    );
+                vote.setActivite(
+                        next(
+                                vote.getActivite()
+                        )
+                );
+
+                CitizenVoteManager.saveVote(vote);
+            }
 
             //
             // 🧭 ORIGINALITÉ
             //
 
-            case CitizenVoteGUI.ORIGINALITE ->
+            case CitizenVoteGUI.ORIGINALITE -> {
 
-                    vote.setOriginalite(
-                            next(
-                                    vote.getOriginalite()
-                            )
-                    );
+                vote.setOriginalite(
+                        next(
+                                vote.getOriginalite()
+                        )
+                );
+
+                CitizenVoteManager.saveVote(vote);
+            }
 
             //
             // ❤️ POPULARITÉ
             //
 
-            case CitizenVoteGUI.POPULARITE ->
+            case CitizenVoteGUI.POPULARITE -> {
 
-                    vote.setPopularite(
-                            next(
-                                    vote.getPopularite()
-                            )
-                    );
+                vote.setPopularite(
+                        next(
+                                vote.getPopularite()
+                        )
+                );
+
+                CitizenVoteManager.saveVote(vote);
+            }
 
             //
             // 💾 SAVE
@@ -262,7 +277,7 @@ public class CitizenVoteListener
                         "§7Ville: §b" + town
                 );
                 p.sendMessage(
-                        "§7Prestige national: §e" + national + "§7/50"
+                        "§7Note nationale: §e" + national + "§7/50"
                 );
                 p.sendMessage(
                         "§7Influences: §6Staff §e" + staff
