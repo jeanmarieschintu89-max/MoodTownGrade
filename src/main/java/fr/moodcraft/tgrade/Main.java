@@ -2,6 +2,7 @@ package fr.moodcraft.tgrade;
 
 import fr.moodcraft.tgrade.command.UrbanismeCommand;
 
+import fr.moodcraft.tgrade.listener.CitizenTownListListener;
 import fr.moodcraft.tgrade.listener.CitizenVoteListener;
 import fr.moodcraft.tgrade.listener.ClassementListener;
 import fr.moodcraft.tgrade.listener.GUIListener;
@@ -179,13 +180,20 @@ public class Main extends JavaPlugin {
                 );
 
         //
-        // 👥 VOTE CITOYEN
+        // 👥 VOTES CITOYENS
         //
 
         getServer()
                 .getPluginManager()
                 .registerEvents(
                         new CitizenVoteListener(),
+                        this
+                );
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new CitizenTownListListener(),
                         this
                 );
 
