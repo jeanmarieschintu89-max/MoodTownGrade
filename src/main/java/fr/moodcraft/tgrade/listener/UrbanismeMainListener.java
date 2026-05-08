@@ -113,53 +113,10 @@ public class UrbanismeMainListener
         );
 
         //
-        // 🏗 PROJETS
-        //
-
-        if (slot == 20) {
-
-            if (!TownyHook.canManage(p)) {
-
-                p.playSound(
-
-                        p.getLocation(),
-
-                        Sound.ENTITY_VILLAGER_NO,
-
-                        1f,
-
-                        1f
-                );
-
-                p.sendMessage("");
-                p.sendMessage(
-                        "§8----- §6Commission Urbaine §8-----"
-                );
-                p.sendMessage(
-                        "§cAccès refusé."
-                );
-                p.sendMessage(
-                        "§7Seuls les maires et assistants peuvent gérer les projets urbains."
-                );
-                p.sendMessage("");
-
-                return;
-            }
-
-            p.closeInventory();
-
-            p.performCommand(
-                    "urbanisme projets"
-            );
-
-            return;
-        }
-
-        //
         // 👥 AVIS CITOYENS
         //
 
-        if (slot == 22) {
+        if (slot == 20) {
 
             CitizenTownListGUI.open(p);
 
@@ -170,7 +127,7 @@ public class UrbanismeMainListener
         // 🏆 CLASSEMENT
         //
 
-        if (slot == 24) {
+        if (slot == 22) {
 
             p.closeInventory();
 
@@ -196,7 +153,7 @@ public class UrbanismeMainListener
         // ➕ SOUMISSION
         //
 
-        if (slot == 30) {
+        if (slot == 29) {
 
             if (!TownyHook.canManage(p)) {
 
@@ -268,7 +225,7 @@ public class UrbanismeMainListener
         // 👑 CONSEIL DES MAIRES
         //
 
-        if (slot == 32) {
+        if (slot == 31) {
 
             if (!TownyHook.canManage(p)) {
 
@@ -318,7 +275,7 @@ public class UrbanismeMainListener
         // ❌ ADMIN WITHOUT PERM
         //
 
-        if (slot == 34
+        if (slot == 33
                 && !p.hasPermission(
                 "moodtowngrade.staff")) {
 
@@ -352,7 +309,7 @@ public class UrbanismeMainListener
         // 🛰 ADMIN
         //
 
-        if (slot == 34) {
+        if (slot == 33) {
 
             p.playSound(
 
