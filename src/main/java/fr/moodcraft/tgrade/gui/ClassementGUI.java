@@ -107,36 +107,35 @@ public class ClassementGUI {
 
             headerMeta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Registre National §8-----",
 
-                    "§7Ville dominante:",
+                    "§7Ville dominante: §e"
+                            + best.getTown(),
 
-                    "§e👑 " + best.getTown(),
-
-                    "",
-
-                    "§7Prestige national:",
-                    "§e" + national + "/50",
-
-                    "",
+                    "§7Prestige national: §e"
+                            + national + "§7/50",
 
                     "§7Titre actuel:",
                     best.getRank(),
 
                     "",
 
-                    "§e▶ Commission Urbaine MoodCraft"
+                    "§e▶ Classement officiel MoodCraft"
             ));
 
         } else {
 
             headerMeta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Registre National §8-----",
 
                     "§7Aucune ville classée",
 
-                    "§7pour cette semaine."
+                    "§7pour cette semaine.",
+
+                    "",
+
+                    "§e▶ En attente d'inspections"
             ));
         }
 
@@ -204,7 +203,7 @@ public class ClassementGUI {
                             Material.NETHER_STAR;
 
                     podium =
-                            "§6🥇 Première Nation";
+                            "§6♛ Rang National I";
                 }
 
                 case 2 -> {
@@ -213,7 +212,7 @@ public class ClassementGUI {
                             Material.DIAMOND;
 
                     podium =
-                            "§7🥈 Deuxième Nation";
+                            "§b♢ Rang National II";
                 }
 
                 case 3 -> {
@@ -222,7 +221,7 @@ public class ClassementGUI {
                             Material.EMERALD;
 
                     podium =
-                            "§6🥉 Troisième Nation";
+                            "§a♢ Rang National III";
                 }
 
                 default -> {
@@ -231,7 +230,7 @@ public class ClassementGUI {
                             Material.GOLD_INGOT;
 
                     podium =
-                            "§e#" + pos;
+                            "§eRang National #" + pos;
                 }
             }
 
@@ -254,38 +253,35 @@ public class ClassementGUI {
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Prestige Urbain §8-----",
 
-                    "§7Prestige urbain:",
+                    "§7Titre officiel:",
                     grade.getRank(),
 
                     "",
 
-                    "🏛 §7Commission: §e"
-                            + staff + "/50",
+                    "§7Commission: §e"
+                            + staff + "§7/50",
 
-                    "👑 §7Maires: §e"
+                    "§7Conseil des maires: §e"
                             + Math.round(
                             (mayors / 2.0) * 10
                     ) / 10.0
-                            + "/25",
+                            + "§7/25",
 
-                    "👥 §7Citoyens: §e"
+                    "§7Votes citoyens: §e"
                             + Math.round(
                             ((citizens / 50.0) * 25.0)
                                     * 10
                     ) / 10.0
-                            + "/25",
+                            + "§7/25",
 
                     "",
 
-                    "⭐ §7Score National: §e"
-                            + national + "/50",
+                    "§7Score national: §e"
+                            + national + "§7/50",
 
-                    "",
-
-                    "§7Financement obtenu:",
-                    "§a"
+                    "§7Financement: §a"
                             + format(
                             grade.getPayout()
                     )
@@ -339,11 +335,15 @@ public class ClassementGUI {
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Registre National §8-----",
 
                     "§7Aucune ville n'a encore",
 
-                    "§7été inspectée cette semaine."
+                    "§7été inspectée cette semaine.",
+
+                    "",
+
+                    "§e▶ Le palmarès attend ses premières données"
             ));
 
             empty.setItemMeta(meta);
@@ -369,11 +369,11 @@ public class ClassementGUI {
 
         backMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Commission Urbaine §8-----",
 
                 "§7Retourner au menu",
 
-                "§7de la commission urbaine."
+                "§7de l'administration nationale."
         ));
 
         back.setItemMeta(backMeta);
