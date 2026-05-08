@@ -1,288 +1,673 @@
-package fr.moodcraft.tgrade.task;
+package fr.moodcraft.tgrade.command;
+
+import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
+import fr.moodcraft.tgrade.gui.ClassementGUI;
+import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
+import fr.moodcraft.tgrade.gui.RateGUI;
+import fr.moodcraft.tgrade.gui.ReviewGUI;
+import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
-import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.PayoutManager;
-import fr.moodcraft.tgrade.manager.RankingManager;
 
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
-import org.bukkit.Bukkit;
+import fr.moodcraft.tgrade.task.WeeklyResetTask;
 
-public class WeeklyResetTask
-        implements Runnable {
+import fr.moodcraft.tgrade.towny.TownyHook;
 
-    //
-    // 🔄 RESET
-    //
+import com.palmergames.bukkit.towny.object.Town;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
+
+public class UrbanismeCommand
+        implements CommandExecutor {
 
     @Override
-    public void run() {
+    public boolean onCommand(
+
+            CommandSender sender,
+
+            Command command,
+
+            String label,
+
+            String[] args
+    ) {
 
         //
-        // 🏆 BEST CITY
+        // 👤 PLAYER ONLY
         //
 
-        TownGrade best =
-                RankingManager.getBest();
+        if (!(sender instanceof Player p)) {
 
-        //
-        // 💰 PAYOUTS
-        //
-
-        PayoutManager.payoutAll();
-
-        //
-        // 📢 FIN SAISON
-        //
-
-        Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(
-                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
-
-        Bukkit.broadcastMessage(
-                "§6✦ Archives Nationales Urbaines"
-        );
-
-        Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(
-                "§7La semaine d'inspection urbaine"
-        );
-
-        Bukkit.broadcastMessage(
-                "§7vient officiellement de se terminer."
-        );
-
-        Bukkit.broadcastMessage("");
-
-        //
-        // 👑 BEST CITY
-        //
-
-        if (best != null) {
-
-            double national =
-                    NationalScoreCalculator
-                            .getFinalScore(
-                                    best.getTown()
-                            );
-
-            double staff =
-                    NationalScoreCalculator
-                            .getStaffScore(
-                                    best.getTown()
-                            );
-
-            double mayors =
-                    NationalScoreCalculator
-                            .getMayorScore(
-                                    best.getTown()
-                            );
-
-            double citizens =
-                    NationalScoreCalculator
-                            .getCitizenScore(
-                                    best.getTown()
-                            );
-
-            Bukkit.broadcastMessage(
-                    "§6👑 Capitale dominante de la semaine"
+            sender.sendMessage(
+                    "§cCommande joueur uniquement."
             );
 
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    " §e" + best.getTown()
-            );
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§7Prestige national:"
-            );
-
-            Bukkit.broadcastMessage(
-                    " §e" + national + "§7/50"
-            );
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§7Réputation gouvernementale:"
-            );
-
-            Bukkit.broadcastMessage(
-                    " §6🏛 Staff: §e" + staff
-            );
-
-            Bukkit.broadcastMessage(
-                    " §6👑 Maires: §e" + mayors
-            );
-
-            Bukkit.broadcastMessage(
-                    " §6👥 Citoyens: §e" + citizens
-            );
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§7Classe urbaine:"
-            );
-
-            Bukkit.broadcastMessage(
-                    " " + best.getRank()
-            );
-
-            Bukkit.broadcastMessage("");
+            return true;
         }
 
-        Bukkit.broadcastMessage(
-                "§a✦ Fonds Nationaux Distribués"
-        );
-
-        Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(
-                "§7Les municipalités inspectées"
-        );
-
-        Bukkit.broadcastMessage(
-                "§7ont reçu leurs subventions"
-        );
-
-        Bukkit.broadcastMessage(
-                "§7de développement urbain."
-        );
-
-        Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(
-                "§7Archivage des inspections"
-        );
-
-        Bukkit.broadcastMessage(
-                "§7et fermeture des registres..."
-        );
-
-        Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(
-                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
-
-        Bukkit.broadcastMessage("");
-
         //
-        // 🧹 RESET NOTES
+        // 🏆 /TOPVILLE
         //
 
-        for (TownGrade grade :
-                GradeManager.getAll()) {
+        if (command.getName()
+                .equalsIgnoreCase(
+                        "topville")) {
+
+            ClassementGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // 🏗 /PROJET
+        //
+
+        if (command.getName()
+                .equalsIgnoreCase(
+                        "projet")) {
 
             //
-            // 📊 RESET NOTES
+            // 🛡 TOWNY CHECK
             //
+
+            if (!TownyHook.canManage(p)) {
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§c🏛 Accès refusé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Seuls les maires"
+                );
+
+                p.sendMessage(
+                        "§7et assistants municipaux"
+                );
+
+                p.sendMessage(
+                        "§7peuvent gérer les projets."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return true;
+            }
+
+            PendingProjectsGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // 👥 /VPROJET
+        //
+
+        if (command.getName()
+                .equalsIgnoreCase(
+                        "vprojet")) {
+
+            CitizenTownListGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // 🏛 OPEN GUI
+        //
+
+        if (args.length == 0) {
+
+            UrbanismeMainGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // 🏆 CLASSEMENT
+        //
+
+        if (args[0].equalsIgnoreCase("classement")) {
+
+            ClassementGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // 🛰 STAFF COMMANDS
+        //
+
+        if (args[0].equalsIgnoreCase("review")
+                || args[0].equalsIgnoreCase("noter")
+                || args[0].equalsIgnoreCase("validation")
+                || args[0].equalsIgnoreCase("payout")
+                || args[0].equalsIgnoreCase("delete")
+                || args[0].equalsIgnoreCase("resetweek")
+                || args[0].equalsIgnoreCase("resetville")) {
+
+            if (!p.hasPermission(
+                    "moodtowngrade.staff")) {
+
+                p.sendMessage(
+                        "§cAccès refusé."
+                );
+
+                return true;
+            }
+        }
+
+        //
+        // 📍 REVIEW
+        //
+
+        if (args[0].equalsIgnoreCase("review")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme review <ville>"
+                );
+
+                return true;
+            }
+
+            ReviewGUI.open(
+                    p,
+                    args[1]
+            );
+
+            return true;
+        }
+
+        //
+        // ⭐ NOTER
+        //
+
+        if (args[0].equalsIgnoreCase("noter")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme noter <ville>"
+                );
+
+                return true;
+            }
+
+            RateGUI.open(
+                    p,
+                    args[1]
+            );
+
+            return true;
+        }
+
+        //
+        // 💰 PAYOUT
+        //
+
+        if (args[0].equalsIgnoreCase("payout")) {
+
+            PayoutManager.payoutAll();
+
+            p.sendMessage(
+                    "§aBourses distribuées."
+            );
+
+            return true;
+        }
+
+        //
+        // 🗑 DELETE PROJECT ADMIN
+        //
+
+        if (args[0].equalsIgnoreCase("delete")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme delete <id>"
+                );
+
+                return true;
+            }
+
+            TownSubmission sub =
+                    SubmissionStorage.get(
+                            args[1]
+                    );
+
+            if (sub == null) {
+
+                p.sendMessage(
+                        "§cProjet introuvable."
+                );
+
+                return true;
+            }
+
+            SubmissionStorage.delete(
+                    sub.getId()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§c🗑 Projet supprimé"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e"
+                            + sub.getBuildName()
+            );
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + sub.getTown()
+            );
+
+            p.sendMessage(
+                    "§7ID: §f"
+                            + sub.getId()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
+        // 🔄 RESET WEEK
+        //
+
+        if (args[0].equalsIgnoreCase("resetweek")) {
+
+            new WeeklyResetTask().run();
+
+            p.sendMessage(
+                    "§aSemaine urbaine réinitialisée."
+            );
+
+            return true;
+        }
+
+        //
+        // 🏛 RESET VILLE
+        //
+
+        if (args[0].equalsIgnoreCase("resetville")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme resetville <ville>"
+                );
+
+                return true;
+            }
+
+            String townName =
+                    args[1];
+
+            TownGrade grade =
+                    GradeManager.get(townName);
 
             grade.setArchitecture(0);
-
             grade.setStyle(0);
-
             grade.setActivite(0);
-
             grade.setBanque(0);
-
             grade.setRemarquable(0);
-
             grade.setRp(0);
-
             grade.setTaille(0);
-
             grade.setVotes(0);
-
-            //
-            // 🔄 RESET
-            //
 
             grade.setFinished(false);
 
             grade.setPayoutClaimed(false);
 
-            //
-            // 💾 SAVE
-            //
-
             GradeManager.save(grade);
+
+            for (TownSubmission sub :
+                    SubmissionStorage.getAll()) {
+
+                if (sub.getTown()
+                        .equalsIgnoreCase(
+                                townName
+                        )) {
+
+                    SubmissionStorage.delete(
+                            sub.getId()
+                    );
+                }
+            }
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§c🏛 Ville réinitialisée"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + townName
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7✔ Notes supprimées"
+            );
+
+            p.sendMessage(
+                    "§7✔ Classement supprimé"
+            );
+
+            p.sendMessage(
+                    "§7✔ Projets supprimés"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
         }
 
         //
-        // 🧹 CLEAN PROJECTS
+        // 🛡 TOWNY CHECK
         //
 
-        SubmissionStorage.cleanup();
+        if (!TownyHook.canManage(p)) {
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§c🏛 Accès refusé"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Seuls les maires"
+            );
+
+            p.sendMessage(
+                    "§7et assistants peuvent"
+            );
+
+            p.sendMessage(
+                    "§7gérer les projets urbains."
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
 
         //
-        // 📢 NEW WEEK
+        // 🏛 TOWN
         //
 
-        Bukkit.broadcastMessage("");
+        Town town =
+                TownyHook.getTown(p);
 
-        Bukkit.broadcastMessage(
-                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
+        if (town == null) {
 
-        Bukkit.broadcastMessage(
-                "§b✦ Nouvelle Saison Urbaine"
-        );
+            p.sendMessage(
+                    "§cAucune ville détectée."
+            );
 
-        Bukkit.broadcastMessage("");
+            return true;
+        }
 
-        Bukkit.broadcastMessage(
-                "§7Les anciennes inspections"
-        );
+        //
+        // ➕ PROJET
+        //
 
-        Bukkit.broadcastMessage(
-                "§7ont été archivées dans"
-        );
+        if (args[0].equalsIgnoreCase("projet")) {
 
-        Bukkit.broadcastMessage(
-                "§7les registres nationaux."
-        );
+            if (args.length < 2) {
 
-        Bukkit.broadcastMessage("");
+                p.sendMessage(
+                        "§c/urbanisme projet <nom>"
+                );
 
-        Bukkit.broadcastMessage(
-                "§7Les villes peuvent désormais"
-        );
+                return true;
+            }
 
-        Bukkit.broadcastMessage(
-                "§7déposer de nouveaux projets"
-        );
+            if (SubmissionStorage
+                    .getTown(town.getName())
+                    .size() >= 5) {
 
-        Bukkit.broadcastMessage(
-                "§7et participer au prestige national."
-        );
+                p.sendMessage(
+                        "§cMaximum 5 projets."
+                );
 
-        Bukkit.broadcastMessage("");
+                return true;
+            }
 
-        Bukkit.broadcastMessage(
-                "§e▶ Les votes citoyens et"
-        );
+            String name =
+                    String.join(" ", args)
+                            .replaceFirst(
+                                    "projet ",
+                                    ""
+                            );
 
-        Bukkit.broadcastMessage(
-                "§e  gouvernementaux sont réouverts"
-        );
+            String id =
+                    UUID.randomUUID()
+                            .toString()
+                            .substring(0, 4)
+                            .toUpperCase();
 
-        Bukkit.broadcastMessage("");
+            TownSubmission sub =
+                    new TownSubmission(
 
-        Bukkit.broadcastMessage(
-                "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        );
+                            id,
 
-        Bukkit.broadcastMessage("");
+                            town.getName(),
+
+                            name,
+
+                            p.getWorld().getName(),
+
+                            p.getLocation().getBlockX(),
+
+                            p.getLocation().getBlockY(),
+
+                            p.getLocation().getBlockZ(),
+
+                            p.getUniqueId(),
+
+                            System.currentTimeMillis(),
+
+                            SubmissionStatus.PENDING
+                    );
+
+            SubmissionStorage.save(sub);
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§a🏗 Projet enregistré"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Projet: §e" + name
+            );
+
+            p.sendMessage(
+                    "§7Ville: §b"
+                            + town.getName()
+            );
+
+            p.sendMessage(
+                    "§7ID: §f" + id
+            );
+
+            p.sendMessage(
+                    "§7Statut: §eEN ATTENTE"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        //
+        // 📜 PROJETS GUI
+        //
+
+        if (args[0].equalsIgnoreCase("projets")) {
+
+            PendingProjectsGUI.open(p);
+
+            return true;
+        }
+
+        //
+        // ❌ RETIRER
+        //
+
+        if (args[0].equalsIgnoreCase("retirer")) {
+
+            if (args.length < 2) {
+
+                p.sendMessage(
+                        "§c/urbanisme retirer <id>"
+                );
+
+                return true;
+            }
+
+            TownSubmission sub =
+                    SubmissionStorage.get(
+                            args[1]
+                    );
+
+            if (sub == null) {
+
+                p.sendMessage(
+                        "§cProjet introuvable."
+                );
+
+                return true;
+            }
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(
+                            town.getName()
+                    )) {
+
+                p.sendMessage(
+                        "§cProjet invalide."
+                );
+
+                return true;
+            }
+
+            SubmissionStorage.delete(
+                    sub.getId()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§cProjet supprimé"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7ID: §f"
+                            + sub.getId()
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return true;
+        }
+
+        return true;
     }
 }
