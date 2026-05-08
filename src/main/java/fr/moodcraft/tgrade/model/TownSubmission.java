@@ -1,142 +1,290 @@
-package fr.moodcraft.tgrade.model;
+package fr.moodcraft.tgrade.listener;
 
-import java.util.UUID;
+import fr.moodcraft.tgrade.gui.ClassementGUI;
+import fr.moodcraft.tgrade.gui.PendingProjectsGUI;
+import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
-public class TownSubmission {
+import fr.moodcraft.tgrade.manager.GradeManager;
 
-    //
-    // 🆔 ID UNIQUE
-    //
+import fr.moodcraft.tgrade.model.TownGrade;
 
-    private final String id;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Town;
 
-    //
-    // 🏙 VILLE
-    //
+import org.bukkit.Sound;
 
-    private final String town;
+import org.bukkit.entity.Player;
 
-    //
-    // 🏗 NOM DU PROJET
-    //
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-    private final String buildName;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
-    //
-    // 🌍 MONDE
-    //
+public class UrbanismeAdminListener
+        implements Listener {
 
-    private final String world;
+    @EventHandler
+    public void click(
+            InventoryClickEvent e
+    ) {
 
-    //
-    // 📍 COORDONNÉES
-    //
+        //
+        // 🌌 GUI CHECK
+        //
 
-    private final int x;
-    private final int y;
-    private final int z;
+        if (!e.getView()
+                .getTitle()
+                .equals("§8✦ Centre National")) {
+            return;
+        }
 
-    //
-    // 👤 JOUEUR
-    //
+        e.setCancelled(true);
 
-    private final UUID submittedBy;
+        //
+        // ❌ PLAYER
+        //
 
-    //
-    // 📅 DATE
-    //
+        if (!(e.getWhoClicked()
+                instanceof Player p)) {
+            return;
+        }
 
-    private final long timestamp;
+        //
+        // ❌ NULL
+        //
 
-    //
-    // 📌 STATUT
-    //
+        if (e.getCurrentItem() == null) {
+            return;
+        }
 
-    private SubmissionStatus status;
+        int slot =
+                e.getRawSlot();
 
-    //
-    // 🏗 CONSTRUCTEUR
-    //
+        //
+        // 📋 PROJETS + 📝 NOTATION
+        //
 
-    public TownSubmission(String id,
-                          String town,
-                          String buildName,
-                          String world,
-                          int x,
-                          int y,
-                          int z,
-                          UUID submittedBy,
-                          long timestamp,
-                          SubmissionStatus status) {
+        if (slot == 13 || slot == 22) {
 
-        this.id = id;
+            p.playSound(
 
-        this.town = town;
+                    p.getLocation(),
 
-        this.buildName = buildName;
+                    Sound.UI_BUTTON_CLICK,
 
-        this.world = world;
+                    1f,
 
-        this.x = x;
-        this.y = y;
-        this.z = z;
+                    1.1f
+            );
 
-        this.submittedBy = submittedBy;
+            PendingProjectsGUI.open(p);
 
-        this.timestamp = timestamp;
+            return;
+        }
 
-        this.status = status;
-    }
+        //
+        // 💰 DISTRIBUTION NATIONALE
+        //
 
-    //
-    // 🆔 GETTERS
-    //
+        if (slot == 31) {
 
-    public String getId() {
-        return id;
-    }
+            p.playSound(
 
-    public String getTown() {
-        return town;
-    }
+                    p.getLocation(),
 
-    public String getBuildName() {
-        return buildName;
-    }
+                    Sound.BLOCK_BEACON_ACTIVATE,
 
-    public String getWorld() {
-        return world;
-    }
+                    1f,
 
-    public int getX() {
-        return x;
-    }
+                    1f
+            );
 
-    public int getY() {
-        return y;
-    }
+            int paid = 0;
 
-    public int getZ() {
-        return z;
-    }
+            double total = 0;
 
-    public UUID getSubmittedBy() {
-        return submittedBy;
-    }
+            //
+            // 📚 LOOP VILLES
+            //
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+            for (TownGrade grade :
+                    GradeManager.getAll()) {
 
-    public SubmissionStatus getStatus() {
-        return status;
-    }
+                //
+                // ❌ NON VALIDÉ
+                //
 
-    //
-    // 🔄 STATUS
-    //
+                if (!grade.isFinished()) {
+                    continue;
+                }
 
-    public void setStatus(SubmissionStatus status) {
-        this.status = status;
+                //
+                // ❌ DÉJÀ PAYÉ
+                //
+
+                if (grade.isPayoutClaimed()) {
+                    continue;
+                }
+
+                //
+                // 💰 BOURSE OFFICIELLE
+                //
+
+                double amount =
+                        grade.getPayout();
+
+                //
+                // ❌ SÉCURITÉ
+                //
+
+                if (amount <= 0) {
+                    continue;
+                }
+
+                //
+                // 🏙 TOWNY
+                //
+
+                Town town;
+
+                try {
+
+                    town = TownyAPI
+                            .getInstance()
+                            .getTown(
+                                    grade.getTown()
+                            );
+
+                } catch (Exception ex) {
+
+                    continue;
+                }
+
+                //
+                // ❌ VILLE INTROUVABLE
+                //
+
+                if (town == null) {
+                    continue;
+                }
+
+                //
+                // 🏦 VERSEMENT BANQUE VILLE
+                //
+
+                try {
+
+                    town.getAccount()
+                            .deposit(
+
+                                    amount,
+
+                                    "Subvention Nationale"
+                            );
+
+                } catch (Exception ex) {
+
+                    continue;
+                }
+
+                //
+                // ✅ CLAIMED
+                //
+
+                grade.setPayoutClaimed(true);
+
+                GradeManager.save(grade);
+
+                paid++;
+
+                total += amount;
+            }
+
+            //
+            // 📢 RAPPORT
+            //
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage(
+                    "§6✦ Distribution Nationale"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§7Subventions distribuées: §e"
+                            + paid
+            );
+
+            p.sendMessage(
+                    "§7Budget national versé: §a"
+                            + String.format(
+                            "%,.0f",
+                            total
+                    )
+                            + "€"
+            );
+
+            p.sendMessage("");
+
+            p.sendMessage(
+                    "§a✔ Commission budgétaire validée"
+            );
+
+            p.sendMessage(
+                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            );
+
+            p.sendMessage("");
+
+            return;
+        }
+
+        //
+        // 🏆 CLASSEMENT
+        //
+
+        if (slot == 33) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                    1f,
+
+                    1f
+            );
+
+            ClassementGUI.open(p);
+
+            return;
+        }
+
+        //
+        // 🔙 RETOUR
+        //
+
+        if (slot == 40) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    0.8f
+            );
+
+            UrbanismeMainGUI.open(p);
+        }
     }
 }
