@@ -33,6 +33,18 @@ public class TownGrade {
 
     private boolean payoutClaimed;
 
+    //
+    // 🔒 DOSSIER VERROUILLÉ
+    //
+
+    private boolean locked;
+
+    //
+    // 📊 NOTE FINALE
+    //
+
+    private double finalScore;
+
     public TownGrade(String town) {
 
         this.town = town;
@@ -314,6 +326,16 @@ public class TownGrade {
         return payoutClaimed;
     }
 
+    public boolean isLocked() {
+
+        return locked;
+    }
+
+    public double getFinalScore() {
+
+        return finalScore;
+    }
+
     //
     // ✏️ SETTERS
     //
@@ -384,5 +406,21 @@ public class TownGrade {
 
         this.payoutClaimed =
                 payoutClaimed;
+    }
+
+    public void setLocked(
+            boolean locked
+    ) {
+
+        this.locked =
+                locked;
+    }
+
+    public void setFinalScore(
+            double finalScore
+    ) {
+
+        this.finalScore =
+                finalScore;
     }
 }
