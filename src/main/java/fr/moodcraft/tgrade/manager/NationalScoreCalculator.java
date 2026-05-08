@@ -31,6 +31,10 @@ public class NationalScoreCalculator {
             String town
     ) {
 
+        if (town == null) {
+            return 0;
+        }
+
         double staff =
                 getStaffScore(town);
 
@@ -57,6 +61,10 @@ public class NationalScoreCalculator {
     public static double getStaffScore(
             String town
     ) {
+
+        if (town == null) {
+            return 0;
+        }
 
         List<StaffVote> votes =
                 VoteStorage
@@ -85,6 +93,10 @@ public class NationalScoreCalculator {
     public static double getMayorScore(
             String town
     ) {
+
+        if (town == null) {
+            return 0;
+        }
 
         List<MayorVote> votes =
                 VoteStorage
@@ -119,6 +131,10 @@ public class NationalScoreCalculator {
             String town
     ) {
 
+        if (town == null) {
+            return 0;
+        }
+
         List<CitizenVote> votes =
                 VoteStorage
                         .getCitizenVotes(town);
@@ -152,6 +168,10 @@ public class NationalScoreCalculator {
             String town
     ) {
 
+        if (town == null) {
+            return 0;
+        }
+
         return VoteStorage
                 .getCitizenVotes(town)
                 .size();
@@ -164,6 +184,10 @@ public class NationalScoreCalculator {
     public static int getMayorCount(
             String town
     ) {
+
+        if (town == null) {
+            return 0;
+        }
 
         return VoteStorage
                 .getMayorVotes(town)
@@ -178,9 +202,24 @@ public class NationalScoreCalculator {
             String town
     ) {
 
+        if (town == null) {
+            return 0;
+        }
+
         return VoteStorage
                 .getStaffVotes(town)
                 .size();
+    }
+
+    //
+    // 🔢 PUBLIC ROUND
+    //
+
+    public static double roundScore(
+            double value
+    ) {
+
+        return round(value);
     }
 
     //
