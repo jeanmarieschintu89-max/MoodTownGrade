@@ -2,13 +2,11 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
 
-import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
 import fr.moodcraft.tgrade.model.StaffVote;
-import fr.moodcraft.tgrade.model.TownGrade;
 
 import fr.moodcraft.tgrade.storage.VoteStorage;
 
@@ -102,13 +100,8 @@ public class RateGUIListener
 
             case RateGUI.SAVE -> {
 
-                TownGrade grade =
-                        GradeManager.get(
-                                session.getTown()
-                        );
-
                 //
-                // 🏛 SAVE STAFF VOTE
+                // 🏛 SAVE STAFF VOTE ONLY
                 //
 
                 StaffVote vote =
@@ -151,71 +144,9 @@ public class RateGUIListener
 
                 VoteStorage.saveStaffVote(vote);
 
-                //
-                // ✅ VALIDATION FINALE DU DOSSIER
-                //
-
-                grade.setArchitecture(
-                        session.getArchitecture()
-                );
-
-                grade.setStyle(
-                        session.getCoherence()
-                );
-
-                grade.setActivite(
-                        session.getActivite()
-                );
-
-                grade.setBanque(
-                        session.getBanque()
-                );
-
-                grade.setRemarquable(
-                        session.getBuild()
-                );
-
-                grade.setRp(
-                        session.getRoleplay()
-                );
-
-                grade.setTaille(
-                        session.getTaille()
-                );
-
-                grade.setVotes(
-                        session.getVotes()
-                );
-
-                grade.setFinished(true);
-
-                GradeManager.save(grade);
-
-                //
-                // 📊 SCORES FIGÉS À L'INSTANT
-                //
-
-                double national =
-                        NationalScoreCalculator
-                                .getFinalScore(
-                                        session.getTown()
-                                );
-
                 double staff =
                         NationalScoreCalculator
                                 .getStaffScore(
-                                        session.getTown()
-                                );
-
-                double mayors =
-                        NationalScoreCalculator
-                                .getMayorScore(
-                                        session.getTown()
-                                );
-
-                double citizens =
-                        NationalScoreCalculator
-                                .getCitizenScore(
                                         session.getTown()
                                 );
 
@@ -226,23 +157,16 @@ public class RateGUIListener
                         "§8----- §6Commission Urbaine §8-----"
                 );
                 p.sendMessage(
-                        "§fDossier urbain validé définitivement."
+                        "§fVote staff enregistré."
                 );
                 p.sendMessage(
                         "§7Ville: §b" + session.getTown()
                 );
                 p.sendMessage(
-                        "§7Commission: §e" + staff + "§7/50"
+                        "§7Moyenne Commission: §e" + staff + "§7/50"
                 );
                 p.sendMessage(
-                        "§7Prestige national: §e" + national + "§7/50"
-                );
-                p.sendMessage(
-                        "§7Votes pris en compte: §6Maires §e" + mayors
-                                + " §8| §6Citoyens §e" + citizens
-                );
-                p.sendMessage(
-                        "§a✔ Analyse nationale clôturée."
+                        "§a✔ Le dossier reste ouvert aux votes."
                 );
                 p.sendMessage("");
 
