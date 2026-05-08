@@ -86,7 +86,7 @@ public class TownGrade {
                         ? finalScore
                         : getTotal();
 
-        if (total <= 10) {
+        if (total <= 15) {
 
             return
                     "§8✦ Hameau en friche";
@@ -98,16 +98,34 @@ public class TownGrade {
                     "§7✦ Commune rurale";
         }
 
+        if (total <= 25) {
+
+            return
+                    "§e✦ Ville émergente";
+        }
+
         if (total <= 30) {
 
             return
                     "§a✦ Ville reconnue";
         }
 
+        if (total <= 35) {
+
+            return
+                    "§b✦ Ville majeure";
+        }
+
         if (total <= 40) {
 
             return
                     "§b✦ Métropole prospère";
+        }
+
+        if (total <= 45) {
+
+            return
+                    "§6✦ Capitale régionale";
         }
 
         if (total <= 49) {
@@ -131,75 +149,39 @@ public class TownGrade {
                         ? finalScore
                         : getTotal();
 
-        //
-        // 🪨 RUINES
-        //
-
-        if (total <= 10) {
+        if (total <= 15) {
             return 0;
         }
 
-        //
-        // 🏚 PETITE COMMUNE
-        //
-
         if (total <= 20) {
-            return 10000;
+            return 15000;
         }
-
-        //
-        // 🏘 VILLE CORRECTE
-        //
 
         if (total <= 25) {
-            return 30000;
+            return 35000;
         }
-
-        //
-        // 🏙 VILLE ACTIVE
-        //
 
         if (total <= 30) {
             return 75000;
         }
 
-        //
-        // 🌆 GRANDE VILLE
-        //
-
         if (total <= 35) {
-            return 150000;
+            return 125000;
         }
-
-        //
-        // 🏛 MÉTROPOLE
-        //
 
         if (total <= 40) {
-            return 300000;
+            return 200000;
         }
-
-        //
-        // 👑 CAPITALE
-        //
 
         if (total <= 45) {
-            return 600000;
+            return 350000;
         }
-
-        //
-        // 💎 ÉLITE
-        //
 
         if (total <= 49) {
-            return 1000000;
+            return 500000;
         }
 
-        //
-        // 🌟 MERVEILLE NATIONALE
-        //
-
-        return 1500000;
+        return 1000000;
     }
 
     //
@@ -213,22 +195,22 @@ public class TownGrade {
                         ? finalScore
                         : getTotal();
 
-        if (total <= 10) {
+        if (total <= 15) {
 
             return
-                    "§7Avis: aide minimale accordée pour lancer le développement.";
+                    "§7Avis: dossier trop faible, aucun financement national accordé.";
         }
 
         if (total <= 20) {
 
             return
-                    "§7Avis: commune en construction, soutien national modéré.";
+                    "§7Avis: commune rurale, soutien national limité.";
         }
 
         if (total <= 25) {
 
             return
-                    "§eAvis: dossier fragile mais recevable pour un financement.";
+                    "§eAvis: ville émergente, effort urbain reconnu.";
         }
 
         if (total <= 30) {
@@ -240,7 +222,7 @@ public class TownGrade {
         if (total <= 35) {
 
             return
-                    "§bAvis: ville solide, organisation municipale visible.";
+                    "§bAvis: ville majeure, organisation municipale visible.";
         }
 
         if (total <= 40) {
@@ -252,7 +234,7 @@ public class TownGrade {
         if (total <= 45) {
 
             return
-                    "§6Avis: cité majeure, référence nationale montante.";
+                    "§6Avis: capitale régionale, référence nationale montante.";
         }
 
         if (total <= 49) {
@@ -276,7 +258,7 @@ public class TownGrade {
                         ? finalScore
                         : getTotal();
 
-        if (total <= 10) {
+        if (total <= 15) {
 
             return "§8";
         }
