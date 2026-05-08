@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade.listener;
 import fr.moodcraft.tgrade.gui.CitizenVoteGUI;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
+import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.CitizenVote;
 
@@ -191,27 +192,108 @@ public class CitizenVoteListener
                         vote
                 );
 
+                //
+                // 📊 SCORES
+                //
+
+                double national =
+                        NationalScoreCalculator
+                                .getFinalScore(
+                                        town
+                                );
+
+                double staff =
+                        NationalScoreCalculator
+                                .getStaffScore(
+                                        town
+                                );
+
+                double mayors =
+                        NationalScoreCalculator
+                                .getMayorScore(
+                                        town
+                                );
+
+                double citizens =
+                        NationalScoreCalculator
+                                .getCitizenScore(
+                                        town
+                                );
+
+                //
+                // 🔒 CLOSE
+                //
+
                 p.closeInventory();
 
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━"
-                );
-
-                p.sendMessage(
-                        "§b✦ Vote Citoyen"
-                );
+                //
+                // 📢 MESSAGE
+                //
 
                 p.sendMessage("");
 
                 p.sendMessage(
-                        "§7Votre avis sur §b"
-                                + town
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
                 );
 
                 p.sendMessage(
-                        "§7a été enregistré."
+                        "§b✦ Registre Citoyen National"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Votre avis concernant la ville"
+                );
+
+                p.sendMessage(
+                        "§b" + town
+                );
+
+                p.sendMessage(
+                        "§7a été archivé dans les registres"
+                );
+
+                p.sendMessage(
+                        "§7de la commission urbaine."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Influence citoyenne:"
+                );
+
+                p.sendMessage(
+                        " §bParticipation nationale enregistrée"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Prestige urbain actuel:"
+                );
+
+                p.sendMessage(
+                        " §e" + national + "§7/50"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Répartition des influences:"
+                );
+
+                p.sendMessage(
+                        " §6🏛 Staff: §e" + staff
+                );
+
+                p.sendMessage(
+                        " §6👑 Maires: §e" + mayors
+                );
+
+                p.sendMessage(
+                        " §6👥 Citoyens: §e" + citizens
                 );
 
                 p.sendMessage("");
@@ -220,11 +302,17 @@ public class CitizenVoteListener
                         "§a✔ Merci pour votre participation"
                 );
 
+                p.sendMessage("");
+
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━"
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
                 );
 
                 p.sendMessage("");
+
+                //
+                // 🔊 SOUND
+                //
 
                 p.playSound(
 
