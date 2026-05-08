@@ -43,7 +43,9 @@ public class PayoutManager {
             }
 
             double national =
-                    NationalScoreCalculator
+                    grade.isLocked()
+                            ? grade.getFinalScore()
+                            : NationalScoreCalculator
                             .getFinalScore(
                                     grade.getTown()
                             );
@@ -114,6 +116,10 @@ public class PayoutManager {
 
             total += payout;
 
+            //
+            // 📢 GLOBAL
+            //
+
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(
                     "§8----- §6Commission Urbaine §8-----"
@@ -158,6 +164,10 @@ public class PayoutManager {
                     "§a✔ Fonds inscrits au registre national."
             );
             Bukkit.broadcastMessage("");
+
+            //
+            // 👑 MESSAGE MAIRE
+            //
 
             Player mayor =
                     town.getMayor()
@@ -208,7 +218,7 @@ public class PayoutManager {
             }
 
             //
-            // 👥 MESSAGE AUX HABITANTS
+            // 👥 MESSAGE HABITANTS
             //
 
             for (Player online :
