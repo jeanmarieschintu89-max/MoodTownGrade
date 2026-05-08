@@ -102,28 +102,26 @@ public class MayorTownListGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§6✦ Conseil National des Maires"
+                "§6✦ Conseil des Maires"
         );
 
         headerMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Gouvernance §8-----",
 
                 "§7Assemblée des municipalités",
 
-                "§7et influence gouvernementale.",
+                "§7et influence nationale.",
 
                 "",
 
-                "§7Les décisions du conseil",
+                "§7Les votes du conseil",
 
-                "§7impactent le prestige",
-
-                "§7national des villes.",
+                "§7agissent sur le §ePrestige§7.",
 
                 "",
 
-                "§6▶ Influence politique nationale"
+                "§6▶ Registre gouvernemental"
         ));
 
         header.setItemMeta(headerMeta);
@@ -173,12 +171,12 @@ public class MayorTownListGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§c✦ Aucun projet inspecté"
+                    "§c✖ Aucun dossier inspecté"
             );
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Conseil National §8-----",
 
                     "§7Aucune municipalité",
 
@@ -188,11 +186,9 @@ public class MayorTownListGUI {
 
                     "",
 
-                    "§7Le conseil des maires",
+                    "§7Le conseil ouvrira après",
 
-                    "§7ouvrira après inspection",
-
-                    "§7des premiers projets.",
+                    "§7les premières inspections.",
 
                     "",
 
@@ -224,7 +220,7 @@ public class MayorTownListGUI {
 
             backMeta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Commission Urbaine §8-----",
 
                     "§7Retourner au menu",
 
@@ -351,34 +347,30 @@ public class MayorTownListGUI {
                     item.getItemMeta();
 
             meta.setDisplayName(
-                    "§6✦ " + town
+                    "§f✦ §b" + town
             );
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Ville Validée §8-----",
 
-                    "§7Prestige national:",
-
-                    " §e"
+                    "§7Prestige national: §e"
                             + String.format("%.1f", score)
                             + "§7/50",
 
-                    "",
-
-                    "§7Votes gouvernementaux: §6"
+                    "§7Votes du conseil: §6"
                             + mayors,
 
-                    "",
-
-                    "§7Classement actuel: §e#"
+                    "§7Classement: §e#"
                             + (position == -1
                             ? "Non classé"
                             : position),
 
                     "",
 
-                    "§7Influence municipale active",
+                    "§7Influence municipale",
+
+                    "§7prise en compte.",
 
                     "",
 
@@ -413,7 +405,7 @@ public class MayorTownListGUI {
 
         backMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Commission Urbaine §8-----",
 
                 "§7Retourner au menu",
 
