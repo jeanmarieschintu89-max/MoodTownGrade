@@ -33,7 +33,7 @@ public class UrbanismeMainGUI {
 
                         null,
 
-                        36,
+                        54,
 
                         "§8✦ Commission Urbaine"
                 );
@@ -74,7 +74,11 @@ public class UrbanismeMainGUI {
 
                 18,26,
 
-                27,28,29,30,31,32,33,34,35
+                27,35,
+
+                36,44,
+
+                45,46,47,48,50,51,52,53
         };
 
         for (int slot : borders) {
@@ -98,9 +102,9 @@ public class UrbanismeMainGUI {
 
                         "§8━━━━━━━━━━━━━━━━",
 
-                        "§7Administration officielle",
+                        "§7Gestion des villes",
 
-                        "§7des villes de MoodCraft.",
+                        "§7et prestige urbain.",
 
                         "",
 
@@ -112,125 +116,41 @@ public class UrbanismeMainGUI {
 
                         "",
 
-                        "§e▶ Système urbain national"
+                        "§e▶ Système national MoodCraft"
                 )
         );
 
         //
-        // 📜 PROJETS
+        // 🏗 PROJETS
         //
 
         inv.setItem(
 
-                11,
+                20,
 
                 item(
 
                         Material.WRITABLE_BOOK,
 
-                        "§b📜 Dossiers Urbains",
+                        "§b🏗 Projets Urbains",
 
                         "§8━━━━━━━━━━━━━━━━",
 
-                        "§7Consulter les projets",
+                        "§7Consultez les projets",
+
+                        "§7et constructions RP",
 
                         "§7de votre municipalité.",
 
                         "",
 
-                        "§7Accès aux dossiers",
+                        "§7Suivi des validations",
 
-                        "§7validés et inspections.",
-
-                        "",
-
-                        "§b▶ Ouvrir les dossiers"
-                )
-        );
-
-        //
-        // ➕ SOUMISSION
-        //
-
-        inv.setItem(
-
-                13,
-
-                item(
-
-                        Material.NETHER_STAR,
-
-                        "§a➕ Déposer un Projet",
-
-                        "§8━━━━━━━━━━━━━━━━",
-
-                        "§7Déclarer une nouvelle",
-
-                        "§7construction RP officielle.",
+                        "§7et inspections urbaines.",
 
                         "",
 
-                        "§7Place-toi devant",
-
-                        "§7la construction concernée.",
-
-                        "",
-
-                        "§a▶ Créer un dossier urbain"
-                )
-        );
-
-        //
-        // 🏆 CLASSEMENT
-        //
-
-        inv.setItem(
-
-                15,
-
-                item(
-
-                        Material.GOLD_INGOT,
-
-                        "§6🏆 Palmarès National",
-
-                        "§8━━━━━━━━━━━━━━━━",
-
-                        "§7Consulter le classement",
-
-                        "§7des villes inspectées.",
-
-                        "",
-
-                        "§7Prestige national",
-
-                        "§7et financements urbains.",
-
-                        "",
-
-                        "§6▶ Voir le classement"
-                )
-        );
-
-        //
-        // 🔙 MENU
-        //
-
-        inv.setItem(
-
-                21,
-
-                item(
-
-                        Material.ARROW,
-
-                        "§c⬅ Retour Principal",
-
-                        "§8━━━━━━━━━━━━━━━━",
-
-                        "§7Retourner au menu",
-
-                        "§7principal de MoodCraft."
+                        "§b▶ Accéder aux projets"
                 )
         );
 
@@ -244,27 +164,89 @@ public class UrbanismeMainGUI {
 
                 item(
 
-                        Material.WRITABLE_BOOK,
+                        Material.BOOK,
 
                         "§b✦ Avis Citoyens",
 
                         "§8━━━━━━━━━━━━━━━━",
 
-                        "§7Consultez les villes",
+                        "§7Participez aux votes",
 
-                        "§7et participez au",
+                        "§7et influencez le",
+
+                        "§7prestige des villes.",
+
+                        "",
+
+                        "§7Impact sur le",
 
                         "§7classement national.",
 
                         "",
 
-                        "§7Influencez le prestige",
+                        "§b▶ Participer aux votes"
+                )
+        );
 
-                        "§7urbain de MoodCraft.",
+        //
+        // 🏆 CLASSEMENT
+        //
+
+        inv.setItem(
+
+                24,
+
+                item(
+
+                        Material.GOLD_INGOT,
+
+                        "§6🏆 Palmarès National",
+
+                        "§8━━━━━━━━━━━━━━━━",
+
+                        "§7Consultez le classement",
+
+                        "§7officiel des villes",
+
+                        "§7de MoodCraft.",
 
                         "",
 
-                        "§b▶ Participer aux votes"
+                        "§7Prestige national,",
+
+                        "§7votes et financements.",
+
+                        "",
+
+                        "§6▶ Voir le palmarès"
+                )
+        );
+
+        //
+        // ➕ SOUMISSION
+        //
+
+        inv.setItem(
+
+                30,
+
+                item(
+
+                        Material.NETHER_STAR,
+
+                        "§a➕ Déposer un Projet",
+
+                        "§8━━━━━━━━━━━━━━━━",
+
+                        "§7Proposer une nouvelle",
+
+                        "§7construction RP pour",
+
+                        "§7votre municipalité.",
+
+                        "",
+
+                        "§a▶ Créer un projet"
                 )
         );
 
@@ -274,7 +256,7 @@ public class UrbanismeMainGUI {
 
         inv.setItem(
 
-                23,
+                32,
 
                 item(
 
@@ -284,15 +266,11 @@ public class UrbanismeMainGUI {
 
                         "§8━━━━━━━━━━━━━━━━",
 
-                        "§7Assemblée nationale",
+                        "§7Votes et influence",
 
-                        "§7des municipalités.",
+                        "§7des municipalités",
 
-                        "",
-
-                        "§7Influence politique",
-
-                        "§7et évaluations RP.",
+                        "§7de MoodCraft.",
 
                         "",
 
@@ -309,7 +287,7 @@ public class UrbanismeMainGUI {
 
             inv.setItem(
 
-                    31,
+                    34,
 
                     item(
 
@@ -319,15 +297,11 @@ public class UrbanismeMainGUI {
 
                             "§8━━━━━━━━━━━━━━━━",
 
-                            "§7Gestion gouvernementale",
+                            "§7Gestion des inspections",
 
-                            "§7des inspections urbaines.",
+                            "§7et administration",
 
-                            "",
-
-                            "§7Administration des",
-
-                            "§7dossiers nationaux.",
+                            "§7urbaine nationale.",
 
                             "",
 
@@ -335,6 +309,28 @@ public class UrbanismeMainGUI {
                     )
             );
         }
+
+        //
+        // 🔙 RETOUR
+        //
+
+        inv.setItem(
+
+                49,
+
+                item(
+
+                        Material.ARROW,
+
+                        "§c⬅ Retour",
+
+                        "§8━━━━━━━━━━━━━━━━",
+
+                        "§7Retourner au menu",
+
+                        "§7principal de MoodCraft."
+                )
+        );
 
         //
         // 🚀 OPEN
