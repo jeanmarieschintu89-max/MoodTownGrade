@@ -1,8 +1,11 @@
 package fr.moodcraft.tgrade.gui;
 
-import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
-import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 
@@ -16,8 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EvaluationManagerGUI {
 
@@ -37,10 +41,6 @@ public class EvaluationManagerGUI {
                         "§8✦ Évaluations Nationales"
                 );
 
-        //
-        // 🌌 GLASS
-        //
-
         ItemStack glass =
                 new ItemStack(
                         Material.BLACK_STAINED_GLASS_PANE
@@ -54,10 +54,6 @@ public class EvaluationManagerGUI {
         );
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -92,25 +88,20 @@ public class EvaluationManagerGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§b✦ Registre des Évaluations"
+                "§6✦ Registre des Évaluations"
         );
 
         headerMeta.setLore(List.of(
 
                 "§8----- §6Commission Urbaine §8-----",
 
-                "§7Gestion des notes",
+                "§7Sélectionnez une ville",
 
-                "§7et inspections nationales.",
-
-                "",
-
-                "§7Villes enregistrées: §b"
-                        + GradeManager.getAll().size(),
+                "§7pour ouvrir sa notation.",
 
                 "",
 
-                "§b▶ Révision administrative"
+                "§e▶ Évaluation nationale"
         ));
 
         header.setItemMeta(headerMeta);
@@ -118,133 +109,120 @@ public class EvaluationManagerGUI {
         inv.setItem(4, header);
 
         //
-        // 📚 LISTE
+        // 🏙 VILLES VALIDÉES
         //
 
-        List<TownGrade> grades =
-                new ArrayList<>(
-                        GradeManager.getAll()
-                );
+        Set<String> towns =
+                new HashSet<>();
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (sub.getStatus()
+                    != SubmissionStatus.APPROVED) {
+
+                continue;
+            }
+
+            towns.add(
+                    sub.getTown()
+            );
+        }
+
+        List<String> sorted =
+                new ArrayList<>(towns);
+
+        sorted.sort(String::compareToIgnoreCase);
 
         //
-        // 🏆 TRI SCORE
+        // ❌ EMPTY
         //
 
-        grades.sort(
-                Comparator.comparingInt(
-                        TownGrade::getTotal
-                ).reversed()
-        );
+        if (sorted.isEmpty()) {
+
+            ItemStack empty =
+                    new ItemStack(
+                            Material.BARRIER
+                    );
+
+            ItemMeta meta =
+                    empty.getItemMeta();
+
+            meta.setDisplayName(
+                    "§c✖ Aucune ville évaluable"
+            );
+
+            meta.setLore(List.of(
+
+                    "§8----- §6Registre National §8-----",
+
+                    "§7Aucun projet validé",
+
+                    "§7n'est disponible pour",
+
+                    "§7une notation nationale.",
+
+                    "",
+
+                    "§e▶ Validez d'abord un projet"
+            ));
+
+            empty.setItemMeta(meta);
+
+            inv.setItem(22, empty);
+        }
 
         //
-        // 📦 SLOT
+        // 📦 LISTE
         //
 
         int slot = 10;
 
-        for (TownGrade grade : grades) {
+        for (String town : sorted) {
 
             if (slot >= 44)
                 break;
 
-            Material mat;
-
-            int total =
-                    grade.getTotal();
-
-            if (total >= 45) {
-
-                mat = Material.NETHER_STAR;
-
-            } else if (total >= 35) {
-
-                mat = Material.BEACON;
-
-            } else if (total >= 25) {
-
-                mat = Material.EMERALD;
-
-            } else if (total >= 15) {
-
-                mat = Material.GOLD_INGOT;
-
-            } else {
-
-                mat = Material.IRON_INGOT;
-            }
+            double score =
+                    NationalScoreCalculator
+                            .getFinalScore(town);
 
             ItemStack item =
-                    new ItemStack(mat);
+                    new ItemStack(
+                            Material.BEACON
+                    );
 
             ItemMeta meta =
                     item.getItemMeta();
 
             meta.setDisplayName(
-                    "§f✦ §b" + grade.getTown()
+                    "§f✦ §b" + town
             );
 
             meta.setLore(List.of(
 
-                    "§8----- §6Dossier Ville §8-----",
+                    "§8----- §6Dossier National §8-----",
 
-                    "§7Score global:",
-                    grade.getFormattedScore(),
+                    "§7Ville: §b" + town,
 
-                    "§7Rang urbain:",
-                    grade.getRank(),
-
-                    "",
-
-                    "§7Architecture: §e"
-                            + grade.getArchitecture()
-                            + "§7/10",
-
-                    "§7Cohérence: §e"
-                            + grade.getStyle()
-                            + "§7/6",
-
-                    "§7Activité: §e"
-                            + grade.getActivite()
-                            + "§7/8",
-
-                    "§7Banque: §e"
-                            + grade.getBanque()
-                            + "§7/4",
-
-                    "§7Urbanisme: §e"
-                            + grade.getRemarquable()
-                            + "§7/8",
-
-                    "§7RolePlay: §e"
-                            + grade.getRp()
-                            + "§7/6",
-
-                    "§7Développement: §e"
-                            + grade.getTaille()
-                            + "§7/3",
-
-                    "§7Votes citoyens: §e"
-                            + grade.getVotes()
-                            + "§7/5",
+                    "§7Prestige actuel: §e"
+                            + score
+                            + "§7/50",
 
                     "",
 
-                    grade.isFinished()
-                            ? "§a✔ Inspection validée"
-                            : "§6⌛ Évaluation en cours",
+                    "§7Ouvre directement le",
+
+                    "§7menu de notation officiel.",
 
                     "",
 
-                    "§b▶ Modifier le dossier"
+                    "§e▶ Noter cette ville"
             ));
 
             item.setItemMeta(meta);
 
             inv.setItem(slot, item);
-
-            //
-            // ➡ NEXT SLOT
-            //
 
             slot++;
 
@@ -256,44 +234,6 @@ public class EvaluationManagerGUI {
 
             if (slot == 35)
                 slot = 37;
-        }
-
-        //
-        // ❌ AUCUNE VILLE
-        //
-
-        if (grades.isEmpty()) {
-
-            ItemStack empty =
-                    new ItemStack(
-                            Material.BARRIER
-                    );
-
-            ItemMeta meta =
-                    empty.getItemMeta();
-
-            meta.setDisplayName(
-                    "§c✖ Aucune évaluation"
-            );
-
-            meta.setLore(List.of(
-
-                    "§8----- §6Registre National §8-----",
-
-                    "§7Aucune ville n'a encore",
-
-                    "§7été inspectée par",
-
-                    "§7la Commission.",
-
-                    "",
-
-                    "§e▶ En attente de dossiers"
-            ));
-
-            empty.setItemMeta(meta);
-
-            inv.setItem(22, empty);
         }
 
         //
@@ -324,10 +264,6 @@ public class EvaluationManagerGUI {
         back.setItemMeta(backMeta);
 
         inv.setItem(49, back);
-
-        //
-        // 🚀 OPEN
-        //
 
         p.openInventory(inv);
     }
