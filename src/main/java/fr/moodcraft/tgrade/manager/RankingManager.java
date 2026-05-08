@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.manager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
@@ -89,5 +90,69 @@ public class RankingManager {
         }
 
         return top.get(0);
+    }
+
+    //
+    // 📊 AVERAGE SCORE
+    //
+
+    public static double getAverageScore() {
+
+        List<TownGrade> top =
+                getTop();
+
+        if (top.isEmpty()) {
+            return 0;
+        }
+
+        double total = 0;
+
+        for (TownGrade grade : top) {
+
+            total += grade.getTotal();
+        }
+
+        return round(
+                total / top.size()
+        );
+    }
+
+    //
+    // 🏙 FINISHED TOWNS
+    //
+
+    public static int getFinishedTowns() {
+
+        return getTop().size();
+    }
+
+    //
+    // 🏆 TOTAL PRESTIGE
+    //
+
+    public static int getTotalPrestige() {
+
+        int total = 0;
+
+        for (TownGrade grade :
+                getTop()) {
+
+            total += grade.getTotal();
+        }
+
+        return total;
+    }
+
+    //
+    // 🔢 ROUND
+    //
+
+    private static double round(
+            double value
+    ) {
+
+        return Math.round(
+                value * 10.0
+        ) / 10.0;
     }
 }
