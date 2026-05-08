@@ -6,6 +6,8 @@ import fr.moodcraft.tgrade.listener.CitizenTownListListener;
 import fr.moodcraft.tgrade.listener.CitizenVoteListener;
 import fr.moodcraft.tgrade.listener.ClassementListener;
 import fr.moodcraft.tgrade.listener.GUIListener;
+import fr.moodcraft.tgrade.listener.MayorTownListListener;
+import fr.moodcraft.tgrade.listener.MayorVoteListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
 import fr.moodcraft.tgrade.listener.ProjectChatListener;
 import fr.moodcraft.tgrade.listener.ProjectReviewListener;
@@ -198,6 +200,24 @@ public class Main extends JavaPlugin {
                 );
 
         //
+        // 👑 VOTES MAIRES
+        //
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new MayorVoteListener(),
+                        this
+                );
+
+        getServer()
+                .getPluginManager()
+                .registerEvents(
+                        new MayorTownListListener(),
+                        this
+                );
+
+        //
         // 💬 CHAT INPUT
         //
 
@@ -265,6 +285,10 @@ public class Main extends JavaPlugin {
 
         getLogger().info(
                 "👥 Vote citoyen actif"
+        );
+
+        getLogger().info(
+                "👑 Conseil des maires actif"
         );
 
         getLogger().info(
