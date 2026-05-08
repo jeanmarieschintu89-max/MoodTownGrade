@@ -173,25 +173,27 @@ public class UrbanismeAdminGUI {
 
                 Material.ENCHANTED_BOOK,
 
-                "§b✦ Évaluations Nationales",
+                "§b✦ Suivi des Évaluations",
 
-                "§8----- §6Notation §8-----",
+                "§8----- §6Dossiers Validés §8-----",
 
-                "§7Réviser les notes",
+                "§7Gérer les villes",
 
-                "§7et rapports urbains.",
-
-                "",
-
-                "§8• §fRéévaluer une ville",
-
-                "§8• §fConsulter les scores",
-
-                "§8• §fAnalyser le classement",
+                "§7dont le permis est accordé.",
 
                 "",
 
-                "§b▶ Accéder aux évaluations"
+                "§8• §fInspection terrain",
+
+                "§8• §fNotation nationale",
+
+                "§8• §fClôture des votes",
+
+                "§8• §fRefus administratif",
+
+                "",
+
+                "§b▶ Ouvrir les dossiers"
         );
 
         //
@@ -243,9 +245,9 @@ public class UrbanismeAdminGUI {
 
                 "§8----- §6Classement §8-----",
 
-                "§7Consulter le prestige",
+                "§7Consulter les notes",
 
-                "§7officiel des villes.",
+                "§7officielles des villes.",
 
                 "",
 
