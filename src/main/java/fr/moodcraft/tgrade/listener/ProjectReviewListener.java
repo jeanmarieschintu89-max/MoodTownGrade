@@ -237,6 +237,30 @@ public class ProjectReviewListener
                 return;
             }
 
+            TownGrade grade =
+                    GradeManager.get(
+                            found.getTown()
+                    );
+
+            if (grade.isLocked()) {
+
+                p.playSound(
+                        p.getLocation(),
+                        Sound.ENTITY_VILLAGER_NO,
+                        1f,
+                        1f
+                );
+
+                p.sendMessage("");
+                p.sendMessage("§8----- §6Commission Urbaine §8-----");
+                p.sendMessage("§cLes notations sont clôturées.");
+                p.sendMessage("§7Ville: §b" + found.getTown());
+                p.sendMessage("§7Le registre national est verrouillé.");
+                p.sendMessage("");
+
+                return;
+            }
+
             p.playSound(
                     p.getLocation(),
                     Sound.BLOCK_BEACON_ACTIVATE,
@@ -282,7 +306,7 @@ public class ProjectReviewListener
                             found.getTown()
                     );
 
-            if (grade.isFinished()) {
+            if (grade.isLocked()) {
 
                 p.playSound(
                         p.getLocation(),
@@ -343,6 +367,12 @@ public class ProjectReviewListener
                             );
 
             grade.setFinished(true);
+
+            grade.setLocked(true);
+
+            grade.setFinalScore(
+                    national
+            );
 
             GradeManager.save(grade);
 
