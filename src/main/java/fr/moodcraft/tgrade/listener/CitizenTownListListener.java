@@ -169,7 +169,7 @@ public class CitizenTownListListener
         //
 
         if (!name.startsWith(
-                "§b✦ ")) {
+                "§f✦ §b")) {
 
             return;
         }
@@ -180,7 +180,7 @@ public class CitizenTownListListener
 
         String town =
                 name.replace(
-                        "§b✦ ",
+                        "§f✦ §b",
                         ""
                 );
 
