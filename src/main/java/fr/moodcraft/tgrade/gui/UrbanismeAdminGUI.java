@@ -117,15 +117,15 @@ public class UrbanismeAdminGUI {
 
         headerMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Administration §8-----",
 
-                "§7Administration officielle",
+                "§7Supervision officielle",
 
                 "§7des villes de MoodCraft.",
 
                 "",
 
-                "§7Dossiers en attente: §6"
+                "§7Dossiers en attente: §e"
                         + pending,
 
                 "§7Projets validés: §a"
@@ -136,7 +136,7 @@ public class UrbanismeAdminGUI {
 
                 "",
 
-                "§e▶ Réseau administratif national"
+                "§e▶ Registres nationaux"
         ));
 
         header.setItemMeta(headerMeta);
@@ -157,17 +157,15 @@ public class UrbanismeAdminGUI {
 
                 "§e✦ Inspection des Projets",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Dossiers Urbains §8-----",
 
                 "§7Consulter les dossiers",
 
-                "§7urbains transmis à",
-
-                "§7la commission nationale.",
+                "§7transmis à la Commission.",
 
                 "",
 
-                "§7Dossiers actifs: §6"
+                "§7Dossiers actifs: §e"
                         + pending,
 
                 "",
@@ -189,21 +187,17 @@ public class UrbanismeAdminGUI {
 
                 "§b✦ Évaluations Nationales",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Notation §8-----",
 
-                "§7Gestion des notes",
+                "§7Réviser les notes",
 
-                "§7et analyses urbaines",
-
-                "§7des villes inspectées.",
+                "§7et rapports urbains.",
 
                 "",
 
                 "§8• §fRéévaluer une ville",
 
                 "§8• §fConsulter les scores",
-
-                "§8• §fModifier les inspections",
 
                 "§8• §fAnalyser le classement",
 
@@ -224,9 +218,9 @@ public class UrbanismeAdminGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§2✦ Financements Nationaux",
+                "§a✦ Financements Nationaux",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Bourses Urbaines §8-----",
 
                 "§7Distribuer les aides",
 
@@ -234,9 +228,7 @@ public class UrbanismeAdminGUI {
 
                 "",
 
-                "§7Les villes sous §625/50",
-
-                "§7ne reçoivent aucune aide.",
+                "§7Condition minimale: §e25§7/50",
 
                 "",
 
@@ -255,23 +247,17 @@ public class UrbanismeAdminGUI {
 
                 Material.NETHER_STAR,
 
-                "§b✦ Palmarès National",
+                "§6✦ Palmarès National",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Classement §8-----",
 
-                "§7Classement officiel",
+                "§7Consulter le prestige",
 
-                "§7des villes inspectées.",
-
-                "",
-
-                "§7Consultation du prestige",
-
-                "§7urbain national.",
+                "§7officiel des villes.",
 
                 "",
 
-                "§b▶ Consulter le classement"
+                "§6▶ Voir le palmarès"
         );
 
         //
@@ -286,11 +272,11 @@ public class UrbanismeAdminGUI {
 
                 Material.ARROW,
 
-                "§c✦ Retour Administratif",
+                "§c⬅ Retour",
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Commission Urbaine §8-----",
 
-                "§7Retourner au centre",
+                "§7Retourner au menu",
 
                 "§7urbain principal."
         );
