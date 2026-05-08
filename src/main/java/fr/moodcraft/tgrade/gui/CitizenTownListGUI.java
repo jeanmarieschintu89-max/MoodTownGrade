@@ -1,9 +1,12 @@
 package fr.moodcraft.tgrade.gui;
 
-import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
+import fr.moodcraft.tgrade.manager.RankingManager;
 
-import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 
@@ -17,8 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CitizenTownListGUI {
 
@@ -66,7 +70,15 @@ public class CitizenTownListGUI {
 
                 0,1,2,3,4,5,6,7,8,
 
-                45,46,47,48,49,50,51,52,53
+                9,17,
+
+                18,26,
+
+                27,35,
+
+                36,44,
+
+                45,46,47,48,50,51,52,53
         };
 
         for (int slot : borders) {
@@ -78,29 +90,128 @@ public class CitizenTownListGUI {
         }
 
         //
-        // 🏙️ LISTE VILLES
+        // 🏙 VILLES VALIDÉES
         //
 
-        List<TownGrade> towns =
-                new ArrayList<>(
-                        GradeManager.getAll()
-                );
+        Set<String> towns =
+                new HashSet<>();
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            //
+            // ✅ UNIQUEMENT VALIDÉS
+            //
+
+            if (sub.getStatus()
+                    != SubmissionStatus.APPROVED) {
+
+                continue;
+            }
+
+            towns.add(
+                    sub.getTown()
+            );
+        }
 
         //
-        // 🏆 TRI SCORE
+        // ❌ AUCUNE VILLE
         //
 
-        towns.sort(
+        if (towns.isEmpty()) {
 
-                Comparator.comparingDouble(
+            ItemStack empty =
+                    new ItemStack(
+                            Material.BARRIER
+                    );
 
-                        grade ->
-                                -NationalScoreCalculator
-                                        .getFinalScore(
-                                                grade.getTown()
-                                        )
-                )
-        );
+            ItemMeta meta =
+                    empty.getItemMeta();
+
+            meta.setDisplayName(
+                    "§c✦ Aucun projet inspecté"
+            );
+
+            meta.setLore(List.of(
+
+                    "§8━━━━━━━━━━━━━━━━",
+
+                    "§7Aucune municipalité",
+
+                    "§7n'a encore reçu",
+
+                    "§7de validation nationale.",
+
+                    "",
+
+                    "§7Les villes apparaîtront",
+
+                    "§7ici après inspection.",
+
+                    "",
+
+                    "§c▶ Revenez plus tard"
+            ));
+
+            empty.setItemMeta(meta);
+
+            inv.setItem(
+                    22,
+                    empty
+            );
+
+            //
+            // 🔙 RETOUR
+            //
+
+            ItemStack back =
+                    new ItemStack(
+                            Material.BARRIER
+                    );
+
+            ItemMeta backMeta =
+                    back.getItemMeta();
+
+            backMeta.setDisplayName(
+                    "§c⬅ Retour"
+            );
+
+            back.setLore(List.of(
+
+                    "§8━━━━━━━━━━━━━━━━",
+
+                    "§7Retourner au menu",
+
+                    "§7de la commission."
+            ));
+
+            back.setItemMeta(backMeta);
+
+            inv.setItem(
+                    49,
+                    back
+            );
+
+            p.openInventory(inv);
+
+            return;
+        }
+
+        //
+        // 📚 LISTE
+        //
+
+        List<String> sorted =
+                new ArrayList<>(towns);
+
+        sorted.sort((a, b) -> Double.compare(
+
+                NationalScoreCalculator
+                        .getFinalScore(b),
+
+                NationalScoreCalculator
+                        .getFinalScore(a)
+        ));
 
         //
         // 📦 SLOT
@@ -109,10 +220,10 @@ public class CitizenTownListGUI {
         int slot = 10;
 
         //
-        // 📚 LOOP
+        // 🏙 LOOP
         //
 
-        for (TownGrade grade : towns) {
+        for (String town : sorted) {
 
             //
             // ⛔ SLOTS INVALIDES
@@ -135,11 +246,8 @@ public class CitizenTownListGUI {
             }
 
             //
-            // 🏙️ DATA
+            // 📊 DATA
             //
-
-            String town =
-                    grade.getTown();
 
             double score =
                     NationalScoreCalculator
@@ -153,14 +261,45 @@ public class CitizenTownListGUI {
                                     town
                             );
 
+            int position =
+                    RankingManager.getPosition(
+                            town
+                    );
+
+            //
+            // 🏆 MATERIAL
+            //
+
+            Material mat;
+
+            if (position == 1) {
+
+                mat = Material.NETHER_STAR;
+
+            } else if (position <= 3
+                    && position != -1) {
+
+                mat = Material.DIAMOND_BLOCK;
+
+            } else if (score >= 35) {
+
+                mat = Material.EMERALD_BLOCK;
+
+            } else if (score >= 20) {
+
+                mat = Material.BRICKS;
+
+            } else {
+
+                mat = Material.GRASS_BLOCK;
+            }
+
             //
             // 📦 ITEM
             //
 
             ItemStack item =
-                    new ItemStack(
-                            Material.GRASS_BLOCK
-                    );
+                    new ItemStack(mat);
 
             ItemMeta meta =
                     item.getItemMeta();
@@ -173,9 +312,11 @@ public class CitizenTownListGUI {
 
                     "§8━━━━━━━━━━━━━━━━",
 
-                    "§7Score national:",
+                    "§7Prestige national:",
 
-                    " §e" + score + "§7/50",
+                    " §e"
+                            + String.format("%.1f", score)
+                            + "§7/50",
 
                     "",
 
@@ -184,11 +325,14 @@ public class CitizenTownListGUI {
 
                     "",
 
-                    "§7Classement national actif",
+                    "§7Classement actuel: §6#"
+                            + (position == -1
+                            ? "Non classé"
+                            : position),
 
                     "",
 
-                    "§e▶ Cliquer pour voter"
+                    "§e▶ Consulter et voter"
             ));
 
             item.setItemMeta(meta);
@@ -207,15 +351,24 @@ public class CitizenTownListGUI {
 
         ItemStack back =
                 new ItemStack(
-                        Material.ARROW
+                        Material.BARRIER
                 );
 
         ItemMeta backMeta =
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§c✦ Retour"
+                "§c⬅ Retour"
         );
+
+        backMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Retourner au menu",
+
+                "§7de la commission."
+        ));
 
         back.setItemMeta(backMeta);
 
