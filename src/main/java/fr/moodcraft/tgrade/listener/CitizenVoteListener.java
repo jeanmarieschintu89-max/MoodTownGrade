@@ -3,9 +3,11 @@ package fr.moodcraft.tgrade.listener;
 import fr.moodcraft.tgrade.gui.CitizenVoteGUI;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
+import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.CitizenVote;
+import fr.moodcraft.tgrade.model.TownGrade;
 
 import org.bukkit.Sound;
 
@@ -99,6 +101,49 @@ public class CitizenVoteListener
             );
             p.sendMessage(
                     "§7Le registre du vote est incomplet."
+            );
+            p.sendMessage("");
+
+            return;
+        }
+
+        //
+        // 🔒 DOSSIER CLOTURÉ
+        //
+
+        TownGrade grade =
+                GradeManager.get(
+                        town
+                );
+
+        if (grade != null
+                && grade.isLocked()) {
+
+            p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.ENTITY_VILLAGER_NO,
+
+                    1f,
+
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cLes votes citoyens sont clôturés."
+            );
+            p.sendMessage(
+                    "§7Ville: §b" + town
+            );
+            p.sendMessage(
+                    "§7Le registre national est verrouillé."
             );
             p.sendMessage("");
 
