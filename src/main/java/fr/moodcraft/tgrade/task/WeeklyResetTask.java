@@ -46,14 +46,12 @@ public class WeeklyResetTask
                 "§fFin de la saison urbaine nationale."
         );
 
-        //
-        // 👑 BEST CITY
-        //
-
         if (best != null) {
 
             double national =
-                    NationalScoreCalculator
+                    best.isLocked()
+                            ? best.getFinalScore()
+                            : NationalScoreCalculator
                             .getFinalScore(
                                     best.getTown()
                             );
@@ -64,7 +62,7 @@ public class WeeklyResetTask
             );
 
             Bukkit.broadcastMessage(
-                    "§7Prestige national: §e"
+                    "§7Note nationale: §e"
                             + national
                             + "§7/50"
             );
@@ -107,6 +105,9 @@ public class WeeklyResetTask
 
             grade.setFinished(false);
             grade.setPayoutClaimed(false);
+
+            grade.setLocked(false);
+            grade.setFinalScore(0);
 
             GradeManager.save(grade);
         }
