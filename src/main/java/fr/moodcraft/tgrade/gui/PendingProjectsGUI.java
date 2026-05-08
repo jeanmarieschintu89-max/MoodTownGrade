@@ -94,16 +94,16 @@ public class PendingProjectsGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§6✦ Commission Nationale"
+                "§6✦ Commission Urbaine"
         );
 
         headerMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Registre National §8-----",
 
-                "§7Inspection des projets",
+                "§7Dossiers urbains déposés",
 
-                "§7urbains de MoodCraft.",
+                "§7auprès de MoodCraft.",
 
                 "",
 
@@ -112,7 +112,7 @@ public class PendingProjectsGUI {
 
                 "",
 
-                "§e▶ Administration urbaine"
+                "§e▶ Inspection administrative"
         ));
 
         header.setItemMeta(headerMeta);
@@ -168,10 +168,10 @@ public class PendingProjectsGUI {
                             Material.EMERALD;
 
                     status =
-                            "§a🟢 Projet validé";
+                            "§a✔ Validé";
 
                     action =
-                            "§a▶ Projet approuvé";
+                            "§e▶ Réouvrir l'inspection";
                 }
 
                 case REJECTED -> {
@@ -180,7 +180,7 @@ public class PendingProjectsGUI {
                             Material.REDSTONE_BLOCK;
 
                     status =
-                            "§c🔴 Projet refusé";
+                            "§c✖ Refusé";
 
                     action =
                             "§c▶ Dossier fermé";
@@ -192,10 +192,10 @@ public class PendingProjectsGUI {
                             Material.WRITABLE_BOOK;
 
                     status =
-                            "§6🟡 En attente";
+                            "§6⌛ En attente";
 
                     action =
-                            "§e▶ Cliquer pour inspecter";
+                            "§e▶ Inspecter le dossier";
                 }
             }
 
@@ -223,27 +223,22 @@ public class PendingProjectsGUI {
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Dossier Urbain §8-----",
 
-                    "§7Ville:",
-                    "§b" + sub.getTown(),
+                    "§7Ville: §b" + sub.getTown(),
 
-                    "",
-
-                    "§7Statut officiel:",
-                    status,
+                    "§7Statut: " + status,
 
                     "",
 
-                    "§7Coordonnées:",
-                    "§fX: §e" + sub.getX(),
-                    "§fY: §e" + sub.getY(),
-                    "§fZ: §e" + sub.getZ(),
+                    "§7Position:",
+                    "§fX §e" + sub.getX()
+                            + " §8| §fY §e" + sub.getY()
+                            + " §8| §fZ §e" + sub.getZ(),
 
                     "",
 
-                    "§7Date dépôt:",
-                    "§f" + date,
+                    "§7Dépôt: §f" + date,
 
                     "",
 
@@ -294,21 +289,17 @@ public class PendingProjectsGUI {
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Registre National §8-----",
 
                     "§7Aucun projet urbain",
 
-                    "§7n'est actuellement",
-
-                    "§7enregistré.",
+                    "§7n'est en attente.",
 
                     "",
 
-                    "§7La commission nationale",
+                    "§7La Commission reste",
 
-                    "§7est en attente de",
-
-                    "§7nouveaux dossiers."
+                    "§7ouverte aux dépôts."
             ));
 
             empty.setItemMeta(meta);
@@ -329,14 +320,14 @@ public class PendingProjectsGUI {
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§c⬅ Retour administratif"
+                "§c⬅ Retour"
         );
 
         backMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Administration §8-----",
 
-                "§7Retourner au centre",
+                "§7Retour au centre",
 
                 "§7administratif national."
         ));
