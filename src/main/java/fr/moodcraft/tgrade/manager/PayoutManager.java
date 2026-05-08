@@ -94,41 +94,48 @@ public class PayoutManager {
             }
 
             Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Bukkit.broadcastMessage("§a✦ Fonds Nationaux Urbains");
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Une aide vient d'être attribuée à:");
-            Bukkit.broadcastMessage(" §b" + town.getName());
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Subvention accordée:");
-            Bukkit.broadcastMessage(" §a+" + format(payout) + "$");
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Prestige national:");
-            Bukkit.broadcastMessage(" §e" + national + "§7/50");
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Influence urbaine:");
-            Bukkit.broadcastMessage(" §6🏛 Staff: §e" + staff);
-            Bukkit.broadcastMessage(" §6👑 Maires: §e" + mayors);
-            Bukkit.broadcastMessage(" §6👥 Citoyens: §e" + citizens);
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§7Classe urbaine:");
-            Bukkit.broadcastMessage(" " + grade.getRank());
-            Bukkit.broadcastMessage("");
-
+            Bukkit.broadcastMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            Bukkit.broadcastMessage(
+                    "§fFinancement national attribué."
+            );
+            Bukkit.broadcastMessage(
+                    "§7Ville: §b" + town.getName()
+            );
+            Bukkit.broadcastMessage(
+                    "§7Subvention: §a+"
+                            + format(payout)
+                            + "$"
+            );
+            Bukkit.broadcastMessage(
+                    "§7Prestige national: §e"
+                            + national
+                            + "§7/50"
+            );
+            Bukkit.broadcastMessage(
+                    "§7Influences: §6Staff §e" + staff
+                            + " §8| §6Maires §e" + mayors
+                            + " §8| §6Citoyens §e" + citizens
+            );
+            Bukkit.broadcastMessage(
+                    "§7Classe urbaine: "
+                            + grade.getRank()
+            );
             Bukkit.broadcastMessage(
                     grade.getAppreciation()
             );
 
             if (national >= 45) {
 
-                Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage("§6👑 Distinction Architecturale");
-                Bukkit.broadcastMessage("§7Cette ville rejoint les");
-                Bukkit.broadcastMessage("§7références nationales de MoodCraft.");
+                Bukkit.broadcastMessage(
+                        "§6👑 Distinction nationale accordée."
+                );
             }
 
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Bukkit.broadcastMessage(
+                    "§a✔ Fonds inscrits au registre national."
+            );
             Bukkit.broadcastMessage("");
 
             for (Player online :
