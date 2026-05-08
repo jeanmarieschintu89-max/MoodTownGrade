@@ -465,3 +465,5 @@ public class ClassementGUI {
         }
 
         if (score <= 35)
+        }
+}
