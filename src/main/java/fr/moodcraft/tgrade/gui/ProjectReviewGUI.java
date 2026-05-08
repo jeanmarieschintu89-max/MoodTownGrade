@@ -255,7 +255,7 @@ public class ProjectReviewGUI {
         inv.setItem(20, tp);
 
         //
-        // ✅ APPROUVER
+        // ✅ APPROUVER PERMIS
         //
 
         ItemStack approve =
@@ -280,18 +280,96 @@ public class ProjectReviewGUI {
 
                 "",
 
-                "§7Le dossier sera reconnu",
+                "§7Le projet devient ouvert",
 
-                "§7par la commission nationale.",
+                "§7aux votes citoyens et maires.",
 
                 "",
 
-                "§a▶ Valider le projet"
+                "§a▶ Valider le permis"
         ));
 
         approve.setItemMeta(approveMeta);
 
-        inv.setItem(24, approve);
+        inv.setItem(22, approve);
+
+        //
+        // ⭐ NOTATION STAFF
+        //
+
+        ItemStack note =
+                new ItemStack(
+                        Material.ENCHANTED_BOOK
+                );
+
+        ItemMeta noteMeta =
+                note.getItemMeta();
+
+        noteMeta.setDisplayName(
+                "§b✦ Notation nationale"
+        );
+
+        noteMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Ouvrir le barème",
+
+                "§7de notation staff.",
+
+                "",
+
+                "§7La note sera ajoutée",
+
+                "§7aux votes de la Commission.",
+
+                "",
+
+                "§b▶ Noter la ville"
+        ));
+
+        note.setItemMeta(noteMeta);
+
+        inv.setItem(24, note);
+
+        //
+        // 🔒 CLÔTURE NOTES
+        //
+
+        ItemStack close =
+                new ItemStack(
+                        Material.BEACON
+                );
+
+        ItemMeta closeMeta =
+                close.getItemMeta();
+
+        closeMeta.setDisplayName(
+                "§6✔ Clôturer les notes"
+        );
+
+        closeMeta.setLore(List.of(
+
+                "§8━━━━━━━━━━━━━━━━",
+
+                "§7Valider définitivement",
+
+                "§7les votes et notations.",
+
+                "",
+
+                "§7Après clôture, la ville",
+
+                "§7peut recevoir son financement.",
+
+                "",
+
+                "§6▶ Finaliser l'analyse"
+        ));
+
+        close.setItemMeta(closeMeta);
+
+        inv.setItem(26, close);
 
         //
         // ❌ REFUSER
@@ -330,7 +408,7 @@ public class ProjectReviewGUI {
 
         reject.setItemMeta(rejectMeta);
 
-        inv.setItem(26, reject);
+        inv.setItem(28, reject);
 
         //
         // 🔙 RETOUR
