@@ -92,25 +92,25 @@ public class EvaluationManagerGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§b✦ Centre d'Évaluation"
+                "§b✦ Registre des Évaluations"
         );
 
         headerMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Commission Urbaine §8-----",
 
                 "§7Gestion des notes",
 
-                "§7urbaines nationales.",
+                "§7et inspections nationales.",
 
                 "",
 
-                "§7Villes inspectées: §b"
+                "§7Villes enregistrées: §b"
                         + GradeManager.getAll().size(),
 
                 "",
 
-                "§b▶ Commission active"
+                "§b▶ Révision administrative"
         ));
 
         header.setItemMeta(headerMeta);
@@ -185,12 +185,10 @@ public class EvaluationManagerGUI {
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Dossier Ville §8-----",
 
                     "§7Score global:",
-                    " " + grade.getFormattedScore(),
-
-                    "",
+                    grade.getFormattedScore(),
 
                     "§7Rang urbain:",
                     grade.getRank(),
@@ -201,7 +199,7 @@ public class EvaluationManagerGUI {
                             + grade.getArchitecture()
                             + "§7/10",
 
-                    "§7Style: §e"
+                    "§7Cohérence: §e"
                             + grade.getStyle()
                             + "§7/6",
 
@@ -213,33 +211,31 @@ public class EvaluationManagerGUI {
                             + grade.getBanque()
                             + "§7/4",
 
-                    "§7Remarquable: §e"
+                    "§7Urbanisme: §e"
                             + grade.getRemarquable()
                             + "§7/8",
 
-                    "§7RP: §e"
+                    "§7RolePlay: §e"
                             + grade.getRp()
                             + "§7/6",
 
-                    "§7Taille: §e"
+                    "§7Développement: §e"
                             + grade.getTaille()
                             + "§7/3",
 
-                    "§7Votes: §e"
+                    "§7Votes citoyens: §e"
                             + grade.getVotes()
                             + "§7/5",
 
                     "",
 
-                    "§7Statut:",
-
                     grade.isFinished()
                             ? "§a✔ Inspection validée"
-                            : "§6⏳ Évaluation en cours",
+                            : "§6⌛ Évaluation en cours",
 
                     "",
 
-                    "§b▶ Cliquer pour modifier"
+                    "§b▶ Modifier le dossier"
             ));
 
             item.setItemMeta(meta);
@@ -282,13 +278,17 @@ public class EvaluationManagerGUI {
 
             meta.setLore(List.of(
 
-                    "§8━━━━━━━━━━━━━━━━",
+                    "§8----- §6Registre National §8-----",
 
                     "§7Aucune ville n'a encore",
 
                     "§7été inspectée par",
 
-                    "§7la commission nationale."
+                    "§7la Commission.",
+
+                    "",
+
+                    "§e▶ En attente de dossiers"
             ));
 
             empty.setItemMeta(meta);
@@ -309,12 +309,12 @@ public class EvaluationManagerGUI {
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§c⬅ Retour administratif"
+                "§c⬅ Retour"
         );
 
         backMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Centre National §8-----",
 
                 "§7Retour au centre",
 
