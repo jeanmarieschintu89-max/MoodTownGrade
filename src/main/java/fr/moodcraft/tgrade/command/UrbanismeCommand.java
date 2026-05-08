@@ -79,42 +79,18 @@ public class UrbanismeCommand
                 .equalsIgnoreCase(
                         "projet")) {
 
-            //
-            // 🛡 TOWNY CHECK
-            //
-
             if (!TownyHook.canManage(p)) {
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§c🏛 Accès refusé"
+                        "§cAccès refusé."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Seuls les maires"
+                        "§7Seuls les maires et assistants peuvent gérer les projets."
                 );
-
-                p.sendMessage(
-                        "§7et assistants municipaux"
-                );
-
-                p.sendMessage(
-                        "§7peuvent gérer les projets."
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
-
                 p.sendMessage("");
 
                 return true;
@@ -175,9 +151,17 @@ public class UrbanismeCommand
             if (!p.hasPermission(
                     "moodtowngrade.staff")) {
 
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
                 p.sendMessage(
                         "§cAccès refusé."
                 );
+                p.sendMessage(
+                        "§7Ce registre est réservé à l'administration nationale."
+                );
+                p.sendMessage("");
 
                 return true;
             }
@@ -237,9 +221,17 @@ public class UrbanismeCommand
 
             PayoutManager.payoutAll();
 
+            p.sendMessage("");
             p.sendMessage(
-                    "§aBourses distribuées."
+                    "§8----- §6Commission Urbaine §8-----"
             );
+            p.sendMessage(
+                    "§fFinancements urbains distribués."
+            );
+            p.sendMessage(
+                    "§a✔ Les bourses nationales ont été versées."
+            );
+            p.sendMessage("");
 
             return true;
         }
@@ -266,9 +258,17 @@ public class UrbanismeCommand
 
             if (sub == null) {
 
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
                 p.sendMessage(
                         "§cProjet introuvable."
                 );
+                p.sendMessage(
+                        "§7Aucun dossier ne correspond à cet identifiant."
+                );
+                p.sendMessage("");
 
                 return true;
             }
@@ -278,38 +278,27 @@ public class UrbanismeCommand
             );
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§c🗑 Projet supprimé"
+                    "§fProjet supprimé du registre."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
                     "§7Projet: §e"
                             + sub.getBuildName()
             );
-
             p.sendMessage(
                     "§7Ville: §b"
                             + sub.getTown()
             );
-
             p.sendMessage(
                     "§7ID: §f"
                             + sub.getId()
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§cDossier retiré par l'administration."
             );
-
             p.sendMessage("");
 
             return true;
@@ -323,9 +312,17 @@ public class UrbanismeCommand
 
             new WeeklyResetTask().run();
 
+            p.sendMessage("");
             p.sendMessage(
-                    "§aSemaine urbaine réinitialisée."
+                    "§8----- §6Commission Urbaine §8-----"
             );
+            p.sendMessage(
+                    "§fSemaine urbaine réinitialisée."
+            );
+            p.sendMessage(
+                    "§a✔ Les registres hebdomadaires sont prêts."
+            );
+            p.sendMessage("");
 
             return true;
         }
@@ -381,42 +378,19 @@ public class UrbanismeCommand
             }
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§c🏛 Ville réinitialisée"
+                    "§fVille réinitialisée."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
                     "§7Ville: §b"
                             + townName
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§7✔ Notes supprimées"
+                    "§a✔ Notes supprimées §8| §aClassement supprimé §8| §aProjets supprimés"
             );
-
-            p.sendMessage(
-                    "§7✔ Classement supprimé"
-            );
-
-            p.sendMessage(
-                    "§7✔ Projets supprimés"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             p.sendMessage("");
 
             return true;
@@ -429,35 +403,15 @@ public class UrbanismeCommand
         if (!TownyHook.canManage(p)) {
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§c🏛 Accès refusé"
+                    "§cAccès refusé."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§7Seuls les maires"
+                    "§7Seuls les maires et assistants peuvent gérer les projets urbains."
             );
-
-            p.sendMessage(
-                    "§7et assistants peuvent"
-            );
-
-            p.sendMessage(
-                    "§7gérer les projets urbains."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             p.sendMessage("");
 
             return true;
@@ -472,9 +426,17 @@ public class UrbanismeCommand
 
         if (town == null) {
 
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
             p.sendMessage(
                     "§cAucune ville détectée."
             );
+            p.sendMessage(
+                    "§7Votre dossier municipal est introuvable."
+            );
+            p.sendMessage("");
 
             return true;
         }
@@ -498,9 +460,17 @@ public class UrbanismeCommand
                     .getTown(town.getName())
                     .size() >= 5) {
 
+                p.sendMessage("");
                 p.sendMessage(
-                        "§cMaximum 5 projets."
+                        "§8----- §6Commission Urbaine §8-----"
                 );
+                p.sendMessage(
+                        "§cLimite atteinte."
+                );
+                p.sendMessage(
+                        "§7Une ville peut déposer au maximum §e5 projets§7."
+                );
+                p.sendMessage("");
 
                 return true;
             }
@@ -545,40 +515,28 @@ public class UrbanismeCommand
             SubmissionStorage.save(sub);
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§a🏗 Projet enregistré"
+                    "§fProjet urbain enregistré."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
                     "§7Projet: §e" + name
             );
-
             p.sendMessage(
                     "§7Ville: §b"
                             + town.getName()
             );
-
             p.sendMessage(
                     "§7ID: §f" + id
             );
-
             p.sendMessage(
-                    "§7Statut: §eEN ATTENTE"
+                    "§7Statut: §eEn attente d'inspection"
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§a✔ Dossier transmis aux registres nationaux."
             );
-
             p.sendMessage("");
 
             return true;
@@ -617,9 +575,17 @@ public class UrbanismeCommand
 
             if (sub == null) {
 
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
                 p.sendMessage(
                         "§cProjet introuvable."
                 );
+                p.sendMessage(
+                        "§7Aucun dossier ne correspond à cet identifiant."
+                );
+                p.sendMessage("");
 
                 return true;
             }
@@ -629,9 +595,17 @@ public class UrbanismeCommand
                             town.getName()
                     )) {
 
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
                 p.sendMessage(
                         "§cProjet invalide."
                 );
+                p.sendMessage(
+                        "§7Ce dossier n'appartient pas à votre ville."
+                );
+                p.sendMessage("");
 
                 return true;
             }
@@ -641,28 +615,19 @@ public class UrbanismeCommand
             );
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§cProjet supprimé"
+                    "§fProjet retiré du registre."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
                     "§7ID: §f"
                             + sub.getId()
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§cDossier fermé par la municipalité."
             );
-
             p.sendMessage("");
 
             return true;
