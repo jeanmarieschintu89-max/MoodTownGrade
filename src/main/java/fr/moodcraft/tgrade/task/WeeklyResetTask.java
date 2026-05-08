@@ -8,6 +8,7 @@ import fr.moodcraft.tgrade.manager.RankingManager;
 import fr.moodcraft.tgrade.model.TownGrade;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.storage.VoteStorage;
 
 import org.bukkit.Bukkit;
 
@@ -117,6 +118,12 @@ public class WeeklyResetTask
         //
 
         SubmissionStorage.cleanup();
+
+        //
+        // 🗳 RESET VOTES
+        //
+
+        VoteStorage.clearAll();
 
         //
         // 📢 NOUVELLE SAISON
