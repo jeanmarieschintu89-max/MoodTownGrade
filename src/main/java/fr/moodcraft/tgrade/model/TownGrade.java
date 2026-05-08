@@ -131,39 +131,75 @@ public class TownGrade {
                         ? finalScore
                         : getTotal();
 
+        //
+        // 🪨 RUINES
+        //
+
         if (total <= 10) {
-            return 2500;
+            return 0;
         }
+
+        //
+        // 🏚 PETITE COMMUNE
+        //
 
         if (total <= 20) {
-            return 5000;
-        }
-
-        if (total <= 25) {
-            return 7500;
-        }
-
-        if (total <= 30) {
             return 10000;
         }
 
-        if (total <= 35) {
-            return 15000;
-        }
+        //
+        // 🏘 VILLE CORRECTE
+        //
 
-        if (total <= 40) {
-            return 20000;
-        }
-
-        if (total <= 45) {
-            return 25000;
-        }
-
-        if (total <= 49) {
+        if (total <= 25) {
             return 30000;
         }
 
-        return 40000;
+        //
+        // 🏙 VILLE ACTIVE
+        //
+
+        if (total <= 30) {
+            return 75000;
+        }
+
+        //
+        // 🌆 GRANDE VILLE
+        //
+
+        if (total <= 35) {
+            return 150000;
+        }
+
+        //
+        // 🏛 MÉTROPOLE
+        //
+
+        if (total <= 40) {
+            return 300000;
+        }
+
+        //
+        // 👑 CAPITALE
+        //
+
+        if (total <= 45) {
+            return 600000;
+        }
+
+        //
+        // 💎 ÉLITE
+        //
+
+        if (total <= 49) {
+            return 1000000;
+        }
+
+        //
+        // 🌟 MERVEILLE NATIONALE
+        //
+
+        return 1500000;
     }
 
     //
