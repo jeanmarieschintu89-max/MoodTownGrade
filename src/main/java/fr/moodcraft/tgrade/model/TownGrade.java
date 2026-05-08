@@ -75,35 +75,35 @@ public class TownGrade {
         if (total <= 10) {
 
             return
-                    "§8Village abandonné";
+                    "§8✦ Hameau en friche";
         }
 
         if (total <= 20) {
 
             return
-                    "§7Ville rurale";
+                    "§7✦ Commune rurale";
         }
 
         if (total <= 30) {
 
             return
-                    "§aVille active";
+                    "§a✦ Ville reconnue";
         }
 
         if (total <= 40) {
 
             return
-                    "§bMétropole prospère";
+                    "§b✦ Métropole prospère";
         }
 
         if (total <= 49) {
 
             return
-                    "§6Capitale d'élite";
+                    "§6✦ Capitale d'élite";
         }
 
         return
-                "§e§lMerveille de MoodCraft";
+                "§e§l✦ Merveille Nationale";
     }
 
     //
@@ -115,27 +115,31 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        if (total <= 10) {
-            return 1000;
-        }
-
-        if (total <= 20) {
-            return 3000;
+        if (total < 25) {
+            return 0;
         }
 
         if (total <= 30) {
             return 10000;
         }
 
-        if (total <= 40) {
-            return 18000;
+        if (total <= 35) {
+            return 15000;
         }
 
-        if (total <= 49) {
+        if (total <= 40) {
+            return 20000;
+        }
+
+        if (total <= 45) {
             return 25000;
         }
 
-        return 30000;
+        if (total <= 49) {
+            return 30000;
+        }
+
+        return 40000;
     }
 
     //
@@ -147,38 +151,44 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        if (total <= 10) {
+        if (total < 25) {
 
             return
-                    "§7Ville inactive ou naissante";
-        }
-
-        if (total <= 20) {
-
-            return
-                    "§eDéveloppement urbain limité";
+                    "§7Avis: dossier insuffisant pour un financement national.";
         }
 
         if (total <= 30) {
 
             return
-                    "§aVille active et organisée";
+                    "§aAvis: ville reconnue, développement urbain encourageant.";
+        }
+
+        if (total <= 35) {
+
+            return
+                    "§bAvis: ville solide, organisation municipale visible.";
         }
 
         if (total <= 40) {
 
             return
-                    "§bVille prospère et attractive";
+                    "§bAvis: métropole attractive, prestige urbain confirmé.";
+        }
+
+        if (total <= 45) {
+
+            return
+                    "§6Avis: cité majeure, référence nationale montante.";
         }
 
         if (total <= 49) {
 
             return
-                    "§6Ville d'élite remarquable";
+                    "§6Avis: capitale d'élite, dossier remarquable.";
         }
 
         return
-                "§e§lPerfection absolue";
+                "§e§lAvis: merveille nationale inscrite au sommet de MoodCraft.";
     }
 
     //
@@ -190,12 +200,7 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        if (total <= 10) {
-
-            return "§8";
-        }
-
-        if (total <= 20) {
+        if (total < 25) {
 
             return "§7";
         }
