@@ -6,6 +6,8 @@ import fr.moodcraft.tgrade.model.CitizenVote;
 import fr.moodcraft.tgrade.model.MayorVote;
 import fr.moodcraft.tgrade.model.StaffVote;
 
+import org.bukkit.Bukkit;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -40,10 +42,6 @@ public class VoteStorage {
 
     public static void init() {
 
-        //
-        // 📂 FILES
-        //
-
         staffFile = new File(
                 Main.get().getDataFolder(),
                 "staffvotes.yml"
@@ -60,14 +58,8 @@ public class VoteStorage {
         );
 
         create(staffFile);
-
         create(mayorFile);
-
         create(citizenFile);
-
-        //
-        // 📄 CONFIGS
-        //
 
         staffConfig =
                 YamlConfiguration.loadConfiguration(
@@ -118,56 +110,28 @@ public class VoteStorage {
             StaffVote vote
     ) {
 
+        if (vote == null
+                || vote.getTown() == null
+                || vote.getVoter() == null) {
+
+            return;
+        }
+
         String path =
                 "votes."
                         + vote.getTown()
                         + "."
                         + vote.getVoter();
 
-        staffConfig.set(
-                path + ".architecture",
-                vote.getArchitecture()
-        );
-
-        staffConfig.set(
-                path + ".style",
-                vote.getStyle()
-        );
-
-        staffConfig.set(
-                path + ".activite",
-                vote.getActivite()
-        );
-
-        staffConfig.set(
-                path + ".banque",
-                vote.getBanque()
-        );
-
-        staffConfig.set(
-                path + ".remarquable",
-                vote.getRemarquable()
-        );
-
-        staffConfig.set(
-                path + ".rp",
-                vote.getRp()
-        );
-
-        staffConfig.set(
-                path + ".taille",
-                vote.getTaille()
-        );
-
-        staffConfig.set(
-                path + ".votes",
-                vote.getVotes()
-        );
-
-        staffConfig.set(
-                path + ".timestamp",
-                vote.getTimestamp()
-        );
+        staffConfig.set(path + ".architecture", vote.getArchitecture());
+        staffConfig.set(path + ".style", vote.getStyle());
+        staffConfig.set(path + ".activite", vote.getActivite());
+        staffConfig.set(path + ".banque", vote.getBanque());
+        staffConfig.set(path + ".remarquable", vote.getRemarquable());
+        staffConfig.set(path + ".rp", vote.getRp());
+        staffConfig.set(path + ".taille", vote.getTaille());
+        staffConfig.set(path + ".votes", vote.getVotes());
+        staffConfig.set(path + ".timestamp", vote.getTimestamp());
 
         save(staffConfig, staffFile);
     }
@@ -180,41 +144,25 @@ public class VoteStorage {
             MayorVote vote
     ) {
 
+        if (vote == null
+                || vote.getTown() == null
+                || vote.getVoter() == null) {
+
+            return;
+        }
+
         String path =
                 "votes."
                         + vote.getTown()
                         + "."
                         + vote.getVoter();
 
-        mayorConfig.set(
-                path + ".beaute",
-                vote.getBeaute()
-        );
-
-        mayorConfig.set(
-                path + ".ambiance",
-                vote.getAmbiance()
-        );
-
-        mayorConfig.set(
-                path + ".activite",
-                vote.getActivite()
-        );
-
-        mayorConfig.set(
-                path + ".originalite",
-                vote.getOriginalite()
-        );
-
-        mayorConfig.set(
-                path + ".popularite",
-                vote.getPopularite()
-        );
-
-        mayorConfig.set(
-                path + ".timestamp",
-                vote.getTimestamp()
-        );
+        mayorConfig.set(path + ".beaute", vote.getBeaute());
+        mayorConfig.set(path + ".ambiance", vote.getAmbiance());
+        mayorConfig.set(path + ".activite", vote.getActivite());
+        mayorConfig.set(path + ".originalite", vote.getOriginalite());
+        mayorConfig.set(path + ".popularite", vote.getPopularite());
+        mayorConfig.set(path + ".timestamp", vote.getTimestamp());
 
         save(mayorConfig, mayorFile);
     }
@@ -227,41 +175,25 @@ public class VoteStorage {
             CitizenVote vote
     ) {
 
+        if (vote == null
+                || vote.getTown() == null
+                || vote.getVoter() == null) {
+
+            return;
+        }
+
         String path =
                 "votes."
                         + vote.getTown()
                         + "."
                         + vote.getVoter();
 
-        citizenConfig.set(
-                path + ".beaute",
-                vote.getBeaute()
-        );
-
-        citizenConfig.set(
-                path + ".ambiance",
-                vote.getAmbiance()
-        );
-
-        citizenConfig.set(
-                path + ".activite",
-                vote.getActivite()
-        );
-
-        citizenConfig.set(
-                path + ".originalite",
-                vote.getOriginalite()
-        );
-
-        citizenConfig.set(
-                path + ".popularite",
-                vote.getPopularite()
-        );
-
-        citizenConfig.set(
-                path + ".timestamp",
-                vote.getTimestamp()
-        );
+        citizenConfig.set(path + ".beaute", vote.getBeaute());
+        citizenConfig.set(path + ".ambiance", vote.getAmbiance());
+        citizenConfig.set(path + ".activite", vote.getActivite());
+        citizenConfig.set(path + ".originalite", vote.getOriginalite());
+        citizenConfig.set(path + ".popularite", vote.getPopularite());
+        citizenConfig.set(path + ".timestamp", vote.getTimestamp());
 
         save(citizenConfig, citizenFile);
     }
@@ -278,6 +210,12 @@ public class VoteStorage {
         List<StaffVote> votes =
                 new ArrayList<>();
 
+        if (town == null
+                || staffConfig == null) {
+
+            return votes;
+        }
+
         ConfigurationSection section =
                 staffConfig.getConfigurationSection(
                         "votes." + town
@@ -290,67 +228,41 @@ public class VoteStorage {
         for (String key :
                 section.getKeys(false)) {
 
-            String path =
-                    "votes."
-                            + town
-                            + "."
-                            + key;
+            try {
 
-            StaffVote vote =
-                    new StaffVote(
-                            UUID.fromString(key),
-                            town
-                    );
+                String path =
+                        "votes."
+                                + town
+                                + "."
+                                + key;
 
-            vote.setArchitecture(
-                    staffConfig.getInt(
-                            path + ".architecture"
-                    )
-            );
+                StaffVote vote =
+                        new StaffVote(
+                                UUID.fromString(key),
+                                town
+                        );
 
-            vote.setStyle(
-                    staffConfig.getInt(
-                            path + ".style"
-                    )
-            );
+                vote.setArchitecture(staffConfig.getInt(path + ".architecture"));
+                vote.setStyle(staffConfig.getInt(path + ".style"));
+                vote.setActivite(staffConfig.getInt(path + ".activite"));
+                vote.setBanque(staffConfig.getInt(path + ".banque"));
+                vote.setRemarquable(staffConfig.getInt(path + ".remarquable"));
+                vote.setRp(staffConfig.getInt(path + ".rp"));
+                vote.setTaille(staffConfig.getInt(path + ".taille"));
+                vote.setVotes(staffConfig.getInt(path + ".votes"));
 
-            vote.setActivite(
-                    staffConfig.getInt(
-                            path + ".activite"
-                    )
-            );
+                votes.add(vote);
 
-            vote.setBanque(
-                    staffConfig.getInt(
-                            path + ".banque"
-                    )
-            );
+            } catch (Exception ex) {
 
-            vote.setRemarquable(
-                    staffConfig.getInt(
-                            path + ".remarquable"
-                    )
-            );
-
-            vote.setRp(
-                    staffConfig.getInt(
-                            path + ".rp"
-                    )
-            );
-
-            vote.setTaille(
-                    staffConfig.getInt(
-                            path + ".taille"
-                    )
-            );
-
-            vote.setVotes(
-                    staffConfig.getInt(
-                            path + ".votes"
-                    )
-            );
-
-            votes.add(vote);
+                Bukkit.getConsoleSender()
+                        .sendMessage(
+                                "§c[MoodTownGrade] Vote staff corrompu ignoré: "
+                                        + town
+                                        + "/"
+                                        + key
+                        );
+            }
         }
 
         return votes;
@@ -368,6 +280,12 @@ public class VoteStorage {
         List<MayorVote> votes =
                 new ArrayList<>();
 
+        if (town == null
+                || mayorConfig == null) {
+
+            return votes;
+        }
+
         ConfigurationSection section =
                 mayorConfig.getConfigurationSection(
                         "votes." + town
@@ -380,49 +298,38 @@ public class VoteStorage {
         for (String key :
                 section.getKeys(false)) {
 
-            String path =
-                    "votes."
-                            + town
-                            + "."
-                            + key;
+            try {
 
-            MayorVote vote =
-                    new MayorVote(
-                            UUID.fromString(key),
-                            town
-                    );
+                String path =
+                        "votes."
+                                + town
+                                + "."
+                                + key;
 
-            vote.setBeaute(
-                    mayorConfig.getInt(
-                            path + ".beaute"
-                    )
-            );
+                MayorVote vote =
+                        new MayorVote(
+                                UUID.fromString(key),
+                                town
+                        );
 
-            vote.setAmbiance(
-                    mayorConfig.getInt(
-                            path + ".ambiance"
-                    )
-            );
+                vote.setBeaute(mayorConfig.getInt(path + ".beaute"));
+                vote.setAmbiance(mayorConfig.getInt(path + ".ambiance"));
+                vote.setActivite(mayorConfig.getInt(path + ".activite"));
+                vote.setOriginalite(mayorConfig.getInt(path + ".originalite"));
+                vote.setPopularite(mayorConfig.getInt(path + ".popularite"));
 
-            vote.setActivite(
-                    mayorConfig.getInt(
-                            path + ".activite"
-                    )
-            );
+                votes.add(vote);
 
-            vote.setOriginalite(
-                    mayorConfig.getInt(
-                            path + ".originalite"
-                    )
-            );
+            } catch (Exception ex) {
 
-            vote.setPopularite(
-                    mayorConfig.getInt(
-                            path + ".popularite"
-                    )
-            );
-
-            votes.add(vote);
+                Bukkit.getConsoleSender()
+                        .sendMessage(
+                                "§c[MoodTownGrade] Vote maire corrompu ignoré: "
+                                        + town
+                                        + "/"
+                                        + key
+                        );
+            }
         }
 
         return votes;
@@ -440,6 +347,12 @@ public class VoteStorage {
         List<CitizenVote> votes =
                 new ArrayList<>();
 
+        if (town == null
+                || citizenConfig == null) {
+
+            return votes;
+        }
+
         ConfigurationSection section =
                 citizenConfig.getConfigurationSection(
                         "votes." + town
@@ -452,49 +365,38 @@ public class VoteStorage {
         for (String key :
                 section.getKeys(false)) {
 
-            String path =
-                    "votes."
-                            + town
-                            + "."
-                            + key;
+            try {
 
-            CitizenVote vote =
-                    new CitizenVote(
-                            UUID.fromString(key),
-                            town
-                    );
+                String path =
+                        "votes."
+                                + town
+                                + "."
+                                + key;
 
-            vote.setBeaute(
-                    citizenConfig.getInt(
-                            path + ".beaute"
-                    )
-            );
+                CitizenVote vote =
+                        new CitizenVote(
+                                UUID.fromString(key),
+                                town
+                        );
 
-            vote.setAmbiance(
-                    citizenConfig.getInt(
-                            path + ".ambiance"
-                    )
-            );
+                vote.setBeaute(citizenConfig.getInt(path + ".beaute"));
+                vote.setAmbiance(citizenConfig.getInt(path + ".ambiance"));
+                vote.setActivite(citizenConfig.getInt(path + ".activite"));
+                vote.setOriginalite(citizenConfig.getInt(path + ".originalite"));
+                vote.setPopularite(citizenConfig.getInt(path + ".popularite"));
 
-            vote.setActivite(
-                    citizenConfig.getInt(
-                            path + ".activite"
-                    )
-            );
+                votes.add(vote);
 
-            vote.setOriginalite(
-                    citizenConfig.getInt(
-                            path + ".originalite"
-                    )
-            );
+            } catch (Exception ex) {
 
-            vote.setPopularite(
-                    citizenConfig.getInt(
-                            path + ".popularite"
-                    )
-            );
-
-            votes.add(vote);
+                Bukkit.getConsoleSender()
+                        .sendMessage(
+                                "§c[MoodTownGrade] Vote citoyen corrompu ignoré: "
+                                        + town
+                                        + "/"
+                                        + key
+                        );
+            }
         }
 
         return votes;
