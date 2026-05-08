@@ -1,12 +1,16 @@
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.EvaluationManagerGUI;
-import fr.moodcraft.tgrade.gui.RateGUI;
+import fr.moodcraft.tgrade.gui.ProjectReviewGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
 
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Sound;
 
@@ -171,6 +175,59 @@ public class EvaluationManagerListener
         }
 
         //
+        // 🔍 FIND PROJECT
+        //
+
+        TownSubmission found = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (sub.getTown()
+                    .equalsIgnoreCase(town)
+
+                    && sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                found = sub;
+
+                break;
+            }
+        }
+
+        //
+        // ❌ NOT FOUND
+        //
+
+        if (found == null) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.ENTITY_VILLAGER_NO,
+
+                    1f,
+
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cAucun dossier actif trouvé."
+            );
+            p.sendMessage(
+                    "§7Cette ville ne possède pas de projet inspectable."
+            );
+            p.sendMessage("");
+
+            return;
+        }
+
+        //
         // 🔊 SOUND
         //
 
@@ -205,12 +262,12 @@ public class EvaluationManagerListener
         p.sendMessage("");
 
         //
-        // ⭐ OPEN RATE GUI
+        // 📂 OPEN REVIEW GUI
         //
 
-        RateGUI.open(
+        ProjectReviewGUI.open(
                 p,
-                town
+                found
         );
     }
 }
