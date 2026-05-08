@@ -213,6 +213,28 @@ public class UrbanismeMainGUI {
         );
 
         //
+        // 🔙 MENU
+        //
+
+        inv.setItem(
+
+                21,
+
+                item(
+
+                        Material.ARROW,
+
+                        "§c⬅ Retour Principal",
+
+                        "§8━━━━━━━━━━━━━━━━",
+
+                        "§7Retourner au menu",
+
+                        "§7principal de MoodCraft."
+                )
+        );
+
+        //
         // 👥 AVIS CITOYENS
         //
 
@@ -247,24 +269,34 @@ public class UrbanismeMainGUI {
         );
 
         //
-        // 🔙 MENU
+        // 👑 CONSEIL DES MAIRES
         //
 
         inv.setItem(
 
-                21,
+                23,
 
                 item(
 
-                        Material.ARROW,
+                        Material.GOLD_BLOCK,
 
-                        "§c⬅ Retour Principal",
+                        "§6✦ Conseil des Maires",
 
                         "§8━━━━━━━━━━━━━━━━",
 
-                        "§7Retourner au menu",
+                        "§7Assemblée nationale",
 
-                        "§7principal de MoodCraft."
+                        "§7des municipalités.",
+
+                        "",
+
+                        "§7Influence politique",
+
+                        "§7et évaluations RP.",
+
+                        "",
+
+                        "§6▶ Accéder au conseil"
                 )
         );
 
