@@ -231,83 +231,26 @@ public class CitizenVoteListener
                 //
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§b✦ Registre Citoyen National"
+                        "§fVotre avis citoyen a été enregistré."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Votre avis concernant la ville"
+                        "§7Ville: §b" + town
                 );
-
                 p.sendMessage(
-                        "§b" + town
+                        "§7Prestige national: §e" + national + "§7/50"
                 );
-
                 p.sendMessage(
-                        "§7a été archivé dans les registres"
+                        "§7Influences: §6Staff §e" + staff
+                                + " §8| §6Maires §e" + mayors
+                                + " §8| §6Citoyens §e" + citizens
                 );
-
                 p.sendMessage(
-                        "§7de la commission urbaine."
+                        "§a✔ Participation archivée au registre national."
                 );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§7Influence citoyenne:"
-                );
-
-                p.sendMessage(
-                        " §bParticipation nationale enregistrée"
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§7Prestige urbain actuel:"
-                );
-
-                p.sendMessage(
-                        " §e" + national + "§7/50"
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§7Répartition des influences:"
-                );
-
-                p.sendMessage(
-                        " §6🏛 Staff: §e" + staff
-                );
-
-                p.sendMessage(
-                        " §6👑 Maires: §e" + mayors
-                );
-
-                p.sendMessage(
-                        " §6👥 Citoyens: §e" + citizens
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§a✔ Merci pour votre participation"
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
-
                 p.sendMessage("");
 
                 //
