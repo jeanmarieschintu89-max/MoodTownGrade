@@ -34,6 +34,10 @@ commands:
 
   vprojetsreset:
     description: Reset national des projets urbains
+    aliases:
+      -vpr
+      -villeprojetsreset
+      -resetprojets
     permission: moodtowngrade.staff
 
 permissions:
