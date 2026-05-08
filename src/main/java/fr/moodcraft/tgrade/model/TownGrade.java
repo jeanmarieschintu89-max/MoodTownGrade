@@ -115,8 +115,16 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        if (total < 25) {
-            return 0;
+        if (total <= 10) {
+            return 2500;
+        }
+
+        if (total <= 20) {
+            return 5000;
+        }
+
+        if (total <= 25) {
+            return 7500;
         }
 
         if (total <= 30) {
@@ -151,10 +159,22 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        if (total < 25) {
+        if (total <= 10) {
 
             return
-                    "§7Avis: dossier insuffisant pour un financement national.";
+                    "§7Avis: aide minimale accordée pour lancer le développement.";
+        }
+
+        if (total <= 20) {
+
+            return
+                    "§7Avis: commune en construction, soutien national modéré.";
+        }
+
+        if (total <= 25) {
+
+            return
+                    "§eAvis: dossier fragile mais recevable pour un financement.";
         }
 
         if (total <= 30) {
@@ -200,9 +220,19 @@ public class TownGrade {
         int total =
                 getTotal();
 
-        if (total < 25) {
+        if (total <= 10) {
+
+            return "§8";
+        }
+
+        if (total <= 20) {
 
             return "§7";
+        }
+
+        if (total <= 25) {
+
+            return "§e";
         }
 
         if (total <= 30) {
