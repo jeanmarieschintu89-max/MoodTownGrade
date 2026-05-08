@@ -173,7 +173,7 @@ public class MayorTownListListener
         //
 
         if (!name.startsWith(
-                "§6✦ ")) {
+                "§f✦ §b")) {
 
             return;
         }
@@ -184,7 +184,7 @@ public class MayorTownListListener
 
         String town =
                 name.replace(
-                        "§6✦ ",
+                        "§f✦ §b",
                         ""
                 );
 
