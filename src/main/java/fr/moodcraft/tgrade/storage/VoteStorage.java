@@ -357,6 +357,150 @@ public class VoteStorage {
     }
 
     //
+    // 👑 GET MAYOR VOTES
+    //
+
+    public static List<MayorVote>
+    getMayorVotes(
+            String town
+    ) {
+
+        List<MayorVote> votes =
+                new ArrayList<>();
+
+        ConfigurationSection section =
+                mayorConfig.getConfigurationSection(
+                        "votes." + town
+                );
+
+        if (section == null) {
+            return votes;
+        }
+
+        for (String key :
+                section.getKeys(false)) {
+
+            String path =
+                    "votes."
+                            + town
+                            + "."
+                            + key;
+
+            MayorVote vote =
+                    new MayorVote(
+                            UUID.fromString(key),
+                            town
+                    );
+
+            vote.setBeaute(
+                    mayorConfig.getInt(
+                            path + ".beaute"
+                    )
+            );
+
+            vote.setAmbiance(
+                    mayorConfig.getInt(
+                            path + ".ambiance"
+                    )
+            );
+
+            vote.setActivite(
+                    mayorConfig.getInt(
+                            path + ".activite"
+                    )
+            );
+
+            vote.setOriginalite(
+                    mayorConfig.getInt(
+                            path + ".originalite"
+                    )
+            );
+
+            vote.setPopularite(
+                    mayorConfig.getInt(
+                            path + ".popularite"
+                    )
+            );
+
+            votes.add(vote);
+        }
+
+        return votes;
+    }
+
+    //
+    // 👥 GET CITIZEN VOTES
+    //
+
+    public static List<CitizenVote>
+    getCitizenVotes(
+            String town
+    ) {
+
+        List<CitizenVote> votes =
+                new ArrayList<>();
+
+        ConfigurationSection section =
+                citizenConfig.getConfigurationSection(
+                        "votes." + town
+                );
+
+        if (section == null) {
+            return votes;
+        }
+
+        for (String key :
+                section.getKeys(false)) {
+
+            String path =
+                    "votes."
+                            + town
+                            + "."
+                            + key;
+
+            CitizenVote vote =
+                    new CitizenVote(
+                            UUID.fromString(key),
+                            town
+                    );
+
+            vote.setBeaute(
+                    citizenConfig.getInt(
+                            path + ".beaute"
+                    )
+            );
+
+            vote.setAmbiance(
+                    citizenConfig.getInt(
+                            path + ".ambiance"
+                    )
+            );
+
+            vote.setActivite(
+                    citizenConfig.getInt(
+                            path + ".activite"
+                    )
+            );
+
+            vote.setOriginalite(
+                    citizenConfig.getInt(
+                            path + ".originalite"
+                    )
+            );
+
+            vote.setPopularite(
+                    citizenConfig.getInt(
+                            path + ".popularite"
+                    )
+            );
+
+            votes.add(vote);
+        }
+
+        return votes;
+    }
+
+    //
     // 💾 SAVE FILE
     //
 
