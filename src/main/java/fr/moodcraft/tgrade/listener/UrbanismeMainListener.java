@@ -1,6 +1,7 @@
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
+import fr.moodcraft.tgrade.gui.MayorTownListGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
 import fr.moodcraft.tgrade.manager.ProjectInputManager;
@@ -347,6 +348,32 @@ public class UrbanismeMainListener
         }
 
         //
+        // 🔙 MENU PRINCIPAL
+        //
+
+        if (slot == 21) {
+
+            p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    1f
+            );
+
+            p.performCommand(
+                    "menu"
+            );
+
+            return;
+        }
+
+        //
         // 👥 AVIS CITOYENS
         //
 
@@ -369,27 +396,83 @@ public class UrbanismeMainListener
         }
 
         //
-        // 🔙 MENU PRINCIPAL
+        // 👑 CONSEIL DES MAIRES
         //
 
-        if (slot == 21) {
+        if (slot == 23) {
 
-            p.closeInventory();
+            //
+            // 🛡 TOWNY CHECK
+            //
+
+            if (!TownyHook.canManage(p)) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§c👑 Accès refusé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Seuls les maires"
+                );
+
+                p.sendMessage(
+                        "§7et assistants municipaux"
+                );
+
+                p.sendMessage(
+                        "§7peuvent accéder au conseil."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                return;
+            }
+
+            //
+            // 🔊 SOUND
+            //
 
             p.playSound(
 
                     p.getLocation(),
 
-                    Sound.UI_BUTTON_CLICK,
+                    Sound.BLOCK_BEACON_ACTIVATE,
 
                     1f,
 
                     1f
             );
 
-            p.performCommand(
-                    "menu"
-            );
+            //
+            // 🚀 OPEN
+            //
+
+            MayorTownListGUI.open(p);
 
             return;
         }
