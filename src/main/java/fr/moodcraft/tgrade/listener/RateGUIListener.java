@@ -1,4 +1,3 @@
-
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
@@ -8,7 +7,10 @@ import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
+import fr.moodcraft.tgrade.model.StaffVote;
 import fr.moodcraft.tgrade.model.TownGrade;
+
+import fr.moodcraft.tgrade.storage.VoteStorage;
 
 import org.bukkit.Sound;
 
@@ -140,6 +142,50 @@ public class RateGUIListener
                 grade.setFinished(true);
 
                 GradeManager.save(grade);
+
+                //
+                // 🏛 SAVE STAFF VOTE
+                //
+
+                StaffVote vote =
+                        new StaffVote(
+                                p.getUniqueId(),
+                                session.getTown()
+                        );
+
+                vote.setArchitecture(
+                        session.getArchitecture()
+                );
+
+                vote.setStyle(
+                        session.getCoherence()
+                );
+
+                vote.setActivite(
+                        session.getActivite()
+                );
+
+                vote.setBanque(
+                        session.getBanque()
+                );
+
+                vote.setRemarquable(
+                        session.getBuild()
+                );
+
+                vote.setRp(
+                        session.getRoleplay()
+                );
+
+                vote.setTaille(
+                        session.getTaille()
+                );
+
+                vote.setVotes(
+                        session.getVotes()
+                );
+
+                VoteStorage.saveStaffVote(vote);
 
                 double national =
                         NationalScoreCalculator
