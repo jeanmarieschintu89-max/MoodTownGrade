@@ -130,9 +130,17 @@ public class ProjectReviewListener
                     1f
             );
 
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
             p.sendMessage(
                     "§cProjet introuvable."
             );
+            p.sendMessage(
+                    "§7Le registre national ne contient plus ce dossier."
+            );
+            p.sendMessage("");
 
             return;
         }
@@ -153,9 +161,28 @@ public class ProjectReviewListener
             if (Bukkit.getWorld(
                     found.getWorld()) == null) {
 
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+                p.sendMessage(
+                        "§8----- §6Commission Urbaine §8-----"
+                );
                 p.sendMessage(
                         "§cMonde introuvable."
                 );
+                p.sendMessage(
+                        "§7La zone d'inspection est inaccessible."
+                );
+                p.sendMessage("");
 
                 return;
             }
@@ -204,43 +231,23 @@ public class ProjectReviewListener
             //
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§a✦ Inspection Lancée"
+                    "§fInspection nationale ouverte."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
                     "§7Projet: §e"
                             + found.getBuildName()
             );
-
             p.sendMessage(
                     "§7Ville: §b"
                             + found.getTown()
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§7Téléportation vers la zone"
+                    "§a✔ Téléportation vers la zone du dossier."
             );
-
-            p.sendMessage(
-                    "§7d'inspection du projet."
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             p.sendMessage("");
 
             return;
@@ -271,46 +278,23 @@ public class ProjectReviewListener
                 );
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§6✦ Projet Déjà Validé"
+                        "§fProjet déjà validé."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§e" + found.getBuildName()
+                        "§7Projet: §e"
+                                + found.getBuildName()
                 );
-
                 p.sendMessage(
-                        "§7est déjà approuvé pour"
-                );
-
-                p.sendMessage(
-                        "§bla ville de "
+                        "§7Ville: §b"
                                 + found.getTown()
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Vous pouvez encore modifier"
+                        "§eLe barème peut encore être révisé."
                 );
-
-                p.sendMessage(
-                        "§7les notes du projet."
-                );
-
-                p.sendMessage("");
-
-                p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
-
                 p.sendMessage("");
 
                 //
@@ -349,46 +333,23 @@ public class ProjectReviewListener
             );
 
             Bukkit.broadcastMessage("");
-
             Bukkit.broadcastMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             Bukkit.broadcastMessage(
-                    "§a✦ Commission des Projets"
+                    "§fUn projet urbain vient d'être accepté."
             );
-
-            Bukkit.broadcastMessage("");
-
             Bukkit.broadcastMessage(
-                    "§e" + found.getBuildName()
+                    "§7Projet: §e"
+                            + found.getBuildName()
             );
-
             Bukkit.broadcastMessage(
-                    "§7vient d'être accepté pour"
-            );
-
-            Bukkit.broadcastMessage(
-                    "§bla ville de "
+                    "§7Ville: §b"
                             + found.getTown()
             );
-
-            Bukkit.broadcastMessage("");
-
             Bukkit.broadcastMessage(
-                    "§7Le projet pourra désormais"
+                    "§a✔ Dossier inscrit aux registres nationaux."
             );
-
-            Bukkit.broadcastMessage(
-                    "§7être inspecté cette semaine."
-            );
-
-            Bukkit.broadcastMessage("");
-
-            Bukkit.broadcastMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             Bukkit.broadcastMessage("");
 
             //
@@ -431,42 +392,23 @@ public class ProjectReviewListener
             );
 
             p.sendMessage("");
-
             p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    "§8----- §6Commission Urbaine §8-----"
             );
-
             p.sendMessage(
-                    "§c✦ Projet Refusé"
+                    "§fLe projet a été refusé."
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§e" + found.getBuildName()
+                    "§7Projet: §e"
+                            + found.getBuildName()
             );
-
             p.sendMessage(
-                    "§7n'a pas été retenu pour"
-            );
-
-            p.sendMessage(
-                    "§bla ville de "
+                    "§7Ville: §b"
                             + found.getTown()
             );
-
-            p.sendMessage("");
-
             p.sendMessage(
-                    "§7Le dossier a été fermé."
+                    "§cDossier fermé par la Commission."
             );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
             p.sendMessage("");
 
             return;
