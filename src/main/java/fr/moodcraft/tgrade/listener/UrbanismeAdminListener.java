@@ -100,7 +100,7 @@ public class UrbanismeAdminListener
                     1f
             );
 
-            ClassementGUI.open(p);
+            EvaluationManagerGUI.open(p);
 
             return;
         }
