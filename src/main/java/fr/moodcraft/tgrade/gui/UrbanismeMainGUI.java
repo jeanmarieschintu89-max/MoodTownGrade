@@ -1,6 +1,5 @@
 package fr.moodcraft.tgrade.gui;
 
-import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.RankingManager;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
@@ -42,10 +41,6 @@ public class UrbanismeMainGUI {
                         "§8✦ Commission Urbaine"
                 );
 
-        //
-        // 📊 STATS
-        //
-
         long pending =
                 SubmissionStorage.getAll()
                         .stream()
@@ -53,10 +48,6 @@ public class UrbanismeMainGUI {
                                 sub.getStatus()
                                         == SubmissionStatus.PENDING)
                         .count();
-
-        //
-        // 👑 BEST CITY
-        //
 
         TownGrade best =
                 RankingManager.getBest();
@@ -66,10 +57,6 @@ public class UrbanismeMainGUI {
                         ? "Aucune"
                         : best.getTown();
 
-        //
-        // 🌌 GLASS
-        //
-
         ItemStack glass =
                 item(
 
@@ -77,10 +64,6 @@ public class UrbanismeMainGUI {
 
                         " "
                 );
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -101,10 +84,6 @@ public class UrbanismeMainGUI {
 
             inv.setItem(slot, glass);
         }
-
-        //
-        // 🏛 HEADER
-        //
 
         inv.setItem(
 
@@ -146,46 +125,12 @@ public class UrbanismeMainGUI {
         );
 
         //
-        // 🏗 PROJETS
-        //
-
-        inv.setItem(
-
-                20,
-
-                item(
-
-                        Material.WRITABLE_BOOK,
-
-                        "§b✦ Dossiers Urbains",
-
-                        "§8----- §6Inspection §8-----",
-
-                        "§7Consultez les projets",
-
-                        "§7et constructions RP",
-
-                        "§7des municipalités.",
-
-                        "",
-
-                        "§7Suivi des validations",
-
-                        "§7et inspections nationales.",
-
-                        "",
-
-                        "§b▶ Ouvrir les dossiers"
-                )
-        );
-
-        //
         // 👥 AVIS CITOYENS
         //
 
         inv.setItem(
 
-                22,
+                20,
 
                 item(
 
@@ -219,7 +164,7 @@ public class UrbanismeMainGUI {
 
         inv.setItem(
 
-                24,
+                22,
 
                 item(
 
@@ -253,13 +198,9 @@ public class UrbanismeMainGUI {
 
         if (TownyHook.canManage(p)) {
 
-            //
-            // ➕ SOUMISSION
-            //
-
             inv.setItem(
 
-                    30,
+                    29,
 
                     item(
 
@@ -281,13 +222,9 @@ public class UrbanismeMainGUI {
                     )
             );
 
-            //
-            // 👑 CONSEIL DES MAIRES
-            //
-
             inv.setItem(
 
-                    32,
+                    31,
 
                     item(
 
@@ -319,7 +256,7 @@ public class UrbanismeMainGUI {
 
             inv.setItem(
 
-                    34,
+                    33,
 
                     item(
 
@@ -363,10 +300,6 @@ public class UrbanismeMainGUI {
                         "§7principal du serveur."
                 )
         );
-
-        //
-        // 🚀 OPEN
-        //
 
         p.openInventory(inv);
     }
