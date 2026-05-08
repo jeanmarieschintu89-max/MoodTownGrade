@@ -39,10 +39,6 @@ public class UrbanismeAdminGUI {
                         "§8✦ Centre National"
                 );
 
-        //
-        // 📊 STATS
-        //
-
         long pending =
                 SubmissionStorage.getAll()
                         .stream()
@@ -59,10 +55,6 @@ public class UrbanismeAdminGUI {
                                         == SubmissionStatus.APPROVED)
                         .count();
 
-        //
-        // 🌌 GLASS
-        //
-
         ItemStack glass =
                 new ItemStack(
                         Material.BLACK_STAINED_GLASS_PANE
@@ -76,10 +68,6 @@ public class UrbanismeAdminGUI {
         );
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -228,7 +216,11 @@ public class UrbanismeAdminGUI {
 
                 "",
 
-                "§7Condition minimale: §e25§7/50",
+                "§8• §fVilles validées",
+
+                "§8• §fSubventions progressives",
+
+                "§8• §fVersement banque municipale",
 
                 "",
 
@@ -280,10 +272,6 @@ public class UrbanismeAdminGUI {
 
                 "§7urbain principal."
         );
-
-        //
-        // 🚀 OPEN
-        //
 
         p.openInventory(inv);
     }
