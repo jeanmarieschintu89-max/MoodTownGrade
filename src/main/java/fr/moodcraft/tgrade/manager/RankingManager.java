@@ -1,4 +1,3 @@
-
 package fr.moodcraft.tgrade.manager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
@@ -10,7 +9,7 @@ import java.util.List;
 public class RankingManager {
 
     //
-    // 🏆 TOP
+    // 🏆 TOP NATIONAL
     //
 
     public static List<TownGrade> getTop() {
@@ -26,7 +25,7 @@ public class RankingManager {
                 GradeManager.getAll()) {
 
             //
-            // ✅ FINISHED ONLY
+            // ✅ VILLES VALIDÉES
             //
 
             if (!grade.isFinished()) {
@@ -37,13 +36,16 @@ public class RankingManager {
         }
 
         //
-        // 📊 SORT
+        // 📊 SORT PRESTIGE
         //
 
         list.sort(
 
-                Comparator.comparingInt(
-                        TownGrade::getTotal
+                Comparator.comparingDouble(
+                        grade -> NationalScoreCalculator
+                                .getFinalScore(
+                                        grade.getTown()
+                                )
                 ).reversed()
         );
 
@@ -57,6 +59,10 @@ public class RankingManager {
     public static int getPosition(
             String town
     ) {
+
+        if (town == null) {
+            return -1;
+        }
 
         List<TownGrade> top =
                 getTop();
@@ -77,7 +83,7 @@ public class RankingManager {
     }
 
     //
-    // 👑 BEST CITY
+    // 👑 CAPITALE NATIONALE
     //
 
     public static TownGrade getBest() {
@@ -93,7 +99,7 @@ public class RankingManager {
     }
 
     //
-    // 📊 AVERAGE SCORE
+    // 📊 SCORE MOYEN
     //
 
     public static double getAverageScore() {
@@ -109,7 +115,11 @@ public class RankingManager {
 
         for (TownGrade grade : top) {
 
-            total += grade.getTotal();
+            total +=
+                    NationalScoreCalculator
+                            .getFinalScore(
+                                    grade.getTown()
+                            );
         }
 
         return round(
@@ -118,7 +128,7 @@ public class RankingManager {
     }
 
     //
-    // 🏙 FINISHED TOWNS
+    // 🏙 VILLES CLASSÉES
     //
 
     public static int getFinishedTowns() {
@@ -127,7 +137,7 @@ public class RankingManager {
     }
 
     //
-    // 🏆 TOTAL PRESTIGE
+    // 🏛 PRESTIGE NATIONAL TOTAL
     //
 
     public static int getTotalPrestige() {
@@ -137,10 +147,72 @@ public class RankingManager {
         for (TownGrade grade :
                 getTop()) {
 
-            total += grade.getTotal();
+            total +=
+                    NationalScoreCalculator
+                            .getFinalScore(
+                                    grade.getTown()
+                            );
         }
 
         return total;
+    }
+
+    //
+    // 👑 TITRE RP
+    //
+
+    public static String getNationalTitle(
+            double score
+    ) {
+
+        if (score >= 47) {
+
+            return "§6👑 Capitale Impériale";
+        }
+
+        if (score >= 42) {
+
+            return "§e✦ Métropole Nationale";
+        }
+
+        if (score >= 36) {
+
+            return "§a✦ Grande Ville Prestigieuse";
+        }
+
+        if (score >= 30) {
+
+            return "§b✦ Ville Reconnue";
+        }
+
+        if (score >= 22) {
+
+            return "§2✦ Ville Émergente";
+        }
+
+        if (score >= 15) {
+
+            return "§e✦ Commune en Développement";
+        }
+
+        return "§7✦ Zone Rurale";
+    }
+
+    //
+    // 🏆 TITRE D'UNE VILLE
+    //
+
+    public static String getTownTitle(
+            String town
+    ) {
+
+        return getNationalTitle(
+
+                NationalScoreCalculator
+                        .getFinalScore(
+                                town
+                        )
+        );
     }
 
     //
