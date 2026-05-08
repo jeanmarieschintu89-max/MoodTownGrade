@@ -213,12 +213,46 @@ public class UrbanismeMainGUI {
         );
 
         //
-        // 🔙 MENU
+        // 👥 AVIS CITOYENS
         //
 
         inv.setItem(
 
                 22,
+
+                item(
+
+                        Material.WRITABLE_BOOK,
+
+                        "§b✦ Avis Citoyens",
+
+                        "§8━━━━━━━━━━━━━━━━",
+
+                        "§7Consultez les villes",
+
+                        "§7et participez au",
+
+                        "§7classement national.",
+
+                        "",
+
+                        "§7Influencez le prestige",
+
+                        "§7urbain de MoodCraft.",
+
+                        "",
+
+                        "§b▶ Participer aux votes"
+                )
+        );
+
+        //
+        // 🔙 MENU
+        //
+
+        inv.setItem(
+
+                21,
 
                 item(
 
