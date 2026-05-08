@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade.listener;
 import fr.moodcraft.tgrade.gui.MayorVoteGUI;
 
 import fr.moodcraft.tgrade.manager.MayorVoteManager;
+import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.MayorVote;
 
@@ -119,10 +120,6 @@ public class MayorVoteListener
 
         switch (slot) {
 
-            //
-            // 🏗 BEAUTÉ
-            //
-
             case MayorVoteGUI.BEAUTE ->
 
                     vote.setBeaute(
@@ -130,10 +127,6 @@ public class MayorVoteListener
                                     vote.getBeaute()
                             )
                     );
-
-            //
-            // 🌆 AMBIANCE
-            //
 
             case MayorVoteGUI.AMBIANCE ->
 
@@ -143,10 +136,6 @@ public class MayorVoteListener
                             )
                     );
 
-            //
-            // ⚡ ACTIVITÉ
-            //
-
             case MayorVoteGUI.ACTIVITE ->
 
                     vote.setActivite(
@@ -154,10 +143,6 @@ public class MayorVoteListener
                                     vote.getActivite()
                             )
                     );
-
-            //
-            // 🧭 ORIGINALITÉ
-            //
 
             case MayorVoteGUI.ORIGINALITE ->
 
@@ -167,10 +152,6 @@ public class MayorVoteListener
                             )
                     );
 
-            //
-            // ❤️ POPULARITÉ
-            //
-
             case MayorVoteGUI.POPULARITE ->
 
                     vote.setPopularite(
@@ -178,10 +159,6 @@ public class MayorVoteListener
                                     vote.getPopularite()
                             )
                     );
-
-            //
-            // 💾 SAVE
-            //
 
             case MayorVoteGUI.SAVE -> {
 
@@ -191,39 +168,39 @@ public class MayorVoteListener
                         vote
                 );
 
+                double national =
+                        NationalScoreCalculator
+                                .getFinalScore(
+                                        town
+                                );
+
+                double mayors =
+                        NationalScoreCalculator
+                                .getMayorScore(
+                                        town
+                                );
+
                 p.closeInventory();
 
                 p.sendMessage("");
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━"
+                        "§8----- §6Commission Urbaine §8-----"
                 );
-
                 p.sendMessage(
-                        "§6✦ Conseil des Maires"
+                        "§fVote du Conseil enregistré."
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§7Votre évaluation de §b"
-                                + town
+                        "§7Ville: §b" + town
                 );
-
                 p.sendMessage(
-                        "§7a été enregistrée."
+                        "§7Influence des maires: §e" + mayors + "§7/50"
                 );
-
-                p.sendMessage("");
-
                 p.sendMessage(
-                        "§a✔ Vote gouvernemental validé"
+                        "§7Prestige national: §e" + national + "§7/50"
                 );
-
                 p.sendMessage(
-                        "§8━━━━━━━━━━━━━━━━━━━━"
+                        "§a✔ Avis municipal archivé au registre national."
                 );
-
                 p.sendMessage("");
 
                 p.playSound(
