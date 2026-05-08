@@ -2,11 +2,13 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.RateGUI;
 
+import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
 import fr.moodcraft.tgrade.model.StaffVote;
+import fr.moodcraft.tgrade.model.TownGrade;
 
 import fr.moodcraft.tgrade.storage.VoteStorage;
 
@@ -52,6 +54,49 @@ public class RateGUIListener
 
         if (session == null)
             return;
+
+        //
+        // 🏙 GRADE
+        //
+
+        TownGrade grade =
+                GradeManager.get(
+                        session.getTown()
+                );
+
+        //
+        // 🔒 LOCKED
+        //
+
+        if (grade != null
+                && grade.isLocked()) {
+
+            p.closeInventory();
+
+            p.playSound(
+                    p.getLocation(),
+                    Sound.ENTITY_VILLAGER_NO,
+                    1f,
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cLes notations sont clôturées."
+            );
+            p.sendMessage(
+                    "§7Ville: §b" + session.getTown()
+            );
+            p.sendMessage(
+                    "§7Le registre national a été verrouillé."
+            );
+            p.sendMessage("");
+
+            return;
+        }
 
         int slot =
                 e.getRawSlot();
@@ -144,13 +189,39 @@ public class RateGUIListener
 
                 VoteStorage.saveStaffVote(vote);
 
+                //
+                // 📊 SCORES
+                //
+
                 double staff =
                         NationalScoreCalculator
                                 .getStaffScore(
                                         session.getTown()
                                 );
 
+                double mayors =
+                        NationalScoreCalculator
+                                .getMayorScore(
+                                        session.getTown()
+                                );
+
+                double citizens =
+                        NationalScoreCalculator
+                                .getCitizenScore(
+                                        session.getTown()
+                                );
+
+                double national =
+                        NationalScoreCalculator
+                                .getFinalScore(
+                                        session.getTown()
+                                );
+
                 p.closeInventory();
+
+                //
+                // 📢 MESSAGE
+                //
 
                 p.sendMessage("");
                 p.sendMessage(
@@ -163,12 +234,25 @@ public class RateGUIListener
                         "§7Ville: §b" + session.getTown()
                 );
                 p.sendMessage(
-                        "§7Moyenne Commission: §e" + staff + "§7/50"
+                        "§7Commission: §e" + staff + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Conseil des maires: §e" + mayors + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Votes citoyens: §e" + citizens + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Note nationale actuelle: §6" + national + "§7/50"
                 );
                 p.sendMessage(
                         "§a✔ Le dossier reste ouvert aux votes."
                 );
                 p.sendMessage("");
+
+                //
+                // 🔊 SOUND
+                //
 
                 p.playSound(
                         p.getLocation(),
