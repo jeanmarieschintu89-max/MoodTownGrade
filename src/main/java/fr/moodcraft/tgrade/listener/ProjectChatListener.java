@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.manager.ProjectInputManager;
@@ -35,16 +36,8 @@ public class ProjectChatListener
             AsyncPlayerChatEvent e
     ) {
 
-        //
-        // 👤 PLAYER
-        //
-
         Player p =
                 e.getPlayer();
-
-        //
-        // ❌ NOT WAITING
-        //
 
         if (!ProjectInputManager.isWaiting(
                 p.getUniqueId()
@@ -52,15 +45,7 @@ public class ProjectChatListener
             return;
         }
 
-        //
-        // ❌ CANCEL CHAT
-        //
-
         e.setCancelled(true);
-
-        //
-        // 📛 NAME
-        //
 
         String name =
                 e.getMessage().trim();
@@ -72,17 +57,9 @@ public class ProjectChatListener
         if (name.equalsIgnoreCase(
                 "annuler")) {
 
-            //
-            // 🛑 STOP WAITING
-            //
-
             ProjectInputManager.stop(
                     p.getUniqueId()
             );
-
-            //
-            // 🔔 MAIN THREAD
-            //
 
             Bukkit.getScheduler()
                     .runTask(
@@ -91,10 +68,6 @@ public class ProjectChatListener
                                     .getPlugin("MoodTownGrade"),
 
                             () -> {
-
-                                //
-                                // 🔊 SOUND
-                                //
 
                                 p.playSound(
 
@@ -107,46 +80,23 @@ public class ProjectChatListener
                                         1f
                                 );
 
-                                //
-                                // 📜 MESSAGE
-                                //
-
                                 p.sendMessage("");
-
                                 p.sendMessage(
-                                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                                        "§8----- §cProjet Annulé §8-----"
                                 );
-
-                                p.sendMessage(
-                                        "§c✦ Création annulée"
-                                );
-
                                 p.sendMessage("");
-
                                 p.sendMessage(
-                                        "§7Le dossier urbain"
+                                        "§fCréation du dossier annulée."
                                 );
-
                                 p.sendMessage(
-                                        "§7a été annulé."
+                                        "§7Aucun projet n'a été envoyé."
                                 );
-
-                                p.sendMessage("");
-
-                                p.sendMessage(
-                                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                                );
-
                                 p.sendMessage("");
                             }
                     );
 
             return;
         }
-
-        //
-        // 🛑 STOP WAITING
-        //
 
         ProjectInputManager.stop(
                 p.getUniqueId()
@@ -167,9 +117,21 @@ public class ProjectChatListener
                             Bukkit.getPluginManager()
                                     .getPlugin("MoodTownGrade"),
 
-                            () -> p.sendMessage(
-                                    "§cAucune ville détectée."
-                            )
+                            () -> {
+
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§8----- §cProjet Impossible §8-----"
+                                );
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§fAucune ville détectée."
+                                );
+                                p.sendMessage(
+                                        "§7Rejoins une ville pour déposer un projet."
+                                );
+                                p.sendMessage("");
+                            }
                     );
 
             return;
@@ -187,9 +149,21 @@ public class ProjectChatListener
                             Bukkit.getPluginManager()
                                     .getPlugin("MoodTownGrade"),
 
-                            () -> p.sendMessage(
-                                    "§cNom de projet invalide."
-                            )
+                            () -> {
+
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§8----- §cNom Invalide §8-----"
+                                );
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§fLe nom du projet est vide."
+                                );
+                                p.sendMessage(
+                                        "§7Relance la création depuis le menu."
+                                );
+                                p.sendMessage("");
+                            }
                     );
 
             return;
@@ -207,9 +181,21 @@ public class ProjectChatListener
                             Bukkit.getPluginManager()
                                     .getPlugin("MoodTownGrade"),
 
-                            () -> p.sendMessage(
-                                    "§cMaximum 32 caractères."
-                            )
+                            () -> {
+
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§8----- §cNom Trop Long §8-----"
+                                );
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§fMaximum: §e32 caractères"
+                                );
+                                p.sendMessage(
+                                        "§7Choisis un nom plus court."
+                                );
+                                p.sendMessage("");
+                            }
                     );
 
             return;
@@ -240,9 +226,21 @@ public class ProjectChatListener
                             Bukkit.getPluginManager()
                                     .getPlugin("MoodTownGrade"),
 
-                            () -> p.sendMessage(
-                                    "§cMaximum 5 projets en attente."
-                            )
+                            () -> {
+
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§8----- §cLimite Atteinte §8-----"
+                                );
+                                p.sendMessage("");
+                                p.sendMessage(
+                                        "§fTa ville a déjà §e5 projets§f en attente."
+                                );
+                                p.sendMessage(
+                                        "§7Attends une validation de la commission."
+                                );
+                                p.sendMessage("");
+                            }
                     );
 
             return;
@@ -286,10 +284,6 @@ public class ProjectChatListener
                         SubmissionStatus.PENDING
                 );
 
-        //
-        // 💾 SAVE
-        //
-
         SubmissionStorage.save(sub);
 
         //
@@ -304,10 +298,6 @@ public class ProjectChatListener
 
                         () -> {
 
-                            //
-                            // 🔊 SOUND
-                            //
-
                             p.playSound(
 
                                     p.getLocation(),
@@ -319,55 +309,27 @@ public class ProjectChatListener
                                     1f
                             );
 
-                            //
-                            // 📜 MESSAGE
-                            //
-
                             p.sendMessage("");
-
                             p.sendMessage(
-                                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                                    "§8----- §aProjet Enregistré §8-----"
                             );
-
-                            p.sendMessage(
-                                    "§a🏗 Projet enregistré"
-                            );
-
                             p.sendMessage("");
-
                             p.sendMessage(
-                                    "§7Projet: §e" + name
+                                    "§fProjet: §e" + name
                             );
-
                             p.sendMessage(
-                                    "§7Ville: §b"
-                                            + town.getName()
+                                    "§fVille: §b" + town.getName()
                             );
-
                             p.sendMessage(
-                                    "§7ID: §f" + id
+                                    "§fID: §7" + id
                             );
-
-                            p.sendMessage(
-                                    "§7Statut: §6EN ATTENTE"
-                            );
-
                             p.sendMessage("");
-
                             p.sendMessage(
-                                    "§7Le projet a été transmis"
+                                    "§7Statut: §6En attente de validation"
                             );
-
                             p.sendMessage(
-                                    "§7à la commission urbaine."
+                                    "§a✔ Transmis à la commission"
                             );
-
-                            p.sendMessage("");
-
-                            p.sendMessage(
-                                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                            );
-
                             p.sendMessage("");
                         }
                 );
