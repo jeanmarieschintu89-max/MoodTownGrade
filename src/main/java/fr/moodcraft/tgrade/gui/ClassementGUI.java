@@ -1,5 +1,6 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RankingManager;
 
 import fr.moodcraft.tgrade.model.TownGrade;
@@ -98,18 +99,24 @@ public class ClassementGUI {
 
         if (best != null) {
 
+            double national =
+                    NationalScoreCalculator
+                            .getFinalScore(
+                                    best.getTown()
+                            );
+
             headerMeta.setLore(List.of(
 
                     "§8━━━━━━━━━━━━━━━━",
 
-                    "§7Capitale architecturale:",
+                    "§7Ville dominante:",
 
                     "§e👑 " + best.getTown(),
 
                     "",
 
                     "§7Prestige national:",
-                    best.getFormattedScore(),
+                    "§e" + national + "/50",
 
                     "",
 
@@ -152,6 +159,34 @@ public class ClassementGUI {
 
             if (slot >= 44)
                 break;
+
+            //
+            // 📊 SCORES
+            //
+
+            double staff =
+                    NationalScoreCalculator
+                            .getStaffScore(
+                                    grade.getTown()
+                            );
+
+            double mayors =
+                    NationalScoreCalculator
+                            .getMayorScore(
+                                    grade.getTown()
+                            );
+
+            double citizens =
+                    NationalScoreCalculator
+                            .getCitizenScore(
+                                    grade.getTown()
+                            );
+
+            double national =
+                    NationalScoreCalculator
+                            .getFinalScore(
+                                    grade.getTown()
+                            );
 
             //
             // 🥇 MATERIAL
@@ -226,8 +261,26 @@ public class ClassementGUI {
 
                     "",
 
-                    "§7Inspection nationale:",
-                    grade.getFormattedScore(),
+                    "🏛 §7Commission: §e"
+                            + staff + "/50",
+
+                    "👑 §7Maires: §e"
+                            + Math.round(
+                            (mayors / 2.0) * 10
+                    ) / 10.0
+                            + "/25",
+
+                    "👥 §7Citoyens: §e"
+                            + Math.round(
+                            ((citizens / 50.0) * 25.0)
+                                    * 10
+                    ) / 10.0
+                            + "/25",
+
+                    "",
+
+                    "⭐ §7Score National: §e"
+                            + national + "/50",
 
                     "",
 
@@ -240,16 +293,8 @@ public class ClassementGUI {
 
                     "",
 
-                    "§7Appréciation officielle:",
-                    grade.getAppreciation(),
-
-                    "",
-
-                    "§7Inspection validée par",
-
-                    "§7la Commission Urbaine",
-
-                    "§7Nationale de MoodCraft."
+                    "§7Appréciation:",
+                    grade.getAppreciation()
             ));
 
             item.setItemMeta(meta);
@@ -319,16 +364,16 @@ public class ClassementGUI {
                 back.getItemMeta();
 
         backMeta.setDisplayName(
-                "§c⬅ Retour administratif"
+                "§c⬅ Retour"
         );
 
         backMeta.setLore(List.of(
 
                 "§8━━━━━━━━━━━━━━━━",
 
-                "§7Retourner au centre",
+                "§7Retourner au menu",
 
-                "§7urbain national."
+                "§7de la commission urbaine."
         ));
 
         back.setItemMeta(backMeta);
