@@ -1,8 +1,10 @@
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
+import fr.moodcraft.tgrade.manager.RankingManager;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownGrade;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
@@ -51,6 +53,18 @@ public class UrbanismeMainGUI {
                                 sub.getStatus()
                                         == SubmissionStatus.PENDING)
                         .count();
+
+        //
+        // 👑 BEST CITY
+        //
+
+        TownGrade best =
+                RankingManager.getBest();
+
+        String bestTown =
+                best == null
+                        ? "Aucune"
+                        : best.getTown();
 
         //
         // 🌌 GLASS
@@ -110,11 +124,22 @@ public class UrbanismeMainGUI {
 
                         "",
 
+                        "§7Capitale actuelle: §e"
+                                + bestTown,
+
+                        "§7Prestige moyen: §b"
+                                + RankingManager
+                                .getAverageScore()
+                                + "/50",
+
+                        "§7Villes classées: §a"
+                                + RankingManager
+                                .getFinishedTowns(),
+
+                        "",
+
                         "§7Dossiers actifs: §e"
                                 + pending,
-
-                        "§7Villes inspectées: §b"
-                                + GradeManager.getAll().size(),
 
                         "",
 
