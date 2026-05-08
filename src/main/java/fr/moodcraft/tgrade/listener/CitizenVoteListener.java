@@ -74,15 +74,36 @@ public class CitizenVoteListener
         //
 
         String town =
-                e.getInventory()
-                        .getItem(4)
-                        .getItemMeta()
-                        .getLore()
-                        .get(2)
-                        .replace(
-                                "§7Ville: §b",
-                                ""
-                        );
+                getTown(e);
+
+        if (town == null
+                || town.isEmpty()) {
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.ENTITY_VILLAGER_NO,
+
+                    1f,
+
+                    1f
+            );
+
+            p.sendMessage("");
+            p.sendMessage(
+                    "§8----- §6Commission Urbaine §8-----"
+            );
+            p.sendMessage(
+                    "§cVille introuvable."
+            );
+            p.sendMessage(
+                    "§7Le registre du vote est incomplet."
+            );
+            p.sendMessage("");
+
+            return;
+        }
 
         //
         // 📦 VOTE
@@ -299,6 +320,54 @@ public class CitizenVoteListener
                 p,
                 town
         );
+    }
+
+    //
+    // 🏙 GET TOWN
+    //
+
+    private String getTown(
+            InventoryClickEvent e
+    ) {
+
+        if (e.getInventory()
+                .getItem(4) == null) {
+
+            return null;
+        }
+
+        if (!e.getInventory()
+                .getItem(4)
+                .hasItemMeta()) {
+
+            return null;
+        }
+
+        if (e.getInventory()
+                .getItem(4)
+                .getItemMeta()
+                .getLore() == null) {
+
+            return null;
+        }
+
+        for (String line :
+                e.getInventory()
+                        .getItem(4)
+                        .getItemMeta()
+                        .getLore()) {
+
+            if (line.startsWith(
+                    "§7Ville: §b")) {
+
+                return line.replace(
+                        "§7Ville: §b",
+                        ""
+                );
+            }
+        }
+
+        return null;
     }
 
     //
