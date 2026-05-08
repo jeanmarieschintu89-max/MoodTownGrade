@@ -191,61 +191,8 @@ public class ReviewGUIListener implements Listener {
             );
 
             //
-            // 📢 MESSAGE RP
+            // ❌ CLOSE
             //
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage(
-                    "§b🏛 Commission Urbaine"
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Inspection du projet:"
-            );
-
-            p.sendMessage(
-                    " §e" + sub.getBuildName()
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Ville: §b"
-                            + sub.getTown()
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§7Coordonnées:"
-            );
-
-            p.sendMessage(
-                    " §fX: §e" + sub.getX()
-            );
-
-            p.sendMessage(
-                    " §fY: §e" + sub.getY()
-            );
-
-            p.sendMessage(
-                    " §fZ: §e" + sub.getZ()
-            );
-
-            p.sendMessage("");
-
-            p.sendMessage(
-                    "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            );
-
-            p.sendMessage("");
 
             p.closeInventory();
 
