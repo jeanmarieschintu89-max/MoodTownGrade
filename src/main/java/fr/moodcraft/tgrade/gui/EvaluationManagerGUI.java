@@ -1,11 +1,14 @@
 package fr.moodcraft.tgrade.gui;
 
-import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
-import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
+
 import org.bukkit.Material;
 
 import org.bukkit.entity.Player;
@@ -15,46 +18,42 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EvaluationManagerGUI {
 
-    public static final int NOTE = 20;
-    public static final int FINALIZE = 24;
-    public static final int BACK = 40;
+    //
+    // ⭐ OPEN
+    //
 
-    public static void open(
-            Player p,
-            String town
-    ) {
+    public static void open(Player p) {
 
         Inventory inv =
                 Bukkit.createInventory(
+
                         null,
-                        45,
-                        "§8✦ Dossier National"
+
+                        54,
+
+                        "§8✦ Évaluations Nationales"
                 );
-
-        TownGrade grade =
-                GradeManager.get(town);
-
-        double national =
-                NationalScoreCalculator.getFinalScore(town);
-
-        double staff =
-                NationalScoreCalculator.getStaffScore(town);
-
-        double mayors =
-                NationalScoreCalculator.getMayorScore(town);
-
-        double citizens =
-                NationalScoreCalculator.getCitizenScore(town);
 
         ItemStack glass =
-                item(
-                        Material.BLACK_STAINED_GLASS_PANE,
-                        " "
+                new ItemStack(
+                        Material.BLACK_STAINED_GLASS_PANE
                 );
+
+        ItemMeta glassMeta =
+                glass.getItemMeta();
+
+        glassMeta.setDisplayName(
+                " "
+        );
+
+        glass.setItemMeta(glassMeta);
 
         int[] borders = {
 
@@ -66,7 +65,9 @@ public class EvaluationManagerGUI {
 
                 27,35,
 
-                36,37,38,39,41,42,43,44
+                36,44,
+
+                45,46,47,48,50,51,52,53
         };
 
         for (int slot : borders) {
@@ -74,130 +75,196 @@ public class EvaluationManagerGUI {
             inv.setItem(slot, glass);
         }
 
-        inv.setItem(
+        //
+        // 🏛 HEADER
+        //
 
-                4,
+        ItemStack header =
+                new ItemStack(
+                        Material.ENCHANTED_BOOK
+                );
 
-                item(
+        ItemMeta headerMeta =
+                header.getItemMeta();
 
-                        Material.NETHER_STAR,
-
-                        "§6✦ Dossier National",
-
-                        "§8----- §6Commission Urbaine §8-----",
-
-                        "§7Ville: §b" + town,
-
-                        "§7Statut: "
-                                + (grade.isFinished()
-                                ? "§aClôturé"
-                                : "§eOuvert"),
-
-                        "",
-
-                        "§7Note nationale: §e"
-                                + national
-                                + "§7/50",
-
-                        "§7Staff: §e" + staff + "§7/50",
-
-                        "§7Maires: §e" + mayors + "§7/50",
-
-                        "§7Citoyens: §e" + citizens + "§7/50"
-                )
+        headerMeta.setDisplayName(
+                "§6✦ Registre des Évaluations"
         );
 
-        inv.setItem(
+        headerMeta.setLore(List.of(
 
-                NOTE,
+                "§8----- §6Commission Urbaine §8-----",
 
-                item(
+                "§7Sélectionnez une ville",
 
-                        Material.ENCHANTED_BOOK,
+                "§7pour ouvrir sa notation.",
 
-                        "§b✦ Noter la ville",
+                "",
 
-                        "§8----- §6Vote Staff §8-----",
+                "§e▶ Évaluation nationale"
+        ));
 
-                        "§7Ouvrir le barème",
+        header.setItemMeta(headerMeta);
 
-                        "§7de notation staff.",
+        inv.setItem(4, header);
 
-                        "",
+        //
+        // 🏙 VILLES VALIDÉES
+        //
 
-                        "§b▶ Modifier la note"
-                )
+        Set<String> towns =
+                new HashSet<>();
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (sub.getStatus()
+                    != SubmissionStatus.APPROVED) {
+
+                continue;
+            }
+
+            towns.add(
+                    sub.getTown()
+            );
+        }
+
+        List<String> sorted =
+                new ArrayList<>(towns);
+
+        sorted.sort(String::compareToIgnoreCase);
+
+        //
+        // ❌ EMPTY
+        //
+
+        if (sorted.isEmpty()) {
+
+            ItemStack empty =
+                    new ItemStack(
+                            Material.BARRIER
+                    );
+
+            ItemMeta meta =
+                    empty.getItemMeta();
+
+            meta.setDisplayName(
+                    "§c✖ Aucune ville évaluable"
+            );
+
+            meta.setLore(List.of(
+
+                    "§8----- §6Registre National §8-----",
+
+                    "§7Aucun projet validé",
+
+                    "§7n'est disponible pour",
+
+                    "§7une notation nationale.",
+
+                    "",
+
+                    "§e▶ Validez d'abord un projet"
+            ));
+
+            empty.setItemMeta(meta);
+
+            inv.setItem(22, empty);
+        }
+
+        //
+        // 📦 LISTE
+        //
+
+        int slot = 10;
+
+        for (String town : sorted) {
+
+            if (slot >= 44)
+                break;
+
+            double score =
+                    NationalScoreCalculator
+                            .getFinalScore(town);
+
+            ItemStack item =
+                    new ItemStack(
+                            Material.BEACON
+                    );
+
+            ItemMeta meta =
+                    item.getItemMeta();
+
+            meta.setDisplayName(
+                    "§f✦ §b" + town
+            );
+
+            meta.setLore(List.of(
+
+                    "§8----- §6Dossier National §8-----",
+
+                    "§7Ville: §b" + town,
+
+                    "§7Note actuelle: §e"
+                            + score
+                            + "§7/50",
+
+                    "",
+
+                    "§7Ouvre directement le",
+
+                    "§7menu de notation officiel.",
+
+                    "",
+
+                    "§e▶ Noter cette ville"
+            ));
+
+            item.setItemMeta(meta);
+
+            inv.setItem(slot, item);
+
+            slot++;
+
+            if (slot == 17)
+                slot = 19;
+
+            if (slot == 26)
+                slot = 28;
+
+            if (slot == 35)
+                slot = 37;
+        }
+
+        //
+        // 🔙 RETOUR
+        //
+
+        ItemStack back =
+                new ItemStack(
+                        Material.ARROW
+                );
+
+        ItemMeta backMeta =
+                back.getItemMeta();
+
+        backMeta.setDisplayName(
+                "§c⬅ Retour"
         );
 
-        inv.setItem(
+        backMeta.setLore(List.of(
 
-                FINALIZE,
+                "§8----- §6Centre National §8-----",
 
-                item(
+                "§7Retour au centre",
 
-                        Material.BEACON,
+                "§7national d'urbanisme."
+        ));
 
-                        "§a✔ Clôturer cette ville",
+        back.setItemMeta(backMeta);
 
-                        "§8----- §6Validation Finale §8-----",
-
-                        "§7Valide définitivement",
-
-                        "§7le dossier de cette ville.",
-
-                        "",
-
-                        "§8• §fVotes staff conservés",
-
-                        "§8• §fVotes maires conservés",
-
-                        "§8• §fVotes citoyens conservés",
-
-                        "",
-
-                        "§a▶ Finaliser le dossier"
-                )
-        );
-
-        inv.setItem(
-
-                BACK,
-
-                item(
-
-                        Material.ARROW,
-
-                        "§c⬅ Retour",
-
-                        "§8----- §6Registre National §8-----",
-
-                        "§7Retourner aux évaluations."
-                )
-        );
+        inv.setItem(49, back);
 
         p.openInventory(inv);
-    }
-
-    private static ItemStack item(
-            Material mat,
-            String name,
-            String... lore
-    ) {
-
-        ItemStack item =
-                new ItemStack(mat);
-
-        ItemMeta meta =
-                item.getItemMeta();
-
-        meta.setDisplayName(name);
-
-        meta.setLore(
-                List.of(lore)
-        );
-
-        item.setItemMeta(meta);
-
-        return item;
     }
 }
