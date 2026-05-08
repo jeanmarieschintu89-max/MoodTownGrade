@@ -210,7 +210,7 @@ public class ProjectReviewListener
             );
 
             p.sendMessage(
-                    "§a📍 Inspection terrain"
+                    "§a✦ Inspection Lancée"
             );
 
             p.sendMessage("");
@@ -228,7 +228,11 @@ public class ProjectReviewListener
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Inspection urbaine lancée."
+                    "§7Téléportation vers la zone"
+            );
+
+            p.sendMessage(
+                    "§7d'inspection du projet."
             );
 
             p.sendMessage("");
@@ -273,27 +277,32 @@ public class ProjectReviewListener
                 );
 
                 p.sendMessage(
-                        "§6🏛 Projet déjà validé"
+                        "§6✦ Projet Déjà Validé"
                 );
 
                 p.sendMessage("");
 
                 p.sendMessage(
-                        "§7Ce projet a déjà été"
+                        "§e" + found.getBuildName()
                 );
 
                 p.sendMessage(
-                        "§7approuvé par la commission."
+                        "§7est déjà approuvé pour"
+                );
+
+                p.sendMessage(
+                        "§bla ville de "
+                                + found.getTown()
                 );
 
                 p.sendMessage("");
 
                 p.sendMessage(
-                        "§7Vous pouvez toujours"
+                        "§7Vous pouvez encore modifier"
                 );
 
                 p.sendMessage(
-                        "§7modifier les évaluations."
+                        "§7les notes du projet."
                 );
 
                 p.sendMessage("");
@@ -346,37 +355,32 @@ public class ProjectReviewListener
             );
 
             Bukkit.broadcastMessage(
-                    "§a🏛 Projet Validé"
+                    "§a✦ Commission des Projets"
             );
 
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Le projet §e"
-                            + found.getBuildName()
+                    "§e" + found.getBuildName()
             );
 
             Bukkit.broadcastMessage(
-                    "§7de §b"
+                    "§7vient d'être accepté pour"
+            );
+
+            Bukkit.broadcastMessage(
+                    "§bla ville de "
                             + found.getTown()
             );
 
-            Bukkit.broadcastMessage(
-                    "§7a été approuvé par"
-            );
-
-            Bukkit.broadcastMessage(
-                    "§ala Commission Urbaine."
-            );
-
             Bukkit.broadcastMessage("");
 
             Bukkit.broadcastMessage(
-                    "§7Le projet peut désormais"
+                    "§7Le projet pourra désormais"
             );
 
             Bukkit.broadcastMessage(
-                    "§7être évalué cette semaine."
+                    "§7être inspecté cette semaine."
             );
 
             Bukkit.broadcastMessage("");
@@ -433,29 +437,28 @@ public class ProjectReviewListener
             );
 
             p.sendMessage(
-                    "§cProjet refusé"
+                    "§c✦ Projet Refusé"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Projet: §e"
-                            + found.getBuildName()
+                    "§e" + found.getBuildName()
             );
 
             p.sendMessage(
-                    "§7Ville: §b"
+                    "§7n'a pas été retenu pour"
+            );
+
+            p.sendMessage(
+                    "§bla ville de "
                             + found.getTown()
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Le dossier a été archivé"
-            );
-
-            p.sendMessage(
-                    "§7par la commission urbaine."
+                    "§7Le dossier a été fermé."
             );
 
             p.sendMessage("");
