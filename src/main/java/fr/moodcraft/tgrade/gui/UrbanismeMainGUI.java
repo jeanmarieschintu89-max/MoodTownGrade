@@ -116,11 +116,11 @@ public class UrbanismeMainGUI {
 
                         "§6✦ Commission Urbaine Nationale",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§8----- §6Registre National §8-----",
 
-                        "§7Gestion des villes",
+                        "§7Administration du prestige",
 
-                        "§7et prestige urbain.",
+                        "§7urbain de MoodCraft.",
 
                         "",
 
@@ -130,20 +130,18 @@ public class UrbanismeMainGUI {
                         "§7Prestige moyen: §b"
                                 + RankingManager
                                 .getAverageScore()
-                                + "/50",
+                                + "§7/50",
 
                         "§7Villes classées: §a"
                                 + RankingManager
                                 .getFinishedTowns(),
-
-                        "",
 
                         "§7Dossiers actifs: §e"
                                 + pending,
 
                         "",
 
-                        "§e▶ Système national MoodCraft"
+                        "§e▶ Administration nationale"
                 )
         );
 
@@ -159,25 +157,25 @@ public class UrbanismeMainGUI {
 
                         Material.WRITABLE_BOOK,
 
-                        "§b🏗 Projets Urbains",
+                        "§b✦ Dossiers Urbains",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§8----- §6Inspection §8-----",
 
                         "§7Consultez les projets",
 
                         "§7et constructions RP",
 
-                        "§7de votre municipalité.",
+                        "§7des municipalités.",
 
                         "",
 
                         "§7Suivi des validations",
 
-                        "§7et inspections urbaines.",
+                        "§7et inspections nationales.",
 
                         "",
 
-                        "§b▶ Accéder aux projets"
+                        "§b▶ Ouvrir les dossiers"
                 )
         );
 
@@ -193,25 +191,25 @@ public class UrbanismeMainGUI {
 
                         Material.BOOK,
 
-                        "§b✦ Avis Citoyens",
+                        "§e✦ Votes Citoyens",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§8----- §6Participation §8-----",
 
-                        "§7Participez aux votes",
+                        "§7Influencez le prestige",
 
-                        "§7et influencez le",
+                        "§7des villes par les",
 
-                        "§7prestige des villes.",
-
-                        "",
-
-                        "§7Impact sur le",
-
-                        "§7classement national.",
+                        "§7votes nationaux.",
 
                         "",
 
-                        "§b▶ Participer aux votes"
+                        "§7Chaque avis participe",
+
+                        "§7au classement officiel.",
+
+                        "",
+
+                        "§e▶ Participer aux votes"
                 )
         );
 
@@ -227,25 +225,25 @@ public class UrbanismeMainGUI {
 
                         Material.GOLD_INGOT,
 
-                        "§6🏆 Palmarès National",
+                        "§6✦ Palmarès National",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§8----- §6Classement §8-----",
 
-                        "§7Consultez le classement",
+                        "§7Consultez les villes",
 
-                        "§7officiel des villes",
+                        "§7les plus prestigieuses",
 
                         "§7de MoodCraft.",
 
                         "",
 
-                        "§7Prestige national,",
+                        "§7Scores, influence",
 
-                        "§7votes et financements.",
+                        "§7et prestige national.",
 
                         "",
 
-                        "§6▶ Voir le palmarès"
+                        "§6▶ Voir le classement"
                 )
         );
 
@@ -267,19 +265,19 @@ public class UrbanismeMainGUI {
 
                             Material.NETHER_STAR,
 
-                            "§a➕ Déposer un Projet",
+                            "§a✦ Déposer un Projet",
 
-                            "§8━━━━━━━━━━━━━━━━",
+                            "§8----- §6Urbanisme §8-----",
 
-                            "§7Proposer une nouvelle",
+                            "§7Soumettre une nouvelle",
 
-                            "§7construction RP pour",
+                            "§7construction au registre",
 
-                            "§7votre municipalité.",
+                            "§7national urbain.",
 
                             "",
 
-                            "§a▶ Créer un projet"
+                            "§a▶ Créer un dossier"
                     )
             );
 
@@ -297,13 +295,13 @@ public class UrbanismeMainGUI {
 
                             "§6✦ Conseil des Maires",
 
-                            "§8━━━━━━━━━━━━━━━━",
+                            "§8----- §6Gouvernance §8-----",
 
-                            "§7Votes et influence",
+                            "§7Gestion des influences",
 
-                            "§7des municipalités",
+                            "§7et des décisions",
 
-                            "§7de MoodCraft.",
+                            "§7municipales.",
 
                             "",
 
@@ -327,19 +325,19 @@ public class UrbanismeMainGUI {
 
                             Material.COMPASS,
 
-                            "§c🛰 Centre National",
+                            "§c✦ Centre National",
 
-                            "§8━━━━━━━━━━━━━━━━",
+                            "§8----- §6Administration §8-----",
 
                             "§7Gestion des inspections",
 
-                            "§7et administration",
+                            "§7et supervision des",
 
-                            "§7urbaine nationale.",
+                            "§7registres urbains.",
 
                             "",
 
-                            "§c▶ Accéder au centre"
+                            "§c▶ Accès administratif"
                     )
             );
         }
@@ -358,11 +356,11 @@ public class UrbanismeMainGUI {
 
                         "§c⬅ Retour",
 
-                        "§8━━━━━━━━━━━━━━━━",
+                        "§8----- §6MoodCraft §8-----",
 
                         "§7Retourner au menu",
 
-                        "§7principal de MoodCraft."
+                        "§7principal du serveur."
                 )
         );
 
