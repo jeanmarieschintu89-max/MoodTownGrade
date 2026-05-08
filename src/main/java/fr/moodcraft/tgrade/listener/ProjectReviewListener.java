@@ -248,6 +248,78 @@ public class ProjectReviewListener
 
         if (slot == 24) {
 
+            //
+            // 🔒 DÉJÀ VALIDÉ
+            //
+
+            if (found.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                p.playSound(
+
+                        p.getLocation(),
+
+                        Sound.ENTITY_VILLAGER_NO,
+
+                        1f,
+
+                        1f
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage(
+                        "§6🏛 Projet déjà validé"
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Ce projet a déjà été"
+                );
+
+                p.sendMessage(
+                        "§7approuvé par la commission."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§7Vous pouvez toujours"
+                );
+
+                p.sendMessage(
+                        "§7modifier les évaluations."
+                );
+
+                p.sendMessage("");
+
+                p.sendMessage(
+                        "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                );
+
+                p.sendMessage("");
+
+                //
+                // ⭐ OPEN NOTES
+                //
+
+                RateGUI.open(
+                        p,
+                        found.getTown()
+                );
+
+                return;
+            }
+
+            //
+            // ✅ VALIDATION
+            //
+
             found.setStatus(
                     SubmissionStatus.APPROVED
             );
