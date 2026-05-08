@@ -113,10 +113,10 @@ public class UrbanismeMainListener
         );
 
         //
-        // 📜 PROJETS
+        // 🏗 PROJETS
         //
 
-        if (slot == 11) {
+        if (slot == 20) {
 
             //
             // 🛡 TOWNY CHECK
@@ -180,10 +180,47 @@ public class UrbanismeMainListener
         }
 
         //
+        // 👥 AVIS CITOYENS
+        //
+
+        if (slot == 22) {
+
+            CitizenTownListGUI.open(p);
+
+            return;
+        }
+
+        //
+        // 🏆 CLASSEMENT
+        //
+
+        if (slot == 24) {
+
+            p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
+
+                    1f,
+
+                    1f
+            );
+
+            p.performCommand(
+                    "urbanisme classement"
+            );
+
+            return;
+        }
+
+        //
         // ➕ SOUMISSION
         //
 
-        if (slot == 13) {
+        if (slot == 30) {
 
             //
             // 🛡 TOWNY CHECK
@@ -277,17 +314,17 @@ public class UrbanismeMainListener
             );
 
             p.sendMessage(
-                    "§a✦ Création d'un dossier urbain"
+                    "§a✦ Nouveau Projet"
             );
 
             p.sendMessage("");
 
             p.sendMessage(
-                    "§7Tape maintenant dans le chat"
+                    "§7Tape dans le chat le nom"
             );
 
             p.sendMessage(
-                    "§7le nom du projet."
+                    "§7de votre projet urbain."
             );
 
             p.sendMessage("");
@@ -322,84 +359,10 @@ public class UrbanismeMainListener
         }
 
         //
-        // 🏆 CLASSEMENT
-        //
-
-        if (slot == 15) {
-
-            p.closeInventory();
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
-                    1f,
-
-                    1f
-            );
-
-            p.performCommand(
-                    "urbanisme classement"
-            );
-
-            return;
-        }
-
-        //
-        // 🔙 MENU PRINCIPAL
-        //
-
-        if (slot == 21) {
-
-            p.closeInventory();
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.UI_BUTTON_CLICK,
-
-                    1f,
-
-                    1f
-            );
-
-            p.performCommand(
-                    "menu"
-            );
-
-            return;
-        }
-
-        //
-        // 👥 AVIS CITOYENS
-        //
-
-        if (slot == 22) {
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.UI_BUTTON_CLICK,
-
-                    1f,
-
-                    1f
-            );
-
-            CitizenTownListGUI.open(p);
-
-            return;
-        }
-
-        //
         // 👑 CONSEIL DES MAIRES
         //
 
-        if (slot == 23) {
+        if (slot == 32) {
 
             //
             // 🛡 TOWNY CHECK
@@ -481,7 +444,7 @@ public class UrbanismeMainListener
         // ❌ ADMIN WITHOUT PERM
         //
 
-        if (slot == 31
+        if (slot == 34
                 && !p.hasPermission(
                 "moodtowngrade.staff")) {
 
@@ -503,7 +466,7 @@ public class UrbanismeMainListener
         // 🛰 ADMIN
         //
 
-        if (slot == 31) {
+        if (slot == 34) {
 
             p.playSound(
 
@@ -517,6 +480,21 @@ public class UrbanismeMainListener
             );
 
             UrbanismeAdminGUI.open(p);
+
+            return;
+        }
+
+        //
+        // 🔙 RETOUR
+        //
+
+        if (slot == 49) {
+
+            p.closeInventory();
+
+            p.performCommand(
+                    "menu"
+            );
         }
     }
 }
