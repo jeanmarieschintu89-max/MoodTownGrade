@@ -55,11 +55,49 @@ public class RateGUI {
 
         fill(inv);
 
+        //
+        // 🏛 HEADER
+        //
+
+        ItemStack header =
+                new ItemStack(
+                        Material.NETHER_STAR
+                );
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        headerMeta.setDisplayName(
+                "§6✦ Commission Urbaine"
+        );
+
+        headerMeta.setLore(List.of(
+
+                "§8----- §6Notation Nationale §8-----",
+
+                "§7Ville inspectée: §b" + town,
+
+                "",
+
+                "§7Chaque critère participe",
+
+                "§7au §ePrestige National§7.",
+
+                "",
+
+                "§e▶ Cliquer sur un critère"
+        ));
+
+        header.setItemMeta(headerMeta);
+
+        inv.setItem(4, header);
+
         set(
                 inv,
                 ARCHI,
                 Material.QUARTZ_BLOCK,
-                "§f🏗 Architecture",
+                "§f✦ Architecture",
+                "§7Qualité visuelle des bâtiments.",
                 session.getArchitecture(),
                 10
         );
@@ -68,7 +106,8 @@ public class RateGUI {
                 inv,
                 COHERENCE,
                 Material.PAINTING,
-                "§d🎨 Cohérence",
+                "§d✦ Cohérence",
+                "§7Harmonie du style urbain.",
                 session.getCoherence(),
                 6
         );
@@ -77,7 +116,8 @@ public class RateGUI {
                 inv,
                 ACTIVITE,
                 Material.BELL,
-                "§e⚡ Activité",
+                "§e✦ Activité",
+                "§7Vie locale et présence citoyenne.",
                 session.getActivite(),
                 8
         );
@@ -86,7 +126,8 @@ public class RateGUI {
                 inv,
                 BANQUE,
                 Material.GOLD_INGOT,
-                "§6💰 Banque",
+                "§6✦ Banque",
+                "§7Solidité économique de la ville.",
                 session.getBanque(),
                 4
         );
@@ -95,7 +136,8 @@ public class RateGUI {
                 inv,
                 BUILD,
                 Material.BRICKS,
-                "§c🏛 Build",
+                "§c✦ Urbanisme",
+                "§7Qualité générale des constructions.",
                 session.getBuild(),
                 8
         );
@@ -104,7 +146,8 @@ public class RateGUI {
                 inv,
                 RP,
                 Material.WRITABLE_BOOK,
-                "§a🎭 RP",
+                "§a✦ Roleplay",
+                "§7Identité, histoire et immersion.",
                 session.getRoleplay(),
                 6
         );
@@ -113,7 +156,8 @@ public class RateGUI {
                 inv,
                 TAILLE,
                 Material.MAP,
-                "§2🌍 Taille",
+                "§2✦ Développement",
+                "§7Taille et organisation du territoire.",
                 session.getTaille(),
                 3
         );
@@ -122,7 +166,8 @@ public class RateGUI {
                 inv,
                 VOTES,
                 Material.DIAMOND,
-                "§b🗳 Votes",
+                "§b✦ Votes Citoyens",
+                "§7Reconnaissance par les habitants.",
                 session.getVotes(),
                 5
         );
@@ -136,8 +181,21 @@ public class RateGUI {
                 save.getItemMeta();
 
         meta.setDisplayName(
-                "§a✅ Sauvegarder"
+                "§a✔ Valider la notation"
         );
+
+        meta.setLore(List.of(
+
+                "§8----- §6Registre National §8-----",
+
+                "§7Enregistrer les notes",
+
+                "§7dans le dossier officiel.",
+
+                "",
+
+                "§a▶ Sauvegarder"
+        ));
 
         save.setItemMeta(meta);
 
@@ -173,6 +231,7 @@ public class RateGUI {
             int slot,
             Material mat,
             String name,
+            String description,
             int current,
             int max
     ) {
@@ -187,10 +246,19 @@ public class RateGUI {
 
         meta.setLore(List.of(
 
-                "§7Note:",
-                "§e" + current + "§7/" + max,
+                "§8----- §6Critère National §8-----",
+
+                description,
+
                 "",
-                "§a▶ Cliquer"
+
+                "§7Note actuelle: §e" + current + "§7/" + max,
+
+                "§7Impact: §ePrestige urbain",
+
+                "",
+
+                "§e▶ Cliquer pour ajuster"
         ));
 
         item.setItemMeta(meta);
