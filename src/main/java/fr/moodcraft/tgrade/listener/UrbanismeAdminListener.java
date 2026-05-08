@@ -126,11 +126,11 @@ public class UrbanismeAdminListener
                 }
 
                 //
-                // 💰 CALCUL SUBVENTION
+                // 💰 BOURSE OFFICIELLE
                 //
 
                 double amount =
-                        grade.getTotal() * 850;
+                        grade.getPayout();
 
                 //
                 // ❌ SÉCURITÉ
@@ -145,7 +145,13 @@ public class UrbanismeAdminListener
                 //
 
                 String mayor =
-                        grade.getMayor();
+                        Bukkit.getOfflinePlayer(
+                                grade.getTown()
+                        ).getName();
+
+                //
+                // ❌ MAIRE INTROUVABLE
+                //
 
                 if (mayor == null
                         || mayor.isEmpty()) {
@@ -157,10 +163,6 @@ public class UrbanismeAdminListener
                 //
 
                 if (fr.moodcraft.bridge.util.VaultHook.economy != null) {
-
-                    Bukkit.getOfflinePlayer(
-                            mayor
-                    );
 
                     fr.moodcraft.bridge.util.VaultHook.economy.depositPlayer(
 
@@ -207,7 +209,7 @@ public class UrbanismeAdminListener
             );
 
             p.sendMessage(
-                    "§7Budget total versé: §a"
+                    "§7Budget national versé: §a"
                             + String.format(
                             "%,.0f",
                             total
