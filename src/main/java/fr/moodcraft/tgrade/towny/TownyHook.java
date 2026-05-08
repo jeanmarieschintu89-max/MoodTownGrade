@@ -20,22 +20,34 @@ public class TownyHook {
     }
 
     //
+    // 👤 GET RESIDENT
+    //
+
+    public static Resident getResident(
+            Player p
+    ) {
+
+        return TownyAPI.getInstance()
+                .getResident(p);
+    }
+
+    //
     // 👑 IS MAYOR
     //
 
-    public static boolean isMayor(Player p) {
+    public static boolean isMayor(
+            Player p
+    ) {
 
-        Town town = getTown(p);
-
-        if (town == null) {
-            return false;
-        }
+        Town town =
+                getTown(p);
 
         Resident resident =
-                TownyAPI.getInstance()
-                        .getResident(p);
+                getResident(p);
 
-        if (resident == null) {
+        if (town == null
+                || resident == null) {
+
             return false;
         }
 
@@ -44,11 +56,38 @@ public class TownyHook {
     }
 
     //
-    // 🛡 CAN MANAGE
+    // 🛡 IS ASSISTANT
     //
 
-    public static boolean canManage(Player p) {
+    public static boolean isAssistant(
+            Player p
+    ) {
 
-        return isMayor(p);
+        Town town =
+                getTown(p);
+
+        Resident resident =
+                getResident(p);
+
+        if (town == null
+                || resident == null) {
+
+            return false;
+        }
+
+        return town.getAssistants()
+                .contains(resident);
+    }
+
+    //
+    // 🏛 CAN MANAGE
+    //
+
+    public static boolean canManage(
+            Player p
+    ) {
+
+        return isMayor(p)
+                || isAssistant(p);
     }
 }
