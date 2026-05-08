@@ -118,18 +118,14 @@ public class ReviewGUI {
 
         headerMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Registre National §8-----",
 
                 "§7Ville inspectée: §b"
                         + town,
 
-                "",
-
                 "§7Prestige actuel:",
 
                 grade.getFormattedScore(),
-
-                "",
 
                 "§7Classement urbain:",
 
@@ -188,7 +184,7 @@ public class ReviewGUI {
 
             meta.setDisplayName(
 
-                    "§e✦ "
+                    "§f✦ §e"
                             + sub.getBuildName()
             );
 
@@ -196,45 +192,27 @@ public class ReviewGUI {
                     new ArrayList<>();
 
             lore.add(
-                    "§8━━━━━━━━━━━━━━━━"
+                    "§8----- §6Dossier Validé §8-----"
+            );
+
+            lore.add(
+                    "§7Ville: §b" + sub.getTown()
+            );
+
+            lore.add(
+                    "§7Statut: §aPermis accordé"
             );
 
             lore.add("");
 
             lore.add(
-                    "§7Ville:"
+                    "§7Position:"
             );
 
             lore.add(
-                    "§b" + sub.getTown()
-            );
-
-            lore.add("");
-
-            lore.add(
-                    "§7Statut:"
-            );
-
-            lore.add(
-                    "§aPermis de construire accordé"
-            );
-
-            lore.add("");
-
-            lore.add(
-                    "§7Coordonnées:"
-            );
-
-            lore.add(
-                    "§fX: §e" + sub.getX()
-            );
-
-            lore.add(
-                    "§fY: §e" + sub.getY()
-            );
-
-            lore.add(
-                    "§fZ: §e" + sub.getZ()
+                    "§fX §e" + sub.getX()
+                            + " §8| §fY §e" + sub.getY()
+                            + " §8| §fZ §e" + sub.getZ()
             );
 
             lore.add("");
@@ -283,11 +261,9 @@ public class ReviewGUI {
 
         reportMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Évaluation Urbaine §8-----",
 
-                "§7Évaluation urbaine",
-
-                "§7officielle MoodCraft.",
+                "§7Rapport officiel MoodCraft.",
 
                 "",
 
@@ -307,7 +283,7 @@ public class ReviewGUI {
                         + grade.getBanque()
                         + "§7/4",
 
-                "§7Build: §e"
+                "§7Urbanisme: §e"
                         + grade.getRemarquable()
                         + "§7/8",
 
@@ -317,7 +293,7 @@ public class ReviewGUI {
 
                 "",
 
-                "§6Prestige total:",
+                "§7Prestige total:",
 
                 grade.getFormattedScore()
         ));
@@ -339,12 +315,12 @@ public class ReviewGUI {
                 notation.getItemMeta();
 
         notationMeta.setDisplayName(
-                "§6⭐ Commission d'Évaluation"
+                "§6✦ Commission d'Évaluation"
         );
 
         notationMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Notation Nationale §8-----",
 
                 "§7Accéder au système",
 
@@ -352,9 +328,9 @@ public class ReviewGUI {
 
                 "",
 
-                "§7Modification possible",
+                "§7Révision possible jusqu'au",
 
-                "§7jusqu'au reset hebdomadaire.",
+                "§7reset hebdomadaire.",
 
                 "",
 
@@ -378,16 +354,16 @@ public class ReviewGUI {
                 close.getItemMeta();
 
         closeMeta.setDisplayName(
-                "§c⬅ Fermer l'Inspection"
+                "§c⬅ Fermer l'inspection"
         );
 
         closeMeta.setLore(List.of(
 
-                "§8━━━━━━━━━━━━━━━━",
+                "§8----- §6Administration §8-----",
 
                 "§7Retour au centre",
 
-                "§7administratif."
+                "§7administratif national."
         ));
 
         close.setItemMeta(closeMeta);
