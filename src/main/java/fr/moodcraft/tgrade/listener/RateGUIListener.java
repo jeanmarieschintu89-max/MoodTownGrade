@@ -107,42 +107,6 @@ public class RateGUIListener
                                 session.getTown()
                         );
 
-                grade.setArchitecture(
-                        session.getArchitecture()
-                );
-
-                grade.setStyle(
-                        session.getCoherence()
-                );
-
-                grade.setActivite(
-                        session.getActivite()
-                );
-
-                grade.setBanque(
-                        session.getBanque()
-                );
-
-                grade.setRemarquable(
-                        session.getBuild()
-                );
-
-                grade.setRp(
-                        session.getRoleplay()
-                );
-
-                grade.setTaille(
-                        session.getTaille()
-                );
-
-                grade.setVotes(
-                        session.getVotes()
-                );
-
-                grade.setFinished(true);
-
-                GradeManager.save(grade);
-
                 //
                 // 🏛 SAVE STAFF VOTE
                 //
@@ -187,6 +151,50 @@ public class RateGUIListener
 
                 VoteStorage.saveStaffVote(vote);
 
+                //
+                // ✅ VALIDATION FINALE DU DOSSIER
+                //
+
+                grade.setArchitecture(
+                        session.getArchitecture()
+                );
+
+                grade.setStyle(
+                        session.getCoherence()
+                );
+
+                grade.setActivite(
+                        session.getActivite()
+                );
+
+                grade.setBanque(
+                        session.getBanque()
+                );
+
+                grade.setRemarquable(
+                        session.getBuild()
+                );
+
+                grade.setRp(
+                        session.getRoleplay()
+                );
+
+                grade.setTaille(
+                        session.getTaille()
+                );
+
+                grade.setVotes(
+                        session.getVotes()
+                );
+
+                grade.setFinished(true);
+
+                GradeManager.save(grade);
+
+                //
+                // 📊 SCORES FIGÉS À L'INSTANT
+                //
+
                 double national =
                         NationalScoreCalculator
                                 .getFinalScore(
@@ -218,7 +226,7 @@ public class RateGUIListener
                         "§8----- §6Commission Urbaine §8-----"
                 );
                 p.sendMessage(
-                        "§fInspection nationale validée."
+                        "§fDossier urbain validé définitivement."
                 );
                 p.sendMessage(
                         "§7Ville: §b" + session.getTown()
@@ -230,12 +238,11 @@ public class RateGUIListener
                         "§7Prestige national: §e" + national + "§7/50"
                 );
                 p.sendMessage(
-                        "§7Influences: §6Staff §e" + staff
-                                + " §8| §6Maires §e" + mayors
+                        "§7Votes pris en compte: §6Maires §e" + mayors
                                 + " §8| §6Citoyens §e" + citizens
                 );
                 p.sendMessage(
-                        "§a✔ Notes inscrites aux registres nationaux."
+                        "§a✔ Analyse nationale clôturée."
                 );
                 p.sendMessage("");
 
