@@ -1,5 +1,6 @@
 package fr.moodcraft.tgrade.listener;
 
+import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
 import fr.moodcraft.tgrade.manager.ProjectInputManager;
@@ -346,20 +347,10 @@ public class UrbanismeMainListener
         }
 
         //
-        // 🔙 MENU PRINCIPAL
+        // 👥 AVIS CITOYENS
         //
 
         if (slot == 22) {
-
-            //
-            // 🔒 CLOSE
-            //
-
-            p.closeInventory();
-
-            //
-            // 🔊 SOUND
-            //
 
             p.playSound(
 
@@ -372,9 +363,29 @@ public class UrbanismeMainListener
                     1f
             );
 
-            //
-            // 🚀 MENU
-            //
+            CitizenTownListGUI.open(p);
+
+            return;
+        }
+
+        //
+        // 🔙 MENU PRINCIPAL
+        //
+
+        if (slot == 21) {
+
+            p.closeInventory();
+
+            p.playSound(
+
+                    p.getLocation(),
+
+                    Sound.UI_BUTTON_CLICK,
+
+                    1f,
+
+                    1f
+            );
 
             p.performCommand(
                     "menu"
@@ -411,10 +422,6 @@ public class UrbanismeMainListener
 
         if (slot == 31) {
 
-            //
-            // 🔊 SOUND
-            //
-
             p.playSound(
 
                     p.getLocation(),
@@ -425,10 +432,6 @@ public class UrbanismeMainListener
 
                     1f
             );
-
-            //
-            // 🚀 OPEN
-            //
 
             UrbanismeAdminGUI.open(p);
         }
