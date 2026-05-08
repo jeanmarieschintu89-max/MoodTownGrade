@@ -176,7 +176,7 @@ public class UrbanismeAdminGUI {
         );
 
         //
-        // 📝 NOTATION
+        // ⭐ ÉVALUATIONS
         //
 
         set(
@@ -187,33 +187,29 @@ public class UrbanismeAdminGUI {
 
                 Material.ENCHANTED_BOOK,
 
-                "§3✦ Commission de Notation",
+                "§b✦ Évaluations Nationales",
 
                 "§8━━━━━━━━━━━━━━━━",
 
-                "§7Accès au réseau national",
+                "§7Gestion des notes",
 
-                "§7d'évaluation architecturale.",
+                "§7et analyses urbaines",
 
-                "",
-
-                "§7Analyse des projets",
-
-                "§7et attribution des notes",
-
-                "§7officielles du territoire.",
+                "§7des villes inspectées.",
 
                 "",
 
-                "§8• §fInspection détaillée",
+                "§8• §fRéévaluer une ville",
 
-                "§8• §fValidation urbaine",
+                "§8• §fConsulter les scores",
 
-                "§8• §fClassement communal",
+                "§8• §fModifier les inspections",
+
+                "§8• §fAnalyser le classement",
 
                 "",
 
-                "§b▶ Accéder au centre de notation"
+                "§b▶ Accéder aux évaluations"
         );
 
         //
