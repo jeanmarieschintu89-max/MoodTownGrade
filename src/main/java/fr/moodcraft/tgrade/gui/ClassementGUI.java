@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
@@ -16,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ClassementGUI {
@@ -38,10 +41,6 @@ public class ClassementGUI {
                         "§8✦ Classement National"
                 );
 
-        //
-        // 🌌 GLASS
-        //
-
         ItemStack glass =
                 new ItemStack(
                         Material.BLACK_STAINED_GLASS_PANE
@@ -53,10 +52,6 @@ public class ClassementGUI {
         glassMeta.setDisplayName(" ");
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -73,17 +68,28 @@ public class ClassementGUI {
                 45,46,47,48,50,51,52,53
         };
 
-        for (int slot : borders) {
+        for (int border : borders) {
 
-            inv.setItem(slot, glass);
+            inv.setItem(border, glass);
         }
+
+        List<TownGrade> top =
+                new ArrayList<>(
+                        RankingManager.getTop()
+                );
+
+        top.sort(
+                Comparator.comparingDouble(
+                        grade -> NationalScoreCalculator
+                                .getFinalScore(
+                                        grade.getTown()
+                                )
+                ).reversed()
+        );
 
         //
         // 👑 HEADER
         //
-
-        TownGrade best =
-                RankingManager.getBest();
 
         ItemStack header =
                 new ItemStack(
@@ -97,7 +103,10 @@ public class ClassementGUI {
                 "§6✦ Palmarès National"
         );
 
-        if (best != null) {
+        if (!top.isEmpty()) {
+
+            TownGrade best =
+                    top.get(0);
 
             double national =
                     NationalScoreCalculator
@@ -112,11 +121,11 @@ public class ClassementGUI {
                     "§7Ville dominante: §e"
                             + best.getTown(),
 
-                    "§7Prestige national: §e"
+                    "§7Note nationale: §e"
                             + national + "§7/50",
 
                     "§7Titre actuel:",
-                    best.getRank(),
+                    getRank(national),
 
                     "",
 
@@ -147,9 +156,6 @@ public class ClassementGUI {
         // 🏆 TOP
         //
 
-        List<TownGrade> top =
-                RankingManager.getTop();
-
         int slot = 10;
 
         int pos = 1;
@@ -158,10 +164,6 @@ public class ClassementGUI {
 
             if (slot >= 44)
                 break;
-
-            //
-            // 📊 SCORES
-            //
 
             double staff =
                     NationalScoreCalculator
@@ -186,10 +188,6 @@ public class ClassementGUI {
                             .getFinalScore(
                                     grade.getTown()
                             );
-
-            //
-            // 🥇 MATERIAL
-            //
 
             Material mat;
 
@@ -234,10 +232,6 @@ public class ClassementGUI {
                 }
             }
 
-            //
-            // 📦 ITEM
-            //
-
             ItemStack item =
                     new ItemStack(mat);
 
@@ -253,10 +247,10 @@ public class ClassementGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Prestige Urbain §8-----",
+                    "§8----- §6Évaluation Nationale §8-----",
 
                     "§7Titre officiel:",
-                    grade.getRank(),
+                    getRank(national),
 
                     "",
 
@@ -264,42 +258,31 @@ public class ClassementGUI {
                             + staff + "§7/50",
 
                     "§7Conseil des maires: §e"
-                            + Math.round(
-                            (mayors / 2.0) * 10
-                    ) / 10.0
-                            + "§7/25",
+                            + mayors + "§7/50",
 
                     "§7Votes citoyens: §e"
-                            + Math.round(
-                            ((citizens / 50.0) * 25.0)
-                                    * 10
-                    ) / 10.0
-                            + "§7/25",
+                            + citizens + "§7/50",
 
                     "",
 
-                    "§7Score national: §e"
+                    "§7Note nationale: §e"
                             + national + "§7/50",
 
                     "§7Financement: §a"
                             + format(
-                            grade.getPayout()
+                            getPayout(national)
                     )
-                            + "$",
+                            + "€",
 
                     "",
 
                     "§7Appréciation:",
-                    grade.getAppreciation()
+                    getAppreciation(national)
             ));
 
             item.setItemMeta(meta);
 
             inv.setItem(slot, item);
-
-            //
-            // ➡ NEXT
-            //
 
             slot++;
 
@@ -380,24 +363,105 @@ public class ClassementGUI {
 
         inv.setItem(49, back);
 
-        //
-        // 🚀 OPEN
-        //
-
         p.openInventory(inv);
     }
 
     //
-    // 💰 FORMAT
+    // 🏅 RANK
     //
 
-    private static String format(
-            int value
+    private static String getRank(
+            double score
     ) {
 
-        return String.format(
-                "%,d",
-                value
-        ).replace(",", " ");
+        if (score <= 10) {
+            return "§8✦ Hameau en friche";
+        }
+
+        if (score <= 20) {
+            return "§7✦ Commune rurale";
+        }
+
+        if (score <= 30) {
+            return "§a✦ Ville reconnue";
+        }
+
+        if (score <= 40) {
+            return "§b✦ Métropole prospère";
+        }
+
+        if (score <= 49) {
+            return "§6✦ Capitale d'élite";
+        }
+
+        return "§e§l✦ Merveille Nationale";
     }
-}
+
+    //
+    // 💰 PAYOUT
+    //
+
+    private static int getPayout(
+            double score
+    ) {
+
+        if (score <= 10) {
+            return 2500;
+        }
+
+        if (score <= 20) {
+            return 5000;
+        }
+
+        if (score <= 25) {
+            return 7500;
+        }
+
+        if (score <= 30) {
+            return 10000;
+        }
+
+        if (score <= 35) {
+            return 15000;
+        }
+
+        if (score <= 40) {
+            return 20000;
+        }
+
+        if (score <= 45) {
+            return 25000;
+        }
+
+        if (score <= 49) {
+            return 30000;
+        }
+
+        return 40000;
+    }
+
+    //
+    // 🏛 APPRECIATION
+    //
+
+    private static String getAppreciation(
+            double score
+    ) {
+
+        if (score <= 10) {
+            return "§7Avis: aide minimale accordée pour lancer le développement.";
+        }
+
+        if (score <= 20) {
+            return "§7Avis: commune en construction, soutien national modéré.";
+        }
+
+        if (score <= 25) {
+            return "§eAvis: dossier fragile mais recevable pour un financement.";
+        }
+
+        if (score <= 30) {
+            return "§aAvis: ville reconnue, développement urbain encourageant.";
+        }
+
+        if (score <= 35)
