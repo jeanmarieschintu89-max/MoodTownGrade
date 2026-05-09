@@ -403,6 +403,60 @@ public class VoteStorage {
     }
 
     //
+    // 🧹 CLEAR TOWN
+    //
+
+    public static void clearTown(
+            String town
+    ) {
+
+        if (town == null
+                || town.isEmpty()) {
+
+            return;
+        }
+
+        if (staffConfig != null) {
+
+            staffConfig.set(
+                    "votes." + town,
+                    null
+            );
+
+            save(
+                    staffConfig,
+                    staffFile
+            );
+        }
+
+        if (mayorConfig != null) {
+
+            mayorConfig.set(
+                    "votes." + town,
+                    null
+            );
+
+            save(
+                    mayorConfig,
+                    mayorFile
+            );
+        }
+
+        if (citizenConfig != null) {
+
+            citizenConfig.set(
+                    "votes." + town,
+                    null
+            );
+
+            save(
+                    citizenConfig,
+                    citizenFile
+            );
+        }
+    }
+
+    //
     // 🧹 CLEAR ALL
     //
 
