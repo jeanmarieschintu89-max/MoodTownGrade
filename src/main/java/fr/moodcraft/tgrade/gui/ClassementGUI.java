@@ -179,6 +179,13 @@ public class ClassementGUI {
                 lore.add(getAppreciation(national));
 
                 meta.setLore(lore);
+
+                meta.addItemFlags(
+                        ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                        ItemFlag.HIDE_ATTRIBUTES,
+                        ItemFlag.HIDE_ENCHANTS
+                );
+
                 item.setItemMeta(meta);
             }
 
@@ -265,7 +272,9 @@ public class ClassementGUI {
         );
 
         meta.addItemFlags(
-                ItemFlag.HIDE_ENCHANTS
+                ItemFlag.HIDE_ENCHANTS,
+                ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                ItemFlag.HIDE_ATTRIBUTES
         );
 
         item.setItemMeta(meta);
