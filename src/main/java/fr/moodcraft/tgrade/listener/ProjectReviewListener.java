@@ -83,18 +83,11 @@ public class ProjectReviewListener
 
         if (found == null) {
 
-            p.playSound(
-                    p.getLocation(),
-                    Sound.ENTITY_VILLAGER_NO,
-                    1f,
-                    1f
+            deny(
+                    p,
+                    "§cProjet introuvable.",
+                    "§7Le registre urbain ne contient plus ce dossier."
             );
-
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§cProjet introuvable.");
-            p.sendMessage("§7Le registre national ne contient plus ce dossier.");
-            p.sendMessage("");
 
             return;
         }
@@ -111,18 +104,11 @@ public class ProjectReviewListener
             if (Bukkit.getWorld(
                     found.getWorld()) == null) {
 
-                p.playSound(
-                        p.getLocation(),
-                        Sound.ENTITY_VILLAGER_NO,
-                        1f,
-                        1f
+                deny(
+                        p,
+                        "§cMonde introuvable.",
+                        "§7La zone du projet est inaccessible."
                 );
-
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cMonde introuvable.");
-                p.sendMessage("§7La zone d'inspection est inaccessible.");
-                p.sendMessage("");
 
                 return;
             }
@@ -152,17 +138,17 @@ public class ProjectReviewListener
 
             p.sendMessage("");
             p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§fInspection nationale ouverte.");
-            p.sendMessage("§7Projet: §e" + found.getBuildName());
-            p.sendMessage("§7Ville: §b" + found.getTown());
-            p.sendMessage("§a✔ Téléportation vers la zone du dossier.");
+            p.sendMessage("§fInspection du projet ouverte.");
+            p.sendMessage("§7Ville : §b" + found.getTown());
+            p.sendMessage("§7Projet : §f" + found.getBuildName());
+            p.sendMessage("§a✔ Téléportation vers la zone déclarée.");
             p.sendMessage("");
 
             return;
         }
 
         //
-        // ✅ VALIDER PERMIS
+        // ✅ VALIDER DEMANDE
         //
 
         if (slot == 22) {
@@ -170,18 +156,11 @@ public class ProjectReviewListener
             if (found.getStatus()
                     == SubmissionStatus.APPROVED) {
 
-                p.playSound(
-                        p.getLocation(),
-                        Sound.ENTITY_VILLAGER_NO,
-                        1f,
-                        1f
+                deny(
+                        p,
+                        "§cDemande déjà validée.",
+                        "§7Les votes restent ouverts jusqu'à clôture."
                 );
-
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§fProjet déjà approuvé.");
-                p.sendMessage("§7Les votes restent ouverts jusqu'à clôture.");
-                p.sendMessage("");
 
                 return;
             }
@@ -203,10 +182,11 @@ public class ProjectReviewListener
 
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage("§8----- §6Commission Urbaine §8-----");
-            Bukkit.broadcastMessage("§fPermis urbain accordé.");
-            Bukkit.broadcastMessage("§7Projet: §e" + found.getBuildName());
-            Bukkit.broadcastMessage("§7Ville: §b" + found.getTown());
-            Bukkit.broadcastMessage("§a✔ Le projet est ouvert aux votes cette semaine.");
+            Bukkit.broadcastMessage("§aDemande de projet validée.");
+            Bukkit.broadcastMessage("§7Ville : §b" + found.getTown());
+            Bukkit.broadcastMessage("§7Projet : §f" + found.getBuildName());
+            Bukkit.broadcastMessage("§7Le dossier rejoint la phase");
+            Bukkit.broadcastMessage("§7de notation publique.");
             Bukkit.broadcastMessage("");
 
             return;
@@ -221,18 +201,11 @@ public class ProjectReviewListener
             if (found.getStatus()
                     != SubmissionStatus.APPROVED) {
 
-                p.playSound(
-                        p.getLocation(),
-                        Sound.ENTITY_VILLAGER_NO,
-                        1f,
-                        1f
+                deny(
+                        p,
+                        "§cNotation impossible.",
+                        "§7La demande doit d'abord être validée."
                 );
-
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cNotation impossible.");
-                p.sendMessage("§7Le permis doit d'abord être validé.");
-                p.sendMessage("");
 
                 return;
             }
@@ -253,9 +226,11 @@ public class ProjectReviewListener
 
                 p.sendMessage("");
                 p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cLes notations sont clôturées.");
-                p.sendMessage("§7Ville: §b" + found.getTown());
-                p.sendMessage("§7Le registre national est verrouillé.");
+                p.sendMessage("§cVotes déjà clôturés.");
+                p.sendMessage("§7Ville : §b" + found.getTown());
+                p.sendMessage("§7Projet : §f" + found.getBuildName());
+                p.sendMessage("§7Le dossier urbain ne reçoit plus");
+                p.sendMessage("§7de nouvelles évaluations.");
                 p.sendMessage("");
 
                 return;
@@ -268,6 +243,13 @@ public class ProjectReviewListener
                     1f
             );
 
+            p.sendMessage("");
+            p.sendMessage("§8----- §6Commission Urbaine §8-----");
+            p.sendMessage("§fNotation staff ouverte.");
+            p.sendMessage("§7Ville : §b" + found.getTown());
+            p.sendMessage("§7Projet : §f" + found.getBuildName());
+            p.sendMessage("");
+
             RateGUI.open(
                     p,
                     found.getTown()
@@ -277,7 +259,7 @@ public class ProjectReviewListener
         }
 
         //
-        // 🔒 CLÔTURER LES NOTES
+        // 🔒 CLÔTURER LES VOTES
         //
 
         if (slot == 26) {
@@ -285,18 +267,11 @@ public class ProjectReviewListener
             if (found.getStatus()
                     != SubmissionStatus.APPROVED) {
 
-                p.playSound(
-                        p.getLocation(),
-                        Sound.ENTITY_VILLAGER_NO,
-                        1f,
-                        1f
+                deny(
+                        p,
+                        "§cClôture impossible.",
+                        "§7La demande doit d'abord être validée."
                 );
-
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cClôture impossible.");
-                p.sendMessage("§7Le permis doit d'abord être validé.");
-                p.sendMessage("");
 
                 return;
             }
@@ -317,8 +292,9 @@ public class ProjectReviewListener
 
                 p.sendMessage("");
                 p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cNotations déjà clôturées.");
-                p.sendMessage("§7Ville: §b" + found.getTown());
+                p.sendMessage("§cVotes déjà clôturés.");
+                p.sendMessage("§7Ville : §b" + found.getTown());
+                p.sendMessage("§7Projet : §f" + found.getBuildName());
                 p.sendMessage("");
 
                 return;
@@ -332,18 +308,11 @@ public class ProjectReviewListener
 
             if (staff <= 0) {
 
-                p.playSound(
-                        p.getLocation(),
-                        Sound.ENTITY_VILLAGER_NO,
-                        1f,
-                        1f
+                deny(
+                        p,
+                        "§cClôture impossible.",
+                        "§7Aucune note staff enregistrée."
                 );
-
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cClôture impossible.");
-                p.sendMessage("§7Aucune note staff enregistrée.");
-                p.sendMessage("");
 
                 return;
             }
@@ -385,29 +354,35 @@ public class ProjectReviewListener
                     1f
             );
 
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§fNotations clôturées.");
-            p.sendMessage("§7Ville: §b" + found.getTown());
-            p.sendMessage("§7Note nationale: §e" + national + "§7/50");
-            p.sendMessage("§7Influences: §6Staff §e" + staff
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("§8----- §6Commission Urbaine §8-----");
+            Bukkit.broadcastMessage("§6Clôture des votes validée.");
+            Bukkit.broadcastMessage("§7Ville : §b" + found.getTown());
+            Bukkit.broadcastMessage("§7Projet : §f" + found.getBuildName());
+            Bukkit.broadcastMessage("§7Le dossier urbain quitte la phase");
+            Bukkit.broadcastMessage("§7de notation publique.");
+            Bukkit.broadcastMessage("");
+
+            p.sendMessage("§7Note finale : §e" + national + "§7/50");
+            p.sendMessage("§7Détail : §6Staff §e" + staff
                     + " §8| §6Maires §e" + mayors
                     + " §8| §6Citoyens §e" + citizens);
-            p.sendMessage("§a✔ Dossier validé définitivement.");
             p.sendMessage("");
 
             return;
         }
 
         //
-        // ❌ REFUSER DOSSIER
+        // ❌ REFUSER DEMANDE
         //
 
         if (slot == 28) {
 
-            SubmissionStorage.delete(
-                    found.getId()
+            found.setStatus(
+                    SubmissionStatus.REJECTED
             );
+
+            SubmissionStorage.save(found);
 
             p.closeInventory();
 
@@ -418,13 +393,14 @@ public class ProjectReviewListener
                     0.8f
             );
 
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§fLe projet a été refusé.");
-            p.sendMessage("§7Projet: §e" + found.getBuildName());
-            p.sendMessage("§7Ville: §b" + found.getTown());
-            p.sendMessage("§cDossier fermé par la Commission.");
-            p.sendMessage("");
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("§8----- §6Commission Urbaine §8-----");
+            Bukkit.broadcastMessage("§cDemande de projet refusée.");
+            Bukkit.broadcastMessage("§7Ville : §b" + found.getTown());
+            Bukkit.broadcastMessage("§7Projet : §f" + found.getBuildName());
+            Bukkit.broadcastMessage("§7Le dossier ne rejoint pas");
+            Bukkit.broadcastMessage("§7la phase de notation publique.");
+            Bukkit.broadcastMessage("");
 
             return;
         }
@@ -444,5 +420,25 @@ public class ProjectReviewListener
 
             PendingProjectsGUI.open(p);
         }
+    }
+
+    private void deny(
+            Player p,
+            String line1,
+            String line2
+    ) {
+
+        p.playSound(
+                p.getLocation(),
+                Sound.ENTITY_VILLAGER_NO,
+                1f,
+                1f
+        );
+
+        p.sendMessage("");
+        p.sendMessage("§8----- §6Commission Urbaine §8-----");
+        p.sendMessage(line1);
+        p.sendMessage(line2);
+        p.sendMessage("");
     }
 }
