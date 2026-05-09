@@ -7,7 +7,11 @@ import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.CitizenVote;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Sound;
 
@@ -26,18 +30,10 @@ public class CitizenVoteListener
             InventoryClickEvent e
     ) {
 
-        //
-        // 👤 PLAYER
-        //
-
         if (!(e.getWhoClicked()
                 instanceof Player p)) {
             return;
         }
-
-        //
-        // 📛 TITLE
-        //
 
         if (!e.getView()
                 .getTitle()
@@ -45,23 +41,11 @@ public class CitizenVoteListener
             return;
         }
 
-        //
-        // ❌ CANCEL
-        //
-
         e.setCancelled(true);
-
-        //
-        // 📦 NULL
-        //
 
         if (e.getCurrentItem() == null) {
             return;
         }
-
-        //
-        // 🛑 PLAYER INVENTORY
-        //
 
         if (e.getRawSlot()
                 >= e.getView()
@@ -71,45 +55,28 @@ public class CitizenVoteListener
             return;
         }
 
-        //
-        // 🏙️ TOWN
-        //
-
         String town =
                 getTown(e);
 
         if (town == null
                 || town.isEmpty()) {
 
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.ENTITY_VILLAGER_NO,
-
-                    1f,
-
-                    1f
-            );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cVille introuvable."
-            );
-            p.sendMessage(
+            deny(
+                    p,
+                    "§cVille introuvable.",
                     "§7Le registre du vote est incomplet."
             );
-            p.sendMessage("");
 
             return;
         }
 
-        //
-        // 🔒 DOSSIER CLOTURÉ
-        //
+        TownSubmission project =
+                getActiveProject(town);
+
+        String projectName =
+                project == null
+                        ? "Projet en cours"
+                        : project.getBuildName();
 
         TownGrade grade =
                 GradeManager.get(
@@ -122,13 +89,9 @@ public class CitizenVoteListener
             p.closeInventory();
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.ENTITY_VILLAGER_NO,
-
                     1f,
-
                     1f
             );
 
@@ -137,58 +100,44 @@ public class CitizenVoteListener
                     "§8----- §6Commission Urbaine §8-----"
             );
             p.sendMessage(
-                    "§cLes votes citoyens sont clôturés."
+                    "§cVotes citoyens clôturés."
             );
             p.sendMessage(
-                    "§7Ville: §b" + town
+                    "§7Ville : §b" + town
             );
             p.sendMessage(
-                    "§7Le registre national est verrouillé."
+                    "§7Projet : §f" + projectName
+            );
+            p.sendMessage(
+                    "§7Ce dossier ne reçoit plus"
+            );
+            p.sendMessage(
+                    "§7de nouvelles évaluations."
             );
             p.sendMessage("");
 
             return;
         }
 
-        //
-        // 📦 VOTE
-        //
-
         CitizenVote vote =
                 CitizenVoteManager.getVote(
-
                         p.getUniqueId(),
-
                         town
                 );
-
-        //
-        // 🆕 CREATE
-        //
 
         if (vote == null) {
 
             vote =
                     new CitizenVote(
-
                             p.getUniqueId(),
-
                             town
                     );
         }
-
-        //
-        // 🔘 SLOT
-        //
 
         int slot =
                 e.getRawSlot();
 
         switch (slot) {
-
-            //
-            // 🏗 BEAUTÉ
-            //
 
             case CitizenVoteGUI.BEAUTE -> {
 
@@ -201,10 +150,6 @@ public class CitizenVoteListener
                 CitizenVoteManager.saveVote(vote);
             }
 
-            //
-            // 🌆 AMBIANCE
-            //
-
             case CitizenVoteGUI.AMBIANCE -> {
 
                 vote.setAmbiance(
@@ -215,10 +160,6 @@ public class CitizenVoteListener
 
                 CitizenVoteManager.saveVote(vote);
             }
-
-            //
-            // ⚡ ACTIVITÉ
-            //
 
             case CitizenVoteGUI.ACTIVITE -> {
 
@@ -231,10 +172,6 @@ public class CitizenVoteListener
                 CitizenVoteManager.saveVote(vote);
             }
 
-            //
-            // 🧭 ORIGINALITÉ
-            //
-
             case CitizenVoteGUI.ORIGINALITE -> {
 
                 vote.setOriginalite(
@@ -245,10 +182,6 @@ public class CitizenVoteListener
 
                 CitizenVoteManager.saveVote(vote);
             }
-
-            //
-            // ❤️ POPULARITÉ
-            //
 
             case CitizenVoteGUI.POPULARITE -> {
 
@@ -261,10 +194,6 @@ public class CitizenVoteListener
                 CitizenVoteManager.saveVote(vote);
             }
 
-            //
-            // 💾 SAVE
-            //
-
             case CitizenVoteGUI.SAVE -> {
 
                 vote.updateTimestamp();
@@ -272,10 +201,6 @@ public class CitizenVoteListener
                 CitizenVoteManager.saveVote(
                         vote
                 );
-
-                //
-                // 📊 SCORES
-                //
 
                 double national =
                         NationalScoreCalculator
@@ -301,51 +226,42 @@ public class CitizenVoteListener
                                         town
                                 );
 
-                //
-                // 🔒 CLOSE
-                //
-
                 p.closeInventory();
-
-                //
-                // 📢 MESSAGE
-                //
 
                 p.sendMessage("");
                 p.sendMessage(
                         "§8----- §6Commission Urbaine §8-----"
                 );
                 p.sendMessage(
-                        "§fVotre avis citoyen a été enregistré."
+                        "§aVote citoyen enregistré."
                 );
                 p.sendMessage(
-                        "§7Ville: §b" + town
+                        "§7Ville : §b" + town
                 );
                 p.sendMessage(
-                        "§7Note nationale: §e" + national + "§7/50"
+                        "§7Projet : §f" + projectName
                 );
                 p.sendMessage(
-                        "§7Influences: §6Staff §e" + staff
+                        "§7Le classement hebdomadaire"
+                );
+                p.sendMessage(
+                        "§7a été actualisé."
+                );
+                p.sendMessage("");
+                p.sendMessage(
+                        "§7Note provisoire : §e" + national + "§7/50"
+                );
+                p.sendMessage(
+                        "§7Détail : §6Staff §e" + staff
                                 + " §8| §6Maires §e" + mayors
                                 + " §8| §6Citoyens §e" + citizens
                 );
-                p.sendMessage(
-                        "§a✔ Participation archivée au registre national."
-                );
                 p.sendMessage("");
 
-                //
-                // 🔊 SOUND
-                //
-
                 p.playSound(
-
                         p.getLocation(),
-
                         Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
                         1f,
-
                         1f
                 );
 
@@ -357,34 +273,18 @@ public class CitizenVoteListener
             }
         }
 
-        //
-        // 🔊 SOUND
-        //
-
         p.playSound(
-
                 p.getLocation(),
-
                 Sound.UI_BUTTON_CLICK,
-
                 1f,
-
                 1f
         );
-
-        //
-        // 🔄 REOPEN
-        //
 
         CitizenVoteGUI.open(
                 p,
                 town
         );
     }
-
-    //
-    // 🏙 GET TOWN
-    //
 
     private String getTown(
             InventoryClickEvent e
@@ -418,6 +318,15 @@ public class CitizenVoteListener
                         .getLore()) {
 
             if (line.startsWith(
+                    "§7Ville : §b")) {
+
+                return line.replace(
+                        "§7Ville : §b",
+                        ""
+                );
+            }
+
+            if (line.startsWith(
                     "§7Ville: §b")) {
 
                 return line.replace(
@@ -430,9 +339,53 @@ public class CitizenVoteListener
         return null;
     }
 
-    //
-    // 🔢 NEXT
-    //
+    private TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
+    }
+
+    private void deny(
+            Player p,
+            String line1,
+            String line2
+    ) {
+
+        p.playSound(
+                p.getLocation(),
+                Sound.ENTITY_VILLAGER_NO,
+                1f,
+                1f
+        );
+
+        p.sendMessage("");
+        p.sendMessage(
+                "§8----- §6Commission Urbaine §8-----"
+        );
+        p.sendMessage(line1);
+        p.sendMessage(line2);
+        p.sendMessage("");
+    }
 
     private int next(
             int current
