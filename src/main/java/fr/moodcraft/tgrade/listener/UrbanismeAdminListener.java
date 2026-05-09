@@ -29,10 +29,6 @@ public class UrbanismeAdminListener
             InventoryClickEvent e
     ) {
 
-        //
-        // 🌌 GUI CHECK
-        //
-
         if (!e.getView()
                 .getTitle()
                 .equals("§8✦ Centre National")) {
@@ -41,18 +37,10 @@ public class UrbanismeAdminListener
 
         e.setCancelled(true);
 
-        //
-        // ❌ PLAYER
-        //
-
         if (!(e.getWhoClicked()
                 instanceof Player p)) {
             return;
         }
-
-        //
-        // ❌ NULL
-        //
 
         if (e.getCurrentItem() == null) {
             return;
@@ -62,19 +50,15 @@ public class UrbanismeAdminListener
                 e.getRawSlot();
 
         //
-        // 📋 DOSSIERS URBAINS
+        // 📋 DEMANDES DE PROJETS
         //
 
         if (slot == 13) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     1.1f
             );
 
@@ -84,19 +68,15 @@ public class UrbanismeAdminListener
         }
 
         //
-        // ⭐ ÉVALUATIONS NATIONALES
+        // ⭐ NOTATIONS & CLÔTURES
         //
 
         if (slot == 22) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.BLOCK_BEACON_ACTIVATE,
-
                     1f,
-
                     1f
             );
 
@@ -106,19 +86,15 @@ public class UrbanismeAdminListener
         }
 
         //
-        // 💰 DISTRIBUTION NATIONALE
+        // 💰 SUBVENTIONS URBAINES
         //
 
         if (slot == 31) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.BLOCK_BEACON_ACTIVATE,
-
                     1f,
-
                     1f
             );
 
@@ -126,47 +102,27 @@ public class UrbanismeAdminListener
 
             double total = 0;
 
-            //
-            // 📚 LOOP VILLES
-            //
-
             for (TownGrade grade :
                     GradeManager.getAll()) {
-
-                //
-                // ❌ NON VALIDÉ
-                //
 
                 if (!grade.isFinished()) {
                     continue;
                 }
 
-                //
-                // ❌ DÉJÀ PAYÉ
-                //
+                if (!grade.isLocked()) {
+                    continue;
+                }
 
                 if (grade.isPayoutClaimed()) {
                     continue;
                 }
 
-                //
-                // 💰 BOURSE
-                //
-
                 double amount =
                         grade.getPayout();
-
-                //
-                // ❌ SÉCURITÉ
-                //
 
                 if (amount <= 0) {
                     continue;
                 }
-
-                //
-                // 🏙 TOWN
-                //
 
                 Town town;
 
@@ -183,36 +139,22 @@ public class UrbanismeAdminListener
                     continue;
                 }
 
-                //
-                // ❌ TOWN INTROUVABLE
-                //
-
                 if (town == null) {
                     continue;
                 }
-
-                //
-                // 🏦 VERSEMENT
-                //
 
                 try {
 
                     town.getAccount()
                             .deposit(
-
                                     amount,
-
-                                    "Subvention Nationale"
+                                    "Subvention urbaine hebdomadaire"
                             );
 
                 } catch (Exception ex) {
 
                     continue;
                 }
-
-                //
-                // ✅ PAYÉ
-                //
 
                 grade.setPayoutClaimed(true);
 
@@ -223,31 +165,31 @@ public class UrbanismeAdminListener
                 total += amount;
             }
 
-            //
-            // 📢 RAPPORT
-            //
-
             p.sendMessage("");
             p.sendMessage(
                     "§8----- §6Commission Urbaine §8-----"
             );
             p.sendMessage(
-                    "§fFinancements nationaux distribués."
+                    "§aSubventions urbaines versées."
             );
             p.sendMessage(
-                    "§7Villes financées: §e"
+                    "§7Villes financées : §e"
                             + paid
             );
             p.sendMessage(
-                    "§7Budget versé: §a"
+                    "§7Budget total : §a"
                             + String.format(
                             "%,.0f",
                             total
                     )
+                            .replace(",", " ")
                             + "€"
             );
             p.sendMessage(
-                    "§a✔ Commission budgétaire validée."
+                    "§7Seuls les projets validés,"
+            );
+            p.sendMessage(
+                    "§7notés et clôturés sont payés."
             );
             p.sendMessage("");
 
@@ -255,19 +197,15 @@ public class UrbanismeAdminListener
         }
 
         //
-        // 🏆 CLASSEMENT
+        // 🏆 CLASSEMENT HEBDOMADAIRE
         //
 
         if (slot == 33) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
                     1f,
-
                     1f
             );
 
@@ -283,13 +221,9 @@ public class UrbanismeAdminListener
         if (slot == 40) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     0.8f
             );
 
