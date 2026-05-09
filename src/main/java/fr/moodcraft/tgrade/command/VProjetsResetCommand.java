@@ -1,4 +1,3 @@
-
 package fr.moodcraft.tgrade.command;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
@@ -39,15 +38,9 @@ public class VProjetsResetCommand
                 "moodtowngrade.staff")) {
 
             p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cAccès refusé."
-            );
-            p.sendMessage(
-                    "§7Commande réservée à l'administration nationale."
-            );
+            p.sendMessage("§8----- §6Commission Urbaine §8-----");
+            p.sendMessage("§cAccès refusé.");
+            p.sendMessage("§7Commande réservée à l'administration urbaine.");
             p.sendMessage("");
 
             return true;
@@ -84,21 +77,11 @@ public class VProjetsResetCommand
         VoteStorage.clearAll();
 
         p.sendMessage("");
-        p.sendMessage(
-                "§8----- §6Commission Urbaine §8-----"
-        );
-        p.sendMessage(
-                "§fRéinitialisation nationale terminée."
-        );
-        p.sendMessage(
-                "§7Tous les projets urbains ont été supprimés."
-        );
-        p.sendMessage(
-                "§7Les votes, notes et verrouillages sont remis à zéro."
-        );
-        p.sendMessage(
-                "§a✔ Nouvelle semaine urbaine prête."
-        );
+        p.sendMessage("§8----- §6Commission Urbaine §8-----");
+        p.sendMessage("§aRegistre urbain réinitialisé.");
+        p.sendMessage("§7Projets, votes, notes et subventions");
+        p.sendMessage("§7ont été remis à zéro.");
+        p.sendMessage("§7Nouvelle session hebdomadaire prête.");
         p.sendMessage("");
 
         return true;
