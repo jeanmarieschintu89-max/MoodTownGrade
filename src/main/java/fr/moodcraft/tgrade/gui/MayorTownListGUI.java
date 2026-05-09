@@ -203,13 +203,13 @@ public class MayorTownListGUI {
                             : project.getBuildName();
 
             ItemStack item =
-                    MoodTownFlagAPI.getTownFlagItem(town);
+                    MoodTownFlagAPI.getTownShieldItem(town);
 
             boolean hasFlag =
                     item != null;
 
             if (item == null) {
-                item = new ItemStack(Material.WHITE_BANNER);
+                item = new ItemStack(Material.SHIELD);
             }
 
             ItemMeta meta =
@@ -228,9 +228,9 @@ public class MayorTownListGUI {
                 lore.add("");
 
                 if (hasFlag) {
-                    lore.add("§a✔ Drapeau officiel enregistré");
+                    lore.add("§a✔ Blason officiel enregistré");
                 } else {
-                    lore.add("§7Drapeau : §fNon défini");
+                    lore.add("§7Blason : §fNon défini");
                 }
 
                 lore.add("");
