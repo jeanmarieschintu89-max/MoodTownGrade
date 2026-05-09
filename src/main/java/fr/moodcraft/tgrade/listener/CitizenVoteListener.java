@@ -1,5 +1,6 @@
 package fr.moodcraft.tgrade.listener;
 
+import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
 import fr.moodcraft.tgrade.gui.CitizenVoteGUI;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
@@ -82,6 +83,24 @@ public class CitizenVoteListener
 
         int slot =
                 e.getRawSlot();
+
+        //
+        // 🔙 RETOUR
+        //
+
+        if (slot == CitizenVoteGUI.BACK) {
+
+            p.playSound(
+                    p.getLocation(),
+                    Sound.UI_BUTTON_CLICK,
+                    1f,
+                    1f
+            );
+
+            CitizenTownListGUI.open(p);
+
+            return;
+        }
 
         //
         // 📍 TP PROJET
@@ -244,6 +263,13 @@ public class CitizenVoteListener
                                         town
                                 );
 
+                int total =
+                        vote.getBeaute()
+                                + vote.getAmbiance()
+                                + vote.getActivite()
+                                + vote.getOriginalite()
+                                + vote.getPopularite();
+
                 p.closeInventory();
 
                 p.sendMessage("");
@@ -260,10 +286,10 @@ public class CitizenVoteListener
                         "§7Projet : §f" + projectName
                 );
                 p.sendMessage(
-                        "§7Le classement hebdomadaire"
+                        "§7Score citoyen : §e" + total + "§7/15"
                 );
                 p.sendMessage(
-                        "§7a été actualisé."
+                        "§7Classement hebdomadaire actualisé."
                 );
                 p.sendMessage("");
                 p.sendMessage(
