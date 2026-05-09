@@ -4,7 +4,11 @@ import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -46,11 +50,21 @@ public class RateGUI {
                         town
                 );
 
+        TownSubmission project =
+                getActiveProject(
+                        town
+                );
+
+        String projectName =
+                project == null
+                        ? "Projet en cours"
+                        : project.getBuildName();
+
         Inventory inv =
                 Bukkit.createInventory(
                         null,
                         54,
-                        "§8✦ Notation Nationale"
+                        "§8✦ Notation Staff"
                 );
 
         fill(inv);
@@ -68,20 +82,36 @@ public class RateGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§6✦ Commission Urbaine"
+                "§6✦ Notation Staff"
         );
 
         headerMeta.setLore(List.of(
 
-                "§8----- §6Notation Nationale §8-----",
+                "§8----- §6Commission Urbaine §8-----",
 
-                "§7Ville inspectée: §b" + town,
+                "§7Ville : §b" + town,
+
+                "§7Projet : §f" + projectName,
 
                 "",
 
-                "§7Chaque critère participe",
+                "§7Cette notation staff concerne",
 
-                "§7au §ePrestige National§7.",
+                "§7la ville et son projet",
+
+                "§7actuellement en développement.",
+
+                "",
+
+                "§7Elle compte pour",
+
+                "§7le classement hebdomadaire.",
+
+                "",
+
+                "§7Note actuelle :",
+
+                grade.getFormattedScore(),
 
                 "",
 
@@ -97,7 +127,8 @@ public class RateGUI {
                 ARCHI,
                 Material.QUARTZ_BLOCK,
                 "§f✦ Architecture",
-                "§7Qualité visuelle des bâtiments.",
+                "§7Qualité visuelle de la ville",
+                "§7et intégration du projet.",
                 session.getArchitecture(),
                 10
         );
@@ -107,7 +138,8 @@ public class RateGUI {
                 COHERENCE,
                 Material.PAINTING,
                 "§d✦ Cohérence",
-                "§7Harmonie du style urbain.",
+                "§7Harmonie du style urbain",
+                "§7et continuité avec le projet.",
                 session.getCoherence(),
                 6
         );
@@ -117,7 +149,8 @@ public class RateGUI {
                 ACTIVITE,
                 Material.BELL,
                 "§e✦ Activité",
-                "§7Vie locale et présence citoyenne.",
+                "§7Vie locale, usage visible",
+                "§7et dynamisme autour du projet.",
                 session.getActivite(),
                 8
         );
@@ -126,8 +159,9 @@ public class RateGUI {
                 inv,
                 BANQUE,
                 Material.GOLD_INGOT,
-                "§6✦ Banque",
-                "§7Solidité économique de la ville.",
+                "§6✦ Économie",
+                "§7Capacité de la ville à soutenir",
+                "§7son développement urbain.",
                 session.getBanque(),
                 4
         );
@@ -137,7 +171,8 @@ public class RateGUI {
                 BUILD,
                 Material.BRICKS,
                 "§c✦ Urbanisme",
-                "§7Qualité générale des constructions.",
+                "§7Organisation du territoire",
+                "§7et qualité du développement.",
                 session.getBuild(),
                 8
         );
@@ -147,7 +182,8 @@ public class RateGUI {
                 RP,
                 Material.WRITABLE_BOOK,
                 "§a✦ Roleplay",
-                "§7Identité, histoire et immersion.",
+                "§7Identité, histoire, cohérence",
+                "§7et immersion municipale.",
                 session.getRoleplay(),
                 6
         );
@@ -157,7 +193,8 @@ public class RateGUI {
                 TAILLE,
                 Material.MAP,
                 "§2✦ Développement",
-                "§7Taille et organisation du territoire.",
+                "§7Taille, progression et logique",
+                "§7du territoire urbain.",
                 session.getTaille(),
                 3
         );
@@ -166,8 +203,9 @@ public class RateGUI {
                 inv,
                 VOTES,
                 Material.DIAMOND,
-                "§b✦ Votes Citoyens",
-                "§7Reconnaissance par les habitants.",
+                "§b✦ Participation",
+                "§7Prise en compte des votes",
+                "§7citoyens et municipaux.",
                 session.getVotes(),
                 5
         );
@@ -186,11 +224,23 @@ public class RateGUI {
 
         meta.setLore(List.of(
 
-                "§8----- §6Registre National §8-----",
+                "§8----- §6Notation Staff §8-----",
 
-                "§7Enregistrer les notes",
+                "§7Ville : §b" + town,
 
-                "§7dans le dossier officiel.",
+                "§7Projet : §f" + projectName,
+
+                "",
+
+                "§7Enregistre la note staff",
+
+                "§7dans le dossier hebdomadaire.",
+
+                "",
+
+                "§7Le classement sera actualisé",
+
+                "§7après sauvegarde.",
 
                 "",
 
@@ -231,7 +281,8 @@ public class RateGUI {
             int slot,
             Material mat,
             String name,
-            String description,
+            String line1,
+            String line2,
             int current,
             int max
     ) {
@@ -246,15 +297,17 @@ public class RateGUI {
 
         meta.setLore(List.of(
 
-                "§8----- §6Critère National §8-----",
+                "§8----- §6Critère Staff §8-----",
 
-                description,
+                line1,
+
+                line2,
 
                 "",
 
-                "§7Note actuelle: §e" + current + "§7/" + max,
+                "§7Note actuelle : §e" + current + "§7/" + max,
 
-                "§7Impact: §ePrestige urbain",
+                "§7Impact : §eClassement hebdomadaire",
 
                 "",
 
@@ -264,5 +317,31 @@ public class RateGUI {
         item.setItemMeta(meta);
 
         inv.setItem(slot, item);
+    }
+
+    private static TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
     }
 }
