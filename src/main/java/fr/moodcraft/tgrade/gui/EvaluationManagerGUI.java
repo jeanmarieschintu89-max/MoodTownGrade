@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,10 +27,6 @@ import java.util.List;
 import java.util.Set;
 
 public class EvaluationManagerGUI {
-
-    //
-    // ⭐ OPEN
-    //
 
     public static void open(Player p) {
 
@@ -50,9 +47,7 @@ public class EvaluationManagerGUI {
 
         if (glassMeta != null) {
 
-            glassMeta.setDisplayName(
-                    " "
-            );
+            glassMeta.setDisplayName(" ");
 
             glass.setItemMeta(glassMeta);
         }
@@ -76,10 +71,6 @@ public class EvaluationManagerGUI {
 
             inv.setItem(slot, glass);
         }
-
-        //
-        // 🏛 HEADER
-        //
 
         ItemStack header =
                 new ItemStack(
@@ -125,10 +116,6 @@ public class EvaluationManagerGUI {
 
         inv.setItem(4, header);
 
-        //
-        // 🏙 VILLES VALIDÉES
-        //
-
         Set<String> towns =
                 new HashSet<>();
 
@@ -150,10 +137,6 @@ public class EvaluationManagerGUI {
                 new ArrayList<>(towns);
 
         sorted.sort(String::compareToIgnoreCase);
-
-        //
-        // ❌ EMPTY
-        //
 
         if (sorted.isEmpty()) {
 
@@ -197,10 +180,6 @@ public class EvaluationManagerGUI {
 
             inv.setItem(22, empty);
         }
-
-        //
-        // 📦 LISTE
-        //
 
         int slot = 10;
 
@@ -264,6 +243,7 @@ public class EvaluationManagerGUI {
                 }
 
                 lore.add("");
+
                 lore.add(
                         "§7Note provisoire : §e"
                                 + String.format("%.1f", score)
@@ -278,6 +258,12 @@ public class EvaluationManagerGUI {
                 lore.add("§e▶ Noter ce dossier");
 
                 meta.setLore(lore);
+
+                meta.addItemFlags(
+                        ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                        ItemFlag.HIDE_ATTRIBUTES,
+                        ItemFlag.HIDE_ENCHANTS
+                );
 
                 item.setItemMeta(meta);
             }
@@ -295,10 +281,6 @@ public class EvaluationManagerGUI {
             if (slot == 35)
                 slot = 37;
         }
-
-        //
-        // 🔙 RETOUR
-        //
 
         ItemStack back =
                 new ItemStack(
