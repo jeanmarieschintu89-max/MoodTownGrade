@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.flag.api.MoodTownFlagAPI;
@@ -130,7 +131,7 @@ public class ClassementGUI {
             }
 
             ItemStack item =
-                    MoodTownFlagAPI.getTownFlagItem(
+                    MoodTownFlagAPI.getTownShieldItem(
                             grade.getTown()
                     );
 
@@ -138,7 +139,7 @@ public class ClassementGUI {
                     item != null;
 
             if (item == null) {
-                item = new ItemStack(Material.WHITE_BANNER);
+                item = new ItemStack(Material.SHIELD);
             }
 
             ItemMeta meta = item.getItemMeta();
@@ -157,9 +158,9 @@ public class ClassementGUI {
                 lore.add("");
 
                 if (hasFlag) {
-                    lore.add("§a✔ Drapeau officiel enregistré");
+                    lore.add("§a✔ Blason officiel enregistré");
                 } else {
-                    lore.add("§7Drapeau : §fNon défini");
+                    lore.add("§7Blason : §fNon défini");
                 }
 
                 lore.add("");
