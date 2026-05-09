@@ -1,5 +1,7 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import fr.moodcraft.tgrade.manager.MayorVoteManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
@@ -20,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MayorVoteGUI {
@@ -88,11 +91,14 @@ public class MayorVoteGUI {
         ItemMeta glassMeta =
                 glass.getItemMeta();
 
-        glassMeta.setDisplayName(
-                " "
-        );
+        if (glassMeta != null) {
 
-        glass.setItemMeta(glassMeta);
+            glassMeta.setDisplayName(
+                    " "
+            );
+
+            glass.setItemMeta(glassMeta);
+        }
 
         int[] borders = {
 
@@ -115,37 +121,90 @@ public class MayorVoteGUI {
             );
         }
 
-        set(
-                inv,
+        //
+        // 🎌 HEADER DRAPEAU
+        //
+
+        ItemStack header =
+                MoodTownFlagAPI.getTownFlagItem(
+                        town
+                );
+
+        boolean hasFlag =
+                header != null;
+
+        if (header == null) {
+
+            header =
+                    new ItemStack(
+                            Material.WHITE_BANNER
+                    );
+        }
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        if (headerMeta != null) {
+
+            headerMeta.setDisplayName(
+                    "§6✦ Conseil des Maires"
+            );
+
+            List<String> lore =
+                    new ArrayList<>();
+
+            lore.add("§8----- §6Vote municipal §8-----");
+            lore.add("§7Ville : §b" + town);
+            lore.add("§7Projet : §f" + projectName);
+            lore.add("");
+
+            if (hasFlag) {
+
+                lore.add("§a✔ Drapeau officiel enregistré");
+
+            } else {
+
+                lore.add("§7Drapeau : §fNon défini");
+            }
+
+            lore.add("");
+            lore.add("§7Donnez un avis municipal");
+            lore.add("§7sur la ville et son projet");
+            lore.add("§7en développement.");
+            lore.add("");
+            lore.add("§7Ce vote compte pour");
+            lore.add("§7le classement hebdomadaire.");
+            lore.add("");
+            lore.add(
+                    "§7Votre score : §e"
+                            + total
+                            + "§7/25"
+            );
+            lore.add(
+                    "§7Note provisoire : §e"
+                            + String.format(
+                            "%.1f",
+                            NationalScoreCalculator
+                                    .getFinalScore(town)
+                    )
+                            + "§7/50"
+            );
+            lore.add(
+                    "§7Votes des maires : §6"
+                            + NationalScoreCalculator
+                            .getMayorCount(town)
+            );
+            lore.add("");
+            lore.add("§6▶ Ajustez les critères");
+
+            headerMeta.setLore(lore);
+
+            header.setItemMeta(headerMeta);
+        }
+
+        inv.setItem(
                 4,
-                Material.NETHER_STAR,
-                "§6✦ Conseil des Maires",
-                "§8----- §6Vote municipal §8-----",
-                "§7Ville : §b" + town,
-                "§7Projet : §f" + projectName,
-                "",
-                "§7Donnez un avis municipal",
-                "§7sur la ville et son projet",
-                "§7en développement.",
-                "",
-                "§7Ce vote compte pour",
-                "§7le classement hebdomadaire.",
-                "",
-                "§7Votre score : §e"
-                        + total
-                        + "§7/25",
-                "§7Note provisoire : §e"
-                        + String.format(
-                        "%.1f",
-                        NationalScoreCalculator
-                                .getFinalScore(town)
-                )
-                        + "§7/50",
-                "§7Votes des maires : §6"
-                        + NationalScoreCalculator
-                        .getMayorCount(town),
-                "",
-                "§6▶ Ajustez les critères"
+                header
         );
 
         set(
