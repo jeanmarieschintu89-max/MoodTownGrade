@@ -36,7 +36,7 @@ public class PendingProjectsListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8✦ Dossiers Urbains"
+                        "§8✦ Demandes Urbaines"
                 )) {
             return;
         }
