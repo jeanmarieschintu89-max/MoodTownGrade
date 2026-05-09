@@ -15,6 +15,7 @@ import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.storage.VoteStorage;
 
 import fr.moodcraft.tgrade.task.WeeklyResetTask;
 
@@ -35,19 +36,11 @@ public class UrbanismeCommand
 
     @Override
     public boolean onCommand(
-
             CommandSender sender,
-
             Command command,
-
             String label,
-
             String[] args
     ) {
-
-        //
-        // 👤 PLAYER ONLY
-        //
 
         if (!(sender instanceof Player p)) {
 
@@ -58,10 +51,6 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 🏆 /TOPVILLE
-        //
-
         if (command.getName()
                 .equalsIgnoreCase(
                         "topville")) {
@@ -70,10 +59,6 @@ public class UrbanismeCommand
 
             return true;
         }
-
-        //
-        // 🏗 /PROJET
-        //
 
         if (command.getName()
                 .equalsIgnoreCase(
@@ -101,10 +86,6 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 👥 /VPROJET
-        //
-
         if (command.getName()
                 .equalsIgnoreCase(
                         "vprojet")) {
@@ -114,10 +95,6 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 🏛 OPEN GUI
-        //
-
         if (args.length == 0) {
 
             UrbanismeMainGUI.open(p);
@@ -125,20 +102,12 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 🏆 CLASSEMENT
-        //
-
         if (args[0].equalsIgnoreCase("classement")) {
 
             ClassementGUI.open(p);
 
             return true;
         }
-
-        //
-        // 🛰 STAFF COMMANDS
-        //
 
         if (args[0].equalsIgnoreCase("review")
                 || args[0].equalsIgnoreCase("noter")
@@ -167,10 +136,6 @@ public class UrbanismeCommand
             }
         }
 
-        //
-        // 📍 REVIEW
-        //
-
         if (args[0].equalsIgnoreCase("review")) {
 
             if (args.length < 2) {
@@ -189,10 +154,6 @@ public class UrbanismeCommand
 
             return true;
         }
-
-        //
-        // ⭐ NOTER
-        //
 
         if (args[0].equalsIgnoreCase("noter")) {
 
@@ -213,10 +174,6 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 💰 PAYOUT
-        //
-
         if (args[0].equalsIgnoreCase("payout")) {
 
             PayoutManager.payoutAll();
@@ -235,10 +192,6 @@ public class UrbanismeCommand
 
             return true;
         }
-
-        //
-        // 🗑 DELETE PROJECT ADMIN
-        //
 
         if (args[0].equalsIgnoreCase("delete")) {
 
@@ -304,10 +257,6 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 🔄 RESET WEEK
-        //
-
         if (args[0].equalsIgnoreCase("resetweek")) {
 
             new WeeklyResetTask().run();
@@ -326,10 +275,6 @@ public class UrbanismeCommand
 
             return true;
         }
-
-        //
-        // 🏛 RESET VILLE
-        //
 
         if (args[0].equalsIgnoreCase("resetville")) {
 
@@ -357,9 +302,14 @@ public class UrbanismeCommand
             grade.setTaille(0);
             grade.setVotes(0);
 
+            grade.setLocked(false);
             grade.setFinished(false);
-
+            grade.setFinalScore(0);
             grade.setPayoutClaimed(false);
+
+            VoteStorage.clearTown(
+                    townName
+            );
 
             GradeManager.save(grade);
 
@@ -389,16 +339,15 @@ public class UrbanismeCommand
                             + townName
             );
             p.sendMessage(
-                    "§a✔ Notes supprimées §8| §aClassement supprimé §8| §aProjets supprimés"
+                    "§a✔ Notes supprimées §8| §aVotes supprimés §8| §aProjets supprimés"
+            );
+            p.sendMessage(
+                    "§a✔ Verrouillage et financement remis à zéro"
             );
             p.sendMessage("");
 
             return true;
         }
-
-        //
-        // 🛡 TOWNY CHECK
-        //
 
         if (!TownyHook.canManage(p)) {
 
@@ -416,10 +365,6 @@ public class UrbanismeCommand
 
             return true;
         }
-
-        //
-        // 🏛 TOWN
-        //
 
         Town town =
                 TownyHook.getTown(p);
@@ -440,10 +385,6 @@ public class UrbanismeCommand
 
             return true;
         }
-
-        //
-        // ➕ PROJET
-        //
 
         if (args[0].equalsIgnoreCase("projet")) {
 
@@ -490,25 +431,15 @@ public class UrbanismeCommand
 
             TownSubmission sub =
                     new TownSubmission(
-
                             id,
-
                             town.getName(),
-
                             name,
-
                             p.getWorld().getName(),
-
                             p.getLocation().getBlockX(),
-
                             p.getLocation().getBlockY(),
-
                             p.getLocation().getBlockZ(),
-
                             p.getUniqueId(),
-
                             System.currentTimeMillis(),
-
                             SubmissionStatus.PENDING
                     );
 
@@ -542,20 +473,12 @@ public class UrbanismeCommand
             return true;
         }
 
-        //
-        // 📜 PROJETS GUI
-        //
-
         if (args[0].equalsIgnoreCase("projets")) {
 
             PendingProjectsGUI.open(p);
 
             return true;
         }
-
-        //
-        // ❌ RETIRER
-        //
 
         if (args[0].equalsIgnoreCase("retirer")) {
 
