@@ -201,7 +201,7 @@ public class EvaluationManagerGUI {
                             : project.getBuildName();
 
             ItemStack item =
-                    MoodTownFlagAPI.getTownFlagItem(
+                    MoodTownFlagAPI.getTownShieldItem(
                             town
                     );
 
@@ -212,7 +212,7 @@ public class EvaluationManagerGUI {
 
                 item =
                         new ItemStack(
-                                Material.WHITE_BANNER
+                                Material.SHIELD
                         );
             }
 
@@ -235,11 +235,11 @@ public class EvaluationManagerGUI {
 
                 if (hasFlag) {
 
-                    lore.add("§a✔ Drapeau officiel enregistré");
+                    lore.add("§a✔ Blason officiel enregistré");
 
                 } else {
 
-                    lore.add("§7Drapeau : §fNon défini");
+                    lore.add("§7Blason : §fNon défini");
                 }
 
                 lore.add("");
