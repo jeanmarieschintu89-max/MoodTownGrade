@@ -4,6 +4,10 @@ import fr.moodcraft.tgrade.manager.MayorVoteManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.MayorVote;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 
@@ -19,10 +23,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class MayorVoteGUI {
-
-    //
-    // 📍 SLOTS
-    //
 
     public static final int
             BEAUTE = 20;
@@ -42,57 +42,42 @@ public class MayorVoteGUI {
     public static final int
             SAVE = 40;
 
-    //
-    // 🚀 OPEN
-    //
-
     public static void open(
-
             Player p,
-
             String town
     ) {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         45,
-
                         "§8✦ Conseil des Maires"
                 );
 
-        //
-        // 📦 VOTE
-        //
-
         MayorVote vote =
                 MayorVoteManager.getVote(
-
                         p.getUniqueId(),
-
                         town
                 );
-
-        //
-        // 🆕 CREATE
-        //
 
         if (vote == null) {
 
             vote =
                     new MayorVote(
-
                             p.getUniqueId(),
-
                             town
                     );
         }
 
-        //
-        // 🌌 GLASS
-        //
+        TownSubmission project =
+                getActiveProject(
+                        town
+                );
+
+        String projectName =
+                project == null
+                        ? "Projet en cours"
+                        : project.getBuildName();
 
         ItemStack glass =
                 new ItemStack(
@@ -107,10 +92,6 @@ public class MayorVoteGUI {
         );
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -133,10 +114,6 @@ public class MayorVoteGUI {
             );
         }
 
-        //
-        // 👑 HEADER
-        //
-
         set(
 
                 inv,
@@ -147,13 +124,29 @@ public class MayorVoteGUI {
 
                 "§6✦ Conseil des Maires",
 
-                "§8----- §6Gouvernance §8-----",
+                "§8----- §6Vote municipal §8-----",
 
-                "§7Ville: §b" + town,
+                "§7Ville : §b" + town,
+
+                "§7Projet : §f" + projectName,
 
                 "",
 
-                "§7Prestige national: §e"
+                "§7Donnez un avis municipal",
+
+                "§7sur la ville et son projet",
+
+                "§7actuellement en développement.",
+
+                "",
+
+                "§7Ce vote compte pour",
+
+                "§7le classement hebdomadaire.",
+
+                "",
+
+                "§7Note provisoire : §e"
                         + String.format(
                         "%.1f",
                         NationalScoreCalculator
@@ -161,18 +154,14 @@ public class MayorVoteGUI {
                 )
                         + "§7/50",
 
-                "§7Votes du conseil: §6"
+                "§7Votes des maires : §6"
                         + NationalScoreCalculator
                         .getMayorCount(town),
 
                 "",
 
-                "§6▶ Influence municipale"
+                "§6▶ Ajustez les critères"
         );
-
-        //
-        // 🏗 BEAUTÉ
-        //
 
         setVote(
 
@@ -184,14 +173,12 @@ public class MayorVoteGUI {
 
                 "§f✦ Beauté",
 
-                "§7Qualité visuelle de la ville.",
+                "§7Qualité visuelle de la ville",
+
+                "§7et intégration du projet.",
 
                 vote.getBeaute()
         );
-
-        //
-        // 🌆 AMBIANCE
-        //
 
         setVote(
 
@@ -203,14 +190,12 @@ public class MayorVoteGUI {
 
                 "§e✦ Ambiance",
 
-                "§7Atmosphère et identité locale.",
+                "§7Cohérence, atmosphère",
+
+                "§7et identité municipale.",
 
                 vote.getAmbiance()
         );
-
-        //
-        // ⚡ ACTIVITÉ
-        //
 
         setVote(
 
@@ -222,14 +207,12 @@ public class MayorVoteGUI {
 
                 "§6✦ Activité",
 
-                "§7Dynamisme municipal observé.",
+                "§7Dynamisme visible autour",
+
+                "§7de la ville et du projet.",
 
                 vote.getActivite()
         );
-
-        //
-        // 🧭 ORIGINALITÉ
-        //
 
         setVote(
 
@@ -241,14 +224,12 @@ public class MayorVoteGUI {
 
                 "§b✦ Originalité",
 
-                "§7Singularité du développement urbain.",
+                "§7Créativité du développement",
+
+                "§7urbain présenté.",
 
                 vote.getOriginalite()
         );
-
-        //
-        // ❤️ POPULARITÉ
-        //
 
         setVote(
 
@@ -260,14 +241,12 @@ public class MayorVoteGUI {
 
                 "§c✦ Popularité",
 
-                "§7Reconnaissance politique de la ville.",
+                "§7Pertinence générale du projet",
+
+                "§7pour le territoire urbain.",
 
                 vote.getPopularite()
         );
-
-        //
-        // 💾 SAVE
-        //
 
         set(
 
@@ -279,27 +258,25 @@ public class MayorVoteGUI {
 
                 "§a✔ Valider le vote",
 
-                "§8----- §6Registre National §8-----",
+                "§8----- §6Conseil des Maires §8-----",
 
-                "§7Enregistrer l'avis",
+                "§7Ville : §b" + town,
 
-                "§7du conseil municipal.",
+                "§7Projet : §f" + projectName,
+
+                "",
+
+                "§7Enregistre votre avis municipal",
+
+                "§7pour le classement hebdomadaire.",
 
                 "",
 
                 "§a▶ Sauvegarder"
         );
 
-        //
-        // 🚀 OPEN
-        //
-
         p.openInventory(inv);
     }
-
-    //
-    // ⭐ ITEM VOTE
-    //
 
     private static void setVote(
 
@@ -311,7 +288,9 @@ public class MayorVoteGUI {
 
             String name,
 
-            String description,
+            String line1,
+
+            String line2,
 
             int value
     ) {
@@ -328,11 +307,13 @@ public class MayorVoteGUI {
 
                 "§8----- §6Critère du Conseil §8-----",
 
-                description,
+                line1,
+
+                line2,
 
                 "",
 
-                "§7Note actuelle: §e"
+                "§7Note actuelle : §e"
                         + value
                         + "§7/5",
 
@@ -341,10 +322,6 @@ public class MayorVoteGUI {
                 "§e▶ Cliquer pour ajuster"
         );
     }
-
-    //
-    // 🛠 ITEM
-    //
 
     private static void set(
 
@@ -377,5 +354,31 @@ public class MayorVoteGUI {
                 slot,
                 item
         );
+    }
+
+    private static TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
     }
 }
