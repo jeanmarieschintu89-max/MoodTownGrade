@@ -30,6 +30,8 @@ public class MayorVoteGUI {
     public static final int ORIGINALITE = 23;
     public static final int POPULARITE = 24;
 
+    public static final int TOWN_DATA = 13;
+
     public static final int BACK = 36;
     public static final int SAVE = 40;
     public static final int TP_PROJECT = 44;
@@ -114,41 +116,24 @@ public class MayorVoteGUI {
         }
 
         set(
-
                 inv,
-
                 4,
-
                 Material.NETHER_STAR,
-
                 "§6✦ Conseil des Maires",
-
                 "§8----- §6Vote municipal §8-----",
-
                 "§7Ville : §b" + town,
-
                 "§7Projet : §f" + projectName,
-
                 "",
-
                 "§7Donnez un avis municipal",
-
                 "§7sur la ville et son projet",
-
                 "§7en développement.",
-
                 "",
-
                 "§7Ce vote compte pour",
-
                 "§7le classement hebdomadaire.",
-
                 "",
-
                 "§7Votre score : §e"
                         + total
                         + "§7/25",
-
                 "§7Note provisoire : §e"
                         + String.format(
                         "%.1f",
@@ -156,179 +141,114 @@ public class MayorVoteGUI {
                                 .getFinalScore(town)
                 )
                         + "§7/50",
-
                 "§7Votes des maires : §6"
                         + NationalScoreCalculator
                         .getMayorCount(town),
-
                 "",
-
                 "§6▶ Ajustez les critères"
         );
 
-        setVote(
-
+        set(
                 inv,
+                TOWN_DATA,
+                Material.PAPER,
+                "§0" + town,
+                "§0" + projectName
+        );
 
+        setVote(
+                inv,
                 BEAUTE,
-
                 Material.QUARTZ_BLOCK,
-
                 "§f✦ Visuel",
-
                 "§7Beauté générale, détails",
-
                 "§7et qualité des constructions.",
-
                 vote.getBeaute()
         );
 
         setVote(
-
                 inv,
-
                 AMBIANCE,
-
                 Material.LANTERN,
-
                 "§e✦ Ambiance",
-
                 "§7Cohérence, atmosphère",
-
                 "§7et identité municipale.",
-
                 vote.getAmbiance()
         );
 
         setVote(
-
                 inv,
-
                 ACTIVITE,
-
                 Material.BELL,
-
                 "§6✦ Activité",
-
                 "§7Dynamisme visible autour",
-
                 "§7de la ville et du projet.",
-
                 vote.getActivite()
         );
 
         setVote(
-
                 inv,
-
                 ORIGINALITE,
-
                 Material.COMPASS,
-
                 "§b✦ Originalité",
-
                 "§7Créativité du développement",
-
                 "§7urbain présenté.",
-
                 vote.getOriginalite()
         );
 
         setVote(
-
                 inv,
-
                 POPULARITE,
-
                 Material.REDSTONE,
-
                 "§c✦ Avis général",
-
                 "§7Pertinence générale",
-
                 "§7du projet municipal.",
-
                 vote.getPopularite()
         );
 
         set(
-
                 inv,
-
                 BACK,
-
                 Material.BARRIER,
-
                 "§c✖ Retour",
-
                 "§8----- §6Conseil des Maires §8-----",
-
                 "§7Retour à la liste",
-
                 "§7des villes à évaluer.",
-
                 "",
-
                 "§c▶ Retour"
         );
 
         set(
-
                 inv,
-
                 SAVE,
-
                 Material.EMERALD_BLOCK,
-
                 "§a✔ Valider le vote",
-
                 "§8----- §6Conseil des Maires §8-----",
-
                 "§7Ville : §b" + town,
-
                 "§7Projet : §f" + projectName,
-
                 "",
-
                 "§7Votre score : §e"
                         + total
                         + "§7/25",
-
                 "",
-
                 "§7Enregistre votre avis municipal",
-
                 "§7pour le classement hebdomadaire.",
-
                 "",
-
                 "§a▶ Sauvegarder"
         );
 
         set(
-
                 inv,
-
                 TP_PROJECT,
-
                 Material.ENDER_PEARL,
-
                 "§b📍 Visiter le projet",
-
                 "§8----- §6Téléportation §8-----",
-
                 "§7Ville : §b" + town,
-
                 "§7Projet : §f" + projectName,
-
                 "",
-
                 "§7Téléporte vers le projet",
-
                 "§7à visiter avant le vote.",
-
                 "",
-
                 "§b▶ Se téléporter"
         );
 
@@ -336,60 +256,37 @@ public class MayorVoteGUI {
     }
 
     private static void setVote(
-
             Inventory inv,
-
             int slot,
-
             Material mat,
-
             String name,
-
             String line1,
-
             String line2,
-
             int value
     ) {
 
         set(
-
                 inv,
-
                 slot,
-
                 mat,
-
                 name,
-
                 "§8----- §6Critère du Conseil §8-----",
-
                 line1,
-
                 line2,
-
                 "",
-
                 "§7Note actuelle : §e"
                         + value
                         + "§7/5",
-
                 "",
-
                 "§e▶ Cliquer pour ajuster"
         );
     }
 
     private static void set(
-
             Inventory inv,
-
             int slot,
-
             Material mat,
-
             String name,
-
             String... lore
     ) {
 
@@ -398,6 +295,10 @@ public class MayorVoteGUI {
 
         ItemMeta meta =
                 item.getItemMeta();
+
+        if (meta == null) {
+            return;
+        }
 
         meta.setDisplayName(name);
 
