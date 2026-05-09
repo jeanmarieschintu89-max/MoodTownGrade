@@ -1,5 +1,7 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RankingManager;
 
@@ -12,9 +14,12 @@ import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
 
+import org.bukkit.enchantments.Enchantment;
+
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,11 +54,14 @@ public class MayorTownListGUI {
         ItemMeta glassMeta =
                 glass.getItemMeta();
 
-        glassMeta.setDisplayName(
-                " "
-        );
+        if (glassMeta != null) {
 
-        glass.setItemMeta(glassMeta);
+            glassMeta.setDisplayName(
+                    " "
+            );
+
+            glass.setItemMeta(glassMeta);
+        }
 
         int[] borders = {
 
@@ -86,38 +94,41 @@ public class MayorTownListGUI {
         ItemMeta headerMeta =
                 header.getItemMeta();
 
-        headerMeta.setDisplayName(
-                "§6✦ Conseil des Maires"
-        );
+        if (headerMeta != null) {
 
-        headerMeta.setLore(List.of(
+            headerMeta.setDisplayName(
+                    "§6✦ Conseil des Maires"
+            );
 
-                "§8----- §6Vote municipal §8-----",
+            headerMeta.setLore(List.of(
 
-                "§7Les maires donnent leur avis",
+                    "§8----- §6Vote municipal §8-----",
 
-                "§7sur les villes ayant un projet",
+                    "§7Les maires donnent leur avis",
 
-                "§7validé en développement.",
+                    "§7sur les villes ayant un projet",
 
-                "",
+                    "§7validé en développement.",
 
-                "§7Le vote du conseil compte",
+                    "",
 
-                "§7pour le classement hebdomadaire.",
+                    "§7Le vote du conseil compte",
 
-                "",
+                    "§7pour le classement hebdomadaire.",
 
-                "§7Ce vote ne remplace pas",
+                    "",
 
-                "§7la validation du staff.",
+                    "§7Ce vote ne remplace pas",
 
-                "",
+                    "§7la validation du staff.",
 
-                "§6▶ Choisir une ville"
-        ));
+                    "",
 
-        header.setItemMeta(headerMeta);
+                    "§6▶ Choisir une ville"
+            ));
+
+            header.setItemMeta(headerMeta);
+        }
 
         inv.setItem(
                 4,
@@ -151,34 +162,37 @@ public class MayorTownListGUI {
             ItemMeta meta =
                     empty.getItemMeta();
 
-            meta.setDisplayName(
-                    "§c✖ Aucun projet ouvert"
-            );
+            if (meta != null) {
 
-            meta.setLore(List.of(
+                meta.setDisplayName(
+                        "§c✖ Aucun projet ouvert"
+                );
 
-                    "§8----- §6Conseil des Maires §8-----",
+                meta.setLore(List.of(
 
-                    "§7Aucune ville ne possède",
+                        "§8----- §6Conseil des Maires §8-----",
 
-                    "§7un projet validé pour",
+                        "§7Aucune ville ne possède",
 
-                    "§7la notation municipale.",
+                        "§7un projet validé pour",
 
-                    "",
+                        "§7la notation municipale.",
 
-                    "§7Le conseil s'ouvrira après",
+                        "",
 
-                    "§7validation d'une demande",
+                        "§7Le conseil s'ouvrira après",
 
-                    "§7par le staff.",
+                        "§7validation d'une demande",
 
-                    "",
+                        "§7par le staff.",
 
-                    "§c▶ Revenez plus tard"
-            ));
+                        "",
 
-            empty.setItemMeta(meta);
+                        "§c▶ Revenez plus tard"
+                ));
+
+                empty.setItemMeta(meta);
+            }
 
             inv.setItem(
                     22,
@@ -193,20 +207,23 @@ public class MayorTownListGUI {
             ItemMeta backMeta =
                     back.getItemMeta();
 
-            backMeta.setDisplayName(
-                    "§c⬅ Retour"
-            );
+            if (backMeta != null) {
 
-            backMeta.setLore(List.of(
+                backMeta.setDisplayName(
+                        "§c⬅ Retour"
+                );
 
-                    "§8----- §6Commission Urbaine §8-----",
+                backMeta.setLore(List.of(
 
-                    "§7Retourner au menu",
+                        "§8----- §6Commission Urbaine §8-----",
 
-                    "§7de la commission."
-            ));
+                        "§7Retourner au menu",
 
-            back.setItemMeta(backMeta);
+                        "§7de la commission."
+                ));
+
+                back.setItemMeta(backMeta);
+            }
 
             inv.setItem(
                     49,
@@ -273,78 +290,85 @@ public class MayorTownListGUI {
                             ? "Projet en cours"
                             : project.getBuildName();
 
-            Material mat;
-
-            if (position == 1) {
-
-                mat = Material.NETHER_STAR;
-
-            } else if (position <= 3
-                    && position != -1) {
-
-                mat = Material.DIAMOND_BLOCK;
-
-            } else if (score >= 35) {
-
-                mat = Material.EMERALD_BLOCK;
-
-            } else if (score >= 20) {
-
-                mat = Material.GOLD_BLOCK;
-
-            } else {
-
-                mat = Material.BRICKS;
-            }
-
             ItemStack item =
-                    new ItemStack(mat);
+                    MoodTownFlagAPI.getTownFlagItem(
+                            town
+                    );
+
+            boolean hasFlag =
+                    item != null;
+
+            if (item == null) {
+
+                item =
+                        new ItemStack(
+                                Material.WHITE_BANNER
+                        );
+            }
 
             ItemMeta meta =
                     item.getItemMeta();
 
-            meta.setDisplayName(
-                    "§f✦ §b" + town
-            );
+            if (meta != null) {
 
-            meta.setLore(List.of(
+                meta.setDisplayName(
+                        "§f✦ §b" + town
+                );
 
-                    "§8----- §6Ville en notation §8-----",
+                List<String> lore =
+                        new ArrayList<>();
 
-                    "§7Ville : §b" + town,
+                lore.add("§8----- §6Ville en notation §8-----");
+                lore.add("§7Ville : §b" + town);
+                lore.add("§7Projet : §f" + projectName);
+                lore.add("");
 
-                    "§7Projet : §f" + projectName,
+                if (hasFlag) {
 
-                    "",
+                    lore.add("§a✔ Drapeau officiel enregistré");
 
-                    "§7Note provisoire : §e"
-                            + String.format("%.1f", score)
-                            + "§7/50",
+                } else {
 
-                    "§7Avis des maires : §6"
-                            + mayors,
+                    lore.add("§7Drapeau : §fNon défini");
+                }
 
-                    "§7Classement : §e#"
-                            + (position == -1
-                            ? "Non classé"
-                            : position),
+                lore.add("");
+                lore.add(
+                        "§7Note provisoire : §e"
+                                + String.format("%.1f", score)
+                                + "§7/50"
+                );
 
-                    "",
+                lore.add(
+                        "§7Avis des maires : §6"
+                                + mayors
+                );
 
-                    "§7Rôle du conseil :",
+                lore.add(
+                        "§7Classement : §e#"
+                                + (position == -1
+                                ? "Non classé"
+                                : position)
+                );
 
-                    "§8• §fvisiter le projet",
+                lore.add("");
+                lore.add("§7Rôle du conseil :");
+                lore.add("§8• §fvisiter le projet");
+                lore.add("§8• §fdonner un avis municipal");
+                lore.add("§8• §finfluencer le classement");
+                lore.add("");
+                lore.add("§6▶ Évaluer cette ville");
 
-                    "§8• §fdonner un avis municipal",
+                meta.setLore(lore);
 
-                    "§8• §finfluencer le classement",
+                item.setItemMeta(meta);
+            }
 
-                    "",
+            if (position == 1) {
 
-                    "§6▶ Évaluer cette ville"
-            ));
-
-            item.setItemMeta(meta);
+                item =
+                        glow(item);
+            }
 
             inv.setItem(
                     slot,
@@ -362,20 +386,23 @@ public class MayorTownListGUI {
         ItemMeta backMeta =
                 back.getItemMeta();
 
-        backMeta.setDisplayName(
-                "§c⬅ Retour"
-        );
+        if (backMeta != null) {
 
-        backMeta.setLore(List.of(
+            backMeta.setDisplayName(
+                    "§c⬅ Retour"
+            );
 
-                "§8----- §6Commission Urbaine §8-----",
+            backMeta.setLore(List.of(
 
-                "§7Retourner au menu",
+                    "§8----- §6Commission Urbaine §8-----",
 
-                "§7de la commission."
-        ));
+                    "§7Retourner au menu",
 
-        back.setItemMeta(backMeta);
+                    "§7de la commission."
+            ));
+
+            back.setItemMeta(backMeta);
+        }
 
         inv.setItem(
                 49,
@@ -383,6 +410,31 @@ public class MayorTownListGUI {
         );
 
         p.openInventory(inv);
+    }
+
+    private static ItemStack glow(
+            ItemStack item
+    ) {
+
+        ItemMeta meta =
+                item.getItemMeta();
+
+        if (meta == null)
+            return item;
+
+        meta.addEnchant(
+                Enchantment.UNBREAKING,
+                1,
+                true
+        );
+
+        meta.addItemFlags(
+                ItemFlag.HIDE_ENCHANTS
+        );
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     private static TownSubmission getActiveProject(
