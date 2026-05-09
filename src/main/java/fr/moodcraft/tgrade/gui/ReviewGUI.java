@@ -32,37 +32,18 @@ public class ReviewGUI {
             String town
     ) {
 
-        //
-        // 📊 GRADE
-        //
-
         TownGrade grade =
                 GradeManager.get(town);
 
-        //
-        // 🏛 INVENTORY
-        //
-
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
-                        "§8✦ Inspection Nationale"
+                        "§8✦ Suivi Urbain"
                 );
-
-        //
-        // 📂 PROJETS VALIDÉS
-        //
 
         List<TownSubmission> list =
                 SubmissionStorage.getTown(town);
-
-        //
-        // 🌌 GLASS
-        //
 
         ItemStack glass =
                 new ItemStack(
@@ -75,10 +56,6 @@ public class ReviewGUI {
         glassMeta.setDisplayName(" ");
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -113,27 +90,37 @@ public class ReviewGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§6✦ Commission d'Inspection"
+                "§6✦ Suivi Urbain"
         );
 
         headerMeta.setLore(List.of(
 
-                "§8----- §6Registre National §8-----",
+                "§8----- §6Registre hebdomadaire §8-----",
 
-                "§7Ville inspectée: §b"
+                "§7Ville suivie : §b"
                         + town,
 
-                "§7Prestige actuel:",
+                "",
+
+                "§7Ce menu rassemble les projets",
+
+                "§7validés et les notes liées",
+
+                "§7au classement hebdomadaire.",
+
+                "",
+
+                "§7Note actuelle :",
 
                 grade.getFormattedScore(),
 
-                "§7Classement urbain:",
+                "§7Classement actuel :",
 
                 grade.getRank(),
 
                 "",
 
-                "§e▶ Dossier gouvernemental actif"
+                "§e▶ Dossier urbain actif"
         ));
 
         header.setItemMeta(headerMeta);
@@ -152,27 +139,15 @@ public class ReviewGUI {
 
         for (TownSubmission sub : list) {
 
-            //
-            // ✅ APPROVED ONLY
-            //
-
             if (sub.getStatus()
                     != SubmissionStatus.APPROVED) {
 
                 continue;
             }
 
-            //
-            // 🛑 LIMIT
-            //
-
             if (slot >= 44) {
                 break;
             }
-
-            //
-            // 📘 ITEM
-            //
 
             ItemStack item =
                     new ItemStack(
@@ -183,7 +158,6 @@ public class ReviewGUI {
                     item.getItemMeta();
 
             meta.setDisplayName(
-
                     "§f✦ §e"
                             + sub.getBuildName()
             );
@@ -192,21 +166,35 @@ public class ReviewGUI {
                     new ArrayList<>();
 
             lore.add(
-                    "§8----- §6Dossier Validé §8-----"
+                    "§8----- §6Projet validé §8-----"
             );
 
             lore.add(
-                    "§7Ville: §b" + sub.getTown()
+                    "§7Ville : §b" + sub.getTown()
             );
 
             lore.add(
-                    "§7Statut: §aPermis accordé"
+                    "§7Projet : §f" + sub.getBuildName()
+            );
+
+            lore.add(
+                    "§7Statut : §aDemande validée"
             );
 
             lore.add("");
 
             lore.add(
-                    "§7Position:"
+                    "§7Ce projet participe"
+            );
+
+            lore.add(
+                    "§7au classement hebdomadaire."
+            );
+
+            lore.add("");
+
+            lore.add(
+                    "§7Position du projet :"
             );
 
             lore.add(
@@ -218,7 +206,7 @@ public class ReviewGUI {
             lore.add("");
 
             lore.add(
-                    "§b▶ Inspection terrain"
+                    "§b▶ Se téléporter au projet"
             );
 
             meta.setLore(lore);
@@ -226,10 +214,6 @@ public class ReviewGUI {
             item.setItemMeta(meta);
 
             inv.setItem(slot, item);
-
-            //
-            // ➡ NEXT SLOT
-            //
 
             slot++;
 
@@ -256,44 +240,52 @@ public class ReviewGUI {
                 report.getItemMeta();
 
         reportMeta.setDisplayName(
-                "§a✦ Rapport National"
+                "§a✦ Rapport de la ville"
         );
 
         reportMeta.setLore(List.of(
 
-                "§8----- §6Évaluation Urbaine §8-----",
+                "§8----- §6Évaluation actuelle §8-----",
 
-                "§7Rapport officiel MoodCraft.",
+                "§7Ville : §b" + town,
 
                 "",
 
-                "§7Architecture: §e"
+                "§7Les notes affichées concernent",
+
+                "§7la ville et ses projets",
+
+                "§7en développement.",
+
+                "",
+
+                "§7Architecture : §e"
                         + grade.getArchitecture()
                         + "§7/10",
 
-                "§7Cohérence: §e"
+                "§7Cohérence : §e"
                         + grade.getStyle()
                         + "§7/6",
 
-                "§7Activité: §e"
+                "§7Activité : §e"
                         + grade.getActivite()
                         + "§7/8",
 
-                "§7Banque: §e"
+                "§7Banque : §e"
                         + grade.getBanque()
                         + "§7/4",
 
-                "§7Urbanisme: §e"
+                "§7Urbanisme : §e"
                         + grade.getRemarquable()
                         + "§7/8",
 
-                "§7RolePlay: §e"
+                "§7RolePlay : §e"
                         + grade.getRp()
                         + "§7/6",
 
                 "",
 
-                "§7Prestige total:",
+                "§7Note hebdomadaire :",
 
                 grade.getFormattedScore()
         ));
@@ -315,22 +307,24 @@ public class ReviewGUI {
                 notation.getItemMeta();
 
         notationMeta.setDisplayName(
-                "§6✦ Commission d'Évaluation"
+                "§6✦ Notation staff"
         );
 
         notationMeta.setLore(List.of(
 
-                "§8----- §6Notation Nationale §8-----",
+                "§8----- §6Commission Urbaine §8-----",
 
-                "§7Accéder au système",
+                "§7Ouvre la notation staff",
 
-                "§7officiel de notation.",
+                "§7pour cette ville et son",
+
+                "§7projet en cours.",
 
                 "",
 
-                "§7Révision possible jusqu'au",
+                "§7La note compte pour",
 
-                "§7reset hebdomadaire.",
+                "§7le classement hebdomadaire.",
 
                 "",
 
@@ -354,25 +348,21 @@ public class ReviewGUI {
                 close.getItemMeta();
 
         closeMeta.setDisplayName(
-                "§c⬅ Fermer l'inspection"
+                "§c⬅ Fermer le suivi"
         );
 
         closeMeta.setLore(List.of(
 
-                "§8----- §6Administration §8-----",
+                "§8----- §6Commission Urbaine §8-----",
 
                 "§7Retour au centre",
 
-                "§7administratif national."
+                "§7administratif."
         ));
 
         close.setItemMeta(closeMeta);
 
         inv.setItem(53, close);
-
-        //
-        // 🚀 OPEN
-        //
 
         p.openInventory(inv);
     }
