@@ -1,13 +1,17 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RankingManager;
 import fr.moodcraft.tgrade.model.TownGrade;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -22,8 +26,11 @@ public class ClassementGUI {
 
         ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
-        glassMeta.setDisplayName(" ");
-        glass.setItemMeta(glassMeta);
+
+        if (glassMeta != null) {
+            glassMeta.setDisplayName(" ");
+            glass.setItemMeta(glassMeta);
+        }
 
         int[] borders = {
                 0,1,2,3,4,5,6,7,8,
@@ -51,45 +58,49 @@ public class ClassementGUI {
         ItemStack header = new ItemStack(Material.NETHER_STAR);
         ItemMeta headerMeta = header.getItemMeta();
 
-        headerMeta.setDisplayName("§6✦ Classement Hebdomadaire");
+        if (headerMeta != null) {
 
-        if (top.isEmpty()) {
+            headerMeta.setDisplayName("§6✦ Classement Hebdomadaire");
 
-            headerMeta.setLore(List.of(
-                    "§8----- §6Registre urbain §8-----",
-                    "§7Aucune ville classée",
-                    "§7pour cette semaine.",
-                    "",
-                    "§7Le classement s'active après",
-                    "§7validation d'une demande",
-                    "§7de projet par le staff.",
-                    "",
-                    "§e▶ En attente de projets"
-            ));
+            if (top.isEmpty()) {
 
-        } else {
+                headerMeta.setLore(List.of(
+                        "§8----- §6Registre urbain §8-----",
+                        "§7Aucune ville classée",
+                        "§7pour cette semaine.",
+                        "",
+                        "§7Le classement s'active après",
+                        "§7validation d'une demande",
+                        "§7de projet par le staff.",
+                        "",
+                        "§e▶ En attente de projets"
+                ));
 
-            TownGrade best = top.get(0);
-            double national = getVisibleScore(best);
+            } else {
 
-            headerMeta.setLore(List.of(
-                    "§8----- §6Registre urbain §8-----",
-                    "§7Classement en direct des villes",
-                    "§7ayant une demande de projet validée.",
-                    "",
-                    "§7Ville en tête : §e" + best.getTown(),
-                    "§7Note actuelle : §e" + formatScore(national) + "§7/50",
-                    "§7État : " + getState(best),
-                    "",
-                    "§7Les subventions sont versées",
-                    "§7séparément par le staff ou",
-                    "§7lors du paiement hebdomadaire.",
-                    "",
-                    "§e▶ Résultats urbains"
-            ));
+                TownGrade best = top.get(0);
+                double national = getVisibleScore(best);
+
+                headerMeta.setLore(List.of(
+                        "§8----- §6Registre urbain §8-----",
+                        "§7Classement en direct des villes",
+                        "§7ayant une demande de projet validée.",
+                        "",
+                        "§7Ville en tête : §e" + best.getTown(),
+                        "§7Note actuelle : §e" + formatScore(national) + "§7/50",
+                        "§7État : " + getState(best),
+                        "",
+                        "§7Les subventions sont versées",
+                        "§7séparément par le staff ou",
+                        "§7lors du paiement hebdomadaire.",
+                        "",
+                        "§e▶ Résultats urbains"
+                ));
+            }
+
+            header.setItemMeta(headerMeta);
         }
 
-        header.setItemMeta(headerMeta);
         inv.setItem(4, header);
 
         int slot = 10;
@@ -106,52 +117,75 @@ public class ClassementGUI {
             double citizens = NationalScoreCalculator.getCitizenScore(grade.getTown());
             double national = getVisibleScore(grade);
 
-            Material mat;
             String podium;
 
             if (pos == 1) {
-                mat = Material.NETHER_STAR;
                 podium = "§6♛ Rang Hebdo I";
             } else if (pos == 2) {
-                mat = Material.DIAMOND;
                 podium = "§b♢ Rang Hebdo II";
             } else if (pos == 3) {
-                mat = Material.EMERALD;
                 podium = "§a♢ Rang Hebdo III";
             } else {
-                mat = Material.GOLD_INGOT;
                 podium = "§eRang Hebdo #" + pos;
             }
 
-            ItemStack item = new ItemStack(mat);
+            ItemStack item =
+                    MoodTownFlagAPI.getTownFlagItem(
+                            grade.getTown()
+                    );
+
+            boolean hasFlag =
+                    item != null;
+
+            if (item == null) {
+                item = new ItemStack(Material.WHITE_BANNER);
+            }
+
             ItemMeta meta = item.getItemMeta();
 
-            meta.setDisplayName(
-                    podium + " §8• §b" + grade.getTown()
-            );
+            if (meta != null) {
 
-            meta.setLore(List.of(
-                    "§8----- §6Classement hebdomadaire §8-----",
-                    "§7Ville : §b" + grade.getTown(),
-                    "§7État : " + getState(grade),
-                    "",
-                    "§7Titre urbain :",
-                    getRank(national),
-                    "",
-                    "§7Staff : §e" + formatScore(staff) + "§7/50",
-                    "§7Conseil des maires : §e" + formatScore(mayors) + "§7/50",
-                    "§7Votes citoyens : §e" + formatScore(citizens) + "§7/50",
-                    "",
-                    "§7Note hebdomadaire : §e" + formatScore(national) + "§7/50",
-                    "§7Subvention estimée : §a" + formatMoney(getPayout(national)) + "€",
-                    "",
-                    "§7Paiement : §6hebdomadaire ou staff",
-                    "",
-                    "§7Appréciation :",
-                    getAppreciation(national)
-            ));
+                meta.setDisplayName(
+                        podium + " §8• §b" + grade.getTown()
+                );
 
-            item.setItemMeta(meta);
+                List<String> lore = new ArrayList<>();
+
+                lore.add("§8----- §6Classement hebdomadaire §8-----");
+                lore.add("§7Ville : §b" + grade.getTown());
+                lore.add("§7État : " + getState(grade));
+                lore.add("");
+
+                if (hasFlag) {
+                    lore.add("§a✔ Drapeau officiel enregistré");
+                } else {
+                    lore.add("§7Drapeau : §fNon défini");
+                }
+
+                lore.add("");
+                lore.add("§7Titre urbain :");
+                lore.add(getRank(national));
+                lore.add("");
+                lore.add("§7Staff : §e" + formatScore(staff) + "§7/50");
+                lore.add("§7Conseil des maires : §e" + formatScore(mayors) + "§7/50");
+                lore.add("§7Votes citoyens : §e" + formatScore(citizens) + "§7/50");
+                lore.add("");
+                lore.add("§7Note hebdomadaire : §e" + formatScore(national) + "§7/50");
+                lore.add("§7Subvention estimée : §a" + formatMoney(getPayout(national)) + "€");
+                lore.add("");
+                lore.add("§7Paiement : §6hebdomadaire ou staff");
+                lore.add("");
+                lore.add("§7Appréciation :");
+                lore.add(getAppreciation(national));
+
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            }
+
+            if (pos == 1) {
+                item = glow(item);
+            }
+
             inv.setItem(slot, item);
 
             slot++;
@@ -176,36 +210,67 @@ public class ClassementGUI {
             ItemStack empty = new ItemStack(Material.BARRIER);
             ItemMeta meta = empty.getItemMeta();
 
-            meta.setDisplayName("§c✖ Aucun classement");
+            if (meta != null) {
 
-            meta.setLore(List.of(
-                    "§8----- §6Classement hebdomadaire §8-----",
-                    "§7Aucune ville n'a encore",
-                    "§7de projet validé cette semaine.",
-                    "",
-                    "§7Le classement attend",
-                    "§7ses premières demandes validées."
-            ));
+                meta.setDisplayName("§c✖ Aucun classement");
 
-            empty.setItemMeta(meta);
+                meta.setLore(List.of(
+                        "§8----- §6Classement hebdomadaire §8-----",
+                        "§7Aucune ville n'a encore",
+                        "§7de projet validé cette semaine.",
+                        "",
+                        "§7Le classement attend",
+                        "§7ses premières demandes validées."
+                ));
+
+                empty.setItemMeta(meta);
+            }
+
             inv.setItem(22, empty);
         }
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemMeta backMeta = back.getItemMeta();
 
-        backMeta.setDisplayName("§c⬅ Retour");
+        if (backMeta != null) {
 
-        backMeta.setLore(List.of(
-                "§8----- §6Commission Urbaine §8-----",
-                "§7Retourner au menu",
-                "§7de la commission."
-        ));
+            backMeta.setDisplayName("§c⬅ Retour");
 
-        back.setItemMeta(backMeta);
+            backMeta.setLore(List.of(
+                    "§8----- §6Commission Urbaine §8-----",
+                    "§7Retourner au menu",
+                    "§7de la commission."
+            ));
+
+            back.setItemMeta(backMeta);
+        }
+
         inv.setItem(49, back);
 
         p.openInventory(inv);
+    }
+
+    private static ItemStack glow(ItemStack item) {
+
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta == null) {
+            return item;
+        }
+
+        meta.addEnchant(
+                Enchantment.UNBREAKING,
+                1,
+                true
+        );
+
+        meta.addItemFlags(
+                ItemFlag.HIDE_ENCHANTS
+        );
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     private static double getVisibleScore(TownGrade grade) {
