@@ -1,5 +1,6 @@
-
 package fr.moodcraft.tgrade.gui;
+
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CitizenVoteGUI {
@@ -87,11 +89,14 @@ public class CitizenVoteGUI {
         ItemMeta glassMeta =
                 glass.getItemMeta();
 
-        glassMeta.setDisplayName(
-                " "
-        );
+        if (glassMeta != null) {
 
-        glass.setItemMeta(glassMeta);
+            glassMeta.setDisplayName(
+                    " "
+            );
+
+            glass.setItemMeta(glassMeta);
+        }
 
         int[] borders = {
 
@@ -114,36 +119,89 @@ public class CitizenVoteGUI {
             );
         }
 
-        set(
-                inv,
+        //
+        // 🎌 HEADER DRAPEAU
+        //
+
+        ItemStack header =
+                MoodTownFlagAPI.getTownFlagItem(
+                        town
+                );
+
+        boolean hasFlag =
+                header != null;
+
+        if (header == null) {
+
+            header =
+                    new ItemStack(
+                            Material.WHITE_BANNER
+                    );
+        }
+
+        ItemMeta headerMeta =
+                header.getItemMeta();
+
+        if (headerMeta != null) {
+
+            headerMeta.setDisplayName(
+                    "§e✦ Vote Citoyen"
+            );
+
+            List<String> lore =
+                    new ArrayList<>();
+
+            lore.add("§8----- §6Notation publique §8-----");
+            lore.add("§7Ville : §b" + town);
+            lore.add("§7Projet : §f" + projectName);
+            lore.add("");
+
+            if (hasFlag) {
+
+                lore.add("§a✔ Drapeau officiel enregistré");
+
+            } else {
+
+                lore.add("§7Drapeau : §fNon défini");
+            }
+
+            lore.add("");
+            lore.add("§7Visitez le projet puis notez");
+            lore.add("§7la ville dans son ensemble.");
+            lore.add("");
+            lore.add("§7Votre vote compte pour");
+            lore.add("§7le classement hebdomadaire.");
+            lore.add("");
+            lore.add(
+                    "§7Votre score : §e"
+                            + total
+                            + "§7/15"
+            );
+            lore.add(
+                    "§7Note provisoire : §e"
+                            + String.format(
+                            "%.1f",
+                            NationalScoreCalculator
+                                    .getFinalScore(town)
+                    )
+                            + "§7/50"
+            );
+            lore.add(
+                    "§7Votes citoyens : §b"
+                            + NationalScoreCalculator
+                            .getCitizenCount(town)
+            );
+            lore.add("");
+            lore.add("§e▶ Ajustez les critères");
+
+            headerMeta.setLore(lore);
+
+            header.setItemMeta(headerMeta);
+        }
+
+        inv.setItem(
                 4,
-                Material.NETHER_STAR,
-                "§e✦ Vote Citoyen",
-                "§8----- §6Notation publique §8-----",
-                "§7Ville : §b" + town,
-                "§7Projet : §f" + projectName,
-                "",
-                "§7Visitez le projet puis notez",
-                "§7la ville dans son ensemble.",
-                "",
-                "§7Votre vote compte pour",
-                "§7le classement hebdomadaire.",
-                "",
-                "§7Votre score : §e"
-                        + total
-                        + "§7/15",
-                "§7Note provisoire : §e"
-                        + String.format(
-                        "%.1f",
-                        NationalScoreCalculator
-                                .getFinalScore(town)
-                )
-                        + "§7/50",
-                "§7Votes citoyens : §b"
-                        + NationalScoreCalculator
-                        .getCitizenCount(town),
-                "",
-                "§e▶ Ajustez les critères"
+                header
         );
 
         setVote(
@@ -286,13 +344,16 @@ public class CitizenVoteGUI {
         ItemMeta meta =
                 item.getItemMeta();
 
-        meta.setDisplayName(name);
+        if (meta != null) {
 
-        meta.setLore(
-                List.of(lore)
-        );
+            meta.setDisplayName(name);
 
-        item.setItemMeta(meta);
+            meta.setLore(
+                    List.of(lore)
+            );
+
+            item.setItemMeta(meta);
+        }
 
         inv.setItem(
                 slot,
