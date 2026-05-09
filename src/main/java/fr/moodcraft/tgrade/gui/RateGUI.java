@@ -1,5 +1,7 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.RateSessionManager;
 
@@ -20,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RateGUI {
@@ -70,55 +73,68 @@ public class RateGUI {
         fill(inv);
 
         //
-        // 🏛 HEADER
+        // 🎌 HEADER DRAPEAU
         //
 
         ItemStack header =
-                new ItemStack(
-                        Material.NETHER_STAR
+                MoodTownFlagAPI.getTownFlagItem(
+                        town
                 );
+
+        boolean hasFlag =
+                header != null;
+
+        if (header == null) {
+
+            header =
+                    new ItemStack(
+                            Material.WHITE_BANNER
+                    );
+        }
 
         ItemMeta headerMeta =
                 header.getItemMeta();
 
-        headerMeta.setDisplayName(
-                "§6✦ Notation Staff"
-        );
+        if (headerMeta != null) {
 
-        headerMeta.setLore(List.of(
+            headerMeta.setDisplayName(
+                    "§6✦ Notation Staff"
+            );
 
-                "§8----- §6Commission Urbaine §8-----",
+            List<String> lore =
+                    new ArrayList<>();
 
-                "§7Ville : §b" + town,
+            lore.add("§8----- §6Commission Urbaine §8-----");
+            lore.add("§7Ville : §b" + town);
+            lore.add("§7Projet : §f" + projectName);
+            lore.add("");
 
-                "§7Projet : §f" + projectName,
+            if (hasFlag) {
 
-                "",
+                lore.add("§a✔ Drapeau officiel enregistré");
 
-                "§7Cette notation staff concerne",
+            } else {
 
-                "§7la ville et son projet",
+                lore.add("§7Drapeau : §fNon défini");
+            }
 
-                "§7actuellement en développement.",
+            lore.add("");
+            lore.add("§7Cette notation staff concerne");
+            lore.add("§7la ville et son projet");
+            lore.add("§7actuellement en développement.");
+            lore.add("");
+            lore.add("§7Elle compte pour");
+            lore.add("§7le classement hebdomadaire.");
+            lore.add("");
+            lore.add("§7Note actuelle :");
+            lore.add(grade.getFormattedScore());
+            lore.add("");
+            lore.add("§e▶ Cliquer sur un critère");
 
-                "",
+            headerMeta.setLore(lore);
 
-                "§7Elle compte pour",
-
-                "§7le classement hebdomadaire.",
-
-                "",
-
-                "§7Note actuelle :",
-
-                grade.getFormattedScore(),
-
-                "",
-
-                "§e▶ Cliquer sur un critère"
-        ));
-
-        header.setItemMeta(headerMeta);
+            header.setItemMeta(headerMeta);
+        }
 
         inv.setItem(4, header);
 
@@ -218,36 +234,39 @@ public class RateGUI {
         ItemMeta meta =
                 save.getItemMeta();
 
-        meta.setDisplayName(
-                "§a✔ Valider la notation"
-        );
+        if (meta != null) {
 
-        meta.setLore(List.of(
+            meta.setDisplayName(
+                    "§a✔ Valider la notation"
+            );
 
-                "§8----- §6Notation Staff §8-----",
+            meta.setLore(List.of(
 
-                "§7Ville : §b" + town,
+                    "§8----- §6Notation Staff §8-----",
 
-                "§7Projet : §f" + projectName,
+                    "§7Ville : §b" + town,
 
-                "",
+                    "§7Projet : §f" + projectName,
 
-                "§7Enregistre la note staff",
+                    "",
 
-                "§7dans le dossier hebdomadaire.",
+                    "§7Enregistre la note staff",
 
-                "",
+                    "§7dans le dossier hebdomadaire.",
 
-                "§7Le classement sera actualisé",
+                    "",
 
-                "§7après sauvegarde.",
+                    "§7Le classement sera actualisé",
 
-                "",
+                    "§7après sauvegarde.",
 
-                "§a▶ Sauvegarder"
-        ));
+                    "",
 
-        save.setItemMeta(meta);
+                    "§a▶ Sauvegarder"
+            ));
+
+            save.setItemMeta(meta);
+        }
 
         inv.setItem(SAVE, save);
 
@@ -266,9 +285,12 @@ public class RateGUI {
         ItemMeta meta =
                 glass.getItemMeta();
 
-        meta.setDisplayName(" ");
+        if (meta != null) {
 
-        glass.setItemMeta(meta);
+            meta.setDisplayName(" ");
+
+            glass.setItemMeta(meta);
+        }
 
         for (int i = 0; i < 54; i++) {
 
@@ -293,28 +315,31 @@ public class RateGUI {
         ItemMeta meta =
                 item.getItemMeta();
 
-        meta.setDisplayName(name);
+        if (meta != null) {
 
-        meta.setLore(List.of(
+            meta.setDisplayName(name);
 
-                "§8----- §6Critère Staff §8-----",
+            meta.setLore(List.of(
 
-                line1,
+                    "§8----- §6Critère Staff §8-----",
 
-                line2,
+                    line1,
 
-                "",
+                    line2,
 
-                "§7Note actuelle : §e" + current + "§7/" + max,
+                    "",
 
-                "§7Impact : §eClassement hebdomadaire",
+                    "§7Note actuelle : §e" + current + "§7/" + max,
 
-                "",
+                    "§7Impact : §eClassement hebdomadaire",
 
-                "§e▶ Cliquer pour ajuster"
-        ));
+                    "",
 
-        item.setItemMeta(meta);
+                    "§e▶ Cliquer pour ajuster"
+            ));
+
+            item.setItemMeta(meta);
+        }
 
         inv.setItem(slot, item);
     }
