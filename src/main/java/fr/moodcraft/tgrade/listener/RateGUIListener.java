@@ -290,3 +290,59 @@ public class RateGUIListener
             }
 
             default -> {
+                return;
+            }
+        }
+
+        p.playSound(
+                p.getLocation(),
+                Sound.UI_BUTTON_CLICK,
+                1f,
+                1f
+        );
+
+        RateGUI.open(
+                p,
+                town
+        );
+    }
+
+    private TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
+    }
+
+    private int next(
+            int current,
+            int max
+    ) {
+
+        current++;
+
+        if (current > max)
+            current = 0;
+
+        return current;
+    }
+}
