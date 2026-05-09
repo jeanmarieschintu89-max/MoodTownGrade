@@ -1,5 +1,7 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.SubmissionStatus;
@@ -46,11 +48,14 @@ public class EvaluationManagerGUI {
         ItemMeta glassMeta =
                 glass.getItemMeta();
 
-        glassMeta.setDisplayName(
-                " "
-        );
+        if (glassMeta != null) {
 
-        glass.setItemMeta(glassMeta);
+            glassMeta.setDisplayName(
+                    " "
+            );
+
+            glass.setItemMeta(glassMeta);
+        }
 
         int[] borders = {
 
@@ -84,36 +89,39 @@ public class EvaluationManagerGUI {
         ItemMeta headerMeta =
                 header.getItemMeta();
 
-        headerMeta.setDisplayName(
-                "§6✦ Notation Staff"
-        );
+        if (headerMeta != null) {
 
-        headerMeta.setLore(List.of(
+            headerMeta.setDisplayName(
+                    "§6✦ Notation Staff"
+            );
 
-                "§8----- §6Commission Urbaine §8-----",
+            headerMeta.setLore(List.of(
 
-                "§7Sélectionnez une ville ayant",
+                    "§8----- §6Commission Urbaine §8-----",
 
-                "§7une demande de projet validée.",
+                    "§7Sélectionnez une ville ayant",
 
-                "",
+                    "§7une demande de projet validée.",
 
-                "§7La note staff compte pour",
+                    "",
 
-                "§7le classement hebdomadaire.",
+                    "§7La note staff compte pour",
 
-                "",
+                    "§7le classement hebdomadaire.",
 
-                "§7Elle concerne la ville",
+                    "",
 
-                "§7et son projet en développement.",
+                    "§7Elle concerne la ville",
 
-                "",
+                    "§7et son projet en développement.",
 
-                "§e▶ Choisir un dossier"
-        ));
+                    "",
 
-        header.setItemMeta(headerMeta);
+                    "§e▶ Choisir un dossier"
+            ));
+
+            header.setItemMeta(headerMeta);
+        }
 
         inv.setItem(4, header);
 
@@ -157,32 +165,35 @@ public class EvaluationManagerGUI {
             ItemMeta meta =
                     empty.getItemMeta();
 
-            meta.setDisplayName(
-                    "§c✖ Aucun dossier ouvert"
-            );
+            if (meta != null) {
 
-            meta.setLore(List.of(
+                meta.setDisplayName(
+                        "§c✖ Aucun dossier ouvert"
+                );
 
-                    "§8----- §6Notation Staff §8-----",
+                meta.setLore(List.of(
 
-                    "§7Aucune ville ne possède",
+                        "§8----- §6Notation Staff §8-----",
 
-                    "§7une demande de projet",
+                        "§7Aucune ville ne possède",
 
-                    "§7validée pour notation.",
+                        "§7une demande de projet",
 
-                    "",
+                        "§7validée pour notation.",
 
-                    "§7Validez d'abord une demande",
+                        "",
 
-                    "§7depuis le centre administratif.",
+                        "§7Validez d'abord une demande",
 
-                    "",
+                        "§7depuis le centre administratif.",
 
-                    "§e▶ En attente de validation"
-            ));
+                        "",
 
-            empty.setItemMeta(meta);
+                        "§e▶ En attente de validation"
+                ));
+
+                empty.setItemMeta(meta);
+            }
 
             inv.setItem(22, empty);
         }
@@ -211,45 +222,65 @@ public class EvaluationManagerGUI {
                             : project.getBuildName();
 
             ItemStack item =
-                    new ItemStack(
-                            Material.BEACON
+                    MoodTownFlagAPI.getTownFlagItem(
+                            town
                     );
+
+            boolean hasFlag =
+                    item != null;
+
+            if (item == null) {
+
+                item =
+                        new ItemStack(
+                                Material.WHITE_BANNER
+                        );
+            }
 
             ItemMeta meta =
                     item.getItemMeta();
 
-            meta.setDisplayName(
-                    "§f✦ §b" + town
-            );
+            if (meta != null) {
 
-            meta.setLore(List.of(
+                meta.setDisplayName(
+                        "§f✦ §b" + town
+                );
 
-                    "§8----- §6Dossier de notation §8-----",
+                List<String> lore =
+                        new ArrayList<>();
 
-                    "§7Ville : §b" + town,
+                lore.add("§8----- §6Dossier de notation §8-----");
+                lore.add("§7Ville : §b" + town);
+                lore.add("§7Projet : §f" + projectName);
+                lore.add("");
 
-                    "§7Projet : §f" + projectName,
+                if (hasFlag) {
 
-                    "",
+                    lore.add("§a✔ Drapeau officiel enregistré");
 
-                    "§7Note provisoire : §e"
-                            + String.format("%.1f", score)
-                            + "§7/50",
+                } else {
 
-                    "",
+                    lore.add("§7Drapeau : §fNon défini");
+                }
 
-                    "§7Ouvre la notation staff",
+                lore.add("");
+                lore.add(
+                        "§7Note provisoire : §e"
+                                + String.format("%.1f", score)
+                                + "§7/50"
+                );
 
-                    "§7pour la ville et son",
+                lore.add("");
+                lore.add("§7Ouvre la notation staff");
+                lore.add("§7pour la ville et son");
+                lore.add("§7projet en développement.");
+                lore.add("");
+                lore.add("§e▶ Noter ce dossier");
 
-                    "§7projet en développement.",
+                meta.setLore(lore);
 
-                    "",
-
-                    "§e▶ Noter ce dossier"
-            ));
-
-            item.setItemMeta(meta);
+                item.setItemMeta(meta);
+            }
 
             inv.setItem(slot, item);
 
@@ -277,20 +308,23 @@ public class EvaluationManagerGUI {
         ItemMeta backMeta =
                 back.getItemMeta();
 
-        backMeta.setDisplayName(
-                "§c⬅ Retour"
-        );
+        if (backMeta != null) {
 
-        backMeta.setLore(List.of(
+            backMeta.setDisplayName(
+                    "§c⬅ Retour"
+            );
 
-                "§8----- §6Commission Urbaine §8-----",
+            backMeta.setLore(List.of(
 
-                "§7Retour au centre",
+                    "§8----- §6Commission Urbaine §8-----",
 
-                "§7administratif."
-        ));
+                    "§7Retour au centre",
 
-        back.setItemMeta(backMeta);
+                    "§7administratif."
+            ));
+
+            back.setItemMeta(backMeta);
+        }
 
         inv.setItem(49, back);
 
