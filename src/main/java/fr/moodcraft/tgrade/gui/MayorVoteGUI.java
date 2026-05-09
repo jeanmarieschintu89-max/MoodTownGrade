@@ -12,12 +12,12 @@ import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
-
 import org.bukkit.Material;
 
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
@@ -93,23 +93,15 @@ public class MayorVoteGUI {
 
         if (glassMeta != null) {
 
-            glassMeta.setDisplayName(
-                    " "
-            );
-
+            glassMeta.setDisplayName(" ");
             glass.setItemMeta(glassMeta);
         }
 
         int[] borders = {
-
                 0,1,2,3,4,5,6,7,8,
-
                 9,17,
-
                 18,26,
-
                 27,35,
-
                 37,38,39,41,42,43
         };
 
@@ -120,10 +112,6 @@ public class MayorVoteGUI {
                     glass
             );
         }
-
-        //
-        // 🎌 HEADER DRAPEAU
-        //
 
         ItemStack header =
                 MoodTownFlagAPI.getTownFlagItem(
@@ -159,11 +147,8 @@ public class MayorVoteGUI {
             lore.add("");
 
             if (hasFlag) {
-
                 lore.add("§a✔ Drapeau officiel enregistré");
-
             } else {
-
                 lore.add("§7Drapeau : §fNon défini");
             }
 
@@ -198,6 +183,12 @@ public class MayorVoteGUI {
             lore.add("§6▶ Ajustez les critères");
 
             headerMeta.setLore(lore);
+
+            headerMeta.addItemFlags(
+                    ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                    ItemFlag.HIDE_ATTRIBUTES,
+                    ItemFlag.HIDE_ENCHANTS
+            );
 
             header.setItemMeta(headerMeta);
         }
