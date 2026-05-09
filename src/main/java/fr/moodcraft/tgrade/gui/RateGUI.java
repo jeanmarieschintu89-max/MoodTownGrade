@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
@@ -72,10 +73,6 @@ public class RateGUI {
 
         fill(inv);
 
-        //
-        // 🎌 HEADER DRAPEAU
-        //
-
         ItemStack header =
                 MoodTownFlagAPI.getTownFlagItem(
                         town
@@ -110,11 +107,8 @@ public class RateGUI {
             lore.add("");
 
             if (hasFlag) {
-
                 lore.add("§a✔ Drapeau officiel enregistré");
-
             } else {
-
                 lore.add("§7Drapeau : §fNon défini");
             }
 
@@ -132,6 +126,12 @@ public class RateGUI {
             lore.add("§e▶ Cliquer sur un critère");
 
             headerMeta.setLore(lore);
+
+            headerMeta.addItemFlags(
+                    ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                    ItemFlag.HIDE_ATTRIBUTES,
+                    ItemFlag.HIDE_ENCHANTS
+            );
 
             header.setItemMeta(headerMeta);
         }
@@ -241,27 +241,16 @@ public class RateGUI {
             );
 
             meta.setLore(List.of(
-
                     "§8----- §6Notation Staff §8-----",
-
                     "§7Ville : §b" + town,
-
                     "§7Projet : §f" + projectName,
-
                     "",
-
                     "§7Enregistre la note staff",
-
                     "§7dans le dossier hebdomadaire.",
-
                     "",
-
                     "§7Le classement sera actualisé",
-
                     "§7après sauvegarde.",
-
                     "",
-
                     "§a▶ Sauvegarder"
             ));
 
@@ -320,21 +309,13 @@ public class RateGUI {
             meta.setDisplayName(name);
 
             meta.setLore(List.of(
-
                     "§8----- §6Critère Staff §8-----",
-
                     line1,
-
                     line2,
-
                     "",
-
                     "§7Note actuelle : §e" + current + "§7/" + max,
-
                     "§7Impact : §eClassement hebdomadaire",
-
                     "",
-
                     "§e▶ Cliquer pour ajuster"
             ));
 
