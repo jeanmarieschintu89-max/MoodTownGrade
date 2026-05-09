@@ -36,17 +36,10 @@ public class MayorTownListGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
-                        "§8✦ Conseil National"
+                        "§8✦ Conseil des Maires"
                 );
-
-        //
-        // 🌌 GLASS
-        //
 
         ItemStack glass =
                 new ItemStack(
@@ -61,10 +54,6 @@ public class MayorTownListGUI {
         );
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -89,10 +78,6 @@ public class MayorTownListGUI {
             );
         }
 
-        //
-        // 👑 HEADER
-        //
-
         ItemStack header =
                 new ItemStack(
                         Material.NETHER_STAR
@@ -107,21 +92,29 @@ public class MayorTownListGUI {
 
         headerMeta.setLore(List.of(
 
-                "§8----- §6Gouvernance §8-----",
+                "§8----- §6Vote municipal §8-----",
 
-                "§7Assemblée des municipalités",
+                "§7Les maires donnent leur avis",
 
-                "§7et influence nationale.",
+                "§7sur les villes ayant un projet",
 
-                "",
-
-                "§7Les votes du conseil",
-
-                "§7agissent sur le §ePrestige§7.",
+                "§7validé en développement.",
 
                 "",
 
-                "§6▶ Registre gouvernemental"
+                "§7Le vote du conseil compte",
+
+                "§7pour le classement hebdomadaire.",
+
+                "",
+
+                "§7Ce vote ne remplace pas",
+
+                "§7la validation du staff.",
+
+                "",
+
+                "§6▶ Choisir une ville"
         ));
 
         header.setItemMeta(headerMeta);
@@ -131,19 +124,11 @@ public class MayorTownListGUI {
                 header
         );
 
-        //
-        // 🏙 VILLES VALIDÉES
-        //
-
         Set<String> towns =
                 new HashSet<>();
 
         for (TownSubmission sub :
                 SubmissionStorage.getAll()) {
-
-            //
-            // ✅ UNIQUEMENT VALIDÉS
-            //
 
             if (sub.getStatus()
                     != SubmissionStatus.APPROVED) {
@@ -156,10 +141,6 @@ public class MayorTownListGUI {
             );
         }
 
-        //
-        // ❌ AUCUNE VILLE
-        //
-
         if (towns.isEmpty()) {
 
             ItemStack empty =
@@ -171,24 +152,26 @@ public class MayorTownListGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§c✖ Aucun dossier inspecté"
+                    "§c✖ Aucun projet ouvert"
             );
 
             meta.setLore(List.of(
 
-                    "§8----- §6Conseil National §8-----",
+                    "§8----- §6Conseil des Maires §8-----",
 
-                    "§7Aucune municipalité",
+                    "§7Aucune ville ne possède",
 
-                    "§7n'a encore reçu",
+                    "§7un projet validé pour",
 
-                    "§7de validation nationale.",
+                    "§7la notation municipale.",
 
                     "",
 
-                    "§7Le conseil ouvrira après",
+                    "§7Le conseil s'ouvrira après",
 
-                    "§7les premières inspections.",
+                    "§7validation d'une demande",
+
+                    "§7par le staff.",
 
                     "",
 
@@ -201,10 +184,6 @@ public class MayorTownListGUI {
                     22,
                     empty
             );
-
-            //
-            // 🔙 RETOUR
-            //
 
             ItemStack back =
                     new ItemStack(
@@ -239,10 +218,6 @@ public class MayorTownListGUI {
             return;
         }
 
-        //
-        // 📚 LISTE
-        //
-
         List<String> sorted =
                 new ArrayList<>(towns);
 
@@ -255,21 +230,9 @@ public class MayorTownListGUI {
                         .getFinalScore(a)
         ));
 
-        //
-        // 📦 SLOT
-        //
-
         int slot = 10;
 
-        //
-        // 🏙 LOOP
-        //
-
         for (String town : sorted) {
-
-            //
-            // ⛔ SLOTS INVALIDES
-            //
 
             if (slot == 17
                     || slot == 26
@@ -279,17 +242,9 @@ public class MayorTownListGUI {
                 slot += 2;
             }
 
-            //
-            // ⛔ OVERFLOW
-            //
-
             if (slot >= 45) {
                 break;
             }
-
-            //
-            // 📊 DATA
-            //
 
             double score =
                     NationalScoreCalculator
@@ -308,9 +263,15 @@ public class MayorTownListGUI {
                             town
                     );
 
-            //
-            // 🏆 MATERIAL
-            //
+            TownSubmission project =
+                    getActiveProject(
+                            town
+                    );
+
+            String projectName =
+                    project == null
+                            ? "Projet en cours"
+                            : project.getBuildName();
 
             Material mat;
 
@@ -336,10 +297,6 @@ public class MayorTownListGUI {
                 mat = Material.BRICKS;
             }
 
-            //
-            // 📦 ITEM
-            //
-
             ItemStack item =
                     new ItemStack(mat);
 
@@ -352,25 +309,35 @@ public class MayorTownListGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Ville Validée §8-----",
+                    "§8----- §6Ville en notation §8-----",
 
-                    "§7Prestige national: §e"
+                    "§7Ville : §b" + town,
+
+                    "§7Projet : §f" + projectName,
+
+                    "",
+
+                    "§7Note provisoire : §e"
                             + String.format("%.1f", score)
                             + "§7/50",
 
-                    "§7Votes du conseil: §6"
+                    "§7Avis des maires : §6"
                             + mayors,
 
-                    "§7Classement: §e#"
+                    "§7Classement : §e#"
                             + (position == -1
                             ? "Non classé"
                             : position),
 
                     "",
 
-                    "§7Influence municipale",
+                    "§7Rôle du conseil :",
 
-                    "§7prise en compte.",
+                    "§8• §fvisiter le projet",
+
+                    "§8• §fdonner un avis municipal",
+
+                    "§8• §finfluencer le classement",
 
                     "",
 
@@ -386,10 +353,6 @@ public class MayorTownListGUI {
 
             slot++;
         }
-
-        //
-        // 🔙 RETOUR
-        //
 
         ItemStack back =
                 new ItemStack(
@@ -419,10 +382,32 @@ public class MayorTownListGUI {
                 back
         );
 
-        //
-        // 🚀 OPEN
-        //
-
         p.openInventory(inv);
+    }
+
+    private static TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
     }
 }
