@@ -84,10 +84,6 @@ public class MayorVoteListener
         int slot =
                 e.getRawSlot();
 
-        //
-        // 🔙 RETOUR
-        //
-
         if (slot == MayorVoteGUI.BACK) {
 
             p.playSound(
@@ -101,10 +97,6 @@ public class MayorVoteListener
 
             return;
         }
-
-        //
-        // 📍 TP PROJET
-        //
 
         if (slot == MayorVoteGUI.TP_PROJECT) {
 
@@ -136,24 +128,12 @@ public class MayorVoteListener
             );
 
             p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Conseil des Maires §8-----"
-            );
-            p.sendMessage(
-                    "§cVotes municipaux clôturés."
-            );
-            p.sendMessage(
-                    "§7Ville : §b" + town
-            );
-            p.sendMessage(
-                    "§7Projet : §f" + projectName
-            );
-            p.sendMessage(
-                    "§7Ce dossier ne reçoit plus"
-            );
-            p.sendMessage(
-                    "§7de nouvelles évaluations."
-            );
+            p.sendMessage("§8----- §6Conseil des Maires §8-----");
+            p.sendMessage("§cVotes municipaux clôturés.");
+            p.sendMessage("§7Ville : §b" + town);
+            p.sendMessage("§7Projet : §f" + projectName);
+            p.sendMessage("§7Ce dossier ne reçoit plus");
+            p.sendMessage("§7de nouvelles évaluations.");
             p.sendMessage("");
 
             return;
@@ -235,28 +215,14 @@ public class MayorVoteListener
                 p.closeInventory();
 
                 p.sendMessage("");
-                p.sendMessage(
-                        "§8----- §6Conseil des Maires §8-----"
-                );
-                p.sendMessage(
-                        "§6Avis municipal enregistré."
-                );
-                p.sendMessage(
-                        "§7Ville : §b" + town
-                );
-                p.sendMessage(
-                        "§7Projet : §f" + projectName
-                );
-                p.sendMessage(
-                        "§7Score municipal : §e" + total + "§7/25"
-                );
-                p.sendMessage(
-                        "§7Classement hebdomadaire actualisé."
-                );
+                p.sendMessage("§8----- §6Conseil des Maires §8-----");
+                p.sendMessage("§6Avis municipal enregistré.");
+                p.sendMessage("§7Ville : §b" + town);
+                p.sendMessage("§7Projet : §f" + projectName);
+                p.sendMessage("§7Score municipal : §e" + total + "§7/25");
+                p.sendMessage("§7Classement hebdomadaire actualisé.");
                 p.sendMessage("");
-                p.sendMessage(
-                        "§7Note provisoire : §e" + national + "§7/50"
-                );
+                p.sendMessage("§7Note provisoire : §e" + national + "§7/50");
                 p.sendMessage(
                         "§7Détail : §6Staff §e" + staff
                                 + " §8| §6Maires §e" + mayors
@@ -349,24 +315,12 @@ public class MayorVoteListener
         );
 
         p.sendMessage("");
-        p.sendMessage(
-                "§8----- §6Conseil des Maires §8-----"
-        );
-        p.sendMessage(
-                "§bTéléportation au projet."
-        );
-        p.sendMessage(
-                "§7Ville : §b" + town
-        );
-        p.sendMessage(
-                "§7Projet : §f" + projectName
-        );
-        p.sendMessage(
-                "§7Inspectez la zone puis revenez"
-        );
-        p.sendMessage(
-                "§7au conseil pour voter."
-        );
+        p.sendMessage("§8----- §6Conseil des Maires §8-----");
+        p.sendMessage("§bTéléportation au projet.");
+        p.sendMessage("§7Ville : §b" + town);
+        p.sendMessage("§7Projet : §f" + projectName);
+        p.sendMessage("§7Inspectez la zone puis revenez");
+        p.sendMessage("§7au conseil pour voter.");
         p.sendMessage("");
     }
 
@@ -375,52 +329,32 @@ public class MayorVoteListener
     ) {
 
         if (e.getInventory()
-                .getItem(4) == null) {
+                .getItem(MayorVoteGUI.TOWN_DATA) == null) {
 
             return null;
         }
 
         if (!e.getInventory()
-                .getItem(4)
+                .getItem(MayorVoteGUI.TOWN_DATA)
                 .hasItemMeta()) {
 
             return null;
         }
 
-        if (e.getInventory()
-                .getItem(4)
-                .getItemMeta()
-                .getLore() == null) {
+        String name =
+                e.getInventory()
+                        .getItem(MayorVoteGUI.TOWN_DATA)
+                        .getItemMeta()
+                        .getDisplayName();
 
+        if (name == null) {
             return null;
         }
 
-        for (String line :
-                e.getInventory()
-                        .getItem(4)
-                        .getItemMeta()
-                        .getLore()) {
-
-            if (line.startsWith(
-                    "§7Ville : §b")) {
-
-                return line.replace(
-                        "§7Ville : §b",
-                        ""
-                );
-            }
-
-            if (line.startsWith(
-                    "§7Ville: §b")) {
-
-                return line.replace(
-                        "§7Ville: §b",
-                        ""
-                );
-            }
-        }
-
-        return null;
+        return name.replace(
+                "§0",
+                ""
+        );
     }
 
     private TownSubmission getActiveProject(
@@ -463,9 +397,7 @@ public class MayorVoteListener
         );
 
         p.sendMessage("");
-        p.sendMessage(
-                "§8----- §6Conseil des Maires §8-----"
-        );
+        p.sendMessage("§8----- §6Conseil des Maires §8-----");
         p.sendMessage(line1);
         p.sendMessage(line2);
         p.sendMessage("");
