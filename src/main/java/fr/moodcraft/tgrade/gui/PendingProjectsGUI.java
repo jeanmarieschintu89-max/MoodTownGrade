@@ -1,6 +1,5 @@
 package fr.moodcraft.tgrade.gui;
 
-import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
@@ -31,12 +30,9 @@ public class PendingProjectsGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
-                        "§8✦ Dossiers Urbains"
+                        "§8✦ Demandes Urbaines"
                 );
 
         //
@@ -99,20 +95,32 @@ public class PendingProjectsGUI {
 
         headerMeta.setLore(List.of(
 
-                "§8----- §6Registre National §8-----",
+                "§8----- §6Demandes de projets §8-----",
 
-                "§7Dossiers urbains déposés",
+                "§7Consulte les projets transmis",
 
-                "§7auprès de MoodCraft.",
+                "§7par les villes à la Commission.",
 
                 "",
 
-                "§7Dossiers enregistrés: §e"
+                "§7Objectif du menu:",
+
+                "§8• §fInspecter le projet sur place",
+
+                "§8• §aValider la demande",
+
+                "§8• §cRefuser la demande",
+
+                "§8• §eSuivre les votes liés au projet",
+
+                "",
+
+                "§7Demandes enregistrées: §e"
                         + SubmissionStorage.getAll().size(),
 
                 "",
 
-                "§e▶ Inspection administrative"
+                "§e▶ Ouvrir les dossiers"
         ));
 
         header.setItemMeta(headerMeta);
@@ -160,6 +168,8 @@ public class PendingProjectsGUI {
 
             String action;
 
+            String participation;
+
             switch (sub.getStatus()) {
 
                 case APPROVED -> {
@@ -168,10 +178,13 @@ public class PendingProjectsGUI {
                             Material.EMERALD;
 
                     status =
-                            "§a✔ Validé";
+                            "§a✔ Demande validée";
+
+                    participation =
+                            "§aInscrit au classement hebdomadaire";
 
                     action =
-                            "§e▶ Réouvrir l'inspection";
+                            "§e▶ Ouvrir le suivi du projet";
                 }
 
                 case REJECTED -> {
@@ -180,7 +193,10 @@ public class PendingProjectsGUI {
                             Material.REDSTONE_BLOCK;
 
                     status =
-                            "§c✖ Refusé";
+                            "§c✖ Demande refusée";
+
+                    participation =
+                            "§cNon éligible au classement";
 
                     action =
                             "§c▶ Dossier fermé";
@@ -192,10 +208,13 @@ public class PendingProjectsGUI {
                             Material.WRITABLE_BOOK;
 
                     status =
-                            "§6⌛ En attente";
+                            "§6⌛ En examen";
+
+                    participation =
+                            "§7En attente de validation staff";
 
                     action =
-                            "§e▶ Inspecter le dossier";
+                            "§e▶ Inspecter la demande";
                 }
             }
 
@@ -223,15 +242,54 @@ public class PendingProjectsGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Dossier Urbain §8-----",
+                    "§8----- §6Demande de projet §8-----",
 
                     "§7Ville: §b" + sub.getTown(),
+
+                    "§7Projet: §f" + sub.getBuildName(),
 
                     "§7Statut: " + status,
 
                     "",
 
-                    "§7Position:",
+                    "§8----- §6Rôle du dossier §8-----",
+
+                    "§7Cette demande concerne un",
+
+                    "§7projet urbain précis.",
+
+                    "§7Elle ne note pas toute la ville.",
+
+                    "",
+
+                    "§7Après validation:",
+
+                    "§8• §fle projet participe au classement",
+
+                    "§8• §fles votes citoyens sont pris en compte",
+
+                    "§8• §fles maires peuvent l'évaluer",
+
+                    "§8• §fune subvention peut être attribuée",
+
+                    "",
+
+                    "§8----- §6Votes liés au projet §8-----",
+
+                    "§7Citoyens: §eavis public sur le projet",
+
+                    "§7Maires: §6évaluation du projet",
+
+                    "§7Staff: §cvalidation de la demande",
+
+                    "",
+
+                    "§7État: " + participation,
+
+                    "",
+
+                    "§7Position du projet:",
+
                     "§fX §e" + sub.getX()
                             + " §8| §fY §e" + sub.getY()
                             + " §8| §fZ §e" + sub.getZ(),
@@ -284,22 +342,24 @@ public class PendingProjectsGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§c✖ Aucun dossier"
+                    "§c✖ Aucune demande"
             );
 
             meta.setLore(List.of(
 
-                    "§8----- §6Registre National §8-----",
+                    "§8----- §6Commission Urbaine §8-----",
 
-                    "§7Aucun projet urbain",
+                    "§7Aucune demande de projet",
 
-                    "§7n'est en attente.",
+                    "§7n'est actuellement enregistrée.",
 
                     "",
 
-                    "§7La Commission reste",
+                    "§7Les villes peuvent déposer",
 
-                    "§7ouverte aux dépôts."
+                    "§7un projet pour participer",
+
+                    "§7au classement hebdomadaire."
             ));
 
             empty.setItemMeta(meta);
@@ -325,11 +385,11 @@ public class PendingProjectsGUI {
 
         backMeta.setLore(List.of(
 
-                "§8----- §6Administration §8-----",
+                "§8----- §6Commission Urbaine §8-----",
 
-                "§7Retour au centre",
+                "§7Retour au menu principal",
 
-                "§7administratif national."
+                "§7de l'administration urbaine."
         ));
 
         back.setItemMeta(backMeta);
