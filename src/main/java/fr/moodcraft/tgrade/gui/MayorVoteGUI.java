@@ -40,6 +40,9 @@ public class MayorVoteGUI {
             POPULARITE = 24;
 
     public static final int
+            TP_PROJECT = 36;
+
+    public static final int
             SAVE = 40;
 
     public static void open(
@@ -103,7 +106,7 @@ public class MayorVoteGUI {
 
                 27,35,
 
-                36,37,38,39,41,42,43,44
+                37,38,39,41,42,43,44
         };
 
         for (int slot : borders) {
@@ -246,6 +249,39 @@ public class MayorVoteGUI {
                 "§7pour le territoire urbain.",
 
                 vote.getPopularite()
+        );
+
+        set(
+
+                inv,
+
+                TP_PROJECT,
+
+                Material.ENDER_PEARL,
+
+                "§b📍 Visiter le projet",
+
+                "§8----- §6Téléportation §8-----",
+
+                "§7Ville : §b" + town,
+
+                "§7Projet : §f" + projectName,
+
+                "",
+
+                "§7Téléporte vers le projet",
+
+                "§7en développement de la ville.",
+
+                "",
+
+                "§7Visitez avant de voter",
+
+                "§7pour un avis municipal juste.",
+
+                "",
+
+                "§b▶ Se téléporter"
         );
 
         set(
