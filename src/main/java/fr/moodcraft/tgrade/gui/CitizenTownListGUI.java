@@ -36,12 +36,9 @@ public class CitizenTownListGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
-                        "§8✦ Avis Citoyens"
+                        "§8✦ Votes Citoyens"
                 );
 
         //
@@ -107,21 +104,27 @@ public class CitizenTownListGUI {
 
         headerMeta.setLore(List.of(
 
-                "§8----- §6Participation §8-----",
+                "§8----- §6Participation publique §8-----",
 
-                "§7Consultez les villes",
+                "§7Notez les villes ayant",
 
-                "§7validées par la Commission.",
-
-                "",
-
-                "§7Votre avis influence",
-
-                "§7le §ePrestige National§7.",
+                "§7un projet en développement.",
 
                 "",
 
-                "§e▶ Registre citoyen"
+                "§7Visitez le projet, observez",
+
+                "§7la ville puis donnez votre vote.",
+
+                "",
+
+                "§7Vos votes comptent pour",
+
+                "§7le classement hebdomadaire.",
+
+                "",
+
+                "§e▶ Choisir une ville"
         ));
 
         header.setItemMeta(headerMeta);
@@ -140,10 +143,6 @@ public class CitizenTownListGUI {
 
         for (TownSubmission sub :
                 SubmissionStorage.getAll()) {
-
-            //
-            // ✅ UNIQUEMENT VALIDÉS
-            //
 
             if (sub.getStatus()
                     != SubmissionStatus.APPROVED) {
@@ -171,24 +170,26 @@ public class CitizenTownListGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§c✖ Aucun projet inspecté"
+                    "§c✖ Aucun vote ouvert"
             );
 
             meta.setLore(List.of(
 
-                    "§8----- §6Registre Citoyen §8-----",
+                    "§8----- §6Votes Citoyens §8-----",
 
-                    "§7Aucune municipalité",
+                    "§7Aucune ville ne possède",
 
-                    "§7n'a encore reçu",
+                    "§7un projet validé pour",
 
-                    "§7de validation nationale.",
+                    "§7la notation citoyenne.",
 
                     "",
 
-                    "§7Les villes apparaîtront",
+                    "§7Les votes s'ouvriront après",
 
-                    "§7après inspection.",
+                    "§7validation d'une demande",
+
+                    "§7par le staff.",
 
                     "",
 
@@ -267,10 +268,6 @@ public class CitizenTownListGUI {
 
         for (String town : sorted) {
 
-            //
-            // ⛔ SLOTS INVALIDES
-            //
-
             if (slot == 17
                     || slot == 26
                     || slot == 35
@@ -279,17 +276,9 @@ public class CitizenTownListGUI {
                 slot += 2;
             }
 
-            //
-            // ⛔ OVERFLOW
-            //
-
             if (slot >= 45) {
                 break;
             }
-
-            //
-            // 📊 DATA
-            //
 
             double score =
                     NationalScoreCalculator
@@ -308,9 +297,15 @@ public class CitizenTownListGUI {
                             town
                     );
 
-            //
-            // 🏆 MATERIAL
-            //
+            TownSubmission project =
+                    getActiveProject(
+                            town
+                    );
+
+            String projectName =
+                    project == null
+                            ? "Projet en cours"
+                            : project.getBuildName();
 
             Material mat;
 
@@ -336,10 +331,6 @@ public class CitizenTownListGUI {
                 mat = Material.GRASS_BLOCK;
             }
 
-            //
-            // 📦 ITEM
-            //
-
             ItemStack item =
                     new ItemStack(mat);
 
@@ -352,25 +343,41 @@ public class CitizenTownListGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Ville Validée §8-----",
+                    "§8----- §6Ville en notation §8-----",
 
-                    "§7Prestige national: §e"
+                    "§7Ville : §b" + town,
+
+                    "§7Projet : §f" + projectName,
+
+                    "",
+
+                    "§7Note provisoire : §e"
                             + String.format("%.1f", score)
                             + "§7/50",
 
-                    "§7Votes citoyens: §b"
+                    "§7Votes citoyens : §b"
                             + citizens,
 
-                    "§7Classement: §6#"
+                    "§7Classement : §6#"
                             + (position == -1
                             ? "Non classé"
                             : position),
 
                     "",
 
-                    "§7Votre avis peut modifier",
+                    "§7Votre rôle :",
 
-                    "§7l'influence populaire.",
+                    "§8• §fvisiter le projet",
+
+                    "§8• §fobserver la ville",
+
+                    "§8• §fvoter pour son évolution",
+
+                    "",
+
+                    "§7Votre vote compte pour",
+
+                    "§7le classement hebdomadaire.",
 
                     "",
 
@@ -424,5 +431,31 @@ public class CitizenTownListGUI {
         //
 
         p.openInventory(inv);
+    }
+
+    private static TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
     }
 }
