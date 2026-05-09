@@ -1,6 +1,5 @@
 package fr.moodcraft.tgrade.listener;
 
-import fr.moodcraft.tgrade.gui.EvaluationManagerGUI;
 import fr.moodcraft.tgrade.gui.ProjectReviewGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeAdminGUI;
 
@@ -12,6 +11,7 @@ import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
+import org.bukkit.Material;
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -29,72 +29,39 @@ public class EvaluationManagerListener
             InventoryClickEvent e
     ) {
 
-        //
-        // 🌌 GUI CHECK
-        //
-
         if (!e.getView()
                 .getTitle()
                 .equals("§8✦ Évaluations Nationales")) {
             return;
         }
 
-        //
-        // ❌ CANCEL
-        //
-
         e.setCancelled(true);
-
-        //
-        // 👤 PLAYER
-        //
 
         if (!(e.getWhoClicked()
                 instanceof Player p)) {
             return;
         }
 
-        //
-        // ❌ NULL
-        //
-
         if (e.getCurrentItem() == null) {
             return;
         }
-
-        //
-        // 🛑 PLAYER INVENTORY
-        //
 
         if (e.getRawSlot()
                 >= e.getView()
                 .getTopInventory()
                 .getSize()) {
-
             return;
         }
 
-        //
-        // 🔘 SLOT
-        //
-
         int slot =
-                e.getSlot();
-
-        //
-        // 🔙 RETOUR
-        //
+                e.getRawSlot();
 
         if (slot == 49) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     1f
             );
 
@@ -103,12 +70,24 @@ public class EvaluationManagerListener
             return;
         }
 
-        //
-        // 📛 ITEM
-        //
+        Material material =
+                e.getCurrentItem()
+                        .getType();
+
+        if (material == Material.BLACK_STAINED_GLASS_PANE
+                || material == Material.BARRIER
+                || material == Material.ARROW) {
+            return;
+        }
 
         if (!e.getCurrentItem()
                 .hasItemMeta()) {
+            return;
+        }
+
+        if (e.getCurrentItem()
+                .getItemMeta()
+                .getDisplayName() == null) {
             return;
         }
 
@@ -117,17 +96,9 @@ public class EvaluationManagerListener
                         .getItemMeta()
                         .getDisplayName();
 
-        //
-        // ❌ HEADER/BORDERS
-        //
-
         if (!name.startsWith("§f✦ §b")) {
             return;
         }
-
-        //
-        // 🏙 VILLE
-        //
 
         String town =
                 name.replace(
@@ -135,139 +106,106 @@ public class EvaluationManagerListener
                         ""
                 );
 
-        //
-        // 📚 GRADE
-        //
-
         TownGrade grade =
                 GradeManager.get(town);
 
-        //
-        // ❌ NULL
-        //
-
         if (grade == null) {
 
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.ENTITY_VILLAGER_NO,
-
-                    1f,
-
-                    1f
-            );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cVille introuvable."
-            );
-            p.sendMessage(
+            deny(
+                    p,
+                    "§cVille introuvable.",
                     "§7Le dossier national n'existe plus."
             );
-            p.sendMessage("");
 
             return;
         }
 
-        //
-        // 🔍 FIND PROJECT
-        //
-
-        TownSubmission found = null;
-
-        for (TownSubmission sub :
-                SubmissionStorage.getAll()) {
-
-            if (sub.getTown()
-                    .equalsIgnoreCase(town)
-
-                    && sub.getStatus()
-                    == SubmissionStatus.APPROVED) {
-
-                found = sub;
-
-                break;
-            }
-        }
-
-        //
-        // ❌ NOT FOUND
-        //
+        TownSubmission found =
+                getActiveProject(town);
 
         if (found == null) {
 
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.ENTITY_VILLAGER_NO,
-
-                    1f,
-
-                    1f
+            deny(
+                    p,
+                    "§cAucun projet actif.",
+                    "§7Cette ville n'a aucun projet validé."
             );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cAucun dossier actif trouvé."
-            );
-            p.sendMessage(
-                    "§7Cette ville ne possède pas de projet inspectable."
-            );
-            p.sendMessage("");
 
             return;
         }
 
-        //
-        // 🔊 SOUND
-        //
-
         p.playSound(
-
                 p.getLocation(),
-
                 Sound.BLOCK_BEACON_ACTIVATE,
-
                 1f,
-
                 1f
         );
-
-        //
-        // 📜 MESSAGE
-        //
 
         p.sendMessage("");
         p.sendMessage(
                 "§8----- §6Commission Urbaine §8-----"
         );
         p.sendMessage(
-                "§fOuverture du dossier d'évaluation."
+                "§fOuverture du dossier staff."
         );
         p.sendMessage(
-                "§7Ville: §b" + town
+                "§7Ville : §b" + town
         );
         p.sendMessage(
-                "§a✔ Registre national chargé."
+                "§7Projet : §f" + found.getBuildName()
+        );
+        p.sendMessage(
+                "§a✔ Inspection nationale chargée."
         );
         p.sendMessage("");
-
-        //
-        // 📂 OPEN REVIEW GUI
-        //
 
         ProjectReviewGUI.open(
                 p,
                 found
         );
+    }
+
+    private TownSubmission getActiveProject(
+            String town
+    ) {
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+        }
+
+        return null;
+    }
+
+    private void deny(
+            Player p,
+            String line1,
+            String line2
+    ) {
+
+        p.playSound(
+                p.getLocation(),
+                Sound.ENTITY_VILLAGER_NO,
+                1f,
+                1f
+        );
+
+        p.sendMessage("");
+        p.sendMessage(
+                "§8----- §6Commission Urbaine §8-----"
+        );
+        p.sendMessage(line1);
+        p.sendMessage(line2);
+        p.sendMessage("");
     }
 }
