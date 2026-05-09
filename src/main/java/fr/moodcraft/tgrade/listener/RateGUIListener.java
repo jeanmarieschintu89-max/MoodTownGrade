@@ -55,8 +55,9 @@ public class RateGUIListener
                         p.getUniqueId()
                 );
 
-        if (session == null)
+        if (session == null) {
             return;
+        }
 
         String town =
                 session.getTown();
@@ -71,18 +72,10 @@ public class RateGUIListener
                         ? "Projet en cours"
                         : project.getBuildName();
 
-        //
-        // 🏙 GRADE
-        //
-
         TownGrade grade =
                 GradeManager.get(
                         town
                 );
-
-        //
-        // 🔒 LOCKED
-        //
 
         if (grade != null
                 && grade.isLocked()) {
@@ -97,24 +90,12 @@ public class RateGUIListener
             );
 
             p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cVotes clôturés."
-            );
-            p.sendMessage(
-                    "§7Ville : §b" + town
-            );
-            p.sendMessage(
-                    "§7Projet : §f" + projectName
-            );
-            p.sendMessage(
-                    "§7Ce dossier ne reçoit plus"
-            );
-            p.sendMessage(
-                    "§7de nouvelles évaluations."
-            );
+            p.sendMessage("§8----- §6Commission Urbaine §8-----");
+            p.sendMessage("§cVotes clôturés.");
+            p.sendMessage("§7Ville : §b" + town);
+            p.sendMessage("§7Projet : §f" + projectName);
+            p.sendMessage("§7Ce dossier ne reçoit plus");
+            p.sendMessage("§7de nouvelles évaluations.");
             p.sendMessage("");
 
             return;
@@ -167,10 +148,6 @@ public class RateGUIListener
 
             case RateGUI.SAVE -> {
 
-                //
-                // 🏛 SAVE STAFF VOTE ONLY
-                //
-
                 StaffVote vote =
                         new StaffVote(
                                 p.getUniqueId(),
@@ -211,10 +188,6 @@ public class RateGUIListener
 
                 VoteStorage.saveStaffVote(vote);
 
-                //
-                // 📊 SCORES
-                //
-
                 double staff =
                         NationalScoreCalculator
                                 .getStaffScore(
@@ -241,43 +214,21 @@ public class RateGUIListener
 
                 p.closeInventory();
 
-                //
-                // 📢 MESSAGE
-                //
-
                 p.sendMessage("");
-                p.sendMessage(
-                        "§8----- §6Commission Urbaine §8-----"
-                );
-                p.sendMessage(
-                        "§aNotation staff enregistrée."
-                );
-                p.sendMessage(
-                        "§7Ville : §b" + town
-                );
-                p.sendMessage(
-                        "§7Projet : §f" + projectName
-                );
-                p.sendMessage(
-                        "§7Le classement hebdomadaire"
-                );
-                p.sendMessage(
-                        "§7a été actualisé."
-                );
+                p.sendMessage("§8----- §6Commission Urbaine §8-----");
+                p.sendMessage("§aNotation staff enregistrée.");
+                p.sendMessage("§7Ville : §b" + town);
+                p.sendMessage("§7Projet : §f" + projectName);
+                p.sendMessage("§7Le classement hebdomadaire");
+                p.sendMessage("§7a été actualisé.");
                 p.sendMessage("");
-                p.sendMessage(
-                        "§7Note provisoire : §e" + national + "§7/50"
-                );
+                p.sendMessage("§7Note provisoire : §e" + national + "§7/50");
                 p.sendMessage(
                         "§7Détail : §6Staff §e" + staff
                                 + " §8| §6Maires §e" + mayors
                                 + " §8| §6Citoyens §e" + citizens
                 );
                 p.sendMessage("");
-
-                //
-                // 🔊 SOUND
-                //
 
                 p.playSound(
                         p.getLocation(),
@@ -340,8 +291,9 @@ public class RateGUIListener
 
         current++;
 
-        if (current > max)
+        if (current > max) {
             current = 0;
+        }
 
         return current;
     }
