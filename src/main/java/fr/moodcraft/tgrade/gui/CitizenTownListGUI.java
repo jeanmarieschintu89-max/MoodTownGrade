@@ -8,6 +8,8 @@ import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
@@ -203,10 +205,6 @@ public class CitizenTownListGUI {
                     empty
             );
 
-            //
-            // 🔙 RETOUR
-            //
-
             ItemStack back =
                     new ItemStack(
                             Material.BARRIER
@@ -307,32 +305,21 @@ public class CitizenTownListGUI {
                             ? "Projet en cours"
                             : project.getBuildName();
 
-            Material mat;
-
-            if (position == 1) {
-
-                mat = Material.NETHER_STAR;
-
-            } else if (position <= 3
-                    && position != -1) {
-
-                mat = Material.DIAMOND_BLOCK;
-
-            } else if (score >= 35) {
-
-                mat = Material.EMERALD_BLOCK;
-
-            } else if (score >= 20) {
-
-                mat = Material.BRICKS;
-
-            } else {
-
-                mat = Material.GRASS_BLOCK;
-            }
-
             ItemStack item =
-                    new ItemStack(mat);
+                    MoodTownFlagAPI.getTownFlagItem(
+                            town
+                    );
+
+            boolean hasFlag =
+                    item != null;
+
+            if (item == null) {
+
+                item =
+                        new ItemStack(
+                                Material.WHITE_BANNER
+                        );
+            }
 
             ItemMeta meta =
                     item.getItemMeta();
@@ -341,50 +328,64 @@ public class CitizenTownListGUI {
                     "§f✦ §b" + town
             );
 
-            meta.setLore(List.of(
+            List<String> lore =
+                    new ArrayList<>();
 
-                    "§8----- §6Ville en notation §8-----",
+            lore.add("§8----- §6Ville en notation §8-----");
+            lore.add("§7Ville : §b" + town);
+            lore.add("§7Projet : §f" + projectName);
+            lore.add("");
 
-                    "§7Ville : §b" + town,
+            if (hasFlag) {
 
-                    "§7Projet : §f" + projectName,
+                lore.add("§a✔ Drapeau officiel enregistré");
 
-                    "",
+            } else {
 
+                lore.add("§7Drapeau : §fNon défini");
+            }
+
+            lore.add("");
+            lore.add(
                     "§7Note provisoire : §e"
                             + String.format("%.1f", score)
-                            + "§7/50",
+                            + "§7/50"
+            );
 
+            lore.add(
                     "§7Votes citoyens : §b"
-                            + citizens,
+                            + citizens
+            );
 
+            lore.add(
                     "§7Classement : §6#"
                             + (position == -1
                             ? "Non classé"
-                            : position),
+                            : position)
+            );
 
-                    "",
+            lore.add("");
+            lore.add("§7Votre rôle :");
+            lore.add("§8• §fvisiter le projet");
+            lore.add("§8• §fobserver la ville");
+            lore.add("§8• §fvoter pour son évolution");
+            lore.add("");
+            lore.add("§7Votre vote compte pour");
+            lore.add("§7le classement hebdomadaire.");
+            lore.add("");
+            lore.add("§e▶ Consulter et voter");
 
-                    "§7Votre rôle :",
-
-                    "§8• §fvisiter le projet",
-
-                    "§8• §fobserver la ville",
-
-                    "§8• §fvoter pour son évolution",
-
-                    "",
-
-                    "§7Votre vote compte pour",
-
-                    "§7le classement hebdomadaire.",
-
-                    "",
-
-                    "§e▶ Consulter et voter"
-            ));
+            meta.setLore(lore);
 
             item.setItemMeta(meta);
+
+            if (position == 1) {
+
+                item =
+                        glow(
+                                item
+                        );
+            }
 
             inv.setItem(
                     slot,
@@ -457,5 +458,30 @@ public class CitizenTownListGUI {
         }
 
         return fallback;
+    }
+
+    private static ItemStack glow(
+            ItemStack item
+    ) {
+
+        ItemMeta meta =
+                item.getItemMeta();
+
+        if (meta == null)
+            return item;
+
+        meta.addEnchant(
+                org.bukkit.enchantments.Enchantment.UNBREAKING,
+                1,
+                true
+        );
+
+        meta.addItemFlags(
+                org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS
+        );
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 }
