@@ -24,36 +24,17 @@ import java.util.List;
 
 public class CitizenVoteGUI {
 
-    //
-    // 📍 SLOTS
-    //
+    public static final int BEAUTE = 20;
+    public static final int AMBIANCE = 21;
+    public static final int ACTIVITE = 22;
+    public static final int ORIGINALITE = 23;
+    public static final int POPULARITE = 24;
 
-    public static final int
-            BEAUTE = 20;
-
-    public static final int
-            AMBIANCE = 21;
-
-    public static final int
-            ACTIVITE = 22;
-
-    public static final int
-            ORIGINALITE = 23;
-
-    public static final int
-            POPULARITE = 24;
-
-    public static final int
-            SAVE = 40;
-
-    //
-    // 🚀 OPEN
-    //
+    public static final int TP_PROJECT = 36;
+    public static final int SAVE = 40;
 
     public static void open(
-
             Player p,
-
             String town
     ) {
 
@@ -113,7 +94,7 @@ public class CitizenVoteGUI {
 
                 27,35,
 
-                36,37,38,39,41,42,43,44
+                37,38,39,41,42,43,44
         };
 
         for (int slot : borders) {
@@ -124,40 +105,21 @@ public class CitizenVoteGUI {
             );
         }
 
-        //
-        // 🏙 HEADER
-        //
-
         set(
-
                 inv,
-
                 4,
-
                 Material.NETHER_STAR,
-
                 "§e✦ Vote Citoyen",
-
                 "§8----- §6Notation publique §8-----",
-
                 "§7Ville : §b" + town,
-
                 "§7Projet : §f" + projectName,
-
                 "",
-
                 "§7Visitez le projet puis notez",
-
                 "§7la ville dans son ensemble.",
-
                 "",
-
                 "§7Votre vote compte pour",
-
                 "§7le classement hebdomadaire.",
-
                 "",
-
                 "§7Note provisoire : §e"
                         + String.format(
                         "%.1f",
@@ -165,218 +127,131 @@ public class CitizenVoteGUI {
                                 .getFinalScore(town)
                 )
                         + "§7/50",
-
                 "§7Votes citoyens : §b"
                         + NationalScoreCalculator
                         .getCitizenCount(town),
-
                 "",
-
                 "§e▶ Ajustez les critères"
         );
 
-        //
-        // 🏗 BEAUTÉ
-        //
-
         setVote(
-
                 inv,
-
                 BEAUTE,
-
                 Material.QUARTZ_BLOCK,
-
                 "§f✦ Beauté",
-
                 "§7Qualité visuelle de la ville",
-
                 "§7et intégration du projet.",
-
                 vote.getBeaute()
         );
 
-        //
-        // 🌆 AMBIANCE
-        //
-
         setVote(
-
                 inv,
-
                 AMBIANCE,
-
                 Material.LANTERN,
-
                 "§e✦ Ambiance",
-
                 "§7Vie, identité et cohérence",
-
                 "§7de l'environnement urbain.",
-
                 vote.getAmbiance()
         );
 
-        //
-        // ⚡ ACTIVITÉ
-        //
-
         setVote(
-
                 inv,
-
                 ACTIVITE,
-
                 Material.BELL,
-
                 "§6✦ Activité",
-
                 "§7Dynamisme visible autour",
-
                 "§7de la ville et du projet.",
-
                 vote.getActivite()
         );
 
-        //
-        // 🧭 ORIGINALITÉ
-        //
-
         setVote(
-
                 inv,
-
                 ORIGINALITE,
-
                 Material.COMPASS,
-
                 "§b✦ Originalité",
-
                 "§7Créativité de la ville",
-
                 "§7et du projet présenté.",
-
                 vote.getOriginalite()
         );
 
-        //
-        // ❤️ POPULARITÉ
-        //
-
         setVote(
-
                 inv,
-
                 POPULARITE,
-
                 Material.REDSTONE,
-
                 "§c✦ Popularité",
-
                 "§7Appréciation générale",
-
                 "§7du projet par les citoyens.",
-
                 vote.getPopularite()
         );
 
-        //
-        // 💾 SAVE
-        //
+        set(
+                inv,
+                TP_PROJECT,
+                Material.ENDER_PEARL,
+                "§b📍 Visiter le projet",
+                "§8----- §6Téléportation §8-----",
+                "§7Ville : §b" + town,
+                "§7Projet : §f" + projectName,
+                "",
+                "§7Téléporte vers le projet",
+                "§7en développement de la ville.",
+                "",
+                "§7Visitez avant de voter",
+                "§7pour une note plus juste.",
+                "",
+                "§b▶ Se téléporter"
+        );
 
         set(
-
                 inv,
-
                 SAVE,
-
                 Material.EMERALD_BLOCK,
-
                 "§a✔ Valider le vote",
-
                 "§8----- §6Votes Citoyens §8-----",
-
                 "§7Ville : §b" + town,
-
                 "§7Projet : §f" + projectName,
-
                 "",
-
                 "§7Enregistre votre vote",
-
                 "§7pour le classement hebdomadaire.",
-
                 "",
-
                 "§a▶ Sauvegarder"
         );
 
         p.openInventory(inv);
     }
 
-    //
-    // ⭐ ITEM VOTE
-    //
-
     private static void setVote(
-
             Inventory inv,
-
             int slot,
-
             Material mat,
-
             String name,
-
             String line1,
-
             String line2,
-
             int value
     ) {
 
         set(
-
                 inv,
-
                 slot,
-
                 mat,
-
                 name,
-
                 "§8----- §6Critère Citoyen §8-----",
-
                 line1,
-
                 line2,
-
                 "",
-
                 "§7Note actuelle : §e"
                         + value
                         + "§7/3",
-
                 "",
-
                 "§e▶ Cliquer pour ajuster"
         );
     }
 
-    //
-    // 🛠 ITEM
-    //
-
     private static void set(
-
             Inventory inv,
-
             int slot,
-
             Material mat,
-
             String name,
-
             String... lore
     ) {
 
