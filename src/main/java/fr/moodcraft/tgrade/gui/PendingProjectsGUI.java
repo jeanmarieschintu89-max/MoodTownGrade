@@ -1,5 +1,7 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
+
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,11 +50,14 @@ public class PendingProjectsGUI {
         ItemMeta glassMeta =
                 glass.getItemMeta();
 
-        glassMeta.setDisplayName(
-                " "
-        );
+        if (glassMeta != null) {
 
-        glass.setItemMeta(glassMeta);
+            glassMeta.setDisplayName(
+                    " "
+            );
+
+            glass.setItemMeta(glassMeta);
+        }
 
         //
         // 🧱 BORDERS
@@ -89,41 +95,44 @@ public class PendingProjectsGUI {
         ItemMeta headerMeta =
                 header.getItemMeta();
 
-        headerMeta.setDisplayName(
-                "§6✦ Commission Urbaine"
-        );
+        if (headerMeta != null) {
 
-        headerMeta.setLore(List.of(
+            headerMeta.setDisplayName(
+                    "§6✦ Commission Urbaine"
+            );
 
-                "§8----- §6Demandes de projets §8-----",
+            headerMeta.setLore(List.of(
 
-                "§7Consulte les projets transmis",
+                    "§8----- §6Demandes de projets §8-----",
 
-                "§7par les villes à la Commission.",
+                    "§7Consulte les projets transmis",
 
-                "",
+                    "§7par les villes à la Commission.",
 
-                "§7Objectif du menu:",
+                    "",
 
-                "§8• §fInspecter le projet sur place",
+                    "§7Objectif du menu:",
 
-                "§8• §aValider la demande",
+                    "§8• §fInspecter le projet sur place",
 
-                "§8• §cRefuser la demande",
+                    "§8• §aValider la demande",
 
-                "§8• §eSuivre les votes liés au projet",
+                    "§8• §cRefuser la demande",
 
-                "",
+                    "§8• §eSuivre les votes liés au projet",
 
-                "§7Demandes enregistrées: §e"
-                        + SubmissionStorage.getAll().size(),
+                    "",
 
-                "",
+                    "§7Demandes enregistrées: §e"
+                            + SubmissionStorage.getAll().size(),
 
-                "§e▶ Ouvrir les dossiers"
-        ));
+                    "",
 
-        header.setItemMeta(headerMeta);
+                    "§e▶ Ouvrir les dossiers"
+            ));
+
+            header.setItemMeta(headerMeta);
+        }
 
         inv.setItem(4, header);
 
@@ -162,8 +171,6 @@ public class PendingProjectsGUI {
             // 📊 STATUS
             //
 
-            Material material;
-
             String status;
 
             String action;
@@ -173,9 +180,6 @@ public class PendingProjectsGUI {
             switch (sub.getStatus()) {
 
                 case APPROVED -> {
-
-                    material =
-                            Material.EMERALD;
 
                     status =
                             "§a✔ Demande validée";
@@ -189,9 +193,6 @@ public class PendingProjectsGUI {
 
                 case REJECTED -> {
 
-                    material =
-                            Material.REDSTONE_BLOCK;
-
                     status =
                             "§c✖ Demande refusée";
 
@@ -203,9 +204,6 @@ public class PendingProjectsGUI {
                 }
 
                 default -> {
-
-                    material =
-                            Material.WRITABLE_BOOK;
 
                     status =
                             "§6⌛ En examen";
@@ -219,91 +217,86 @@ public class PendingProjectsGUI {
             }
 
             //
-            // 📘 ITEM
+            // 🎌 ITEM DRAPEAU
             //
 
             ItemStack item =
-                    new ItemStack(material);
+                    MoodTownFlagAPI.getTownFlagItem(
+                            sub.getTown()
+                    );
+
+            boolean hasFlag =
+                    item != null;
+
+            if (item == null) {
+
+                item =
+                        new ItemStack(
+                                Material.WHITE_BANNER
+                        );
+            }
 
             ItemMeta meta =
                     item.getItemMeta();
 
-            //
-            // 📛 NAME
-            //
+            if (meta != null) {
 
-            meta.setDisplayName(
-                    "§f✦ §e" + sub.getBuildName()
-            );
+                meta.setDisplayName(
+                        "§f✦ §e" + sub.getBuildName()
+                );
 
-            //
-            // 📜 LORE
-            //
+                List<String> lore =
+                        new ArrayList<>();
 
-            meta.setLore(List.of(
+                lore.add("§8----- §6Demande de projet §8-----");
+                lore.add("§7Ville: §b" + sub.getTown());
+                lore.add("§7Projet: §f" + sub.getBuildName());
+                lore.add("§7Statut: " + status);
+                lore.add("");
 
-                    "§8----- §6Demande de projet §8-----",
+                if (hasFlag) {
 
-                    "§7Ville: §b" + sub.getTown(),
+                    lore.add("§a✔ Drapeau officiel enregistré");
 
-                    "§7Projet: §f" + sub.getBuildName(),
+                } else {
 
-                    "§7Statut: " + status,
+                    lore.add("§7Drapeau : §fNon défini");
+                }
 
-                    "",
+                lore.add("");
+                lore.add("§8----- §6Rôle du dossier §8-----");
+                lore.add("§7Cette demande concerne un");
+                lore.add("§7projet urbain précis.");
+                lore.add("§7Elle ne note pas toute la ville.");
+                lore.add("");
+                lore.add("§7Après validation:");
+                lore.add("§8• §fle projet participe au classement");
+                lore.add("§8• §fles votes citoyens sont pris en compte");
+                lore.add("§8• §fles maires peuvent l'évaluer");
+                lore.add("§8• §fune subvention peut être attribuée");
+                lore.add("");
+                lore.add("§8----- §6Votes liés au projet §8-----");
+                lore.add("§7Citoyens: §eavis public sur le projet");
+                lore.add("§7Maires: §6évaluation du projet");
+                lore.add("§7Staff: §cvalidation de la demande");
+                lore.add("");
+                lore.add("§7État: " + participation);
+                lore.add("");
+                lore.add("§7Position du projet:");
+                lore.add(
+                        "§fX §e" + sub.getX()
+                                + " §8| §fY §e" + sub.getY()
+                                + " §8| §fZ §e" + sub.getZ()
+                );
+                lore.add("");
+                lore.add("§7Dépôt: §f" + date);
+                lore.add("");
+                lore.add(action);
 
-                    "§8----- §6Rôle du dossier §8-----",
+                meta.setLore(lore);
 
-                    "§7Cette demande concerne un",
-
-                    "§7projet urbain précis.",
-
-                    "§7Elle ne note pas toute la ville.",
-
-                    "",
-
-                    "§7Après validation:",
-
-                    "§8• §fle projet participe au classement",
-
-                    "§8• §fles votes citoyens sont pris en compte",
-
-                    "§8• §fles maires peuvent l'évaluer",
-
-                    "§8• §fune subvention peut être attribuée",
-
-                    "",
-
-                    "§8----- §6Votes liés au projet §8-----",
-
-                    "§7Citoyens: §eavis public sur le projet",
-
-                    "§7Maires: §6évaluation du projet",
-
-                    "§7Staff: §cvalidation de la demande",
-
-                    "",
-
-                    "§7État: " + participation,
-
-                    "",
-
-                    "§7Position du projet:",
-
-                    "§fX §e" + sub.getX()
-                            + " §8| §fY §e" + sub.getY()
-                            + " §8| §fZ §e" + sub.getZ(),
-
-                    "",
-
-                    "§7Dépôt: §f" + date,
-
-                    "",
-
-                    action
-            ));
-
-            item.setItemMeta(meta);
+                item.setItemMeta(meta);
+            }
 
             inv.setItem(slot, item);
 
@@ -341,28 +334,31 @@ public class PendingProjectsGUI {
             ItemMeta meta =
                     empty.getItemMeta();
 
-            meta.setDisplayName(
-                    "§c✖ Aucune demande"
-            );
+            if (meta != null) {
 
-            meta.setLore(List.of(
+                meta.setDisplayName(
+                        "§c✖ Aucune demande"
+                );
 
-                    "§8----- §6Commission Urbaine §8-----",
+                meta.setLore(List.of(
 
-                    "§7Aucune demande de projet",
+                        "§8----- §6Commission Urbaine §8-----",
 
-                    "§7n'est actuellement enregistrée.",
+                        "§7Aucune demande de projet",
 
-                    "",
+                        "§7n'est actuellement enregistrée.",
 
-                    "§7Les villes peuvent déposer",
+                        "",
 
-                    "§7un projet pour participer",
+                        "§7Les villes peuvent déposer",
 
-                    "§7au classement hebdomadaire."
-            ));
+                        "§7un projet pour participer",
 
-            empty.setItemMeta(meta);
+                        "§7au classement hebdomadaire."
+                ));
+
+                empty.setItemMeta(meta);
+            }
 
             inv.setItem(22, empty);
         }
@@ -379,20 +375,23 @@ public class PendingProjectsGUI {
         ItemMeta backMeta =
                 back.getItemMeta();
 
-        backMeta.setDisplayName(
-                "§c⬅ Retour"
-        );
+        if (backMeta != null) {
 
-        backMeta.setLore(List.of(
+            backMeta.setDisplayName(
+                    "§c⬅ Retour"
+            );
 
-                "§8----- §6Commission Urbaine §8-----",
+            backMeta.setLore(List.of(
 
-                "§7Retour au menu principal",
+                    "§8----- §6Commission Urbaine §8-----",
 
-                "§7de l'administration urbaine."
-        ));
+                    "§7Retour au menu principal",
 
-        back.setItemMeta(backMeta);
+                    "§7de l'administration urbaine."
+            ));
+
+            back.setItemMeta(backMeta);
+        }
 
         inv.setItem(49, back);
 
