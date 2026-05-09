@@ -8,8 +8,11 @@ import fr.moodcraft.tgrade.manager.RateSessionManager;
 
 import fr.moodcraft.tgrade.model.RateSession;
 import fr.moodcraft.tgrade.model.StaffVote;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.TownSubmission;
 
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.storage.VoteStorage;
 
 import org.bukkit.Sound;
@@ -36,7 +39,7 @@ public class RateGUIListener
 
         if (!e.getView()
                 .getTitle()
-                .equals("§8✦ Notation Nationale")) {
+                .equals("§8✦ Notation Staff")) {
             return;
         }
 
@@ -55,13 +58,26 @@ public class RateGUIListener
         if (session == null)
             return;
 
+        String town =
+                session.getTown();
+
+        TownSubmission project =
+                getActiveProject(
+                        town
+                );
+
+        String projectName =
+                project == null
+                        ? "Projet en cours"
+                        : project.getBuildName();
+
         //
         // 🏙 GRADE
         //
 
         TownGrade grade =
                 GradeManager.get(
-                        session.getTown()
+                        town
                 );
 
         //
@@ -85,13 +101,19 @@ public class RateGUIListener
                     "§8----- §6Commission Urbaine §8-----"
             );
             p.sendMessage(
-                    "§cLes notations sont clôturées."
+                    "§cVotes clôturés."
             );
             p.sendMessage(
-                    "§7Ville: §b" + session.getTown()
+                    "§7Ville : §b" + town
             );
             p.sendMessage(
-                    "§7Le registre national a été verrouillé."
+                    "§7Projet : §f" + projectName
+            );
+            p.sendMessage(
+                    "§7Ce dossier ne reçoit plus"
+            );
+            p.sendMessage(
+                    "§7de nouvelles évaluations."
             );
             p.sendMessage("");
 
@@ -152,7 +174,7 @@ public class RateGUIListener
                 StaffVote vote =
                         new StaffVote(
                                 p.getUniqueId(),
-                                session.getTown()
+                                town
                         );
 
                 vote.setArchitecture(
@@ -196,25 +218,25 @@ public class RateGUIListener
                 double staff =
                         NationalScoreCalculator
                                 .getStaffScore(
-                                        session.getTown()
+                                        town
                                 );
 
                 double mayors =
                         NationalScoreCalculator
                                 .getMayorScore(
-                                        session.getTown()
+                                        town
                                 );
 
                 double citizens =
                         NationalScoreCalculator
                                 .getCitizenScore(
-                                        session.getTown()
+                                        town
                                 );
 
                 double national =
                         NationalScoreCalculator
                                 .getFinalScore(
-                                        session.getTown()
+                                        town
                                 );
 
                 p.closeInventory();
@@ -228,25 +250,28 @@ public class RateGUIListener
                         "§8----- §6Commission Urbaine §8-----"
                 );
                 p.sendMessage(
-                        "§fVote staff enregistré."
+                        "§aNotation staff enregistrée."
                 );
                 p.sendMessage(
-                        "§7Ville: §b" + session.getTown()
+                        "§7Ville : §b" + town
                 );
                 p.sendMessage(
-                        "§7Commission: §e" + staff + "§7/50"
+                        "§7Projet : §f" + projectName
                 );
                 p.sendMessage(
-                        "§7Conseil des maires: §e" + mayors + "§7/50"
+                        "§7Le classement hebdomadaire"
                 );
                 p.sendMessage(
-                        "§7Votes citoyens: §e" + citizens + "§7/50"
+                        "§7a été actualisé."
+                );
+                p.sendMessage("");
+                p.sendMessage(
+                        "§7Note provisoire : §e" + national + "§7/50"
                 );
                 p.sendMessage(
-                        "§7Note nationale actuelle: §6" + national + "§7/50"
-                );
-                p.sendMessage(
-                        "§a✔ Le dossier reste ouvert aux votes."
+                        "§7Détail : §6Staff §e" + staff
+                                + " §8| §6Maires §e" + mayors
+                                + " §8| §6Citoyens §e" + citizens
                 );
                 p.sendMessage("");
 
@@ -265,33 +290,3 @@ public class RateGUIListener
             }
 
             default -> {
-                return;
-            }
-        }
-
-        p.playSound(
-                p.getLocation(),
-                Sound.UI_BUTTON_CLICK,
-                1f,
-                1f
-        );
-
-        RateGUI.open(
-                p,
-                session.getTown()
-        );
-    }
-
-    private int next(
-            int current,
-            int max
-    ) {
-
-        current++;
-
-        if (current > max)
-            current = 0;
-
-        return current;
-    }
-}
