@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.command;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
@@ -6,6 +7,7 @@ import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.storage.VoteStorage;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -79,6 +81,8 @@ public class VProjetsResetCommand
             GradeManager.save(grade);
         }
 
+        VoteStorage.clearAll();
+
         p.sendMessage("");
         p.sendMessage(
                 "§8----- §6Commission Urbaine §8-----"
@@ -90,7 +94,7 @@ public class VProjetsResetCommand
                 "§7Tous les projets urbains ont été supprimés."
         );
         p.sendMessage(
-                "§7Les notes, financements et verrouillages sont remis à zéro."
+                "§7Les votes, notes et verrouillages sont remis à zéro."
         );
         p.sendMessage(
                 "§a✔ Nouvelle semaine urbaine prête."
