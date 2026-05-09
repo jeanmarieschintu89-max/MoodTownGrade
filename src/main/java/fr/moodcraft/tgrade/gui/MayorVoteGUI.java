@@ -24,26 +24,15 @@ import java.util.List;
 
 public class MayorVoteGUI {
 
-    public static final int
-            BEAUTE = 20;
+    public static final int BEAUTE = 20;
+    public static final int AMBIANCE = 21;
+    public static final int ACTIVITE = 22;
+    public static final int ORIGINALITE = 23;
+    public static final int POPULARITE = 24;
 
-    public static final int
-            AMBIANCE = 21;
-
-    public static final int
-            ACTIVITE = 22;
-
-    public static final int
-            ORIGINALITE = 23;
-
-    public static final int
-            POPULARITE = 24;
-
-    public static final int
-            TP_PROJECT = 36;
-
-    public static final int
-            SAVE = 40;
+    public static final int BACK = 36;
+    public static final int SAVE = 40;
+    public static final int TP_PROJECT = 44;
 
     public static void open(
             Player p,
@@ -82,6 +71,13 @@ public class MayorVoteGUI {
                         ? "Projet en cours"
                         : project.getBuildName();
 
+        int total =
+                vote.getBeaute()
+                        + vote.getAmbiance()
+                        + vote.getActivite()
+                        + vote.getOriginalite()
+                        + vote.getPopularite();
+
         ItemStack glass =
                 new ItemStack(
                         Material.BLACK_STAINED_GLASS_PANE
@@ -106,7 +102,7 @@ public class MayorVoteGUI {
 
                 27,35,
 
-                37,38,39,41,42,43,44
+                37,38,39,41,42,43
         };
 
         for (int slot : borders) {
@@ -139,7 +135,7 @@ public class MayorVoteGUI {
 
                 "§7sur la ville et son projet",
 
-                "§7actuellement en développement.",
+                "§7en développement.",
 
                 "",
 
@@ -148,6 +144,10 @@ public class MayorVoteGUI {
                 "§7le classement hebdomadaire.",
 
                 "",
+
+                "§7Votre score : §e"
+                        + total
+                        + "§7/25",
 
                 "§7Note provisoire : §e"
                         + String.format(
@@ -174,11 +174,11 @@ public class MayorVoteGUI {
 
                 Material.QUARTZ_BLOCK,
 
-                "§f✦ Beauté",
+                "§f✦ Visuel",
 
-                "§7Qualité visuelle de la ville",
+                "§7Beauté générale, détails",
 
-                "§7et intégration du projet.",
+                "§7et qualité des constructions.",
 
                 vote.getBeaute()
         );
@@ -242,13 +242,67 @@ public class MayorVoteGUI {
 
                 Material.REDSTONE,
 
-                "§c✦ Popularité",
+                "§c✦ Avis général",
 
-                "§7Pertinence générale du projet",
+                "§7Pertinence générale",
 
-                "§7pour le territoire urbain.",
+                "§7du projet municipal.",
 
                 vote.getPopularite()
+        );
+
+        set(
+
+                inv,
+
+                BACK,
+
+                Material.BARRIER,
+
+                "§c✖ Retour",
+
+                "§8----- §6Conseil des Maires §8-----",
+
+                "§7Retour à la liste",
+
+                "§7des villes à évaluer.",
+
+                "",
+
+                "§c▶ Retour"
+        );
+
+        set(
+
+                inv,
+
+                SAVE,
+
+                Material.EMERALD_BLOCK,
+
+                "§a✔ Valider le vote",
+
+                "§8----- §6Conseil des Maires §8-----",
+
+                "§7Ville : §b" + town,
+
+                "§7Projet : §f" + projectName,
+
+                "",
+
+                "§7Votre score : §e"
+                        + total
+                        + "§7/25",
+
+                "",
+
+                "§7Enregistre votre avis municipal",
+
+                "§7pour le classement hebdomadaire.",
+
+                "",
+
+                "§a▶ Sauvegarder"
         );
 
         set(
@@ -271,44 +325,11 @@ public class MayorVoteGUI {
 
                 "§7Téléporte vers le projet",
 
-                "§7en développement de la ville.",
-
-                "",
-
-                "§7Visitez avant de voter",
-
-                "§7pour un avis municipal juste.",
+                "§7à visiter avant le vote.",
 
                 "",
 
                 "§b▶ Se téléporter"
-        );
-
-        set(
-
-                inv,
-
-                SAVE,
-
-                Material.EMERALD_BLOCK,
-
-                "§a✔ Valider le vote",
-
-                "§8----- §6Conseil des Maires §8-----",
-
-                "§7Ville : §b" + town,
-
-                "§7Projet : §f" + projectName,
-
-                "",
-
-                "§7Enregistre votre avis municipal",
-
-                "§7pour le classement hebdomadaire.",
-
-                "",
-
-                "§a▶ Sauvegarder"
         );
 
         p.openInventory(inv);
