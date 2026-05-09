@@ -22,42 +22,22 @@ public class CitizenTownListListener
             InventoryClickEvent e
     ) {
 
-        //
-        // 👤 PLAYER
-        //
-
         if (!(e.getWhoClicked()
                 instanceof Player p)) {
             return;
         }
 
-        //
-        // 📛 TITLE
-        //
-
         if (!e.getView()
                 .getTitle()
-                .equals("§8✦ Avis Citoyens")) {
+                .equals("§8✦ Votes Citoyens")) {
             return;
         }
 
-        //
-        // ❌ CANCEL
-        //
-
         e.setCancelled(true);
-
-        //
-        // 📦 NULL
-        //
 
         if (e.getCurrentItem() == null) {
             return;
         }
-
-        //
-        // 🛑 PLAYER INVENTORY
-        //
 
         if (e.getRawSlot()
                 >= e.getView()
@@ -67,10 +47,6 @@ public class CitizenTownListListener
             return;
         }
 
-        //
-        // ❌ AIR
-        //
-
         if (e.getCurrentItem()
                 .getType()
                 .isAir()) {
@@ -78,27 +54,15 @@ public class CitizenTownListListener
             return;
         }
 
-        //
-        // 🔘 SLOT
-        //
-
         int slot =
                 e.getRawSlot();
-
-        //
-        // 🔙 RETOUR
-        //
 
         if (slot == 49) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     1f
             );
 
@@ -107,44 +71,25 @@ public class CitizenTownListListener
             return;
         }
 
-        //
-        // 🌌 BORDURES
-        //
-
         Material mat =
                 e.getCurrentItem()
                         .getType();
 
-        if (mat
-                == Material.BLACK_STAINED_GLASS_PANE) {
-
+        if (mat == Material.BLACK_STAINED_GLASS_PANE) {
             return;
         }
 
-        //
-        // ❌ BARRIER
-        //
-
-        if (mat
-                == Material.BARRIER) {
+        if (mat == Material.BARRIER) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     1f
             );
 
             return;
         }
-
-        //
-        // 📛 ITEM NAME
-        //
 
         if (!e.getCurrentItem()
                 .hasItemMeta()) {
@@ -164,19 +109,11 @@ public class CitizenTownListListener
                         .getItemMeta()
                         .getDisplayName();
 
-        //
-        // 🏙️ INVALID
-        //
-
         if (!name.startsWith(
                 "§f✦ §b")) {
 
             return;
         }
-
-        //
-        // 🏙️ TOWN
-        //
 
         String town =
                 name.replace(
@@ -184,24 +121,12 @@ public class CitizenTownListListener
                         ""
                 );
 
-        //
-        // 🔊 SOUND
-        //
-
         p.playSound(
-
                 p.getLocation(),
-
                 Sound.UI_BUTTON_CLICK,
-
                 1f,
-
                 1f
         );
-
-        //
-        // 🚀 OPEN VOTE
-        //
 
         CitizenVoteGUI.open(
                 p,
