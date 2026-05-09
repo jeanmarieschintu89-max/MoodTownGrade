@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
@@ -70,7 +71,7 @@ public class ClassementGUI {
         }
 
         List<TownGrade> top =
-                new ArrayList<>(
+                new ArrayList<TownGrade>(
                         RankingManager.getTop()
                 );
 
