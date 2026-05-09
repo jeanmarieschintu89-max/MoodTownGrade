@@ -31,7 +31,7 @@ public class EvaluationManagerListener
 
         if (!e.getView()
                 .getTitle()
-                .equals("§8✦ Évaluations Nationales")) {
+                .equals("§8✦ Notation Staff")) {
             return;
         }
 
