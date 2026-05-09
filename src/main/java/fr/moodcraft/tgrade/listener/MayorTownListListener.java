@@ -22,42 +22,22 @@ public class MayorTownListListener
             InventoryClickEvent e
     ) {
 
-        //
-        // 👤 PLAYER
-        //
-
         if (!(e.getWhoClicked()
                 instanceof Player p)) {
             return;
         }
 
-        //
-        // 📛 TITLE
-        //
-
         if (!e.getView()
                 .getTitle()
-                .equals("§8✦ Conseil National")) {
+                .equals("§8✦ Conseil des Maires")) {
             return;
         }
 
-        //
-        // ❌ CANCEL
-        //
-
         e.setCancelled(true);
-
-        //
-        // 📦 NULL
-        //
 
         if (e.getCurrentItem() == null) {
             return;
         }
-
-        //
-        // 🛑 PLAYER INVENTORY
-        //
 
         if (e.getRawSlot()
                 >= e.getView()
@@ -67,10 +47,6 @@ public class MayorTownListListener
             return;
         }
 
-        //
-        // ❌ AIR
-        //
-
         if (e.getCurrentItem()
                 .getType()
                 .isAir()) {
@@ -78,27 +54,15 @@ public class MayorTownListListener
             return;
         }
 
-        //
-        // 🔘 SLOT
-        //
-
         int slot =
                 e.getRawSlot();
-
-        //
-        // 🔙 RETOUR
-        //
 
         if (slot == 49) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     1f
             );
 
@@ -107,44 +71,25 @@ public class MayorTownListListener
             return;
         }
 
-        //
-        // 🌌 BORDURES
-        //
-
         Material mat =
                 e.getCurrentItem()
                         .getType();
 
-        if (mat
-                == Material.BLACK_STAINED_GLASS_PANE) {
-
+        if (mat == Material.BLACK_STAINED_GLASS_PANE) {
             return;
         }
 
-        //
-        // ❌ BARRIER
-        //
-
-        if (mat
-                == Material.BARRIER) {
+        if (mat == Material.BARRIER) {
 
             p.playSound(
-
                     p.getLocation(),
-
                     Sound.UI_BUTTON_CLICK,
-
                     1f,
-
                     1f
             );
 
             return;
         }
-
-        //
-        // 📛 ITEM META
-        //
 
         if (!e.getCurrentItem()
                 .hasItemMeta()) {
@@ -159,18 +104,10 @@ public class MayorTownListListener
             return;
         }
 
-        //
-        // 📛 ITEM NAME
-        //
-
         String name =
                 e.getCurrentItem()
                         .getItemMeta()
                         .getDisplayName();
-
-        //
-        // 🏙️ INVALID
-        //
 
         if (!name.startsWith(
                 "§f✦ §b")) {
@@ -178,34 +115,18 @@ public class MayorTownListListener
             return;
         }
 
-        //
-        // 🏙️ TOWN
-        //
-
         String town =
                 name.replace(
                         "§f✦ §b",
                         ""
                 );
 
-        //
-        // 🔊 SOUND
-        //
-
         p.playSound(
-
                 p.getLocation(),
-
                 Sound.UI_BUTTON_CLICK,
-
                 1f,
-
                 1f
         );
-
-        //
-        // 🚀 OPEN VOTE
-        //
 
         MayorVoteGUI.open(
                 p,
