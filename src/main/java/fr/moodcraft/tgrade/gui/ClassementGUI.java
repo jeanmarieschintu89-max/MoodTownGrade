@@ -32,12 +32,9 @@ public class ClassementGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
-                        "§8✦ Classement National"
+                        "§8✦ Classement Hebdo"
                 );
 
         ItemStack glass =
@@ -77,14 +74,11 @@ public class ClassementGUI {
                         RankingManager.getTop()
                 );
 
-        //
-        // 📊 TRI SCORE FINAL FIGÉ
-        //
-
         top.sort(
 
                 Comparator.comparingDouble(
-                        TownGrade::getFinalScore
+                        thisGrade ->
+                                getVisibleScore(thisGrade)
                 ).reversed()
         );
 
@@ -101,7 +95,7 @@ public class ClassementGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§6✦ Palmarès National"
+                "§6✦ Classement Hebdomadaire"
         );
 
         if (!top.isEmpty()) {
@@ -110,31 +104,46 @@ public class ClassementGUI {
                     top.get(0);
 
             double national =
-                    best.getFinalScore();
+                    getVisibleScore(best);
 
             headerMeta.setLore(List.of(
 
-                    "§8----- §6Registre National §8-----",
+                    "§8----- §6Registre urbain §8-----",
 
-                    "§7Ville dominante: §e"
-                            + best.getTown(),
+                    "§7Classement en direct des villes",
 
-                    "§7Note nationale: §e"
-                            + national + "§7/50",
-
-                    "§7Titre actuel:",
-                    getRank(national),
+                    "§7ayant une demande de projet validée.",
 
                     "",
 
-                    "§e▶ Classement officiel MoodCraft"
+                    "§7Ville en tête : §e"
+                            + best.getTown(),
+
+                    "§7Note actuelle : §e"
+                            + String.format("%.1f", national)
+                            + "§7/50",
+
+                    "§7État : "
+                            + getState(best),
+
+                    "",
+
+                    "§7Les subventions sont versées",
+
+                    "§7séparément par le staff ou",
+
+                    "§7lors du paiement hebdomadaire.",
+
+                    "",
+
+                    "§e▶ Résultats urbains"
             ));
 
         } else {
 
             headerMeta.setLore(List.of(
 
-                    "§8----- §6Registre National §8-----",
+                    "§8----- §6Registre urbain §8-----",
 
                     "§7Aucune ville classée",
 
@@ -142,7 +151,15 @@ public class ClassementGUI {
 
                     "",
 
-                    "§e▶ En attente d'inspections"
+                    "§7Le classement s'active après",
+
+                    "§7validation d'une demande",
+
+                    "§7de projet par le staff.",
+
+                    "",
+
+                    "§e▶ En attente de projets"
             ));
         }
 
@@ -181,12 +198,8 @@ public class ClassementGUI {
                                     grade.getTown()
                             );
 
-            //
-            // 🔒 SCORE FIGÉ
-            //
-
             double national =
-                    grade.getFinalScore();
+                    getVisibleScore(grade);
 
             Material mat;
 
@@ -200,7 +213,7 @@ public class ClassementGUI {
                             Material.NETHER_STAR;
 
                     podium =
-                            "§6♛ Rang National I";
+                            "§6♛ Rang Hebdo I";
                 }
 
                 case 2 -> {
@@ -209,7 +222,7 @@ public class ClassementGUI {
                             Material.DIAMOND;
 
                     podium =
-                            "§b♢ Rang National II";
+                            "§b♢ Rang Hebdo II";
                 }
 
                 case 3 -> {
@@ -218,7 +231,7 @@ public class ClassementGUI {
                             Material.EMERALD;
 
                     podium =
-                            "§a♢ Rang National III";
+                            "§a♢ Rang Hebdo III";
                 }
 
                 default -> {
@@ -227,7 +240,7 @@ public class ClassementGUI {
                             Material.GOLD_INGOT;
 
                     podium =
-                            "§eRang National #" + pos;
+                            "§eRang Hebdo #" + pos;
                 }
             }
 
@@ -238,7 +251,6 @@ public class ClassementGUI {
                     item.getItemMeta();
 
             meta.setDisplayName(
-
                     podium
                             + " §8• §b"
                             + grade.getTown()
@@ -246,28 +258,38 @@ public class ClassementGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Évaluation Nationale §8-----",
+                    "§8----- §6Classement hebdomadaire §8-----",
 
-                    "§7Titre officiel:",
+                    "§7Ville : §b" + grade.getTown(),
+
+                    "§7État : " + getState(grade),
+
+                    "",
+
+                    "§7Titre urbain :",
                     getRank(national),
 
                     "",
 
-                    "§7Commission: §e"
-                            + staff + "§7/50",
+                    "§7Staff : §e"
+                            + String.format("%.1f", staff)
+                            + "§7/50",
 
-                    "§7Conseil des maires: §e"
-                            + mayors + "§7/50",
+                    "§7Conseil des maires : §e"
+                            + String.format("%.1f", mayors)
+                            + "§7/50",
 
-                    "§7Votes citoyens: §e"
-                            + citizens + "§7/50",
+                    "§7Votes citoyens : §e"
+                            + String.format("%.1f", citizens)
+                            + "§7/50",
 
                     "",
 
-                    "§7Note nationale: §e"
-                            + national + "§7/50",
+                    "§7Note hebdomadaire : §e"
+                            + String.format("%.1f", national)
+                            + "§7/50",
 
-                    "§7Financement: §a"
+                    "§7Subvention estimée : §a"
                             + format(
                             getPayout(national)
                     )
@@ -275,7 +297,11 @@ public class ClassementGUI {
 
                     "",
 
-                    "§7Appréciation:",
+                    "§7Paiement : §6hebdomadaire ou staff",
+
+                    "",
+
+                    "§7Appréciation :",
                     getAppreciation(national)
             ));
 
@@ -317,15 +343,17 @@ public class ClassementGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Registre National §8-----",
+                    "§8----- §6Classement hebdomadaire §8-----",
 
                     "§7Aucune ville n'a encore",
 
-                    "§7été inspectée cette semaine.",
+                    "§7de projet validé cette semaine.",
 
                     "",
 
-                    "§e▶ Le palmarès attend ses premières données"
+                    "§7Le classement attend",
+
+                    "§7ses premières demandes validées."
             ));
 
             empty.setItemMeta(meta);
@@ -355,7 +383,7 @@ public class ClassementGUI {
 
                 "§7Retourner au menu",
 
-                "§7de l'administration nationale."
+                "§7de la commission."
         ));
 
         back.setItemMeta(backMeta);
@@ -363,6 +391,39 @@ public class ClassementGUI {
         inv.setItem(49, back);
 
         p.openInventory(inv);
+    }
+
+    //
+    // 👁 SCORE
+    //
+
+    private static double getVisibleScore(
+            TownGrade grade
+    ) {
+
+        if (grade.isLocked()) {
+
+            return grade.getFinalScore();
+        }
+
+        return NationalScoreCalculator.getFinalScore(
+                grade.getTown()
+        );
+    }
+
+    //
+    // 🔒 STATE
+    //
+
+    private static String getState(
+            TownGrade grade
+    ) {
+
+        if (grade.isLocked()) {
+            return "§6Votes clôturés";
+        }
+
+        return "§aVotes ouverts";
     }
 
     //
@@ -404,39 +465,39 @@ public class ClassementGUI {
             double score
     ) {
 
-        if (score <= 10) {
-            return 2500;
+        if (score <= 15) {
+            return 0;
         }
 
         if (score <= 20) {
-            return 5000;
-        }
-
-        if (score <= 25) {
-            return 7500;
-        }
-
-        if (score <= 30) {
-            return 10000;
-        }
-
-        if (score <= 35) {
             return 15000;
         }
 
+        if (score <= 25) {
+            return 35000;
+        }
+
+        if (score <= 30) {
+            return 75000;
+        }
+
+        if (score <= 35) {
+            return 125000;
+        }
+
         if (score <= 40) {
-            return 20000;
+            return 200000;
         }
 
         if (score <= 45) {
-            return 25000;
+            return 350000;
         }
 
         if (score <= 49) {
-            return 30000;
+            return 500000;
         }
 
-        return 40000;
+        return 1000000;
     }
 
     //
@@ -447,39 +508,39 @@ public class ClassementGUI {
             double score
     ) {
 
-        if (score <= 10) {
-            return "§7Avis: aide minimale accordée pour lancer le développement.";
+        if (score <= 15) {
+            return "§7Dossier trop faible pour une subvention.";
         }
 
         if (score <= 20) {
-            return "§7Avis: commune en construction, soutien national modéré.";
+            return "§7Projet recevable, soutien urbain limité.";
         }
 
         if (score <= 25) {
-            return "§eAvis: dossier fragile mais recevable pour un financement.";
+            return "§eVille en progression, dossier encourageant.";
         }
 
         if (score <= 30) {
-            return "§aAvis: ville reconnue, développement urbain encourageant.";
+            return "§aDéveloppement urbain sérieux et visible.";
         }
 
         if (score <= 35) {
-            return "§bAvis: ville solide, organisation municipale visible.";
+            return "§bVille solide, projet bien intégré.";
         }
 
         if (score <= 40) {
-            return "§bAvis: métropole attractive, note urbaine confirmée.";
+            return "§bMétropole attractive, dossier confirmé.";
         }
 
         if (score <= 45) {
-            return "§6Avis: cité majeure, référence nationale montante.";
+            return "§6Cité majeure, forte influence urbaine.";
         }
 
         if (score <= 49) {
-            return "§6Avis: capitale d'élite, dossier remarquable.";
+            return "§6Capitale d'élite, projet remarquable.";
         }
 
-        return "§e§lAvis: merveille nationale inscrite au sommet de MoodCraft.";
+        return "§e§lMerveille nationale inscrite au sommet de MoodCraft.";
     }
 
     //
