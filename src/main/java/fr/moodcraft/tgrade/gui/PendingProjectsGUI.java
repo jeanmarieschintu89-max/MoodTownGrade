@@ -142,7 +142,7 @@ public class PendingProjectsGUI {
             }
 
             ItemStack item =
-                    MoodTownFlagAPI.getTownFlagItem(
+                    MoodTownFlagAPI.getTownShieldItem(
                             sub.getTown()
                     );
 
@@ -153,7 +153,7 @@ public class PendingProjectsGUI {
 
                 item =
                         new ItemStack(
-                                Material.WHITE_BANNER
+                                Material.SHIELD
                         );
             }
 
@@ -177,11 +177,11 @@ public class PendingProjectsGUI {
 
                 if (hasFlag) {
 
-                    lore.add("§a✔ Drapeau officiel enregistré");
+                    lore.add("§a✔ Blason officiel enregistré");
 
                 } else {
 
-                    lore.add("§7Drapeau : §fNon défini");
+                    lore.add("§7Blason : §fNon défini");
                 }
 
                 lore.add("");
