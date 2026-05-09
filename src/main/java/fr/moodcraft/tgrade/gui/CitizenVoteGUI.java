@@ -30,8 +30,9 @@ public class CitizenVoteGUI {
     public static final int ORIGINALITE = 23;
     public static final int POPULARITE = 24;
 
-    public static final int TP_PROJECT = 36;
+    public static final int BACK = 36;
     public static final int SAVE = 40;
+    public static final int TP_PROJECT = 44;
 
     public static void open(
             Player p,
@@ -70,6 +71,13 @@ public class CitizenVoteGUI {
                         ? "Projet en cours"
                         : project.getBuildName();
 
+        int total =
+                vote.getBeaute()
+                        + vote.getAmbiance()
+                        + vote.getActivite()
+                        + vote.getOriginalite()
+                        + vote.getPopularite();
+
         ItemStack glass =
                 new ItemStack(
                         Material.BLACK_STAINED_GLASS_PANE
@@ -94,7 +102,7 @@ public class CitizenVoteGUI {
 
                 27,35,
 
-                37,38,39,41,42,43,44
+                37,38,39,41,42,43
         };
 
         for (int slot : borders) {
@@ -120,6 +128,9 @@ public class CitizenVoteGUI {
                 "§7Votre vote compte pour",
                 "§7le classement hebdomadaire.",
                 "",
+                "§7Votre score : §e"
+                        + total
+                        + "§7/15",
                 "§7Note provisoire : §e"
                         + String.format(
                         "%.1f",
@@ -138,9 +149,9 @@ public class CitizenVoteGUI {
                 inv,
                 BEAUTE,
                 Material.QUARTZ_BLOCK,
-                "§f✦ Beauté",
-                "§7Qualité visuelle de la ville",
-                "§7et intégration du projet.",
+                "§f✦ Visuel",
+                "§7Beauté générale, détails",
+                "§7et qualité des constructions.",
                 vote.getBeaute()
         );
 
@@ -149,8 +160,8 @@ public class CitizenVoteGUI {
                 AMBIANCE,
                 Material.LANTERN,
                 "§e✦ Ambiance",
-                "§7Vie, identité et cohérence",
-                "§7de l'environnement urbain.",
+                "§7Vie, atmosphère",
+                "§7et ressenti en ville.",
                 vote.getAmbiance()
         );
 
@@ -159,8 +170,8 @@ public class CitizenVoteGUI {
                 ACTIVITE,
                 Material.BELL,
                 "§6✦ Activité",
-                "§7Dynamisme visible autour",
-                "§7de la ville et du projet.",
+                "§7Présence, dynamisme",
+                "§7et usage des lieux.",
                 vote.getActivite()
         );
 
@@ -169,8 +180,8 @@ public class CitizenVoteGUI {
                 ORIGINALITE,
                 Material.COMPASS,
                 "§b✦ Originalité",
-                "§7Créativité de la ville",
-                "§7et du projet présenté.",
+                "§7Idées uniques",
+                "§7et personnalité du projet.",
                 vote.getOriginalite()
         );
 
@@ -178,10 +189,41 @@ public class CitizenVoteGUI {
                 inv,
                 POPULARITE,
                 Material.REDSTONE,
-                "§c✦ Popularité",
-                "§7Appréciation générale",
-                "§7du projet par les citoyens.",
+                "§c✦ Avis général",
+                "§7Votre impression globale",
+                "§7après visite.",
                 vote.getPopularite()
+        );
+
+        set(
+                inv,
+                BACK,
+                Material.BARRIER,
+                "§c✖ Retour",
+                "§8----- §6Votes Citoyens §8-----",
+                "§7Retour à la liste",
+                "§7des villes à noter.",
+                "",
+                "§c▶ Retour"
+        );
+
+        set(
+                inv,
+                SAVE,
+                Material.EMERALD_BLOCK,
+                "§a✔ Valider le vote",
+                "§8----- §6Votes Citoyens §8-----",
+                "§7Ville : §b" + town,
+                "§7Projet : §f" + projectName,
+                "",
+                "§7Votre score : §e"
+                        + total
+                        + "§7/15",
+                "",
+                "§7Enregistre votre vote",
+                "§7pour le classement hebdomadaire.",
+                "",
+                "§a▶ Sauvegarder"
         );
 
         set(
@@ -194,27 +236,9 @@ public class CitizenVoteGUI {
                 "§7Projet : §f" + projectName,
                 "",
                 "§7Téléporte vers le projet",
-                "§7en développement de la ville.",
-                "",
-                "§7Visitez avant de voter",
-                "§7pour une note plus juste.",
+                "§7à visiter avant le vote.",
                 "",
                 "§b▶ Se téléporter"
-        );
-
-        set(
-                inv,
-                SAVE,
-                Material.EMERALD_BLOCK,
-                "§a✔ Valider le vote",
-                "§8----- §6Votes Citoyens §8-----",
-                "§7Ville : §b" + town,
-                "§7Projet : §f" + projectName,
-                "",
-                "§7Enregistre votre vote",
-                "§7pour le classement hebdomadaire.",
-                "",
-                "§a▶ Sauvegarder"
         );
 
         p.openInventory(inv);
