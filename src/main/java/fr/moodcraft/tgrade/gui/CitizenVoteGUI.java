@@ -1,3 +1,4 @@
+
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
