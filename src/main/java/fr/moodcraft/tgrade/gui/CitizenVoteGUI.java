@@ -1,10 +1,13 @@
-
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.CitizenVote;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 
@@ -56,44 +59,35 @@ public class CitizenVoteGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         45,
-
                         "§8✦ Vote Citoyen"
                 );
 
-        //
-        // 📦 VOTE
-        //
-
         CitizenVote vote =
                 CitizenVoteManager.getVote(
-
                         p.getUniqueId(),
-
                         town
                 );
-
-        //
-        // 🆕 CREATE
-        //
 
         if (vote == null) {
 
             vote =
                     new CitizenVote(
-
                             p.getUniqueId(),
-
                             town
                     );
         }
 
-        //
-        // 🌌 GLASS
-        //
+        TownSubmission project =
+                getActiveProject(
+                        town
+                );
+
+        String projectName =
+                project == null
+                        ? "Projet en cours"
+                        : project.getBuildName();
 
         ItemStack glass =
                 new ItemStack(
@@ -108,10 +102,6 @@ public class CitizenVoteGUI {
         );
 
         glass.setItemMeta(glassMeta);
-
-        //
-        // 🧱 BORDERS
-        //
 
         int[] borders = {
 
@@ -146,15 +136,29 @@ public class CitizenVoteGUI {
 
                 Material.NETHER_STAR,
 
-                "§e✦ Registre Citoyen",
+                "§e✦ Vote Citoyen",
 
-                "§8----- §6Avis Citoyen §8-----",
+                "§8----- §6Notation publique §8-----",
 
-                "§7Ville: §b" + town,
+                "§7Ville : §b" + town,
+
+                "§7Projet : §f" + projectName,
 
                 "",
 
-                "§7Prestige national: §e"
+                "§7Visitez le projet puis notez",
+
+                "§7la ville dans son ensemble.",
+
+                "",
+
+                "§7Votre vote compte pour",
+
+                "§7le classement hebdomadaire.",
+
+                "",
+
+                "§7Note provisoire : §e"
                         + String.format(
                         "%.1f",
                         NationalScoreCalculator
@@ -162,13 +166,13 @@ public class CitizenVoteGUI {
                 )
                         + "§7/50",
 
-                "§7Votes enregistrés: §b"
+                "§7Votes citoyens : §b"
                         + NationalScoreCalculator
                         .getCitizenCount(town),
 
                 "",
 
-                "§e▶ Influence populaire"
+                "§e▶ Ajustez les critères"
         );
 
         //
@@ -185,7 +189,9 @@ public class CitizenVoteGUI {
 
                 "§f✦ Beauté",
 
-                "§7Qualité visuelle de la ville.",
+                "§7Qualité visuelle de la ville",
+
+                "§7et intégration du projet.",
 
                 vote.getBeaute()
         );
@@ -204,7 +210,9 @@ public class CitizenVoteGUI {
 
                 "§e✦ Ambiance",
 
-                "§7Vie, lumière et identité urbaine.",
+                "§7Vie, identité et cohérence",
+
+                "§7de l'environnement urbain.",
 
                 vote.getAmbiance()
         );
@@ -223,7 +231,9 @@ public class CitizenVoteGUI {
 
                 "§6✦ Activité",
 
-                "§7Présence et dynamisme local.",
+                "§7Dynamisme visible autour",
+
+                "§7de la ville et du projet.",
 
                 vote.getActivite()
         );
@@ -242,7 +252,9 @@ public class CitizenVoteGUI {
 
                 "§b✦ Originalité",
 
-                "§7Créativité et singularité du projet.",
+                "§7Créativité de la ville",
+
+                "§7et du projet présenté.",
 
                 vote.getOriginalite()
         );
@@ -261,7 +273,9 @@ public class CitizenVoteGUI {
 
                 "§c✦ Popularité",
 
-                "§7Appréciation générale citoyenne.",
+                "§7Appréciation générale",
+
+                "§7du projet par les citoyens.",
 
                 vote.getPopularite()
         );
@@ -280,20 +294,22 @@ public class CitizenVoteGUI {
 
                 "§a✔ Valider le vote",
 
-                "§8----- §6Registre National §8-----",
+                "§8----- §6Votes Citoyens §8-----",
 
-                "§7Enregistrer votre avis",
+                "§7Ville : §b" + town,
 
-                "§7dans le dossier citoyen.",
+                "§7Projet : §f" + projectName,
+
+                "",
+
+                "§7Enregistre votre vote",
+
+                "§7pour le classement hebdomadaire.",
 
                 "",
 
                 "§a▶ Sauvegarder"
         );
-
-        //
-        // 🚀 OPEN
-        //
 
         p.openInventory(inv);
     }
@@ -312,7 +328,9 @@ public class CitizenVoteGUI {
 
             String name,
 
-            String description,
+            String line1,
+
+            String line2,
 
             int value
     ) {
@@ -329,11 +347,13 @@ public class CitizenVoteGUI {
 
                 "§8----- §6Critère Citoyen §8-----",
 
-                description,
+                line1,
+
+                line2,
 
                 "",
 
-                "§7Note actuelle: §e"
+                "§7Note actuelle : §e"
                         + value
                         + "§7/3",
 
@@ -378,5 +398,31 @@ public class CitizenVoteGUI {
                 slot,
                 item
         );
+    }
+
+    private static TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
     }
 }
