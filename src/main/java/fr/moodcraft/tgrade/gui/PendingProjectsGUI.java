@@ -3,16 +3,15 @@ package fr.moodcraft.tgrade.gui;
 import fr.moodcraft.flag.api.MoodTownFlagAPI;
 
 import fr.moodcraft.tgrade.model.TownSubmission;
-
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
-
 import org.bukkit.Material;
 
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,10 +24,6 @@ import java.util.List;
 
 public class PendingProjectsGUI {
 
-    //
-    // 📋 OPEN
-    //
-
     public static void open(Player p) {
 
         Inventory inv =
@@ -37,10 +32,6 @@ public class PendingProjectsGUI {
                         54,
                         "§8✦ Demandes Urbaines"
                 );
-
-        //
-        // 🌌 GLASS
-        //
 
         ItemStack glass =
                 new ItemStack(
@@ -52,29 +43,16 @@ public class PendingProjectsGUI {
 
         if (glassMeta != null) {
 
-            glassMeta.setDisplayName(
-                    " "
-            );
-
+            glassMeta.setDisplayName(" ");
             glass.setItemMeta(glassMeta);
         }
 
-        //
-        // 🧱 BORDERS
-        //
-
         int[] borders = {
-
                 0,1,2,3,4,5,6,7,8,
-
                 9,17,
-
                 18,26,
-
                 27,35,
-
                 36,44,
-
                 45,46,47,48,50,51,52,53
         };
 
@@ -82,10 +60,6 @@ public class PendingProjectsGUI {
 
             inv.setItem(slot, glass);
         }
-
-        //
-        // 🏛 HEADER
-        //
 
         ItemStack header =
                 new ItemStack(
@@ -102,32 +76,19 @@ public class PendingProjectsGUI {
             );
 
             headerMeta.setLore(List.of(
-
                     "§8----- §6Demandes de projets §8-----",
-
                     "§7Consulte les projets transmis",
-
                     "§7par les villes à la Commission.",
-
                     "",
-
                     "§7Objectif du menu:",
-
                     "§8• §fInspecter le projet sur place",
-
                     "§8• §aValider la demande",
-
                     "§8• §cRefuser la demande",
-
                     "§8• §eSuivre les votes liés au projet",
-
                     "",
-
                     "§7Demandes enregistrées: §e"
                             + SubmissionStorage.getAll().size(),
-
                     "",
-
                     "§e▶ Ouvrir les dossiers"
             ));
 
@@ -136,16 +97,8 @@ public class PendingProjectsGUI {
 
         inv.setItem(4, header);
 
-        //
-        // 📂 PROJETS
-        //
-
         List<TownSubmission> list =
                 SubmissionStorage.getAll();
-
-        //
-        // 📦 SLOT
-        //
 
         int slot = 10;
 
@@ -153,10 +106,6 @@ public class PendingProjectsGUI {
 
             if (slot >= 44)
                 break;
-
-            //
-            // 📅 DATE
-            //
 
             String date =
                     new SimpleDateFormat(
@@ -167,58 +116,30 @@ public class PendingProjectsGUI {
                             )
                     );
 
-            //
-            // 📊 STATUS
-            //
-
             String status;
-
             String action;
-
             String participation;
 
             switch (sub.getStatus()) {
 
                 case APPROVED -> {
-
-                    status =
-                            "§a✔ Demande validée";
-
-                    participation =
-                            "§aInscrit au classement hebdomadaire";
-
-                    action =
-                            "§e▶ Ouvrir le suivi du projet";
+                    status = "§a✔ Demande validée";
+                    participation = "§aInscrit au classement hebdomadaire";
+                    action = "§e▶ Ouvrir le suivi du projet";
                 }
 
                 case REJECTED -> {
-
-                    status =
-                            "§c✖ Demande refusée";
-
-                    participation =
-                            "§cNon éligible au classement";
-
-                    action =
-                            "§c▶ Dossier fermé";
+                    status = "§c✖ Demande refusée";
+                    participation = "§cNon éligible au classement";
+                    action = "§c▶ Dossier fermé";
                 }
 
                 default -> {
-
-                    status =
-                            "§6⌛ En examen";
-
-                    participation =
-                            "§7En attente de validation staff";
-
-                    action =
-                            "§e▶ Inspecter la demande";
+                    status = "§6⌛ En examen";
+                    participation = "§7En attente de validation staff";
+                    action = "§e▶ Inspecter la demande";
                 }
             }
-
-            //
-            // 🎌 ITEM DRAPEAU
-            //
 
             ItemStack item =
                     MoodTownFlagAPI.getTownFlagItem(
@@ -295,20 +216,18 @@ public class PendingProjectsGUI {
 
                 meta.setLore(lore);
 
+                meta.addItemFlags(
+                        ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                        ItemFlag.HIDE_ATTRIBUTES,
+                        ItemFlag.HIDE_ENCHANTS
+                );
+
                 item.setItemMeta(meta);
             }
 
             inv.setItem(slot, item);
 
-            //
-            // ➡ SLOT NEXT
-            //
-
             slot++;
-
-            //
-            // ⬛ SKIPS
-            //
 
             if (slot == 17)
                 slot = 19;
@@ -319,10 +238,6 @@ public class PendingProjectsGUI {
             if (slot == 35)
                 slot = 37;
         }
-
-        //
-        // ❌ EMPTY
-        //
 
         if (list.isEmpty()) {
 
@@ -341,19 +256,12 @@ public class PendingProjectsGUI {
                 );
 
                 meta.setLore(List.of(
-
                         "§8----- §6Commission Urbaine §8-----",
-
                         "§7Aucune demande de projet",
-
                         "§7n'est actuellement enregistrée.",
-
                         "",
-
                         "§7Les villes peuvent déposer",
-
                         "§7un projet pour participer",
-
                         "§7au classement hebdomadaire."
                 ));
 
@@ -362,10 +270,6 @@ public class PendingProjectsGUI {
 
             inv.setItem(22, empty);
         }
-
-        //
-        // 🔙 RETOUR
-        //
 
         ItemStack back =
                 new ItemStack(
@@ -382,11 +286,8 @@ public class PendingProjectsGUI {
             );
 
             backMeta.setLore(List.of(
-
                     "§8----- §6Commission Urbaine §8-----",
-
                     "§7Retour au menu principal",
-
                     "§7de l'administration urbaine."
             ));
 
@@ -394,10 +295,6 @@ public class PendingProjectsGUI {
         }
 
         inv.setItem(49, back);
-
-        //
-        // 🚀 OPEN
-        //
 
         p.openInventory(inv);
     }
