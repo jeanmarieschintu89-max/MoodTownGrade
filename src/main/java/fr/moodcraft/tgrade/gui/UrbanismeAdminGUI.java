@@ -31,11 +31,8 @@ public class UrbanismeAdminGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         45,
-
                         "§8✦ Centre National"
                 );
 
@@ -105,26 +102,34 @@ public class UrbanismeAdminGUI {
 
         headerMeta.setLore(List.of(
 
-                "§8----- §6Administration §8-----",
+                "§8----- §6Administration urbaine §8-----",
 
-                "§7Supervision officielle",
+                "§7Supervision des demandes",
 
-                "§7des villes de MoodCraft.",
+                "§7de projets déposées par",
+
+                "§7les villes de MoodCraft.",
 
                 "",
 
-                "§7Dossiers en attente: §e"
+                "§7Demandes en examen : §e"
                         + pending,
 
-                "§7Projets validés: §a"
+                "§7Projets validés : §a"
                         + approved,
 
-                "§7Villes inspectées: §b"
+                "§7Villes suivies : §b"
                         + GradeManager.getAll().size(),
 
                 "",
 
-                "§e▶ Registres nationaux"
+                "§7Une demande validée ouvre",
+
+                "§7les votes et le classement hebdo.",
+
+                "",
+
+                "§e▶ Registres administratifs"
         ));
 
         header.setItemMeta(headerMeta);
@@ -132,7 +137,7 @@ public class UrbanismeAdminGUI {
         inv.setItem(4, header);
 
         //
-        // 📋 PROJETS
+        // 📋 DEMANDES
         //
 
         set(
@@ -143,22 +148,34 @@ public class UrbanismeAdminGUI {
 
                 Material.WRITABLE_BOOK,
 
-                "§e✦ Inspection des Projets",
+                "§e✦ Demandes de Projets",
 
-                "§8----- §6Dossiers Urbains §8-----",
+                "§8----- §6Inspection staff §8-----",
 
-                "§7Consulter les dossiers",
+                "§7Consulter les demandes",
 
-                "§7transmis à la Commission.",
+                "§7transmises à la Commission.",
 
                 "",
 
-                "§7Dossiers actifs: §e"
+                "§7Le staff peut :",
+
+                "§8• §fse téléporter au projet",
+
+                "§8• §avalider la demande",
+
+                "§8• §crefuser la demande",
+
+                "§8• §eouvrir la phase de notation",
+
+                "",
+
+                "§7Demandes en examen : §e"
                         + pending,
 
                 "",
 
-                "§e▶ Accéder aux inspections"
+                "§e▶ Ouvrir les demandes"
         );
 
         //
@@ -173,27 +190,33 @@ public class UrbanismeAdminGUI {
 
                 Material.ENCHANTED_BOOK,
 
-                "§b✦ Suivi des Évaluations",
+                "§b✦ Notations & Clôtures",
 
-                "§8----- §6Dossiers Validés §8-----",
+                "§8----- §6Projets validés §8-----",
 
-                "§7Gérer les villes",
+                "§7Gérer les villes ayant",
 
-                "§7dont le permis est accordé.",
-
-                "",
-
-                "§8• §fInspection terrain",
-
-                "§8• §fNotation nationale",
-
-                "§8• §fClôture des votes",
-
-                "§8• §fRefus administratif",
+                "§7un projet validé en cours.",
 
                 "",
 
-                "§b▶ Ouvrir les dossiers"
+                "§8• §fnotation staff",
+
+                "§8• §fvotes citoyens",
+
+                "§8• §favis des maires",
+
+                "§8• §6clôture des votes",
+
+                "",
+
+                "§7La clôture verrouille les notes.",
+
+                "§7Elle ne verse pas la subvention.",
+
+                "",
+
+                "§b▶ Gérer les évaluations"
         );
 
         //
@@ -208,25 +231,33 @@ public class UrbanismeAdminGUI {
 
                 Material.EMERALD_BLOCK,
 
-                "§a✦ Financements Nationaux",
+                "§a✦ Subventions Urbaines",
 
-                "§8----- §6Bourses Urbaines §8-----",
+                "§8----- §6Financement hebdomadaire §8-----",
 
-                "§7Distribuer les aides",
+                "§7Verser les subventions",
 
-                "§7municipales officielles.",
-
-                "",
-
-                "§8• §fVilles validées",
-
-                "§8• §fSubventions progressives",
-
-                "§8• §fVersement banque municipale",
+                "§7aux villes éligibles.",
 
                 "",
 
-                "§a▶ Distribuer les financements"
+                "§8• §fprojets validés",
+
+                "§8• §fnotes clôturées",
+
+                "§8• §fclassement hebdomadaire",
+
+                "§8• §fversement municipal",
+
+                "",
+
+                "§7Le paiement est séparé",
+
+                "§7de la clôture des votes.",
+
+                "",
+
+                "§a▶ Verser les subventions"
         );
 
         //
@@ -241,17 +272,25 @@ public class UrbanismeAdminGUI {
 
                 Material.NETHER_STAR,
 
-                "§6✦ Palmarès National",
+                "§6✦ Classement Hebdomadaire",
 
-                "§8----- §6Classement §8-----",
+                "§8----- §6Registre urbain §8-----",
 
-                "§7Consulter les notes",
+                "§7Consulter le classement",
 
-                "§7officielles des villes.",
+                "§7des villes ayant un projet",
+
+                "§7validé cette semaine.",
 
                 "",
 
-                "§6▶ Voir le palmarès"
+                "§7Le score est provisoire",
+
+                "§7tant que les votes sont ouverts.",
+
+                "",
+
+                "§6▶ Voir le classement"
         );
 
         //
