@@ -12,12 +12,12 @@ import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
-
 import org.bukkit.Material;
 
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.ItemMeta;
@@ -91,37 +91,22 @@ public class CitizenVoteGUI {
 
         if (glassMeta != null) {
 
-            glassMeta.setDisplayName(
-                    " "
-            );
-
+            glassMeta.setDisplayName(" ");
             glass.setItemMeta(glassMeta);
         }
 
         int[] borders = {
-
                 0,1,2,3,4,5,6,7,8,
-
                 9,17,
-
                 18,26,
-
                 27,35,
-
                 37,38,39,41,42,43
         };
 
         for (int slot : borders) {
 
-            inv.setItem(
-                    slot,
-                    glass
-            );
+            inv.setItem(slot, glass);
         }
-
-        //
-        // 🎌 HEADER DRAPEAU
-        //
 
         ItemStack header =
                 MoodTownFlagAPI.getTownFlagItem(
@@ -157,11 +142,8 @@ public class CitizenVoteGUI {
             lore.add("");
 
             if (hasFlag) {
-
                 lore.add("§a✔ Drapeau officiel enregistré");
-
             } else {
-
                 lore.add("§7Drapeau : §fNon défini");
             }
 
@@ -172,11 +154,7 @@ public class CitizenVoteGUI {
             lore.add("§7Votre vote compte pour");
             lore.add("§7le classement hebdomadaire.");
             lore.add("");
-            lore.add(
-                    "§7Votre score : §e"
-                            + total
-                            + "§7/15"
-            );
+            lore.add("§7Votre score : §e" + total + "§7/15");
             lore.add(
                     "§7Note provisoire : §e"
                             + String.format(
@@ -196,13 +174,16 @@ public class CitizenVoteGUI {
 
             headerMeta.setLore(lore);
 
+            headerMeta.addItemFlags(
+                    ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                    ItemFlag.HIDE_ATTRIBUTES,
+                    ItemFlag.HIDE_ENCHANTS
+            );
+
             header.setItemMeta(headerMeta);
         }
 
-        inv.setItem(
-                4,
-                header
-        );
+        inv.setItem(4, header);
 
         setVote(
                 inv,
