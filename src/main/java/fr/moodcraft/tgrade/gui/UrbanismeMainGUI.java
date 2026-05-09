@@ -25,19 +25,12 @@ import java.util.List;
 
 public class UrbanismeMainGUI {
 
-    //
-    // 🏛 OPEN
-    //
-
     public static void open(Player p) {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
                         "§8✦ Commission Urbaine"
                 );
 
@@ -57,246 +50,150 @@ public class UrbanismeMainGUI {
                         ? "Aucune"
                         : best.getTown();
 
+        boolean canManage =
+                TownyHook.canManage(p);
+
+        boolean staff =
+                p.hasPermission(
+                        "moodtowngrade.staff"
+                );
+
         ItemStack glass =
                 item(
-
                         Material.BLACK_STAINED_GLASS_PANE,
-
                         " "
                 );
 
         int[] borders = {
-
                 0,1,2,3,4,5,6,7,8,
-
                 9,17,
-
                 18,26,
-
                 27,35,
-
                 36,44,
-
                 45,46,47,48,50,51,52,53
         };
 
         for (int slot : borders) {
-
             inv.setItem(slot, glass);
         }
 
         inv.setItem(
-
                 4,
-
                 item(
-
                         Material.NETHER_STAR,
-
-                        "§6✦ Commission Urbaine Nationale",
-
-                        "§8----- §6Registre National §8-----",
-
-                        "§7Administration du prestige",
-
-                        "§7urbain de MoodCraft.",
-
+                        "§6✦ Commission Urbaine",
+                        "§8----- §6Registre hebdomadaire §8-----",
+                        "§7Suivi des projets urbains",
+                        "§7et du classement MoodCraft.",
                         "",
-
-                        "§7Capitale actuelle: §e"
-                                + bestTown,
-
-                        "§7Prestige moyen: §b"
-                                + RankingManager
-                                .getAverageScore()
+                        "§7Ville en tête : §e" + bestTown,
+                        "§7Prestige moyen : §b"
+                                + RankingManager.getAverageScore()
                                 + "§7/50",
-
-                        "§7Villes classées: §a"
-                                + RankingManager
-                                .getFinishedTowns(),
-
-                        "§7Dossiers actifs: §e"
+                        "§7Villes classées : §a"
+                                + RankingManager.getFinishedTowns(),
+                        "§7Demandes en attente : §e"
                                 + pending,
-
                         "",
-
-                        "§e▶ Administration nationale"
+                        "§e▶ Centre urbain"
                 )
         );
 
-        //
-        // 👥 AVIS CITOYENS
-        //
-
         inv.setItem(
-
                 20,
-
                 item(
-
                         Material.BOOK,
-
                         "§e✦ Votes Citoyens",
-
-                        "§8----- §6Participation §8-----",
-
-                        "§7Influencez le prestige",
-
-                        "§7des villes par les",
-
-                        "§7votes nationaux.",
-
+                        "§8----- §6Participation publique §8-----",
+                        "§7Notez les villes ayant",
+                        "§7un projet en développement.",
                         "",
-
-                        "§7Chaque avis participe",
-
-                        "§7au classement officiel.",
-
+                        "§7Votre vote compte pour",
+                        "§7le classement hebdomadaire.",
                         "",
-
-                        "§e▶ Participer aux votes"
+                        "§e▶ Voter"
                 )
         );
 
-        //
-        // 🏆 CLASSEMENT
-        //
-
         inv.setItem(
-
                 22,
-
                 item(
-
                         Material.GOLD_INGOT,
-
-                        "§6✦ Palmarès National",
-
-                        "§8----- §6Classement §8-----",
-
-                        "§7Consultez les villes",
-
-                        "§7les plus prestigieuses",
-
-                        "§7de MoodCraft.",
-
+                        "§6✦ Classement Hebdo",
+                        "§8----- §6Registre urbain §8-----",
+                        "§7Consultez le classement",
+                        "§7des villes et projets validés.",
                         "",
-
-                        "§7Scores, influence",
-
-                        "§7et prestige national.",
-
+                        "§7Score en direct tant que",
+                        "§7les votes sont ouverts.",
                         "",
-
                         "§6▶ Voir le classement"
                 )
         );
 
-        //
-        // 👑 GOUVERNANCE
-        //
-
-        if (TownyHook.canManage(p)) {
+        if (canManage) {
 
             inv.setItem(
-
                     29,
-
                     item(
-
                             Material.NETHER_STAR,
-
                             "§a✦ Déposer un Projet",
-
-                            "§8----- §6Urbanisme §8-----",
-
-                            "§7Soumettre une nouvelle",
-
-                            "§7construction au registre",
-
-                            "§7national urbain.",
-
+                            "§8----- §6Demande urbaine §8-----",
+                            "§7Créer une demande de projet",
+                            "§7pour votre ville.",
                             "",
-
-                            "§a▶ Créer un dossier"
+                            "§7Après validation staff,",
+                            "§7les votes seront ouverts.",
+                            "",
+                            "§a▶ Déposer une demande"
                     )
             );
+        }
+
+        if (canManage || staff) {
 
             inv.setItem(
-
                     31,
-
                     item(
-
                             Material.GOLD_BLOCK,
-
                             "§6✦ Conseil des Maires",
-
-                            "§8----- §6Gouvernance §8-----",
-
-                            "§7Gestion des influences",
-
-                            "§7et des décisions",
-
-                            "§7municipales.",
-
+                            "§8----- §6Vote municipal §8-----",
+                            "§7Les maires donnent leur avis",
+                            "§7sur les villes ayant un projet",
+                            "§7validé en développement.",
                             "",
-
+                            "§7Le vote compte pour",
+                            "§7le classement hebdomadaire.",
+                            "",
                             "§6▶ Accéder au conseil"
                     )
             );
         }
 
-        //
-        // 🛰 STAFF
-        //
-
-        if (p.hasPermission(
-                "moodtowngrade.staff")) {
+        if (staff) {
 
             inv.setItem(
-
                     33,
-
                     item(
-
                             Material.COMPASS,
-
                             "§c✦ Centre National",
-
                             "§8----- §6Administration §8-----",
-
-                            "§7Gestion des inspections",
-
-                            "§7et supervision des",
-
-                            "§7registres urbains.",
-
+                            "§7Gérer les demandes,",
+                            "§7notations, clôtures",
+                            "§7et subventions.",
                             "",
-
-                            "§c▶ Accès administratif"
+                            "§c▶ Accès staff"
                     )
             );
         }
 
-        //
-        // 🔙 RETOUR
-        //
-
         inv.setItem(
-
                 49,
-
                 item(
-
                         Material.ARROW,
-
                         "§c⬅ Retour",
-
                         "§8----- §6MoodCraft §8-----",
-
                         "§7Retourner au menu",
-
                         "§7principal du serveur."
                 )
         );
@@ -304,16 +201,9 @@ public class UrbanismeMainGUI {
         p.openInventory(inv);
     }
 
-    //
-    // 📦 ITEM
-    //
-
     private static ItemStack item(
-
             Material mat,
-
             String name,
-
             String... loreLines
     ) {
 
@@ -332,7 +222,6 @@ public class UrbanismeMainGUI {
                 new ArrayList<>();
 
         for (String line : loreLines) {
-
             lore.add(line);
         }
 
