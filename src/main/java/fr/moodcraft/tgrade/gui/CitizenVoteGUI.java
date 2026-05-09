@@ -109,7 +109,7 @@ public class CitizenVoteGUI {
         }
 
         ItemStack header =
-                MoodTownFlagAPI.getTownFlagItem(
+                MoodTownFlagAPI.getTownShieldItem(
                         town
                 );
 
@@ -120,7 +120,7 @@ public class CitizenVoteGUI {
 
             header =
                     new ItemStack(
-                            Material.WHITE_BANNER
+                            Material.SHIELD
                     );
         }
 
@@ -142,9 +142,9 @@ public class CitizenVoteGUI {
             lore.add("");
 
             if (hasFlag) {
-                lore.add("§a✔ Drapeau officiel enregistré");
+                lore.add("§a✔ Blason officiel enregistré");
             } else {
-                lore.add("§7Drapeau : §fNon défini");
+                lore.add("§7Blason : §fNon défini");
             }
 
             lore.add("");
