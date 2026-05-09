@@ -2,6 +2,8 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
+import org.bukkit.Material;
+
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -30,7 +32,7 @@ public class ClassementListener
         if (!e.getView()
                 .getTitle()
                 .equalsIgnoreCase(
-                        "§8✦ Classement National"
+                        "§8✦ Classement Hebdo"
                 )) {
             return;
         }
@@ -75,6 +77,28 @@ public class ClassementListener
             return;
 
         //
+        // ❌ AIR
+        //
+
+        if (e.getCurrentItem()
+                .getType()
+                .isAir()) {
+
+            return;
+        }
+
+        //
+        // 🌌 GLASS
+        //
+
+        if (e.getCurrentItem()
+                .getType()
+                == Material.BLACK_STAINED_GLASS_PANE) {
+
+            return;
+        }
+
+        //
         // 🔘 SLOT
         //
 
@@ -98,17 +122,26 @@ public class ClassementListener
                     1f
             );
 
-            //
-            // 🔒 CLOSE
-            //
-
             p.closeInventory();
 
-            //
-            // 🏛 OPEN
-            //
-
             UrbanismeMainGUI.open(p);
+
+            return;
         }
+
+        //
+        // 🔊 CLICK
+        //
+
+        p.playSound(
+
+                p.getLocation(),
+
+                Sound.UI_BUTTON_CLICK,
+
+                0.8f,
+
+                1.2f
+        );
     }
 }
