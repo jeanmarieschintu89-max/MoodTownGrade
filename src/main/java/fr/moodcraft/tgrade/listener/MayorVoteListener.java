@@ -13,6 +13,8 @@ import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -78,6 +80,25 @@ public class MayorVoteListener
                         ? "Projet en cours"
                         : project.getBuildName();
 
+        int slot =
+                e.getRawSlot();
+
+        //
+        // 📍 TP PROJET
+        //
+
+        if (slot == MayorVoteGUI.TP_PROJECT) {
+
+            teleportToProject(
+                    p,
+                    town,
+                    project,
+                    projectName
+            );
+
+            return;
+        }
+
         //
         // 🔒 DOSSIER CLOTURÉ
         //
@@ -137,9 +158,6 @@ public class MayorVoteListener
                             town
                     );
         }
-
-        int slot =
-                e.getRawSlot();
 
         switch (slot) {
 
@@ -254,6 +272,80 @@ public class MayorVoteListener
                 p,
                 town
         );
+    }
+
+    private void teleportToProject(
+            Player p,
+            String town,
+            TownSubmission project,
+            String projectName
+    ) {
+
+        if (project == null) {
+
+            deny(
+                    p,
+                    "§cProjet introuvable.",
+                    "§7Aucun projet validé n'est disponible."
+            );
+
+            return;
+        }
+
+        if (Bukkit.getWorld(
+                project.getWorld()
+        ) == null) {
+
+            deny(
+                    p,
+                    "§cMonde introuvable.",
+                    "§7La zone du projet est inaccessible."
+            );
+
+            return;
+        }
+
+        Location loc =
+                new Location(
+                        Bukkit.getWorld(
+                                project.getWorld()
+                        ),
+                        project.getX() + 0.5,
+                        project.getY() + 1,
+                        project.getZ() + 0.5
+                );
+
+        p.closeInventory();
+
+        p.teleport(loc);
+
+        p.playSound(
+                p.getLocation(),
+                Sound.ENTITY_ENDERMAN_TELEPORT,
+                1f,
+                1f
+        );
+
+        p.sendMessage("");
+        p.sendMessage(
+                "§8----- §6Conseil des Maires §8-----"
+        );
+        p.sendMessage(
+                "§bTéléportation au projet."
+        );
+        p.sendMessage(
+                "§7Ville : §b" + town
+        );
+        p.sendMessage(
+                "§7Projet : §f" + projectName
+        );
+        p.sendMessage(
+                "§7Inspectez la zone puis revenez"
+        );
+        p.sendMessage(
+                "§7au conseil pour voter."
+        );
+        p.sendMessage("");
     }
 
     private String getTown(
