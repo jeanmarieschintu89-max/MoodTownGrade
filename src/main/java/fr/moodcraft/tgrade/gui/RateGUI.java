@@ -74,7 +74,7 @@ public class RateGUI {
         fill(inv);
 
         ItemStack header =
-                MoodTownFlagAPI.getTownFlagItem(
+                MoodTownFlagAPI.getTownShieldItem(
                         town
                 );
 
@@ -85,7 +85,7 @@ public class RateGUI {
 
             header =
                     new ItemStack(
-                            Material.WHITE_BANNER
+                            Material.SHIELD
                     );
         }
 
@@ -107,9 +107,9 @@ public class RateGUI {
             lore.add("");
 
             if (hasFlag) {
-                lore.add("§a✔ Drapeau officiel enregistré");
+                lore.add("§a✔ Blason officiel enregistré");
             } else {
-                lore.add("§7Drapeau : §fNon défini");
+                lore.add("§7Blason : §fNon défini");
             }
 
             lore.add("");
