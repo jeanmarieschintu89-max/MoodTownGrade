@@ -33,12 +33,9 @@ public class EvaluationManagerGUI {
 
         Inventory inv =
                 Bukkit.createInventory(
-
                         null,
-
                         54,
-
-                        "§8✦ Évaluations Nationales"
+                        "§8✦ Notation Staff"
                 );
 
         ItemStack glass =
@@ -88,20 +85,32 @@ public class EvaluationManagerGUI {
                 header.getItemMeta();
 
         headerMeta.setDisplayName(
-                "§6✦ Registre des Évaluations"
+                "§6✦ Notation Staff"
         );
 
         headerMeta.setLore(List.of(
 
                 "§8----- §6Commission Urbaine §8-----",
 
-                "§7Sélectionnez une ville",
+                "§7Sélectionnez une ville ayant",
 
-                "§7pour ouvrir sa notation.",
+                "§7une demande de projet validée.",
 
                 "",
 
-                "§e▶ Évaluation nationale"
+                "§7La note staff compte pour",
+
+                "§7le classement hebdomadaire.",
+
+                "",
+
+                "§7Elle concerne la ville",
+
+                "§7et son projet en développement.",
+
+                "",
+
+                "§e▶ Choisir un dossier"
         ));
 
         header.setItemMeta(headerMeta);
@@ -149,22 +158,28 @@ public class EvaluationManagerGUI {
                     empty.getItemMeta();
 
             meta.setDisplayName(
-                    "§c✖ Aucune ville évaluable"
+                    "§c✖ Aucun dossier ouvert"
             );
 
             meta.setLore(List.of(
 
-                    "§8----- §6Registre National §8-----",
+                    "§8----- §6Notation Staff §8-----",
 
-                    "§7Aucun projet validé",
+                    "§7Aucune ville ne possède",
 
-                    "§7n'est disponible pour",
+                    "§7une demande de projet",
 
-                    "§7une notation nationale.",
+                    "§7validée pour notation.",
 
                     "",
 
-                    "§e▶ Validez d'abord un projet"
+                    "§7Validez d'abord une demande",
+
+                    "§7depuis le centre administratif.",
+
+                    "",
+
+                    "§e▶ En attente de validation"
             ));
 
             empty.setItemMeta(meta);
@@ -187,6 +202,14 @@ public class EvaluationManagerGUI {
                     NationalScoreCalculator
                             .getFinalScore(town);
 
+            TownSubmission project =
+                    getActiveProject(town);
+
+            String projectName =
+                    project == null
+                            ? "Projet en cours"
+                            : project.getBuildName();
+
             ItemStack item =
                     new ItemStack(
                             Material.BEACON
@@ -201,23 +224,29 @@ public class EvaluationManagerGUI {
 
             meta.setLore(List.of(
 
-                    "§8----- §6Dossier National §8-----",
+                    "§8----- §6Dossier de notation §8-----",
 
-                    "§7Ville: §b" + town,
+                    "§7Ville : §b" + town,
 
-                    "§7Note actuelle: §e"
-                            + score
+                    "§7Projet : §f" + projectName,
+
+                    "",
+
+                    "§7Note provisoire : §e"
+                            + String.format("%.1f", score)
                             + "§7/50",
 
                     "",
 
-                    "§7Ouvre directement le",
+                    "§7Ouvre la notation staff",
 
-                    "§7menu de notation officiel.",
+                    "§7pour la ville et son",
+
+                    "§7projet en développement.",
 
                     "",
 
-                    "§e▶ Noter cette ville"
+                    "§e▶ Noter ce dossier"
             ));
 
             item.setItemMeta(meta);
@@ -254,11 +283,11 @@ public class EvaluationManagerGUI {
 
         backMeta.setLore(List.of(
 
-                "§8----- §6Centre National §8-----",
+                "§8----- §6Commission Urbaine §8-----",
 
                 "§7Retour au centre",
 
-                "§7national d'urbanisme."
+                "§7administratif."
         ));
 
         back.setItemMeta(backMeta);
@@ -266,5 +295,31 @@ public class EvaluationManagerGUI {
         inv.setItem(49, back);
 
         p.openInventory(inv);
+    }
+
+    private static TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
     }
 }
