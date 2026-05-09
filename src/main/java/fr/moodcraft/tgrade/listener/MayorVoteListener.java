@@ -7,7 +7,11 @@ import fr.moodcraft.tgrade.manager.MayorVoteManager;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 
 import fr.moodcraft.tgrade.model.MayorVote;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.model.TownSubmission;
+
+import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Sound;
 
@@ -57,27 +61,22 @@ public class MayorVoteListener
         if (town == null
                 || town.isEmpty()) {
 
-            p.playSound(
-                    p.getLocation(),
-                    Sound.ENTITY_VILLAGER_NO,
-                    1f,
-                    1f
-            );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cVille introuvable."
-            );
-            p.sendMessage(
+            deny(
+                    p,
+                    "§cVille introuvable.",
                     "§7Le registre du vote est incomplet."
             );
-            p.sendMessage("");
 
             return;
         }
+
+        TownSubmission project =
+                getActiveProject(town);
+
+        String projectName =
+                project == null
+                        ? "Projet en cours"
+                        : project.getBuildName();
 
         //
         // 🔒 DOSSIER CLOTURÉ
@@ -102,16 +101,22 @@ public class MayorVoteListener
 
             p.sendMessage("");
             p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
+                    "§8----- §6Conseil des Maires §8-----"
             );
             p.sendMessage(
-                    "§cLes votes municipaux sont clôturés."
+                    "§cVotes municipaux clôturés."
             );
             p.sendMessage(
-                    "§7Ville: §b" + town
+                    "§7Ville : §b" + town
             );
             p.sendMessage(
-                    "§7Le registre national est verrouillé."
+                    "§7Projet : §f" + projectName
+            );
+            p.sendMessage(
+                    "§7Ce dossier ne reçoit plus"
+            );
+            p.sendMessage(
+                    "§7de nouvelles évaluations."
             );
             p.sendMessage("");
 
@@ -191,28 +196,31 @@ public class MayorVoteListener
 
                 p.sendMessage("");
                 p.sendMessage(
-                        "§8----- §6Commission Urbaine §8-----"
+                        "§8----- §6Conseil des Maires §8-----"
                 );
                 p.sendMessage(
-                        "§fVote du Conseil enregistré."
+                        "§6Avis municipal enregistré."
                 );
                 p.sendMessage(
-                        "§7Ville: §b" + town
+                        "§7Ville : §b" + town
                 );
                 p.sendMessage(
-                        "§7Commission: §e" + staff + "§7/50"
+                        "§7Projet : §f" + projectName
                 );
                 p.sendMessage(
-                        "§7Conseil des maires: §e" + mayors + "§7/50"
+                        "§7Le classement hebdomadaire"
                 );
                 p.sendMessage(
-                        "§7Votes citoyens: §e" + citizens + "§7/50"
+                        "§7a été actualisé."
+                );
+                p.sendMessage("");
+                p.sendMessage(
+                        "§7Note provisoire : §e" + national + "§7/50"
                 );
                 p.sendMessage(
-                        "§7Note nationale: §6" + national + "§7/50"
-                );
-                p.sendMessage(
-                        "§a✔ Avis municipal archivé au registre national."
+                        "§7Détail : §6Staff §e" + staff
+                                + " §8| §6Maires §e" + mayors
+                                + " §8| §6Citoyens §e" + citizens
                 );
                 p.sendMessage("");
 
@@ -280,6 +288,15 @@ public class MayorVoteListener
                         .getLore()) {
 
             if (line.startsWith(
+                    "§7Ville : §b")) {
+
+                return line.replace(
+                        "§7Ville : §b",
+                        ""
+                );
+            }
+
+            if (line.startsWith(
                     "§7Ville: §b")) {
 
                 return line.replace(
@@ -290,6 +307,54 @@ public class MayorVoteListener
         }
 
         return null;
+    }
+
+    private TownSubmission getActiveProject(
+            String town
+    ) {
+
+        TownSubmission fallback = null;
+
+        for (TownSubmission sub :
+                SubmissionStorage.getAll()) {
+
+            if (!sub.getTown()
+                    .equalsIgnoreCase(town)) {
+                continue;
+            }
+
+            if (sub.getStatus()
+                    == SubmissionStatus.APPROVED) {
+
+                return sub;
+            }
+
+            fallback = sub;
+        }
+
+        return fallback;
+    }
+
+    private void deny(
+            Player p,
+            String line1,
+            String line2
+    ) {
+
+        p.playSound(
+                p.getLocation(),
+                Sound.ENTITY_VILLAGER_NO,
+                1f,
+                1f
+        );
+
+        p.sendMessage("");
+        p.sendMessage(
+                "§8----- §6Conseil des Maires §8-----"
+        );
+        p.sendMessage(line1);
+        p.sendMessage(line2);
+        p.sendMessage("");
     }
 
     private int next(
