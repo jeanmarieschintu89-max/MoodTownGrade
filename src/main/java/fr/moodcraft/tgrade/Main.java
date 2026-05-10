@@ -12,6 +12,7 @@ import fr.moodcraft.tgrade.listener.MayorTownListListener;
 import fr.moodcraft.tgrade.listener.MayorVoteListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
 import fr.moodcraft.tgrade.listener.ProjectChatListener;
+import fr.moodcraft.tgrade.listener.ProjectDepositChatListener;
 import fr.moodcraft.tgrade.listener.ProjectReviewListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
 import fr.moodcraft.tgrade.listener.ReviewGUIListener;
@@ -108,7 +109,24 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CitizenTownListListener(), this);
         getServer().getPluginManager().registerEvents(new MayorVoteListener(), this);
         getServer().getPluginManager().registerEvents(new MayorTownListListener(), this);
-        getServer().getPluginManager().registerEvents(new ProjectChatListener(), this);
+
+        //
+        // 💬 CHAT PROJECT
+        //
+
+        getServer().getPluginManager().registerEvents(
+                new ProjectChatListener(),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new ProjectDepositChatListener(),
+                this
+        );
+
+        //
+        // 📅 RESET
+        //
 
         long week =
                 20L * 60L * 60L * 24L * 7L;
@@ -125,6 +143,10 @@ public class Main extends JavaPlugin {
                         week
                 );
 
+        //
+        // ✅ STARTUP
+        //
+
         getLogger().info("");
         getLogger().info("----- MoodTownGrade -----");
         getLogger().info("Commission urbaine chargée.");
@@ -133,6 +155,7 @@ public class Main extends JavaPlugin {
         getLogger().info("Conseil des maires actif.");
         getLogger().info("Classement national actif.");
         getLogger().info("Commande vprojetsreset active.");
+        getLogger().info("Système de dépôt immersif actif.");
         getLogger().info("Grades chargés: " + GradeManager.getAll().size());
         getLogger().info("Towny détecté.");
         getLogger().info("Reset hebdomadaire actif.");
