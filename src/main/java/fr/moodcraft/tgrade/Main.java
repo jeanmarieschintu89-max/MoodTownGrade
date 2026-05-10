@@ -11,7 +11,6 @@ import fr.moodcraft.tgrade.listener.GUIListener;
 import fr.moodcraft.tgrade.listener.MayorTownListListener;
 import fr.moodcraft.tgrade.listener.MayorVoteListener;
 import fr.moodcraft.tgrade.listener.PendingProjectsListener;
-import fr.moodcraft.tgrade.listener.ProjectChatListener;
 import fr.moodcraft.tgrade.listener.ProjectDepositChatListener;
 import fr.moodcraft.tgrade.listener.ProjectReviewListener;
 import fr.moodcraft.tgrade.listener.RateGUIListener;
@@ -110,42 +109,21 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MayorVoteListener(), this);
         getServer().getPluginManager().registerEvents(new MayorTownListListener(), this);
 
-        //
-        // 💬 CHAT PROJECT
-        //
-
-        getServer().getPluginManager().registerEvents(
-                new ProjectChatListener(),
-                this
-        );
-
         getServer().getPluginManager().registerEvents(
                 new ProjectDepositChatListener(),
                 this
         );
-
-        //
-        // 📅 RESET
-        //
 
         long week =
                 20L * 60L * 60L * 24L * 7L;
 
         Bukkit.getScheduler()
                 .runTaskTimer(
-
                         this,
-
                         new WeeklyResetTask(),
-
                         week,
-
                         week
                 );
-
-        //
-        // ✅ STARTUP
-        //
 
         getLogger().info("");
         getLogger().info("----- MoodTownGrade -----");
