@@ -9,8 +9,8 @@ import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import fr.moodcraft.tgrade.manager.GradeManager;
 import fr.moodcraft.tgrade.manager.PayoutManager;
+import fr.moodcraft.tgrade.manager.ProjectDepositSessionManager;
 
-import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
@@ -28,8 +28,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class UrbanismeCommand
         implements CommandExecutor {
@@ -267,12 +265,6 @@ public class UrbanismeCommand
 
         if (args[0].equalsIgnoreCase("projet")) {
 
-            if (args.length < 2) {
-
-                p.sendMessage("§c/urbanisme projet <nom>");
-                return true;
-            }
-
             if (SubmissionStorage.getTown(town.getName()).size() >= 5) {
 
                 p.sendMessage("");
@@ -285,43 +277,10 @@ public class UrbanismeCommand
                 return true;
             }
 
-            String name =
-                    String.join(" ", args)
-                            .replaceFirst(
-                                    "projet ",
-                                    ""
-                            );
-
-            String id =
-                    UUID.randomUUID()
-                            .toString()
-                            .substring(0, 4)
-                            .toUpperCase();
-
-            TownSubmission sub =
-                    new TownSubmission(
-                            id,
-                            town.getName(),
-                            name,
-                            p.getWorld().getName(),
-                            p.getLocation().getBlockX(),
-                            p.getLocation().getBlockY(),
-                            p.getLocation().getBlockZ(),
-                            p.getUniqueId(),
-                            System.currentTimeMillis(),
-                            SubmissionStatus.PENDING
-                    );
-
-            SubmissionStorage.save(sub);
-
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§aDemande de projet enregistrée.");
-            p.sendMessage("§7Ville : §b" + town.getName());
-            p.sendMessage("§7Projet : §f" + name);
-            p.sendMessage("§7ID : §f" + id);
-            p.sendMessage("§7Statut : §eInspection staff requise.");
-            p.sendMessage("");
+            ProjectDepositSessionManager.start(
+                    p,
+                    town.getName()
+            );
 
             return true;
         }
