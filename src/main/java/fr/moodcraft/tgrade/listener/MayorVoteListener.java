@@ -35,7 +35,7 @@ public class MayorVoteListener
         implements Listener {
 
     private static final String TITLE =
-            "§8✦ Conseil des Maires";
+            MayorVoteGUI.TITLE;
 
     @EventHandler
     public void click(
@@ -50,16 +50,6 @@ public class MayorVoteListener
         if (!e.getView()
                 .getTitle()
                 .equals(TITLE)) {
-            return;
-        }
-
-        //
-        // Important :
-        // Le menu liste des villes et le menu vote ont le même titre.
-        // Si l'inventaire ne contient pas TOWN_DATA, ce n'est PAS le menu de vote.
-        //
-
-        if (!isVoteInventory(e)) {
             return;
         }
 
@@ -285,38 +275,6 @@ public class MayorVoteListener
                 p,
                 town
         );
-    }
-
-    private boolean isVoteInventory(
-            InventoryClickEvent e
-    ) {
-
-        Inventory inv =
-                e.getView()
-                        .getTopInventory();
-
-        ItemStack data =
-                inv.getItem(
-                        MayorVoteGUI.TOWN_DATA
-                );
-
-        if (data == null
-                || data.getType()
-                .isAir()) {
-            return false;
-        }
-
-        if (!data.hasItemMeta()) {
-            return false;
-        }
-
-        ItemMeta meta =
-                data.getItemMeta();
-
-        return meta != null
-                && meta.hasDisplayName()
-                && meta.getDisplayName()
-                .startsWith("§0");
     }
 
     private boolean isFiller(
