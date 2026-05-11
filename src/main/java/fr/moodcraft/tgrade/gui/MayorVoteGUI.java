@@ -27,6 +27,9 @@ import java.util.List;
 
 public class MayorVoteGUI {
 
+    public static final String TITLE =
+            "§8✦ Vote des Maires";
+
     public static final int BEAUTE = 20;
     public static final int AMBIANCE = 21;
     public static final int ACTIVITE = 22;
@@ -48,7 +51,7 @@ public class MayorVoteGUI {
                 Bukkit.createInventory(
                         null,
                         45,
-                        "§8✦ Conseil des Maires"
+                        TITLE
                 );
 
         MayorVote vote =
@@ -98,11 +101,11 @@ public class MayorVoteGUI {
         }
 
         int[] borders = {
-                0,1,2,3,4,5,6,7,8,
-                9,17,
-                18,26,
-                27,35,
-                37,38,39,41,42,43
+                0, 1, 2, 3, 4, 5, 6, 7, 8,
+                9, 17,
+                18, 26,
+                27, 35,
+                37, 38, 39, 41, 42, 43
         };
 
         for (int slot : borders) {
@@ -135,7 +138,7 @@ public class MayorVoteGUI {
         if (headerMeta != null) {
 
             headerMeta.setDisplayName(
-                    "§6✦ Conseil des Maires"
+                    "§6✦ Vote des Maires"
             );
 
             List<String> lore =
@@ -356,6 +359,12 @@ public class MayorVoteGUI {
                 List.of(lore)
         );
 
+        meta.addItemFlags(
+                ItemFlag.HIDE_ATTRIBUTES,
+                ItemFlag.HIDE_ENCHANTS,
+                ItemFlag.HIDE_ADDITIONAL_TOOLTIP
+        );
+
         item.setItemMeta(meta);
 
         inv.setItem(
@@ -368,7 +377,8 @@ public class MayorVoteGUI {
             String town
     ) {
 
-        TownSubmission fallback = null;
+        TownSubmission fallback =
+                null;
 
         for (TownSubmission sub :
                 SubmissionStorage.getAll()) {
@@ -384,7 +394,8 @@ public class MayorVoteGUI {
                 return sub;
             }
 
-            fallback = sub;
+            fallback =
+                    sub;
         }
 
         return fallback;
