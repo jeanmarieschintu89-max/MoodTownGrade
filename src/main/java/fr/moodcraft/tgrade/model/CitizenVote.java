@@ -37,9 +37,11 @@ public class CitizenVote {
             String town
     ) {
 
-        this.voter = voter;
+        this.voter =
+                voter;
 
-        this.town = town;
+        this.town =
+                town;
 
         this.timestamp =
                 System.currentTimeMillis();
@@ -63,14 +65,17 @@ public class CitizenVote {
     //
 
     public UUID getVoter() {
+
         return voter;
     }
 
     public String getTown() {
+
         return town;
     }
 
     public long getTimestamp() {
+
         return timestamp;
     }
 
@@ -79,27 +84,32 @@ public class CitizenVote {
     //
 
     public int getBeaute() {
+
         return beaute;
     }
 
     public int getAmbiance() {
+
         return ambiance;
     }
 
     public int getActivite() {
+
         return activite;
     }
 
     public int getOriginalite() {
+
         return originalite;
     }
 
     public int getPopularite() {
+
         return popularite;
     }
 
     //
-    // ✏️ SETTERS
+    // ✏️ SETTERS NOTES
     //
 
     public void setBeaute(
@@ -107,13 +117,7 @@ public class CitizenVote {
     ) {
 
         this.beaute =
-                Math.max(
-                        0,
-                        Math.min(
-                                3,
-                                beaute
-                        )
-                );
+                clamp(beaute);
     }
 
     public void setAmbiance(
@@ -121,13 +125,7 @@ public class CitizenVote {
     ) {
 
         this.ambiance =
-                Math.max(
-                        0,
-                        Math.min(
-                                3,
-                                ambiance
-                        )
-                );
+                clamp(ambiance);
     }
 
     public void setActivite(
@@ -135,13 +133,7 @@ public class CitizenVote {
     ) {
 
         this.activite =
-                Math.max(
-                        0,
-                        Math.min(
-                                3,
-                                activite
-                        )
-                );
+                clamp(activite);
     }
 
     public void setOriginalite(
@@ -149,13 +141,7 @@ public class CitizenVote {
     ) {
 
         this.originalite =
-                Math.max(
-                        0,
-                        Math.min(
-                                3,
-                                originalite
-                        )
-                );
+                clamp(originalite);
     }
 
     public void setPopularite(
@@ -163,13 +149,19 @@ public class CitizenVote {
     ) {
 
         this.popularite =
-                Math.max(
-                        0,
-                        Math.min(
-                                3,
-                                popularite
-                        )
-                );
+                clamp(popularite);
+    }
+
+    //
+    // 📅 SET TIMESTAMP
+    //
+
+    public void setTimestamp(
+            long timestamp
+    ) {
+
+        this.timestamp =
+                timestamp;
     }
 
     //
@@ -180,5 +172,22 @@ public class CitizenVote {
 
         this.timestamp =
                 System.currentTimeMillis();
+    }
+
+    //
+    // 🔒 LIMIT
+    //
+
+    private int clamp(
+            int value
+    ) {
+
+        return Math.max(
+                0,
+                Math.min(
+                        3,
+                        value
+                )
+        );
     }
 }
