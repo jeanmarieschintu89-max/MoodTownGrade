@@ -1,10 +1,10 @@
+
 package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.MayorVoteGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
 
 import org.bukkit.Material;
-
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -14,8 +14,18 @@ import org.bukkit.event.Listener;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import org.bukkit.inventory.ItemStack;
+
+import org.bukkit.inventory.meta.ItemMeta;
+
 public class MayorTownListListener
         implements Listener {
+
+    private static final String TITLE =
+            "§8✦ Conseil des Maires";
+
+    private static final String TOWN_PREFIX =
+            "§f✦ §b";
 
     @EventHandler
     public void click(
@@ -29,28 +39,30 @@ public class MayorTownListListener
 
         if (!e.getView()
                 .getTitle()
-                .equals("§8✦ Conseil des Maires")) {
+                .equals(TITLE)) {
             return;
         }
 
         e.setCancelled(true);
 
-        if (e.getCurrentItem() == null) {
+        if (e.getClickedInventory() == null) {
             return;
         }
 
-        if (e.getRawSlot()
+        if (e.getRawSlot() < 0
+                || e.getRawSlot()
                 >= e.getView()
                 .getTopInventory()
                 .getSize()) {
-
             return;
         }
 
-        if (e.getCurrentItem()
-                .getType()
-                .isAir()) {
+        ItemStack item =
+                e.getCurrentItem();
 
+        if (item == null
+                || item.getType()
+                .isAir()) {
             return;
         }
 
@@ -72,54 +84,40 @@ public class MayorTownListListener
         }
 
         Material mat =
-                e.getCurrentItem()
-                        .getType();
+                item.getType();
 
-        if (mat == Material.BLACK_STAINED_GLASS_PANE) {
+        if (mat == Material.BLACK_STAINED_GLASS_PANE
+                || mat == Material.GRAY_STAINED_GLASS_PANE
+                || mat == Material.LIGHT_GRAY_STAINED_GLASS_PANE
+                || mat == Material.WHITE_STAINED_GLASS_PANE
+                || mat == Material.BARRIER) {
             return;
         }
 
-        if (mat == Material.BARRIER) {
+        ItemMeta meta =
+                item.getItemMeta();
 
-            p.playSound(
-                    p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
-                    1f,
-                    1f
-            );
-
-            return;
-        }
-
-        if (!e.getCurrentItem()
-                .hasItemMeta()) {
-
-            return;
-        }
-
-        if (e.getCurrentItem()
-                .getItemMeta()
-                .getDisplayName() == null) {
-
+        if (meta == null
+                || !meta.hasDisplayName()) {
             return;
         }
 
         String name =
-                e.getCurrentItem()
-                        .getItemMeta()
-                        .getDisplayName();
+                meta.getDisplayName();
 
-        if (!name.startsWith(
-                "§f✦ §b")) {
-
+        if (!name.startsWith(TOWN_PREFIX)) {
             return;
         }
 
         String town =
                 name.replace(
-                        "§f✦ §b",
+                        TOWN_PREFIX,
                         ""
-                );
+                ).trim();
+
+        if (town.isEmpty()) {
+            return;
+        }
 
         p.playSound(
                 p.getLocation(),
