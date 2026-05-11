@@ -6,7 +6,10 @@ import fr.moodcraft.tgrade.model.StaffVote;
 
 import fr.moodcraft.tgrade.storage.VoteStorage;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class NationalScoreCalculator {
 
@@ -45,11 +48,8 @@ public class NationalScoreCalculator {
                 getCitizenScore(town);
 
         return round(
-
                 (staff * STAFF_WEIGHT)
-
                         + (mayor * MAYOR_WEIGHT)
-
                         + (citizen * CITIZEN_WEIGHT)
         );
     }
@@ -66,19 +66,38 @@ public class NationalScoreCalculator {
             return 0;
         }
 
-        List<StaffVote> votes =
+        List<StaffVote> rawVotes =
                 VoteStorage
                         .getStaffVotes(town);
+
+        Map<UUID, StaffVote> votes =
+                new LinkedHashMap<>();
+
+        for (StaffVote vote : rawVotes) {
+
+            if (vote == null
+                    || vote.getVoter() == null) {
+                continue;
+            }
+
+            votes.put(
+                    vote.getVoter(),
+                    vote
+            );
+        }
 
         if (votes.isEmpty()) {
             return 0;
         }
 
-        double total = 0;
+        double total =
+                0;
 
-        for (StaffVote vote : votes) {
+        for (StaffVote vote :
+                votes.values()) {
 
-            total += vote.getTotal();
+            total +=
+                    vote.getTotal();
         }
 
         return round(
@@ -98,24 +117,42 @@ public class NationalScoreCalculator {
             return 0;
         }
 
-        List<MayorVote> votes =
+        List<MayorVote> rawVotes =
                 VoteStorage
                         .getMayorVotes(town);
+
+        Map<UUID, MayorVote> votes =
+                new LinkedHashMap<>();
+
+        for (MayorVote vote : rawVotes) {
+
+            if (vote == null
+                    || vote.getVoter() == null) {
+                continue;
+            }
+
+            votes.put(
+                    vote.getVoter(),
+                    vote
+            );
+        }
 
         if (votes.isEmpty()) {
             return 0;
         }
 
-        double total = 0;
+        double total =
+                0;
 
-        for (MayorVote vote : votes) {
+        for (MayorVote vote :
+                votes.values()) {
 
             //
             // 📊 /25 -> /50
             //
 
             total +=
-                    (vote.getTotal() * 2.0);
+                    vote.getTotal() * 2.0;
         }
 
         return round(
@@ -135,24 +172,42 @@ public class NationalScoreCalculator {
             return 0;
         }
 
-        List<CitizenVote> votes =
+        List<CitizenVote> rawVotes =
                 VoteStorage
                         .getCitizenVotes(town);
+
+        Map<UUID, CitizenVote> votes =
+                new LinkedHashMap<>();
+
+        for (CitizenVote vote : rawVotes) {
+
+            if (vote == null
+                    || vote.getVoter() == null) {
+                continue;
+            }
+
+            votes.put(
+                    vote.getVoter(),
+                    vote
+            );
+        }
 
         if (votes.isEmpty()) {
             return 0;
         }
 
-        double total = 0;
+        double total =
+                0;
 
-        for (CitizenVote vote : votes) {
+        for (CitizenVote vote :
+                votes.values()) {
 
             //
             // 📊 /15 -> /50
             //
 
             total +=
-                    ((vote.getTotal() / 15.0) * 50.0);
+                    (vote.getTotal() / 15.0) * 50.0;
         }
 
         return round(
@@ -172,9 +227,24 @@ public class NationalScoreCalculator {
             return 0;
         }
 
-        return VoteStorage
-                .getCitizenVotes(town)
-                .size();
+        Map<UUID, CitizenVote> votes =
+                new LinkedHashMap<>();
+
+        for (CitizenVote vote :
+                VoteStorage.getCitizenVotes(town)) {
+
+            if (vote == null
+                    || vote.getVoter() == null) {
+                continue;
+            }
+
+            votes.put(
+                    vote.getVoter(),
+                    vote
+            );
+        }
+
+        return votes.size();
     }
 
     //
@@ -189,9 +259,24 @@ public class NationalScoreCalculator {
             return 0;
         }
 
-        return VoteStorage
-                .getMayorVotes(town)
-                .size();
+        Map<UUID, MayorVote> votes =
+                new LinkedHashMap<>();
+
+        for (MayorVote vote :
+                VoteStorage.getMayorVotes(town)) {
+
+            if (vote == null
+                    || vote.getVoter() == null) {
+                continue;
+            }
+
+            votes.put(
+                    vote.getVoter(),
+                    vote
+            );
+        }
+
+        return votes.size();
     }
 
     //
@@ -206,9 +291,24 @@ public class NationalScoreCalculator {
             return 0;
         }
 
-        return VoteStorage
-                .getStaffVotes(town)
-                .size();
+        Map<UUID, StaffVote> votes =
+                new LinkedHashMap<>();
+
+        for (StaffVote vote :
+                VoteStorage.getStaffVotes(town)) {
+
+            if (vote == null
+                    || vote.getVoter() == null) {
+                continue;
+            }
+
+            votes.put(
+                    vote.getVoter(),
+                    vote
+            );
+        }
+
+        return votes.size();
     }
 
     //
