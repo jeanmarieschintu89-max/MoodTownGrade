@@ -16,6 +16,7 @@ import fr.moodcraft.tgrade.storage.SubmissionStorage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -25,8 +26,16 @@ import org.bukkit.event.Listener;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import org.bukkit.inventory.meta.ItemMeta;
+
 public class MayorVoteListener
         implements Listener {
+
+    private static final String TITLE =
+            "§8✦ Conseil des Maires";
 
     @EventHandler
     public void click(
@@ -40,21 +49,44 @@ public class MayorVoteListener
 
         if (!e.getView()
                 .getTitle()
-                .equals("§8✦ Conseil des Maires")) {
+                .equals(TITLE)) {
+            return;
+        }
+
+        //
+        // Important :
+        // Le menu liste des villes et le menu vote ont le même titre.
+        // Si l'inventaire ne contient pas TOWN_DATA, ce n'est PAS le menu de vote.
+        //
+
+        if (!isVoteInventory(e)) {
             return;
         }
 
         e.setCancelled(true);
 
-        if (e.getCurrentItem() == null) {
+        if (e.getClickedInventory() == null) {
             return;
         }
 
-        if (e.getRawSlot()
+        if (e.getRawSlot() < 0
+                || e.getRawSlot()
                 >= e.getView()
                 .getTopInventory()
                 .getSize()) {
+            return;
+        }
 
+        ItemStack clicked =
+                e.getCurrentItem();
+
+        if (clicked == null
+                || clicked.getType()
+                .isAir()) {
+            return;
+        }
+
+        if (isFiller(clicked)) {
             return;
         }
 
@@ -63,13 +95,6 @@ public class MayorVoteListener
 
         if (town == null
                 || town.isEmpty()) {
-
-            deny(
-                    p,
-                    "§cVille introuvable.",
-                    "§7Le registre du vote est incomplet."
-            );
-
             return;
         }
 
@@ -262,6 +287,51 @@ public class MayorVoteListener
         );
     }
 
+    private boolean isVoteInventory(
+            InventoryClickEvent e
+    ) {
+
+        Inventory inv =
+                e.getView()
+                        .getTopInventory();
+
+        ItemStack data =
+                inv.getItem(
+                        MayorVoteGUI.TOWN_DATA
+                );
+
+        if (data == null
+                || data.getType()
+                .isAir()) {
+            return false;
+        }
+
+        if (!data.hasItemMeta()) {
+            return false;
+        }
+
+        ItemMeta meta =
+                data.getItemMeta();
+
+        return meta != null
+                && meta.hasDisplayName()
+                && meta.getDisplayName()
+                .startsWith("§0");
+    }
+
+    private boolean isFiller(
+            ItemStack item
+    ) {
+
+        Material mat =
+                item.getType();
+
+        return mat == Material.BLACK_STAINED_GLASS_PANE
+                || mat == Material.GRAY_STAINED_GLASS_PANE
+                || mat == Material.LIGHT_GRAY_STAINED_GLASS_PANE
+                || mat == Material.WHITE_STAINED_GLASS_PANE;
+    }
+
     private void teleportToProject(
             Player p,
             String town,
@@ -328,40 +398,48 @@ public class MayorVoteListener
             InventoryClickEvent e
     ) {
 
-        if (e.getInventory()
-                .getItem(MayorVoteGUI.TOWN_DATA) == null) {
+        Inventory inv =
+                e.getView()
+                        .getTopInventory();
 
+        ItemStack item =
+                inv.getItem(
+                        MayorVoteGUI.TOWN_DATA
+                );
+
+        if (item == null
+                || item.getType()
+                .isAir()) {
             return null;
         }
 
-        if (!e.getInventory()
-                .getItem(MayorVoteGUI.TOWN_DATA)
-                .hasItemMeta()) {
+        if (!item.hasItemMeta()) {
+            return null;
+        }
 
+        ItemMeta meta =
+                item.getItemMeta();
+
+        if (meta == null
+                || !meta.hasDisplayName()) {
             return null;
         }
 
         String name =
-                e.getInventory()
-                        .getItem(MayorVoteGUI.TOWN_DATA)
-                        .getItemMeta()
-                        .getDisplayName();
-
-        if (name == null) {
-            return null;
-        }
+                meta.getDisplayName();
 
         return name.replace(
                 "§0",
                 ""
-        );
+        ).trim();
     }
 
     private TownSubmission getActiveProject(
             String town
     ) {
 
-        TownSubmission fallback = null;
+        TownSubmission fallback =
+                null;
 
         for (TownSubmission sub :
                 SubmissionStorage.getAll()) {
@@ -377,7 +455,8 @@ public class MayorVoteListener
                 return sub;
             }
 
-            fallback = sub;
+            fallback =
+                    sub;
         }
 
         return fallback;
