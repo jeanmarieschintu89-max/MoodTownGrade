@@ -20,12 +20,31 @@ public class CitizenVoteManager {
             votes = new HashMap<>();
 
     //
+    // 🔑 NORMALIZE
+    //
+
+    private static String key(
+            String town
+    ) {
+
+        if (town == null) {
+            return "";
+        }
+
+        return town.toLowerCase()
+                .trim();
+    }
+
+    //
     // 📥 LOAD
     //
 
     public static void loadTown(
             String town
     ) {
+
+        String key =
+                key(town);
 
         Map<UUID, CitizenVote> map =
                 new HashMap<>();
@@ -37,6 +56,10 @@ public class CitizenVoteManager {
 
         for (CitizenVote vote : loaded) {
 
+            if (vote == null) {
+                continue;
+            }
+
             map.put(
                     vote.getVoter(),
                     vote
@@ -44,9 +67,26 @@ public class CitizenVoteManager {
         }
 
         votes.put(
-                town.toLowerCase(),
+                key,
                 map
         );
+    }
+
+    //
+    // ✅ ENSURE LOAD
+    //
+
+    private static void ensureLoaded(
+            String town
+    ) {
+
+        String key =
+                key(town);
+
+        if (!votes.containsKey(key)) {
+
+            loadTown(town);
+        }
     }
 
     //
@@ -54,15 +94,15 @@ public class CitizenVoteManager {
     //
 
     public static CitizenVote getVote(
-
             UUID player,
-
             String town
     ) {
 
+        ensureLoaded(town);
+
         Map<UUID, CitizenVote> map =
                 votes.get(
-                        town.toLowerCase()
+                        key(town)
                 );
 
         if (map == null) {
@@ -80,9 +120,18 @@ public class CitizenVoteManager {
             CitizenVote vote
     ) {
 
+        if (vote == null) {
+            return;
+        }
+
         String town =
+                key(
+                        vote.getTown()
+                );
+
+        ensureLoaded(
                 vote.getTown()
-                        .toLowerCase();
+        );
 
         votes.putIfAbsent(
                 town,
@@ -104,23 +153,23 @@ public class CitizenVoteManager {
     // 📚 GET ALL
     //
 
-    public static List<CitizenVote>
-    getVotes(
+    public static List<CitizenVote> getVotes(
             String town
     ) {
 
-        if (!votes.containsKey(
-                town.toLowerCase()
-        )) {
+        ensureLoaded(town);
 
-            loadTown(town);
+        Map<UUID, CitizenVote> map =
+                votes.get(
+                        key(town)
+                );
+
+        if (map == null) {
+            return List.of();
         }
 
         return List.copyOf(
-
-                votes.get(
-                        town.toLowerCase()
-                ).values()
+                map.values()
         );
     }
 
@@ -129,9 +178,7 @@ public class CitizenVoteManager {
     //
 
     public static boolean hasVoted(
-
             UUID player,
-
             String town
     ) {
 
