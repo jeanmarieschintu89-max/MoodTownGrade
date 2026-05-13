@@ -4,20 +4,15 @@ import fr.moodcraft.tgrade.model.RateSession;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.UUID;
 
 public class RateSessionManager {
 
-    //
-    // 🧠 SESSIONS
-    //
-
-    private static final Map<UUID, RateSession>
-            sessions = new HashMap<>();
+    private static final Map<UUID, RateSession> sessions =
+            new HashMap<>();
 
     //
-    // ➕ CREATE / GET
+    // 🏛️ CRÉATION / RÉCUPÉRATION
     //
 
     public static RateSession create(
@@ -25,18 +20,29 @@ public class RateSessionManager {
             String town
     ) {
 
-        //
-        // 🔍 EXISTING SESSION
-        //
+        RateSession existing =
+                sessions.get(uuid);
 
-        if (sessions.containsKey(uuid)) {
+        /*
+         * Important :
+         *
+         * RateGUI.open(...) est aussi appelé quand on clique sur un critère,
+         * pour rafraîchir le menu.
+         *
+         * Donc on garde la session si c'est la même ville.
+         * Mais si l'admin choisit une autre ville, on remplace la session.
+         *
+         * Ancien bug :
+         * le plugin gardait l'ancienne session même si la ville changeait.
+         * Résultat : la note partait sur la mauvaise ville.
+         */
 
-            return sessions.get(uuid);
+        if (existing != null
+                && existing.getTown() != null
+                && existing.getTown().equalsIgnoreCase(town)) {
+
+            return existing;
         }
-
-        //
-        // ➕ NEW SESSION
-        //
 
         RateSession session =
                 new RateSession(town);
@@ -50,7 +56,7 @@ public class RateSessionManager {
     }
 
     //
-    // 📦 GET
+    // 🔎 GET
     //
 
     public static RateSession get(
@@ -61,7 +67,7 @@ public class RateSessionManager {
     }
 
     //
-    // ❌ REMOVE
+    // 🧹 REMOVE
     //
 
     public static void remove(
@@ -72,7 +78,7 @@ public class RateSessionManager {
     }
 
     //
-    // 🔍 HAS
+    // ✅ HAS
     //
 
     public static boolean has(
