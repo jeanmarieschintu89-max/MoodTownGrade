@@ -1,412 +1,127 @@
-
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.flag.api.MoodTownFlagAPI;
-
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RankingManager;
 import fr.moodcraft.tgrade.model.TownGrade;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ClassementGUI {
 
+    public static final String TITLE = MoodStyle.CLASSEMENT_TITLE;
+
+    private static final int[] BORDER = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 17, 18, 26, 27, 35, 36, 44,
+            45, 46, 47, 48, 50, 51, 52, 53
+    };
+
+    private static final int[] RANK_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
+    };
+
     public static void open(Player p) {
 
-        Inventory inv = Bukkit.createInventory(null, 54, "§8✦ Classement Hebdo");
+        Inventory inv = Bukkit.createInventory(null, 54, TITLE);
+        MoodStyle.fill(inv, BORDER);
 
-        ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        ItemMeta glassMeta = glass.getItemMeta();
+        inv.setItem(
+                4,
+                MoodStyle.item(
+                        Material.GOLD_INGOT,
+                        MoodStyle.button("Classement Hebdo"),
+                        List.of(
+                                "§7Classement national",
+                                "§7des villes évaluées.",
+                                "",
+                                "§7Score moyen: §e" + String.format("%.1f", RankingManager.getAverageScore()),
+                                "§7Villes classées: §e" + RankingManager.getFinishedTowns(),
+                                "§7Prestige total: §e" + RankingManager.getTotalPrestige(),
+                                "",
+                                "§8• §7Subventions",
+                                "§8• §7Prestige"
+                        )
+                )
+        );
 
-        if (glassMeta != null) {
-            glassMeta.setDisplayName(" ");
-            glass.setItemMeta(glassMeta);
+        List<TownGrade> grades = new ArrayList<>(RankingManager.getTop());
+        grades.sort(Comparator.comparingDouble((TownGrade grade) -> NationalScoreCalculator.getFinalScore(grade.getTown())).reversed());
+
+        if (grades.isEmpty()) {
+            inv.setItem(
+                    22,
+                    MoodStyle.item(
+                            Material.BARRIER,
+                            MoodStyle.button("Aucun classement"),
+                            List.of(
+                                    "§7Aucune ville n'est",
+                                    "§7encore classée.",
+                                    "",
+                                    "§8• §7Votes requis"
+                            )
+                    )
+            );
         }
 
-        int[] borders = {
-                0,1,2,3,4,5,6,7,8,
-                9,17,
-                18,26,
-                27,35,
-                36,44,
-                45,46,47,48,50,51,52,53
-        };
+        int index = 0;
 
-        for (int border : borders) {
-            inv.setItem(border, glass);
-        }
-
-        List<TownGrade> top = new ArrayList<>();
-
-        for (Object object : RankingManager.getTop()) {
-            if (object instanceof TownGrade grade) {
-                top.add(grade);
-            }
-        }
-
-        top.sort((a, b) -> Double.compare(getVisibleScore(b), getVisibleScore(a)));
-
-        ItemStack header = new ItemStack(Material.NETHER_STAR);
-        ItemMeta headerMeta = header.getItemMeta();
-
-        if (headerMeta != null) {
-
-            headerMeta.setDisplayName("§6✦ Classement Hebdomadaire");
-
-            if (top.isEmpty()) {
-
-                headerMeta.setLore(List.of(
-                        "§8----- §6Registre urbain §8-----",
-                        "§7Aucune ville classée",
-                        "§7pour cette semaine.",
-                        "",
-                        "§7Le classement s'active après",
-                        "§7validation d'une demande",
-                        "§7de projet par le staff.",
-                        "",
-                        "§e▶ En attente de projets"
-                ));
-
-            } else {
-
-                TownGrade best = top.get(0);
-                double national = getVisibleScore(best);
-
-                headerMeta.setLore(List.of(
-                        "§8----- §6Registre urbain §8-----",
-                        "§7Classement en direct des villes",
-                        "§7ayant une demande de projet validée.",
-                        "",
-                        "§7Ville en tête : §e" + best.getTown(),
-                        "§7Note actuelle : §e" + formatScore(national) + "§7/50",
-                        "§7État : " + getState(best),
-                        "",
-                        "§7Les subventions sont versées",
-                        "§7séparément par le staff ou",
-                        "§7lors du paiement hebdomadaire.",
-                        "",
-                        "§e▶ Résultats urbains"
-                ));
-            }
-
-            header.setItemMeta(headerMeta);
-        }
-
-        inv.setItem(4, header);
-
-        int slot = 10;
-        int pos = 1;
-
-        for (TownGrade grade : top) {
-
-            if (slot >= 44) {
+        for (TownGrade grade : grades) {
+            if (index >= RANK_SLOTS.length) {
                 break;
             }
 
-            double staff = NationalScoreCalculator.getStaffScore(grade.getTown());
-            double mayors = NationalScoreCalculator.getMayorScore(grade.getTown());
-            double citizens = NationalScoreCalculator.getCitizenScore(grade.getTown());
-            double national = getVisibleScore(grade);
+            String town = grade.getTown();
+            double score = NationalScoreCalculator.getFinalScore(town);
+            int position = index + 1;
 
-            String podium;
+            ItemStack icon = null;
 
-            if (pos == 1) {
-                podium = "§6♛ Rang Hebdo I";
-            } else if (pos == 2) {
-                podium = "§b♢ Rang Hebdo II";
-            } else if (pos == 3) {
-                podium = "§a♢ Rang Hebdo III";
-            } else {
-                podium = "§eRang Hebdo #" + pos;
+            try {
+                icon = MoodTownFlagAPI.getTownShieldItem(town);
+            } catch (Throwable ignored) {
+                icon = null;
             }
 
-            ItemStack item =
-                    MoodTownFlagAPI.getTownShieldItem(
-                            grade.getTown()
-                    );
-
-            boolean hasFlag =
-                    item != null;
-
-            if (item == null) {
-                item = new ItemStack(Material.SHIELD);
+            if (icon == null) {
+                icon = new ItemStack(Material.SHIELD);
             }
 
-            ItemMeta meta = item.getItemMeta();
+            ItemMeta meta = icon.getItemMeta();
 
             if (meta != null) {
-
-                meta.setDisplayName(
-                        podium + " §8• §b" + grade.getTown()
-                );
-
-                List<String> lore = new ArrayList<>();
-
-                lore.add("§8----- §6Classement hebdomadaire §8-----");
-                lore.add("§7Ville : §b" + grade.getTown());
-                lore.add("§7État : " + getState(grade));
-                lore.add("");
-
-                if (hasFlag) {
-                    lore.add("§a✔ Blason officiel enregistré");
-                } else {
-                    lore.add("§7Blason : §fNon défini");
-                }
-
-                lore.add("");
-                lore.add("§7Titre urbain :");
-                lore.add(getRank(national));
-                lore.add("");
-                lore.add("§7Staff : §e" + formatScore(staff) + "§7/50");
-                lore.add("§7Conseil des maires : §e" + formatScore(mayors) + "§7/50");
-                lore.add("§7Votes citoyens : §e" + formatScore(citizens) + "§7/50");
-                lore.add("");
-                lore.add("§7Note hebdomadaire : §e" + formatScore(national) + "§7/50");
-                lore.add("§7Subvention estimée : §a" + formatMoney(getPayout(national)) + "€");
-                lore.add("");
-                lore.add("§7Paiement : §6hebdomadaire ou staff");
-                lore.add("");
-                lore.add("§7Appréciation :");
-                lore.add(getAppreciation(national));
-
-                meta.setLore(lore);
-
-                meta.addItemFlags(
-                        ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
-                        ItemFlag.HIDE_ATTRIBUTES,
-                        ItemFlag.HIDE_ENCHANTS
-                );
-
-                item.setItemMeta(meta);
-            }
-
-            if (pos == 1) {
-                item = glow(item);
-            }
-
-            inv.setItem(slot, item);
-
-            slot++;
-
-            if (slot == 17) {
-                slot = 19;
-            }
-
-            if (slot == 26) {
-                slot = 28;
-            }
-
-            if (slot == 35) {
-                slot = 37;
-            }
-
-            pos++;
-        }
-
-        if (top.isEmpty()) {
-
-            ItemStack empty = new ItemStack(Material.BARRIER);
-            ItemMeta meta = empty.getItemMeta();
-
-            if (meta != null) {
-
-                meta.setDisplayName("§c✖ Aucun classement");
-
+                meta.setDisplayName(MoodStyle.button("#" + position + " " + town));
                 meta.setLore(List.of(
-                        "§8----- §6Classement hebdomadaire §8-----",
-                        "§7Aucune ville n'a encore",
-                        "§7de projet validé cette semaine.",
+                        "§7Ville: §b" + town,
+                        "§7Score: §e" + String.format("%.1f", score) + "/50",
+                        "§7Rang: §6" + grade.getRank(),
+                        "§7Subvention: §e" + grade.getPayout() + "€",
                         "",
-                        "§7Le classement attend",
-                        "§7ses premières demandes validées."
+                        "§8• §7Staff: §e" + String.format("%.1f", NationalScoreCalculator.getStaffScore(town)),
+                        "§8• §7Maires: §e" + String.format("%.1f", NationalScoreCalculator.getMayorScore(town)),
+                        "§8• §7Citoyens: §e" + String.format("%.1f", NationalScoreCalculator.getCitizenScore(town))
                 ));
-
-                empty.setItemMeta(meta);
+                icon.setItemMeta(meta);
             }
 
-            inv.setItem(22, empty);
+            inv.setItem(RANK_SLOTS[index], icon);
+            index++;
         }
 
-        ItemStack back = new ItemStack(Material.ARROW);
-        ItemMeta backMeta = back.getItemMeta();
-
-        if (backMeta != null) {
-
-            backMeta.setDisplayName("§c⬅ Retour");
-
-            backMeta.setLore(List.of(
-                    "§8----- §6Commission Urbaine §8-----",
-                    "§7Retourner au menu",
-                    "§7de la commission."
-            ));
-
-            back.setItemMeta(backMeta);
-        }
-
-        inv.setItem(49, back);
-
+        inv.setItem(49, MoodStyle.backItem("Commission Urbaine"));
         p.openInventory(inv);
-    }
-
-    private static ItemStack glow(ItemStack item) {
-
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta == null) {
-            return item;
-        }
-
-        meta.addEnchant(
-                Enchantment.UNBREAKING,
-                1,
-                true
-        );
-
-        meta.addItemFlags(
-                ItemFlag.HIDE_ENCHANTS,
-                ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
-                ItemFlag.HIDE_ATTRIBUTES
-        );
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    private static double getVisibleScore(TownGrade grade) {
-
-        if (grade.isLocked()) {
-            return grade.getFinalScore();
-        }
-
-        return NationalScoreCalculator.getFinalScore(grade.getTown());
-    }
-
-    private static String getState(TownGrade grade) {
-
-        if (grade.isLocked()) {
-            return "§6Votes clôturés";
-        }
-
-        return "§aVotes ouverts";
-    }
-
-    private static String getRank(double score) {
-
-        if (score <= 10) {
-            return "§8✦ Hameau en friche";
-        }
-
-        if (score <= 20) {
-            return "§7✦ Commune rurale";
-        }
-
-        if (score <= 30) {
-            return "§a✦ Ville reconnue";
-        }
-
-        if (score <= 40) {
-            return "§b✦ Métropole prospère";
-        }
-
-        if (score <= 49) {
-            return "§6✦ Capitale d'élite";
-        }
-
-        return "§e§l✦ Merveille Nationale";
-    }
-
-    private static int getPayout(double score) {
-
-        if (score <= 15) {
-            return 0;
-        }
-
-        if (score <= 20) {
-            return 15000;
-        }
-
-        if (score <= 25) {
-            return 35000;
-        }
-
-        if (score <= 30) {
-            return 75000;
-        }
-
-        if (score <= 35) {
-            return 125000;
-        }
-
-        if (score <= 40) {
-            return 200000;
-        }
-
-        if (score <= 45) {
-            return 350000;
-        }
-
-        if (score <= 49) {
-            return 500000;
-        }
-
-        return 1000000;
-    }
-
-    private static String getAppreciation(double score) {
-
-        if (score <= 15) {
-            return "§7Dossier trop faible pour une subvention.";
-        }
-
-        if (score <= 20) {
-            return "§7Projet recevable, soutien urbain limité.";
-        }
-
-        if (score <= 25) {
-            return "§eVille en progression, dossier encourageant.";
-        }
-
-        if (score <= 30) {
-            return "§aDéveloppement urbain sérieux et visible.";
-        }
-
-        if (score <= 35) {
-            return "§bVille solide, projet bien intégré.";
-        }
-
-        if (score <= 40) {
-            return "§bMétropole attractive, dossier confirmé.";
-        }
-
-        if (score <= 45) {
-            return "§6Cité majeure, forte influence urbaine.";
-        }
-
-        if (score <= 49) {
-            return "§6Capitale d'élite, projet remarquable.";
-        }
-
-        return "§e§lMerveille nationale inscrite au sommet de MoodCraft.";
-    }
-
-    private static String formatScore(double value) {
-
-        return String.format("%.1f", value);
-    }
-
-    private static String formatMoney(int value) {
-
-        return String.format("%,d", value).replace(",", " ");
     }
 }

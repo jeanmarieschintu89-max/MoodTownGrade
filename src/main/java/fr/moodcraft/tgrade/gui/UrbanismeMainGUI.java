@@ -1,234 +1,162 @@
 package fr.moodcraft.tgrade.gui;
 
 import fr.moodcraft.tgrade.manager.RankingManager;
-
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
-
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
-
 import fr.moodcraft.tgrade.towny.TownyHook;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
-
 import org.bukkit.Material;
-
 import org.bukkit.entity.Player;
-
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class UrbanismeMainGUI {
 
+    public static final String TITLE = MoodStyle.MAIN_TITLE;
+
+    private static final int[] BORDER = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 17, 18, 26, 27, 35, 36, 44,
+            45, 46, 47, 48, 50, 51, 52, 53
+    };
+
     public static void open(Player p) {
 
-        Inventory inv =
-                Bukkit.createInventory(
-                        null,
-                        54,
-                        "§8✦ Commission Urbaine"
-                );
+        Inventory inv = Bukkit.createInventory(null, 54, TITLE);
+        MoodStyle.fill(inv, BORDER);
 
-        long pending =
-                SubmissionStorage.getAll()
-                        .stream()
-                        .filter(sub ->
-                                sub.getStatus()
-                                        == SubmissionStatus.PENDING)
-                        .count();
+        long pending = SubmissionStorage.getAll().stream()
+                .filter(sub -> sub.getStatus() == SubmissionStatus.PENDING)
+                .count();
 
-        TownGrade best =
-                RankingManager.getBest();
+        TownGrade best = RankingManager.getBest();
+        String bestTown = best == null ? "Aucune" : best.getTown();
 
-        String bestTown =
-                best == null
-                        ? "Aucune"
-                        : best.getTown();
-
-        boolean canManage =
-                TownyHook.canManage(p);
-
-        boolean staff =
-                p.hasPermission(
-                        "moodtowngrade.staff"
-                );
-
-        ItemStack glass =
-                item(
-                        Material.BLACK_STAINED_GLASS_PANE,
-                        " "
-                );
-
-        int[] borders = {
-                0,1,2,3,4,5,6,7,8,
-                9,17,
-                18,26,
-                27,35,
-                36,44,
-                45,46,47,48,50,51,52,53
-        };
-
-        for (int slot : borders) {
-            inv.setItem(slot, glass);
-        }
+        boolean canManage = TownyHook.canManage(p);
+        boolean staff = p.hasPermission("moodtowngrade.staff");
 
         inv.setItem(
                 4,
-                item(
+                MoodStyle.item(
                         Material.NETHER_STAR,
-                        "§6✦ Commission Urbaine",
-                        "§8----- §6Registre hebdomadaire §8-----",
-                        "§7Suivi des projets urbains",
-                        "§7et du classement MoodCraft.",
-                        "",
-                        "§7Ville en tête : §e" + bestTown,
-                        "§7Prestige moyen : §b"
-                                + RankingManager.getAverageScore()
-                                + "§7/50",
-                        "§7Villes classées : §a"
-                                + RankingManager.getFinishedTowns(),
-                        "§7Demandes en attente : §e"
-                                + pending,
-                        "",
-                        "§e▶ Centre urbain"
+                        MoodStyle.button("Commission Urbaine"),
+                        List.of(
+                                "§7Centre urbain de",
+                                "§aMood§6Craft§7.",
+                                "",
+                                "§7Meilleure ville: §e" + bestTown,
+                                "§7Score moyen: §e" + String.format("%.1f", RankingManager.getAverageScore()),
+                                "§7Villes classées: §e" + RankingManager.getFinishedTowns(),
+                                "§7Demandes ouvertes: §e" + pending,
+                                "",
+                                "§8• §7Votes",
+                                "§8• §7Projets",
+                                "§8• §7Classement"
+                        )
                 )
         );
 
         inv.setItem(
                 20,
-                item(
+                MoodStyle.item(
                         Material.BOOK,
-                        "§e✦ Votes Citoyens",
-                        "§8----- §6Participation publique §8-----",
-                        "§7Notez les villes ayant",
-                        "§7un projet en développement.",
-                        "",
-                        "§7Votre vote compte pour",
-                        "§7le classement hebdomadaire.",
-                        "",
-                        "§e▶ Voter"
+                        MoodStyle.button("Votes Citoyens"),
+                        List.of(
+                                "§7Note les villes",
+                                "§7avec un projet validé.",
+                                "",
+                                "§8• §7Vote public",
+                                "§8• §7Avis global",
+                                "§8• §7Classement hebdo",
+                                "",
+                                "§eOuvrir les votes"
+                        )
                 )
         );
 
         inv.setItem(
                 22,
-                item(
+                MoodStyle.item(
                         Material.GOLD_INGOT,
-                        "§6✦ Classement Hebdo",
-                        "§8----- §6Registre urbain §8-----",
-                        "§7Consultez le classement",
-                        "§7des villes et projets validés.",
-                        "",
-                        "§7Score en direct tant que",
-                        "§7les votes sont ouverts.",
-                        "",
-                        "§6▶ Voir le classement"
+                        MoodStyle.button("Classement Hebdo"),
+                        List.of(
+                                "§7Consulte le classement",
+                                "§7des villes évaluées.",
+                                "",
+                                "§8• §7Score national",
+                                "§8• §7Prestige",
+                                "§8• §7Subventions",
+                                "",
+                                "§eVoir le classement"
+                        )
                 )
         );
 
         if (canManage) {
-
             inv.setItem(
                     29,
-                    item(
+                    MoodStyle.item(
                             Material.NETHER_STAR,
-                            "§a✦ Déposer un Projet",
-                            "§8----- §6Demande urbaine §8-----",
-                            "§7Créer une demande de projet",
-                            "§7pour votre ville.",
-                            "",
-                            "§7Après validation staff,",
-                            "§7les votes seront ouverts.",
-                            "",
-                            "§a▶ Déposer une demande"
+                            MoodStyle.button("Déposer un projet"),
+                            List.of(
+                                    "§7Ouvre un dossier",
+                                    "§7pour ta ville.",
+                                    "",
+                                    "§8• §7Nom du projet",
+                                    "§8• §7Description",
+                                    "§8• §7Position actuelle",
+                                    "",
+                                    "§eSaisie dans le chat"
+                            )
                     )
             );
         }
 
         if (canManage || staff) {
-
             inv.setItem(
                     31,
-                    item(
+                    MoodStyle.item(
                             Material.GOLD_BLOCK,
-                            "§6✦ Conseil des Maires",
-                            "§8----- §6Vote municipal §8-----",
-                            "§7Les maires donnent leur avis",
-                            "§7sur les villes ayant un projet",
-                            "§7validé en développement.",
-                            "",
-                            "§7Le vote compte pour",
-                            "§7le classement hebdomadaire.",
-                            "",
-                            "§6▶ Accéder au conseil"
+                            MoodStyle.button("Conseil des Maires"),
+                            List.of(
+                                    "§7Avis des maires",
+                                    "§7sur les projets validés.",
+                                    "",
+                                    "§8• §7Vote municipal",
+                                    "§8• §7Ville par ville",
+                                    "§8• §7Classement hebdo",
+                                    "",
+                                    "§eOuvrir le conseil"
+                            )
                     )
             );
         }
 
         if (staff) {
-
             inv.setItem(
                     33,
-                    item(
+                    MoodStyle.item(
                             Material.COMPASS,
-                            "§c✦ Centre National",
-                            "§8----- §6Administration §8-----",
-                            "§7Gérer les demandes,",
-                            "§7notations, clôtures",
-                            "§7et subventions.",
-                            "",
-                            "§c▶ Accès staff"
+                            MoodStyle.button("Centre National"),
+                            List.of(
+                                    "§7Gère les dossiers",
+                                    "§7de la Commission.",
+                                    "",
+                                    "§8• §7Demandes",
+                                    "§8• §7Notations",
+                                    "§8• §7Subventions",
+                                    "",
+                                    "§eAccès staff"
+                            )
                     )
             );
         }
 
-        inv.setItem(
-                49,
-                item(
-                        Material.ARROW,
-                        "§c⬅ Retour",
-                        "§8----- §6MoodCraft §8-----",
-                        "§7Retourner au menu",
-                        "§7principal du serveur."
-                )
-        );
-
+        inv.setItem(49, MoodStyle.backItem("principal"));
         p.openInventory(inv);
-    }
-
-    private static ItemStack item(
-            Material mat,
-            String name,
-            String... loreLines
-    ) {
-
-        ItemStack item =
-                new ItemStack(mat);
-
-        ItemMeta meta =
-                item.getItemMeta();
-
-        if (meta == null)
-            return item;
-
-        meta.setDisplayName(name);
-
-        List<String> lore =
-                new ArrayList<>();
-
-        for (String line : loreLines) {
-            lore.add(line);
-        }
-
-        meta.setLore(lore);
-
-        item.setItemMeta(meta);
-
-        return item;
     }
 }
