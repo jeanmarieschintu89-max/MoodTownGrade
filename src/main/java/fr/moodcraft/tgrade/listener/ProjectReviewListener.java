@@ -10,6 +10,7 @@ import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,7 +29,7 @@ public class ProjectReviewListener
             InventoryClickEvent e
     ) {
 
-        if (!e.getView().getTitle().equals(ProjectReviewGUI.TITLE)) {
+        if (!MoodStyle.titleEquals(e.getView().getTitle(), ProjectReviewGUI.TITLE)) {
             return;
         }
 
@@ -38,7 +39,7 @@ public class ProjectReviewListener
             return;
         }
 
-        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
+        if (e.getRawSlot() < 0 || e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 

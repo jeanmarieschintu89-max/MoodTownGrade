@@ -8,6 +8,7 @@ import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -27,7 +28,7 @@ public class EvaluationManagerListener
             InventoryClickEvent e
     ) {
 
-        if (!e.getView().getTitle().equals(EvaluationManagerGUI.TITLE)) {
+        if (!MoodStyle.titleEquals(e.getView().getTitle(), EvaluationManagerGUI.TITLE)) {
             return;
         }
 
@@ -37,7 +38,7 @@ public class EvaluationManagerListener
             return;
         }
 
-        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
+        if (e.getRawSlot() < 0 || e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 
@@ -80,9 +81,14 @@ public class EvaluationManagerListener
         }
 
         String town =
-                cleanTownName(
-                        meta.getDisplayName()
-                );
+                MoodStyle.tag(item, MoodStyle.TAG_TOWN);
+
+        if (town == null || town.isBlank()) {
+            town =
+                    cleanTownName(
+                            meta.getDisplayName()
+                    );
+        }
 
         if (town == null
                 || town.isBlank()) {

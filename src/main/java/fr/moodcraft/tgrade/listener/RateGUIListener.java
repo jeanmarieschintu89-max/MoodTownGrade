@@ -12,6 +12,7 @@ import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
 import fr.moodcraft.tgrade.storage.VoteStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class RateGUIListener
             InventoryClickEvent e
     ) {
 
-        if (!e.getView().getTitle().equals(RateGUI.TITLE)) {
+        if (!MoodStyle.titleEquals(e.getView().getTitle(), RateGUI.TITLE)) {
             return;
         }
 

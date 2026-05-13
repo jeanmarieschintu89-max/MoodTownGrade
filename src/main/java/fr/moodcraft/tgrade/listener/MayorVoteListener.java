@@ -38,7 +38,7 @@ public class MayorVoteListener implements Listener {
             return;
         }
 
-        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
+        if (e.getRawSlot() < 0 || e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 
@@ -114,7 +114,8 @@ public class MayorVoteListener implements Listener {
                     "§a✔ §fVote municipal enregistré.",
                     "",
                     "§7Ville: §b" + town,
-                    "§7Note: §e" + vote.getTotal() + "/50",
+                    "§7Note: §e" + vote.getTotal() + "/" + MayorVoteGUI.MAX_TOTAL,
+                    "§7Score compté: §e" + (vote.getTotal() * 2) + "/50",
                     "§7État: §aValidé",
                     "",
                     "§8• §7Le classement hebdo est actualisé"
@@ -195,6 +196,6 @@ public class MayorVoteListener implements Listener {
     }
 
     private int next(int current) {
-        return current >= 10 ? 1 : current + 1;
+        return current >= MayorVoteGUI.MAX_NOTE ? 1 : current + 1;
     }
 }
