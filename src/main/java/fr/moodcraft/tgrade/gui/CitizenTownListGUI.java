@@ -1,24 +1,18 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.flag.api.MoodTownFlagAPI;
 import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
 import fr.moodcraft.tgrade.manager.RankingManager;
-
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
-
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
-
-import fr.moodcraft.flag.api.MoodTownFlagAPI;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-
 import org.bukkit.entity.Player;
-
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -28,388 +22,131 @@ import java.util.Set;
 
 public class CitizenTownListGUI {
 
-    public static void open(
-            Player p
-    ) {
+    public static final String TITLE = MoodStyle.CITIZEN_LIST_TITLE;
 
-        Inventory inv =
-                Bukkit.createInventory(
-                        null,
-                        54,
-                        "§8✦ Votes Citoyens"
-                );
+    private static final int[] BORDER = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 17, 18, 26, 27, 35, 36, 44,
+            45, 46, 47, 48, 50, 51, 52, 53
+    };
 
-        ItemStack glass =
-                new ItemStack(
-                        Material.BLACK_STAINED_GLASS_PANE
-                );
+    private static final int[] TOWN_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
+    };
 
-        ItemMeta glassMeta =
-                glass.getItemMeta();
+    public static void open(Player p) {
 
-        if (glassMeta != null) {
-
-            glassMeta.setDisplayName(" ");
-            glass.setItemMeta(glassMeta);
-        }
-
-        int[] borders = {
-                0,1,2,3,4,5,6,7,8,
-                9,17,
-                18,26,
-                27,35,
-                36,44,
-                45,46,47,48,50,51,52,53
-        };
-
-        for (int slot : borders) {
-
-            inv.setItem(
-                    slot,
-                    glass
-            );
-        }
-
-        ItemStack header =
-                new ItemStack(
-                        Material.BOOK
-                );
-
-        ItemMeta headerMeta =
-                header.getItemMeta();
-
-        if (headerMeta != null) {
-
-            headerMeta.setDisplayName(
-                    "§e✦ Votes Citoyens"
-            );
-
-            headerMeta.setLore(List.of(
-                    "§8----- §6Participation publique §8-----",
-                    "§7Notez les villes ayant",
-                    "§7un projet en développement.",
-                    "",
-                    "§7Visitez le projet, observez",
-                    "§7la ville puis donnez votre vote.",
-                    "",
-                    "§7Vos votes comptent pour",
-                    "§7le classement hebdomadaire.",
-                    "",
-                    "§e▶ Choisir une ville"
-            ));
-
-            header.setItemMeta(headerMeta);
-        }
+        Inventory inv = Bukkit.createInventory(null, 54, TITLE);
+        MoodStyle.fill(inv, BORDER);
 
         inv.setItem(
                 4,
-                header
+                MoodStyle.item(
+                        Material.BOOK,
+                        MoodStyle.button("Votes Citoyens"),
+                        List.of(
+                                "§7Vote public sur",
+                                "§7les villes en projet.",
+                                "",
+                                "§8• §7Visite",
+                                "§8• §7Avis citoyen",
+                                "§8• §7Classement hebdo"
+                        )
+                )
         );
 
-        Set<String> towns =
-                new HashSet<>();
-
-        for (TownSubmission sub :
-                SubmissionStorage.getAll()) {
-
-            if (sub.getStatus()
-                    != SubmissionStatus.APPROVED) {
-                continue;
-            }
-
-            towns.add(
-                    sub.getTown()
-            );
-        }
+        List<String> towns = approvedTowns();
 
         if (towns.isEmpty()) {
-
-            ItemStack empty =
-                    new ItemStack(
-                            Material.BARRIER
-                    );
-
-            ItemMeta meta =
-                    empty.getItemMeta();
-
-            if (meta != null) {
-
-                meta.setDisplayName(
-                        "§c✖ Aucun vote ouvert"
-                );
-
-                meta.setLore(List.of(
-                        "§8----- §6Votes Citoyens §8-----",
-                        "§7Aucune ville ne possède",
-                        "§7un projet validé pour",
-                        "§7la notation citoyenne.",
-                        "",
-                        "§7Les votes s'ouvriront après",
-                        "§7validation d'une demande",
-                        "§7par le staff.",
-                        "",
-                        "§c▶ Revenez plus tard"
-                ));
-
-                empty.setItemMeta(meta);
-            }
-
             inv.setItem(
                     22,
-                    empty
+                    MoodStyle.item(
+                            Material.BARRIER,
+                            MoodStyle.button("Aucun vote ouvert"),
+                            List.of(
+                                    "§7Aucune ville n'a",
+                                    "§7de projet validé.",
+                                    "",
+                                    "§8• §7Revenez plus tard"
+                            )
+                    )
             );
-
-            ItemStack back =
-                    new ItemStack(
-                            Material.BARRIER
-                    );
-
-            ItemMeta backMeta =
-                    back.getItemMeta();
-
-            if (backMeta != null) {
-
-                backMeta.setDisplayName(
-                        "§c⬅ Retour"
-                );
-
-                backMeta.setLore(List.of(
-                        "§8----- §6Commission Urbaine §8-----",
-                        "§7Retourner au menu",
-                        "§7de la commission."
-                ));
-
-                back.setItemMeta(backMeta);
-            }
-
-            inv.setItem(
-                    49,
-                    back
-            );
-
-            p.openInventory(inv);
-
-            return;
         }
 
-        List<String> sorted =
-                new ArrayList<>(towns);
+        int index = 0;
 
-        sorted.sort((a, b) -> Double.compare(
-                NationalScoreCalculator.getFinalScore(b),
-                NationalScoreCalculator.getFinalScore(a)
-        ));
-
-        int slot = 10;
-
-        for (String town : sorted) {
-
-            if (slot == 17
-                    || slot == 26
-                    || slot == 35
-                    || slot == 44) {
-
-                slot += 2;
-            }
-
-            if (slot >= 45) {
+        for (String town : towns) {
+            if (index >= TOWN_SLOTS.length) {
                 break;
             }
 
-            double score =
-                    NationalScoreCalculator
-                            .getFinalScore(town);
+            TownSubmission project = getActiveProject(town);
+            String projectName = project == null ? "Projet en cours" : project.getBuildName();
 
-            int citizens =
-                    NationalScoreCalculator
-                            .getCitizenCount(town);
+            ItemStack icon = null;
 
-            int position =
-                    RankingManager.getPosition(town);
-
-            TownSubmission project =
-                    getActiveProject(town);
-
-            String projectName =
-                    project == null
-                            ? "Projet en cours"
-                            : project.getBuildName();
-
-            ItemStack item =
-                    MoodTownFlagAPI.getTownShieldItem(town);
-
-            boolean hasFlag =
-                    item != null;
-
-            if (item == null) {
-
-                item =
-                        new ItemStack(
-                                Material.SHIELD
-                        );
+            try {
+                icon = MoodTownFlagAPI.getTownShieldItem(town);
+            } catch (Throwable ignored) {
+                icon = null;
             }
 
-            ItemMeta meta =
-                    item.getItemMeta();
+            if (icon == null) {
+                icon = new ItemStack(Material.SHIELD);
+            }
+
+            ItemMeta meta = icon.getItemMeta();
 
             if (meta != null) {
-
-                meta.setDisplayName(
-                        "§f✦ §b" + town
-                );
-
-                List<String> lore =
-                        new ArrayList<>();
-
-                lore.add("§8----- §6Ville en notation §8-----");
-                lore.add("§7Ville : §b" + town);
-                lore.add("§7Projet : §f" + projectName);
-                lore.add("");
-
-                if (hasFlag) {
-
-                    lore.add("§a✔ Blason officiel enregistré");
-
-                } else {
-
-                    lore.add("§7Blason : §fNon défini");
-                }
-
-                lore.add("");
-                lore.add(
-                        "§7Note provisoire : §e"
-                                + String.format("%.1f", score)
-                                + "§7/50"
-                );
-
-                lore.add(
-                        "§7Votes citoyens : §b"
-                                + citizens
-                );
-
-                lore.add(
-                        "§7Classement : §6#"
-                                + (position == -1
-                                ? "Non classé"
-                                : position)
-                );
-
-                lore.add("");
-                lore.add("§7Votre rôle :");
-                lore.add("§8• §fvisiter le projet");
-                lore.add("§8• §fobserver la ville");
-                lore.add("§8• §fvoter pour son évolution");
-                lore.add("");
-                lore.add("§7Votre vote compte pour");
-                lore.add("§7le classement hebdomadaire.");
-                lore.add("");
-                lore.add("§e▶ Consulter et voter");
-
-                meta.setLore(lore);
-
-                meta.addItemFlags(
-                        ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
-                        ItemFlag.HIDE_ATTRIBUTES,
-                        ItemFlag.HIDE_ENCHANTS
-                );
-
-                item.setItemMeta(meta);
+                meta.setDisplayName(MoodStyle.button(town));
+                meta.setLore(List.of(
+                        "§7Ville: §b" + town,
+                        "§7Projet: §e" + projectName,
+                        "§7Score: §e" + String.format("%.1f", NationalScoreCalculator.getFinalScore(town)) + "/50",
+                        "§7Rang: §e#" + RankingManager.getPosition(town),
+                        "§7Votes citoyens: §e" + NationalScoreCalculator.getCitizenCount(town),
+                        "",
+                        "§8• §7Consulter et voter"
+                ));
+                icon.setItemMeta(meta);
             }
 
-            if (position == 1) {
-
-                item =
-                        glow(item);
-            }
-
-            inv.setItem(
-                    slot,
-                    item
-            );
-
-            slot++;
+            MoodStyle.tag(icon, MoodStyle.TAG_TOWN, town);
+            inv.setItem(TOWN_SLOTS[index], icon);
+            index++;
         }
 
-        ItemStack back =
-                new ItemStack(
-                        Material.BARRIER
-                );
-
-        ItemMeta backMeta =
-                back.getItemMeta();
-
-        if (backMeta != null) {
-
-            backMeta.setDisplayName(
-                    "§c⬅ Retour"
-            );
-
-            backMeta.setLore(List.of(
-                    "§8----- §6Commission Urbaine §8-----",
-                    "§7Retourner au menu",
-                    "§7de la commission."
-            ));
-
-            back.setItemMeta(backMeta);
-        }
-
-        inv.setItem(
-                49,
-                back
-        );
-
+        inv.setItem(49, MoodStyle.backItem("Commission Urbaine"));
         p.openInventory(inv);
     }
 
-    private static TownSubmission getActiveProject(
-            String town
-    ) {
+    private static List<String> approvedTowns() {
 
-        TownSubmission fallback = null;
+        Set<String> towns = new HashSet<>();
 
-        for (TownSubmission sub :
-                SubmissionStorage.getAll()) {
-
-            if (!sub.getTown()
-                    .equalsIgnoreCase(town)) {
-                continue;
+        for (TownSubmission submission : SubmissionStorage.getAll()) {
+            if (submission.getStatus() == SubmissionStatus.APPROVED) {
+                towns.add(submission.getTown());
             }
-
-            if (sub.getStatus()
-                    == SubmissionStatus.APPROVED) {
-                return sub;
-            }
-
-            fallback = sub;
         }
 
-        return fallback;
+        List<String> sorted = new ArrayList<>(towns);
+        sorted.sort(String.CASE_INSENSITIVE_ORDER);
+        return sorted;
     }
 
-    private static ItemStack glow(
-            ItemStack item
-    ) {
+    private static TownSubmission getActiveProject(String town) {
 
-        ItemMeta meta =
-                item.getItemMeta();
+        for (TownSubmission submission : SubmissionStorage.getAll()) {
+            if (submission.getTown().equalsIgnoreCase(town)
+                    && submission.getStatus() == SubmissionStatus.APPROVED) {
+                return submission;
+            }
+        }
 
-        if (meta == null)
-            return item;
-
-        meta.addEnchant(
-                org.bukkit.enchantments.Enchantment.UNBREAKING,
-                1,
-                true
-        );
-
-        meta.addItemFlags(
-                ItemFlag.HIDE_ENCHANTS,
-                ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
-                ItemFlag.HIDE_ATTRIBUTES
-        );
-
-        item.setItemMeta(meta);
-
-        return item;
+        return null;
     }
 }
