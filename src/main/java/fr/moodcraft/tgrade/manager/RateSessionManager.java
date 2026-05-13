@@ -24,17 +24,14 @@ public class RateSessionManager {
                 sessions.get(uuid);
 
         /*
-         * Important :
+         * Correction importante :
          *
-         * RateGUI.open(...) est aussi appelé quand on clique sur un critère,
-         * pour rafraîchir le menu.
+         * Le menu de notation se rouvre à chaque clic sur un critère.
+         * On garde donc la session seulement si l'admin note toujours
+         * la même ville.
          *
-         * Donc on garde la session si c'est la même ville.
-         * Mais si l'admin choisit une autre ville, on remplace la session.
-         *
-         * Ancien bug :
-         * le plugin gardait l'ancienne session même si la ville changeait.
-         * Résultat : la note partait sur la mauvaise ville.
+         * Ancien bug : la session était réutilisée même quand l'admin
+         * changeait de ville. La note partait alors sur l'ancienne ville.
          */
 
         if (existing != null
