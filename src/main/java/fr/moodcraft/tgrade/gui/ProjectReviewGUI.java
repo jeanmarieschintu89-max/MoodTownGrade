@@ -1,468 +1,289 @@
 package fr.moodcraft.tgrade.gui;
 
+import fr.moodcraft.tgrade.gui.holder.ProjectReviewHolder;
+import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import org.bukkit.Bukkit;
-
 import org.bukkit.Material;
-
 import org.bukkit.entity.Player;
-
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.List;
 
 public class ProjectReviewGUI {
 
-    //
-    // 🏛 OPEN
-    //
+    public static final String TITLE =
+            "§6✦ §8Inspection Nationale §6✦";
+
+    private static final int[] BORDER_SLOTS = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 17,
+            18, 26,
+            27, 35,
+            36, 37, 38, 39, 41, 42, 43, 44
+    };
 
     public static void open(
             Player p,
-            TownSubmission sub
+            TownSubmission submission
     ) {
 
-        Inventory inv =
-                Bukkit.createInventory(
-                        null,
-                        45,
-                        "§8✦ Inspection Nationale"
-                );
-
-        ItemStack glass =
-                new ItemStack(
-                        Material.BLACK_STAINED_GLASS_PANE
-                );
-
-        ItemMeta glassMeta =
-                glass.getItemMeta();
-
-        glassMeta.setDisplayName(
-                " "
+        Inventory inv = Bukkit.createInventory(
+                new ProjectReviewHolder(submission),
+                45,
+                TITLE
         );
 
-        glass.setItemMeta(glassMeta);
+        fillBorders(inv);
 
-        int[] borders = {
+        String statusText =
+                statusText(submission.getStatus());
 
-                0,1,2,3,4,5,6,7,8,
-
-                9,17,
-
-                18,26,
-
-                27,35,
-
-                36,37,38,39,41,42,43,44
-        };
-
-        for (int slot : borders) {
-
-            inv.setItem(slot, glass);
-        }
-
-        String status;
-
-        Material statusMaterial;
-
-        switch (sub.getStatus()) {
-
-            case APPROVED -> {
-
-                status =
-                        "§a✔ Demande validée";
-
-                statusMaterial =
-                        Material.EMERALD;
-            }
-
-            case REJECTED -> {
-
-                status =
-                        "§c✖ Demande refusée";
-
-                statusMaterial =
-                        Material.REDSTONE_BLOCK;
-            }
-
-            default -> {
-
-                status =
-                        "§6⌛ Demande en examen";
-
-                statusMaterial =
-                        Material.GOLD_BLOCK;
-            }
-        }
+        Material statusMaterial =
+                statusMaterial(submission.getStatus());
 
         String date =
-                new SimpleDateFormat(
-                        "dd/MM/yyyy"
-                ).format(
-                        new Date(
-                                sub.getTimestamp()
+                new SimpleDateFormat("dd/MM/yyyy").format(
+                        new Date(submission.getTimestamp())
+                );
+
+        inv.setItem(
+                4,
+                item(
+                        Material.NETHER_STAR,
+                        "§6✦ §fCommission Urbaine §6✦",
+                        List.of(
+                                "§7Inspection d'un projet",
+                                "§7déposé par une ville.",
+                                "",
+                                "§8• §7Téléportation",
+                                "§8• §7Validation",
+                                "§8• §7Notation staff",
+                                "§8• §7Clôture des votes",
+                                "",
+                                "§7État: " + statusText
                         )
-                );
-
-        //
-        // 🏛 HEADER
-        //
-
-        ItemStack header =
-                new ItemStack(
-                        Material.NETHER_STAR
-                );
-
-        ItemMeta headerMeta =
-                header.getItemMeta();
-
-        headerMeta.setDisplayName(
-                "§6✦ Commission Urbaine"
+                )
         );
 
-        headerMeta.setLore(List.of(
-
-                "§8----- §6Inspection administrative §8-----",
-
-                "§7Contrôle d'une demande",
-
-                "§7de projet urbain déposée",
-
-                "§7par une ville.",
-
-                "",
-
-                "§7Rôle du staff :",
-
-                "§8• §fse téléporter au projet",
-
-                "§8• §avalider la demande",
-
-                "§8• §crefuser la demande",
-
-                "§8• §bnoter pendant la phase ouverte",
-
-                "§8• §6clôturer les votes",
-
-                "",
-
-                "§7Statut : " + status
-        ));
-
-        header.setItemMeta(headerMeta);
-
-        inv.setItem(4, header);
-
-        //
-        // 📋 DOSSIER
-        //
-
-        ItemStack info =
-                new ItemStack(
-                        statusMaterial
-                );
-
-        ItemMeta infoMeta =
-                info.getItemMeta();
-
-        infoMeta.setDisplayName(
-                "§f✦ §e" + sub.getBuildName()
+        inv.setItem(
+                13,
+                item(
+                        statusMaterial,
+                        "§6✦ §f" + submission.getBuildName() + " §6✦",
+                        List.of(
+                                "§7Ville: §b" + submission.getTown(),
+                                "§7Projet: §e" + submission.getBuildName(),
+                                "§7État: " + statusText,
+                                "",
+                                "§7Position:",
+                                "§8• §7" + submission.getWorld(),
+                                "§8• §7X " + submission.getX()
+                                        + "  Y " + submission.getY()
+                                        + "  Z " + submission.getZ(),
+                                "",
+                                "§7Date: §e" + date,
+                                "§7ID: §8" + submission.getId(),
+                                "",
+                                "§8• §7Dossier national"
+                        )
+                )
         );
 
-        infoMeta.setLore(List.of(
-
-                "§8----- §6Demande de projet §8-----",
-
-                "§7Ville : §b" + sub.getTown(),
-
-                "§7Projet : §f" + sub.getBuildName(),
-
-                "",
-
-                "§7Coordonnées du projet :",
-
-                "§fX §e" + sub.getX()
-                        + " §8| §fY §e" + sub.getY()
-                        + " §8| §fZ §e" + sub.getZ(),
-
-                "",
-
-                "§7Dépôt : §f" + date,
-
-                "§7Identifiant : §f#" + sub.getId(),
-
-                "",
-
-                "§7État du dossier :",
-
-                status,
-
-                "",
-
-                "§7Une fois validée, cette demande",
-
-                "§7ouvre la notation publique et",
-
-                "§7le suivi du classement hebdomadaire."
-        ));
-
-        info.setItemMeta(infoMeta);
-
-        inv.setItem(13, info);
-
-        //
-        // 📍 INSPECTION
-        //
-
-        ItemStack tp =
-                new ItemStack(
-                        Material.ENDER_PEARL
-                );
-
-        ItemMeta tpMeta =
-                tp.getItemMeta();
-
-        tpMeta.setDisplayName(
-                "§b📍 Se téléporter au projet"
+        inv.setItem(
+                20,
+                item(
+                        Material.ENDER_PEARL,
+                        "§6✦ §fVoir le projet §6✦",
+                        List.of(
+                                "§7Téléporte le staff",
+                                "§7à la zone déclarée.",
+                                "",
+                                "§8• §7Ville: §b" + submission.getTown(),
+                                "§8• §7Projet: §e" + submission.getBuildName(),
+                                "",
+                                "§eInspecter sur place"
+                        )
+                )
         );
 
-        tpMeta.setLore(List.of(
-
-                "§8----- §6Inspection terrain §8-----",
-
-                "§7Ville : §b" + sub.getTown(),
-
-                "§7Projet : §f" + sub.getBuildName(),
-
-                "",
-
-                "§7Téléporte le staff vers",
-
-                "§7la position déclarée du projet.",
-
-                "",
-
-                "§e▶ Inspecter sur place"
-        ));
-
-        tp.setItemMeta(tpMeta);
-
-        inv.setItem(20, tp);
-
-        //
-        // ✅ VALIDER DEMANDE
-        //
-
-        ItemStack approve =
-                new ItemStack(
-                        Material.LIME_CONCRETE
-                );
-
-        ItemMeta approveMeta =
-                approve.getItemMeta();
-
-        approveMeta.setDisplayName(
-                "§a✔ Valider la demande"
+        inv.setItem(
+                22,
+                item(
+                        Material.LIME_CONCRETE,
+                        "§6✦ §fValider le dossier §6✦",
+                        List.of(
+                                "§7Valide la demande",
+                                "§7de projet urbain.",
+                                "",
+                                "§8• §7Ouvre les votes",
+                                "§8• §7Autorise la notation",
+                                "§8• §7Classement hebdo",
+                                "",
+                                "§aOuvrir la phase de vote"
+                        )
+                )
         );
 
-        approveMeta.setLore(List.of(
-
-                "§8----- §6Validation staff §8-----",
-
-                "§7Ville : §b" + sub.getTown(),
-
-                "§7Projet : §f" + sub.getBuildName(),
-
-                "",
-
-                "§7Valide la demande de projet.",
-
-                "§7Le dossier rejoint alors",
-
-                "§7la phase de notation publique.",
-
-                "",
-
-                "§7Citoyens, maires et staff",
-
-                "§7pourront participer au classement.",
-
-                "",
-
-                "§a▶ Ouvrir les votes"
-        ));
-
-        approve.setItemMeta(approveMeta);
-
-        inv.setItem(22, approve);
-
-        //
-        // ⭐ NOTATION STAFF
-        //
-
-        ItemStack note =
-                new ItemStack(
-                        Material.ENCHANTED_BOOK
-                );
-
-        ItemMeta noteMeta =
-                note.getItemMeta();
-
-        noteMeta.setDisplayName(
-                "§b✦ Notation staff"
+        inv.setItem(
+                24,
+                item(
+                        Material.ENCHANTED_BOOK,
+                        "§6✦ §fNotation staff §6✦",
+                        List.of(
+                                "§7Ouvre le barème",
+                                "§7réservé au staff.",
+                                "",
+                                "§8• §7Ville: §b" + submission.getTown(),
+                                "§8• §7Projet: §e" + submission.getBuildName(),
+                                "§8• §7Score hebdo",
+                                "",
+                                "§eNoter ce dossier"
+                        )
+                )
         );
 
-        noteMeta.setLore(List.of(
-
-                "§8----- §6Évaluation interne §8-----",
-
-                "§7Ville : §b" + sub.getTown(),
-
-                "§7Projet : §f" + sub.getBuildName(),
-
-                "",
-
-                "§7Ouvre le barème de notation",
-
-                "§7réservé au staff.",
-
-                "",
-
-                "§7Cette note compte dans",
-
-                "§7le classement hebdomadaire.",
-
-                "",
-
-                "§b▶ Noter le dossier"
-        ));
-
-        note.setItemMeta(noteMeta);
-
-        inv.setItem(24, note);
-
-        //
-        // 🔒 CLÔTURE VOTES
-        //
-
-        ItemStack close =
-                new ItemStack(
-                        Material.BEACON
-                );
-
-        ItemMeta closeMeta =
-                close.getItemMeta();
-
-        closeMeta.setDisplayName(
-                "§6✔ Clôturer les votes"
+        inv.setItem(
+                26,
+                item(
+                        Material.BEACON,
+                        "§6✦ §fClôturer les votes §6✦",
+                        List.of(
+                                "§7Ferme la phase",
+                                "§7de vote du dossier.",
+                                "",
+                                "§8• §7Note finale",
+                                "§8• §7Subvention prête",
+                                "§8• §7Notes bloquées",
+                                "",
+                                "§6Valider la clôture"
+                        )
+                )
         );
 
-        closeMeta.setLore(List.of(
-
-                "§8----- §6Fin de notation §8-----",
-
-                "§7Ville : §b" + sub.getTown(),
-
-                "§7Projet : §f" + sub.getBuildName(),
-
-                "",
-
-                "§7Ferme la phase de vote",
-
-                "§7pour ce dossier urbain.",
-
-                "",
-
-                "§7Après clôture, les notes",
-
-                "§7ne peuvent plus être modifiées.",
-
-                "",
-
-                "§6▶ Valider la clôture"
-        ));
-
-        close.setItemMeta(closeMeta);
-
-        inv.setItem(26, close);
-
-        //
-        // ❌ REFUSER
-        //
-
-        ItemStack reject =
-                new ItemStack(
-                        Material.RED_CONCRETE
-                );
-
-        ItemMeta rejectMeta =
-                reject.getItemMeta();
-
-        rejectMeta.setDisplayName(
-                "§c✖ Refuser la demande"
+        inv.setItem(
+                28,
+                item(
+                        Material.RED_CONCRETE,
+                        "§6✦ §fRefuser le dossier §6✦",
+                        List.of(
+                                "§7Refuse la demande",
+                                "§7de projet urbain.",
+                                "",
+                                "§8• §7Pas de notation",
+                                "§8• §7Pas de classement",
+                                "",
+                                "§cRefuser la demande"
+                        )
+                )
         );
 
-        rejectMeta.setLore(List.of(
-
-                "§8----- §6Décision staff §8-----",
-
-                "§7Ville : §b" + sub.getTown(),
-
-                "§7Projet : §f" + sub.getBuildName(),
-
-                "",
-
-                "§7Refuse la demande de projet.",
-
-                "§7Le dossier ne rejoint pas",
-
-                "§7la notation publique.",
-
-                "",
-
-                "§c▶ Refuser le dossier"
-        ));
-
-        reject.setItemMeta(rejectMeta);
-
-        inv.setItem(28, reject);
-
-        //
-        // 🔙 RETOUR
-        //
-
-        ItemStack back =
-                new ItemStack(
-                        Material.ARROW
-                );
-
-        ItemMeta backMeta =
-                back.getItemMeta();
-
-        backMeta.setDisplayName(
-                "§c⬅ Retour"
+        inv.setItem(
+                40,
+                item(
+                        Material.ARROW,
+                        "§6✦ §fRetour §6✦",
+                        List.of(
+                                "§7Retour aux demandes",
+                                "§7de projets urbains.",
+                                "",
+                                "§8• §7Commission Urbaine"
+                        )
+                )
         );
-
-        backMeta.setLore(List.of(
-
-                "§8----- §6Commission Urbaine §8-----",
-
-                "§7Retour aux demandes",
-
-                "§7de projets urbains."
-        ));
-
-        back.setItemMeta(backMeta);
-
-        inv.setItem(40, back);
 
         p.openInventory(inv);
+    }
+
+    private static void fillBorders(
+            Inventory inv
+    ) {
+
+        ItemStack glass =
+                item(
+                        Material.BLACK_STAINED_GLASS_PANE,
+                        " ",
+                        null
+                );
+
+        for (int slot : BORDER_SLOTS) {
+            inv.setItem(slot, glass);
+        }
+    }
+
+    private static ItemStack item(
+            Material material,
+            String name,
+            List<String> lore
+    ) {
+
+        ItemStack item =
+                new ItemStack(material);
+
+        ItemMeta meta =
+                item.getItemMeta();
+
+        if (meta != null) {
+
+            meta.setDisplayName(name);
+
+            if (lore != null) {
+                meta.setLore(lore);
+            }
+
+            meta.addItemFlags(
+                    ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
+                    ItemFlag.HIDE_ATTRIBUTES,
+                    ItemFlag.HIDE_ENCHANTS
+            );
+
+            item.setItemMeta(meta);
+        }
+
+        return item;
+    }
+
+    private static String statusText(
+            SubmissionStatus status
+    ) {
+
+        if (status == SubmissionStatus.APPROVED) {
+            return "§aValidé";
+        }
+
+        if (status == SubmissionStatus.REJECTED) {
+            return "§cRefusé";
+        }
+
+        if (status == SubmissionStatus.FINISHED) {
+            return "§6Clôturé";
+        }
+
+        return "§eEn examen";
+    }
+
+    private static Material statusMaterial(
+            SubmissionStatus status
+    ) {
+
+        if (status == SubmissionStatus.APPROVED) {
+            return Material.EMERALD;
+        }
+
+        if (status == SubmissionStatus.REJECTED) {
+            return Material.REDSTONE_BLOCK;
+        }
+
+        if (status == SubmissionStatus.FINISHED) {
+            return Material.BEACON;
+        }
+
+        return Material.GOLD_BLOCK;
     }
 }
