@@ -1,147 +1,40 @@
 package fr.moodcraft.tgrade.listener;
 
+import fr.moodcraft.tgrade.gui.ClassementGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
-
-import org.bukkit.Material;
-
-import org.bukkit.Sound;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.entity.Player;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class ClassementListener
-        implements Listener {
-
-    //
-    // 🏆 CLICK
-    //
+public class ClassementListener implements Listener {
 
     @EventHandler
-    public void click(
-            InventoryClickEvent e
-    ) {
+    public void click(InventoryClickEvent e) {
 
-        //
-        // 📛 TITLE
-        //
-
-        if (!e.getView()
-                .getTitle()
-                .equalsIgnoreCase(
-                        "§8✦ Classement Hebdo"
-                )) {
+        if (!MoodStyle.titleEquals(e.getView().getTitle(), ClassementGUI.TITLE)) {
             return;
         }
-
-        //
-        // ❌ CANCEL
-        //
 
         e.setCancelled(true);
 
-        //
-        // 👤 PLAYER
-        //
-
-        if (!(e.getWhoClicked()
-                instanceof Player p))
-            return;
-
-        //
-        // 📦 INVENTORY CHECK
-        //
-
-        if (e.getClickedInventory() == null)
-            return;
-
-        //
-        // 🛑 PLAYER INVENTORY
-        //
-
-        if (e.getRawSlot() >= e.getView()
-                .getTopInventory()
-                .getSize()) {
-
+        if (!(e.getWhoClicked() instanceof Player p)) {
             return;
         }
 
-        //
-        // 📦 ITEM CHECK
-        //
-
-        if (e.getCurrentItem() == null)
-            return;
-
-        //
-        // ❌ AIR
-        //
-
-        if (e.getCurrentItem()
-                .getType()
-                .isAir()) {
-
+        if (e.getClickedInventory() == null) {
             return;
         }
 
-        //
-        // 🌌 GLASS
-        //
-
-        if (e.getCurrentItem()
-                .getType()
-                == Material.BLACK_STAINED_GLASS_PANE) {
-
+        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 
-        //
-        // 🔘 SLOT
-        //
-
-        int slot =
-                e.getRawSlot();
-
-        //
-        // 🔙 RETOUR
-        //
-
-        if (slot == 49) {
-
-            p.playSound(
-
-                    p.getLocation(),
-
-                    Sound.UI_BUTTON_CLICK,
-
-                    1f,
-
-                    1f
-            );
-
-            p.closeInventory();
-
+        if (e.getRawSlot() == 49) {
+            MoodStyle.click(p);
             UrbanismeMainGUI.open(p);
-
-            return;
         }
-
-        //
-        // 🔊 CLICK
-        //
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.UI_BUTTON_CLICK,
-
-                0.8f,
-
-                1.2f
-        );
     }
 }

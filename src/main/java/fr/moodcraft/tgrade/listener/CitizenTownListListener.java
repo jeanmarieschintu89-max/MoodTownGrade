@@ -1,136 +1,62 @@
 package fr.moodcraft.tgrade.listener;
 
+import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
 import fr.moodcraft.tgrade.gui.CitizenVoteGUI;
 import fr.moodcraft.tgrade.gui.UrbanismeMainGUI;
-
-import org.bukkit.Material;
-
-import org.bukkit.Sound;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.entity.Player;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class CitizenTownListListener
-        implements Listener {
+public class CitizenTownListListener implements Listener {
 
     @EventHandler
-    public void click(
-            InventoryClickEvent e
-    ) {
+    public void click(InventoryClickEvent e) {
 
-        if (!(e.getWhoClicked()
-                instanceof Player p)) {
-            return;
-        }
-
-        if (!e.getView()
-                .getTitle()
-                .equals("§8✦ Votes Citoyens")) {
+        if (!MoodStyle.titleEquals(e.getView().getTitle(), CitizenTownListGUI.TITLE)) {
             return;
         }
 
         e.setCancelled(true);
 
-        if (e.getCurrentItem() == null) {
+        if (!(e.getWhoClicked() instanceof Player p)) {
             return;
         }
 
-        if (e.getRawSlot()
-                >= e.getView()
-                .getTopInventory()
-                .getSize()) {
-
+        if (e.getClickedInventory() == null) {
             return;
         }
 
-        if (e.getCurrentItem()
-                .getType()
-                .isAir()) {
-
+        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 
-        int slot =
-                e.getRawSlot();
+        ItemStack item = e.getCurrentItem();
 
-        if (slot == 49) {
+        if (item == null || item.getType().isAir()) {
+            return;
+        }
 
-            p.playSound(
-                    p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
-                    1f,
-                    1f
-            );
+        MoodStyle.click(p);
 
+        if (e.getRawSlot() == 49) {
             UrbanismeMainGUI.open(p);
-
             return;
         }
 
-        Material mat =
-                e.getCurrentItem()
-                        .getType();
+        String town = MoodStyle.tag(item, MoodStyle.TAG_TOWN);
 
-        if (mat == Material.BLACK_STAINED_GLASS_PANE) {
+        if (town == null && item.hasItemMeta()) {
+            town = MoodStyle.cleanButtonName(item.getItemMeta().getDisplayName());
+        }
+
+        if (town == null || town.isBlank()) {
             return;
         }
 
-        if (mat == Material.BARRIER) {
-
-            p.playSound(
-                    p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
-                    1f,
-                    1f
-            );
-
-            return;
-        }
-
-        if (!e.getCurrentItem()
-                .hasItemMeta()) {
-
-            return;
-        }
-
-        if (e.getCurrentItem()
-                .getItemMeta()
-                .getDisplayName() == null) {
-
-            return;
-        }
-
-        String name =
-                e.getCurrentItem()
-                        .getItemMeta()
-                        .getDisplayName();
-
-        if (!name.startsWith(
-                "§f✦ §b")) {
-
-            return;
-        }
-
-        String town =
-                name.replace(
-                        "§f✦ §b",
-                        ""
-                );
-
-        p.playSound(
-                p.getLocation(),
-                Sound.UI_BUTTON_CLICK,
-                1f,
-                1f
-        );
-
-        CitizenVoteGUI.open(
-                p,
-                town
-        );
+        CitizenVoteGUI.open(p, town);
     }
 }

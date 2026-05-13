@@ -2,519 +2,199 @@ package fr.moodcraft.tgrade.listener;
 
 import fr.moodcraft.tgrade.gui.CitizenTownListGUI;
 import fr.moodcraft.tgrade.gui.CitizenVoteGUI;
-
+import fr.moodcraft.tgrade.gui.holder.TownVoteHolder;
 import fr.moodcraft.tgrade.manager.CitizenVoteManager;
-import fr.moodcraft.tgrade.manager.GradeManager;
-import fr.moodcraft.tgrade.manager.NationalScoreCalculator;
-
 import fr.moodcraft.tgrade.model.CitizenVote;
 import fr.moodcraft.tgrade.model.SubmissionStatus;
-import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
-
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class CitizenVoteListener
-        implements Listener {
+public class CitizenVoteListener implements Listener {
 
     @EventHandler
-    public void click(
-            InventoryClickEvent e
-    ) {
+    public void click(InventoryClickEvent e) {
 
-        if (!(e.getWhoClicked()
-                instanceof Player p)) {
-            return;
-        }
-
-        if (!e.getView()
-                .getTitle()
-                .equals("§8✦ Vote Citoyen")) {
+        if (!MoodStyle.titleEquals(e.getView().getTitle(), CitizenVoteGUI.TITLE)) {
             return;
         }
 
         e.setCancelled(true);
 
-        if (e.getCurrentItem() == null) {
+        if (!(e.getWhoClicked() instanceof Player p)) {
             return;
         }
 
-        if (e.getRawSlot()
-                >= e.getView()
-                .getTopInventory()
-                .getSize()) {
-
+        if (e.getClickedInventory() == null) {
             return;
         }
 
-        String town =
-                getTown(e);
-
-        if (town == null
-                || town.isEmpty()) {
-
-            deny(
-                    p,
-                    "§cVille introuvable.",
-                    "§7Le registre du vote est incomplet."
-            );
-
+        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 
-        TownSubmission project =
-                getActiveProject(town);
+        String town = getTown(e);
 
-        String projectName =
-                project == null
-                        ? "Projet en cours"
-                        : project.getBuildName();
+        if (town == null || town.isBlank()) {
+            return;
+        }
 
-        int slot =
-                e.getRawSlot();
-
-        //
-        // 🔙 RETOUR
-        //
+        int slot = e.getRawSlot();
+        MoodStyle.click(p);
 
         if (slot == CitizenVoteGUI.BACK) {
-
-            p.playSound(
-                    p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
-                    1f,
-                    1f
-            );
-
             CitizenTownListGUI.open(p);
-
             return;
         }
 
-        //
-        // 📍 TP PROJET
-        //
+        TownSubmission project = getActiveProject(town);
 
         if (slot == CitizenVoteGUI.TP_PROJECT) {
-
-            teleportToProject(
-                    p,
-                    town,
-                    project,
-                    projectName
-            );
-
+            teleportToProject(p, town, project, "vote citoyen");
             return;
         }
 
-        TownGrade grade =
-                GradeManager.get(
-                        town
-                );
-
-        if (grade != null
-                && grade.isLocked()) {
-
-            p.closeInventory();
-
-            p.playSound(
-                    p.getLocation(),
-                    Sound.ENTITY_VILLAGER_NO,
-                    1f,
-                    1f
-            );
-
-            p.sendMessage("");
-            p.sendMessage(
-                    "§8----- §6Commission Urbaine §8-----"
-            );
-            p.sendMessage(
-                    "§cVotes citoyens clôturés."
-            );
-            p.sendMessage(
-                    "§7Ville : §b" + town
-            );
-            p.sendMessage(
-                    "§7Projet : §f" + projectName
-            );
-            p.sendMessage(
-                    "§7Ce dossier ne reçoit plus"
-            );
-            p.sendMessage(
-                    "§7de nouvelles évaluations."
-            );
-            p.sendMessage("");
-
-            return;
-        }
-
-        CitizenVote vote =
-                CitizenVoteManager.getVote(
-                        p.getUniqueId(),
-                        town
-                );
+        CitizenVote vote = CitizenVoteManager.getVote(p.getUniqueId(), town);
 
         if (vote == null) {
-
-            vote =
-                    new CitizenVote(
-                            p.getUniqueId(),
-                            town
-                    );
+            vote = new CitizenVote(p.getUniqueId(), town);
         }
 
-        switch (slot) {
-
-            case CitizenVoteGUI.BEAUTE -> {
-
-                vote.setBeaute(
-                        next(
-                                vote.getBeaute()
-                        )
-                );
-
-                CitizenVoteManager.saveVote(vote);
-            }
-
-            case CitizenVoteGUI.AMBIANCE -> {
-
-                vote.setAmbiance(
-                        next(
-                                vote.getAmbiance()
-                        )
-                );
-
-                CitizenVoteManager.saveVote(vote);
-            }
-
-            case CitizenVoteGUI.ACTIVITE -> {
-
-                vote.setActivite(
-                        next(
-                                vote.getActivite()
-                        )
-                );
-
-                CitizenVoteManager.saveVote(vote);
-            }
-
-            case CitizenVoteGUI.ORIGINALITE -> {
-
-                vote.setOriginalite(
-                        next(
-                                vote.getOriginalite()
-                        )
-                );
-
-                CitizenVoteManager.saveVote(vote);
-            }
-
-            case CitizenVoteGUI.POPULARITE -> {
-
-                vote.setPopularite(
-                        next(
-                                vote.getPopularite()
-                        )
-                );
-
-                CitizenVoteManager.saveVote(vote);
-            }
-
-            case CitizenVoteGUI.SAVE -> {
-
-                vote.updateTimestamp();
-
-                CitizenVoteManager.saveVote(
-                        vote
-                );
-
-                double national =
-                        NationalScoreCalculator
-                                .getFinalScore(
-                                        town
-                                );
-
-                double staff =
-                        NationalScoreCalculator
-                                .getStaffScore(
-                                        town
-                                );
-
-                double mayors =
-                        NationalScoreCalculator
-                                .getMayorScore(
-                                        town
-                                );
-
-                double citizens =
-                        NationalScoreCalculator
-                                .getCitizenScore(
-                                        town
-                                );
-
-                int total =
-                        vote.getBeaute()
-                                + vote.getAmbiance()
-                                + vote.getActivite()
-                                + vote.getOriginalite()
-                                + vote.getPopularite();
-
-                p.closeInventory();
-
-                p.sendMessage("");
-                p.sendMessage(
-                        "§8----- §6Commission Urbaine §8-----"
-                );
-                p.sendMessage(
-                        "§aVote citoyen enregistré."
-                );
-                p.sendMessage(
-                        "§7Ville : §b" + town
-                );
-                p.sendMessage(
-                        "§7Projet : §f" + projectName
-                );
-                p.sendMessage(
-                        "§7Score citoyen : §e" + total + "§7/15"
-                );
-                p.sendMessage(
-                        "§7Classement hebdomadaire actualisé."
-                );
-                p.sendMessage("");
-                p.sendMessage(
-                        "§7Note provisoire : §e" + national + "§7/50"
-                );
-                p.sendMessage(
-                        "§7Détail : §6Staff §e" + staff
-                                + " §8| §6Maires §e" + mayors
-                                + " §8| §6Citoyens §e" + citizens
-                );
-                p.sendMessage("");
-
-                p.playSound(
-                        p.getLocation(),
-                        Sound.UI_TOAST_CHALLENGE_COMPLETE,
-                        1f,
-                        1f
-                );
-
-                return;
-            }
-
-            default -> {
-                return;
-            }
+        if (slot == CitizenVoteGUI.BEAUTE) {
+            vote.setBeaute(next(vote.getBeaute()));
+            CitizenVoteManager.saveVote(vote);
+            CitizenVoteGUI.open(p, town);
+            return;
         }
 
-        p.playSound(
-                p.getLocation(),
-                Sound.UI_BUTTON_CLICK,
-                1f,
-                1f
-        );
+        if (slot == CitizenVoteGUI.AMBIANCE) {
+            vote.setAmbiance(next(vote.getAmbiance()));
+            CitizenVoteManager.saveVote(vote);
+            CitizenVoteGUI.open(p, town);
+            return;
+        }
 
-        CitizenVoteGUI.open(
-                p,
-                town
-        );
+        if (slot == CitizenVoteGUI.ACTIVITE) {
+            vote.setActivite(next(vote.getActivite()));
+            CitizenVoteManager.saveVote(vote);
+            CitizenVoteGUI.open(p, town);
+            return;
+        }
+
+        if (slot == CitizenVoteGUI.ORIGINALITE) {
+            vote.setOriginalite(next(vote.getOriginalite()));
+            CitizenVoteManager.saveVote(vote);
+            CitizenVoteGUI.open(p, town);
+            return;
+        }
+
+        if (slot == CitizenVoteGUI.POPULARITE) {
+            vote.setPopularite(next(vote.getPopularite()));
+            CitizenVoteManager.saveVote(vote);
+            CitizenVoteGUI.open(p, town);
+            return;
+        }
+
+        if (slot == CitizenVoteGUI.SAVE) {
+            vote.updateTimestamp();
+            CitizenVoteManager.saveVote(vote);
+            MoodStyle.ok(p);
+            MoodStyle.send(
+                    p,
+                    MoodStyle.MODULE,
+                    "§a✔ §fVote citoyen enregistré.",
+                    "",
+                    "§7Ville: §b" + town,
+                    "§7Note: §e" + vote.getTotal() + "/50",
+                    "§7État: §aValidé",
+                    "",
+                    "§8• §7Le classement hebdo est actualisé"
+            );
+            p.closeInventory();
+        }
     }
 
     private void teleportToProject(
             Player p,
             String town,
             TownSubmission project,
-            String projectName
+            String reason
     ) {
 
         if (project == null) {
-
-            deny(
+            MoodStyle.deny(
                     p,
-                    "§cProjet introuvable.",
-                    "§7Aucun projet validé n'est disponible."
+                    "Projet introuvable.",
+                    "Aucun dossier actif pour " + town + "."
             );
-
             return;
         }
 
-        if (Bukkit.getWorld(
-                project.getWorld()
-        ) == null) {
+        World world = Bukkit.getWorld(project.getWorld());
 
-            deny(
+        if (world == null) {
+            MoodStyle.deny(
                     p,
-                    "§cMonde introuvable.",
-                    "§7La zone du projet est inaccessible."
+                    "Monde introuvable.",
+                    "La position du projet ne peut pas être ouverte."
             );
-
             return;
         }
 
-        Location loc =
-                new Location(
-                        Bukkit.getWorld(
-                                project.getWorld()
-                        ),
-                        project.getX() + 0.5,
-                        project.getY() + 1,
-                        project.getZ() + 0.5
-                );
-
-        p.closeInventory();
-
-        p.teleport(loc);
-
-        p.playSound(
-                p.getLocation(),
-                Sound.ENTITY_ENDERMAN_TELEPORT,
-                1f,
-                1f
+        Location location = new Location(
+                world,
+                project.getX() + 0.5,
+                project.getY() + 1,
+                project.getZ() + 0.5
         );
 
-        p.sendMessage("");
-        p.sendMessage(
-                "§8----- §6Votes Citoyens §8-----"
+        p.teleport(location);
+        p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
+
+        MoodStyle.send(
+                p,
+                MoodStyle.MODULE,
+                "§fTéléportation au projet.",
+                "",
+                "§7Ville: §b" + town,
+                "§7Projet: §e" + project.getBuildName(),
+                "§7Motif: §e" + reason,
+                "",
+                "§8• §7Inspectez avant de voter"
         );
-        p.sendMessage(
-                "§bTéléportation au projet."
-        );
-        p.sendMessage(
-                "§7Ville : §b" + town
-        );
-        p.sendMessage(
-                "§7Projet : §f" + projectName
-        );
-        p.sendMessage(
-                "§7Visitez la zone puis revenez"
-        );
-        p.sendMessage(
-                "§7au menu pour voter."
-        );
-        p.sendMessage("");
     }
 
-    private String getTown(
-            InventoryClickEvent e
-    ) {
+    private String getTown(InventoryClickEvent e) {
 
-        if (e.getInventory()
-                .getItem(4) == null) {
-
-            return null;
+        if (e.getView().getTopInventory().getHolder() instanceof TownVoteHolder holder) {
+            return holder.getTown();
         }
 
-        if (!e.getInventory()
-                .getItem(4)
-                .hasItemMeta()) {
+        return null;
+    }
 
-            return null;
-        }
+    private TownSubmission getActiveProject(String town) {
 
-        if (e.getInventory()
-                .getItem(4)
-                .getItemMeta()
-                .getLore() == null) {
-
-            return null;
-        }
-
-        for (String line :
-                e.getInventory()
-                        .getItem(4)
-                        .getItemMeta()
-                        .getLore()) {
-
-            if (line.startsWith(
-                    "§7Ville : §b")) {
-
-                return line.replace(
-                        "§7Ville : §b",
-                        ""
-                );
-            }
-
-            if (line.startsWith(
-                    "§7Ville: §b")) {
-
-                return line.replace(
-                        "§7Ville: §b",
-                        ""
-                );
+        for (TownSubmission submission : SubmissionStorage.getAll()) {
+            if (submission.getTown().equalsIgnoreCase(town)
+                    && submission.getStatus() == SubmissionStatus.APPROVED) {
+                return submission;
             }
         }
 
         return null;
     }
 
-    private TownSubmission getActiveProject(
-            String town
-    ) {
-
-        TownSubmission fallback = null;
-
-        for (TownSubmission sub :
-                SubmissionStorage.getAll()) {
-
-            if (!sub.getTown()
-                    .equalsIgnoreCase(town)) {
-                continue;
-            }
-
-            if (sub.getStatus()
-                    == SubmissionStatus.APPROVED) {
-
-                return sub;
-            }
-
-            fallback = sub;
-        }
-
-        return fallback;
-    }
-
-    private void deny(
-            Player p,
-            String line1,
-            String line2
-    ) {
-
-        p.playSound(
-                p.getLocation(),
-                Sound.ENTITY_VILLAGER_NO,
-                1f,
-                1f
-        );
-
-        p.sendMessage("");
-        p.sendMessage(
-                "§8----- §6Commission Urbaine §8-----"
-        );
-        p.sendMessage(line1);
-        p.sendMessage(line2);
-        p.sendMessage("");
-    }
-
-    private int next(
-            int current
-    ) {
-
-        current++;
-
-        if (current > 3) {
-            current = 0;
-        }
-
-        return current;
+    private int next(int current) {
+        return current >= 10 ? 1 : current + 1;
     }
 }
