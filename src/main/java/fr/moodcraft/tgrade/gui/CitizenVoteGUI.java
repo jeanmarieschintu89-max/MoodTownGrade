@@ -32,6 +32,9 @@ public class CitizenVoteGUI {
     public static final int SAVE = 40;
     public static final int TP_PROJECT = 44;
 
+    public static final int MAX_NOTE = 3;
+    public static final int MAX_TOTAL = 15;
+
     private static final int[] BORDER = {
             0, 1, 2, 3, 4, 5, 6, 7, 8,
             9, 17, 18, 26, 27, 35,
@@ -99,6 +102,7 @@ public class CitizenVoteGUI {
                                 "§7dans le classement.",
                                 "",
                                 "§8• §7Vote citoyen",
+                                "§8• §7Barème /15",
                                 "§8• §7Score hebdo",
                                 "",
                                 "§aSauvegarder"
@@ -140,7 +144,7 @@ public class CitizenVoteGUI {
                         List.of(
                                 "§7" + description + ".",
                                 "",
-                                "§7Note: §e" + value + "/10",
+                                "§7Note: §e" + value + "/" + MAX_NOTE,
                                 "",
                                 "§8• §7Cliquer pour ajuster"
                         )

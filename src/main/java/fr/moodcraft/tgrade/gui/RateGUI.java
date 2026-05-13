@@ -9,6 +9,7 @@ import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ import java.util.List;
 public class RateGUI {
 
     public static final String TITLE =
-            "§6✦ §8Notation Staff §6✦";
+            MoodStyle.RATE_TITLE;
 
     public static final int ARCHI = 10;
     public static final int COHERENCE = 12;

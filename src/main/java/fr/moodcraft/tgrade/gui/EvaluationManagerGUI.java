@@ -6,6 +6,7 @@ import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownGrade;
 import fr.moodcraft.tgrade.model.TownSubmission;
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -176,6 +177,8 @@ public class EvaluationManagerGUI {
 
                 icon.setItemMeta(meta);
             }
+
+            MoodStyle.tag(icon, MoodStyle.TAG_TOWN, town);
 
             inv.setItem(
                     TOWN_SLOTS[index],

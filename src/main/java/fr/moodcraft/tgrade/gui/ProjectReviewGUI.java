@@ -3,6 +3,7 @@ package fr.moodcraft.tgrade.gui;
 import fr.moodcraft.tgrade.gui.holder.ProjectReviewHolder;
 import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +20,7 @@ import java.util.List;
 public class ProjectReviewGUI {
 
     public static final String TITLE =
-            "§6✦ §8Inspection Nationale §6✦";
+            MoodStyle.PROJECT_REVIEW_TITLE;
 
     private static final int[] BORDER_SLOTS = {
             0, 1, 2, 3, 4, 5, 6, 7, 8,
