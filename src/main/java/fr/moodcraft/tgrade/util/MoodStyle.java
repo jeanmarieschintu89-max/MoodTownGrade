@@ -138,7 +138,12 @@ public final class MoodStyle {
             String expected
     ) {
 
-        return strip(current).equalsIgnoreCase(strip(expected));
+        String a = strip(current);
+        String b = strip(expected);
+
+        return a.equalsIgnoreCase(b)
+                || a.endsWith(b)
+                || b.endsWith(a);
     }
 
     public static String strip(String text) {
