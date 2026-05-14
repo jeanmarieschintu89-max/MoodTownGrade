@@ -49,37 +49,22 @@ public class UrbanismeMainListener implements Listener {
         int slot = e.getRawSlot();
         MoodStyle.click(p);
 
-        if (slot == 20) {
-            CitizenTownListGUI.open(p);
-            return;
-        }
-
-        if (slot == 22) {
-            ClassementGUI.open(p);
-            return;
-        }
-
-        if (slot == 29) {
+        if (slot == 11) {
             startProjectDeposit(p);
             return;
         }
 
-        if (slot == 31) {
-            if (!TownyHook.canManage(p) && !p.hasPermission("moodtowngrade.staff")) {
-                MoodStyle.deny(
-                        p,
-                        "Accès refusé.",
-                        "Seuls les maires et assistants peuvent accéder au conseil."
-                );
-                return;
-            }
-
-            p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 1f);
-            MayorTownListGUI.open(p);
+        if (slot == 13) {
+            openVoteMenu(p);
             return;
         }
 
-        if (slot == 33) {
+        if (slot == 15) {
+            ClassementGUI.open(p);
+            return;
+        }
+
+        if (slot == 31) {
             if (!p.hasPermission("moodtowngrade.staff")) {
                 MoodStyle.deny(
                         p,
@@ -93,18 +78,43 @@ public class UrbanismeMainListener implements Listener {
             MoodStyle.send(
                     p,
                     MoodStyle.MODULE,
-                    "§fOuverture du Centre National.",
-                    "",
-                    "§8• §7Session administrative ouverte"
+                    MoodStyle.info("Ouverture du Centre National."),
+                    MoodStyle.detail("Demandes, notes et subventions")
             );
             UrbanismeAdminGUI.open(p);
             return;
         }
 
-        if (slot == 49) {
+        if (slot == 40) {
             p.closeInventory();
             p.performCommand("menu");
         }
+    }
+
+    private void openVoteMenu(Player p) {
+
+        if (TownyHook.canManage(p)) {
+
+            p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 1f);
+            MoodStyle.send(
+                    p,
+                    MoodStyle.MODULE,
+                    MoodStyle.info("Conseil des maires ouvert."),
+                    MoodStyle.detail("Votez pour les projets validés"),
+                    MoodStyle.detail("Votre avis compte pour le classement")
+            );
+            MayorTownListGUI.open(p);
+            return;
+        }
+
+        MoodStyle.send(
+                p,
+                MoodStyle.MODULE,
+                MoodStyle.info("Vote citoyen ouvert."),
+                MoodStyle.detail("Votez pour les villes ayant un projet validé"),
+                MoodStyle.detail("Votre vote aide le classement hebdo")
+        );
+        CitizenTownListGUI.open(p);
     }
 
     private void startProjectDeposit(Player p) {
@@ -134,17 +144,5 @@ public class UrbanismeMainListener implements Listener {
         ProjectDepositSessionManager.start(p, town.getName());
         p.closeInventory();
         MoodStyle.ok(p);
-
-        MoodStyle.send(
-                p,
-                MoodStyle.MODULE,
-                "§a✔ §fNouveau dossier urbain ouvert.",
-                "",
-                "§7Ville: §b" + town.getName(),
-                "",
-                "§8• §7Tapez le nom du projet dans le chat",
-                "§8• §7Exemple: §eGare Centrale",
-                "§8• §7Tapez §cannuler §7pour quitter"
-        );
     }
 }
