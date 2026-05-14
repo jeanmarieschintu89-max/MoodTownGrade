@@ -31,6 +31,15 @@ commands:
       - vprojet
       - vprojets
 
+  urbanismeadmin:
+    description: Administration de la commission urbaine MoodCraft
+    usage: /urbanismeadmin
+    permission: moodtowngrade.admin
+    aliases:
+      - urbadmin
+      - tgradeadmin
+      - villeadmin
+
   topville:
     description: Classement national des villes
     usage: /topville
