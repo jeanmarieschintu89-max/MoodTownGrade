@@ -42,60 +42,42 @@ public class EvaluationManagerGUI {
             37, 38, 39, 40, 41, 42, 43
     };
 
-    public static void open(
-            Player p
-    ) {
+    public static void open(Player p) {
 
-        Inventory inv = Bukkit.createInventory(
-                null,
-                54,
-                TITLE
-        );
+        Inventory inv = Bukkit.createInventory(null, 54, TITLE);
 
         fillBorders(inv);
 
         inv.setItem(
                 4,
-                item(
+                MoodStyle.item(
                         Material.ENCHANTED_BOOK,
-                        "§6✦ §fNotation staff §6✦",
-                        List.of(
-                                "§7Choisis une ville",
-                                "§7avec un projet validé.",
-                                "",
-                                "§8• §7Dossier urbain",
-                                "§8• §7Note staff",
-                                "§8• §7Classement hebdo",
-                                "",
-                                "§eCliquer sur une ville"
-                        )
+                        MoodStyle.button("Notation staff"),
+                        MoodStyle.detail("Choisis une ville avec un projet validé"),
+                        MoodStyle.detail("Dossier urbain"),
+                        MoodStyle.detail("Note staff"),
+                        MoodStyle.detail("Classement hebdo"),
+                        "",
+                        MoodStyle.info("Ouvrir un dossier")
                 )
         );
 
-        List<String> towns =
-                getApprovedTowns();
+        List<String> towns = getApprovedTowns();
 
         if (towns.isEmpty()) {
 
             inv.setItem(
                     22,
-                    item(
+                    MoodStyle.item(
                             Material.BARRIER,
-                            "§6✦ §fAucun dossier §6✦",
-                            List.of(
-                                    "§7Aucune ville n'a",
-                                    "§7de projet validé.",
-                                    "",
-                                    "§8• §7Validation requise"
-                            )
+                            MoodStyle.button("Aucun dossier"),
+                            MoodStyle.detail("Aucune ville n'a de projet validé"),
+                            "",
+                            MoodStyle.detail("Validation requise")
                     )
             );
 
-            inv.setItem(
-                    49,
-                    backItem()
-            );
-
+            inv.setItem(49, backItem());
             p.openInventory(inv);
             return;
         }
@@ -108,25 +90,19 @@ public class EvaluationManagerGUI {
                 break;
             }
 
-            TownSubmission project =
-                    getActiveProject(town);
+            TownSubmission project = getActiveProject(town);
 
-            String projectName =
-                    project == null
-                            ? "Projet en cours"
-                            : project.getBuildName();
+            String projectName = project == null
+                    ? "Projet en cours"
+                    : project.getBuildName();
 
-            TownGrade grade =
-                    GradeManager.get(town);
+            TownGrade grade = GradeManager.get(town);
 
-            String score =
-                    grade == null
-                            ? "§70/50"
-                            : grade.getFormattedScore();
+            String score = grade == null
+                    ? "§70/50"
+                    : grade.getFormattedScore();
 
-            ItemStack icon =
-                    null;
-
+            ItemStack icon = null;
             boolean hasFlag = false;
 
             try {
@@ -140,33 +116,24 @@ public class EvaluationManagerGUI {
                 icon = new ItemStack(Material.SHIELD);
             }
 
-            ItemMeta meta =
-                    icon.getItemMeta();
+            ItemMeta meta = icon.getItemMeta();
 
             if (meta != null) {
 
-                meta.setDisplayName(
-                        "§6✦ §f" + town + " §6✦"
-                );
+                meta.setDisplayName("§6✦ §f" + town + " §6✦");
 
-                List<String> lore =
-                        new ArrayList<>();
-
-                lore.add("§7Ville: §b" + town);
-                lore.add("§7Projet: §e" + projectName);
-                lore.add("§7Score: " + score);
+                List<String> lore = new ArrayList<>();
+                lore.add(MoodStyle.detail("Ville : §b" + town));
+                lore.add(MoodStyle.detail("Projet : §e" + projectName));
+                lore.add(MoodStyle.detail("Score : " + score));
                 lore.add("");
-
-                if (hasFlag) {
-                    lore.add("§8• §7Blason enregistré");
-                } else {
-                    lore.add("§8• §7Blason non défini");
-                }
-
-                lore.add("§8• §7Inspection staff");
-                lore.add("§8• §7Notation hebdo");
+                lore.add(hasFlag
+                        ? MoodStyle.detail("Blason enregistré")
+                        : MoodStyle.detail("Blason non défini"));
+                lore.add(MoodStyle.detail("Inspection staff"));
+                lore.add(MoodStyle.detail("Notation hebdo"));
                 lore.add("");
-                lore.add("§eOuvrir le dossier");
+                lore.add(MoodStyle.info("Ouvrir le dossier"));
 
                 meta.setLore(lore);
                 meta.addItemFlags(
@@ -179,33 +146,17 @@ public class EvaluationManagerGUI {
             }
 
             MoodStyle.tag(icon, MoodStyle.TAG_TOWN, town);
-
-            inv.setItem(
-                    TOWN_SLOTS[index],
-                    icon
-            );
-
+            inv.setItem(TOWN_SLOTS[index], icon);
             index++;
         }
 
-        inv.setItem(
-                49,
-                backItem()
-        );
-
+        inv.setItem(49, backItem());
         p.openInventory(inv);
     }
 
-    private static void fillBorders(
-            Inventory inv
-    ) {
+    private static void fillBorders(Inventory inv) {
 
-        ItemStack glass =
-                item(
-                        Material.BLACK_STAINED_GLASS_PANE,
-                        " ",
-                        null
-                );
+        ItemStack glass = MoodStyle.glass();
 
         for (int slot : BORDER_SLOTS) {
             inv.setItem(slot, glass);
@@ -213,55 +164,12 @@ public class EvaluationManagerGUI {
     }
 
     private static ItemStack backItem() {
-
-        return item(
-                Material.ARROW,
-                "§6✦ §fRetour §6✦",
-                List.of(
-                        "§7Retour au centre",
-                        "§7administratif.",
-                        "",
-                        "§8• §7Commission Urbaine"
-                )
-        );
-    }
-
-    private static ItemStack item(
-            Material material,
-            String name,
-            List<String> lore
-    ) {
-
-        ItemStack item =
-                new ItemStack(material);
-
-        ItemMeta meta =
-                item.getItemMeta();
-
-        if (meta != null) {
-
-            meta.setDisplayName(name);
-
-            if (lore != null) {
-                meta.setLore(lore);
-            }
-
-            meta.addItemFlags(
-                    ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
-                    ItemFlag.HIDE_ATTRIBUTES,
-                    ItemFlag.HIDE_ENCHANTS
-            );
-
-            item.setItemMeta(meta);
-        }
-
-        return item;
+        return MoodStyle.backItem("Centre National");
     }
 
     private static List<String> getApprovedTowns() {
 
-        Set<String> towns =
-                new HashSet<>();
+        Set<String> towns = new HashSet<>();
 
         for (TownSubmission submission : SubmissionStorage.getAll()) {
 
@@ -269,27 +177,17 @@ public class EvaluationManagerGUI {
                 continue;
             }
 
-            towns.add(
-                    submission.getTown()
-            );
+            towns.add(submission.getTown());
         }
 
-        List<String> sorted =
-                new ArrayList<>(towns);
-
-        sorted.sort(
-                String.CASE_INSENSITIVE_ORDER
-        );
-
+        List<String> sorted = new ArrayList<>(towns);
+        sorted.sort(String.CASE_INSENSITIVE_ORDER);
         return sorted;
     }
 
-    private static TownSubmission getActiveProject(
-            String town
-    ) {
+    private static TownSubmission getActiveProject(String town) {
 
-        TownSubmission fallback =
-                null;
+        TownSubmission fallback = null;
 
         for (TownSubmission submission : SubmissionStorage.getAll()) {
 
