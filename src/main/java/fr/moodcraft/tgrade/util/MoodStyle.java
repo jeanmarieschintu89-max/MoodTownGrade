@@ -86,7 +86,7 @@ public final class MoodStyle {
         meta.setDisplayName(name);
 
         if (lore != null) {
-            meta.setLore(lore);
+            meta.setLore(normalizeLore(lore));
         }
 
         meta.addItemFlags(
@@ -248,13 +248,11 @@ public final class MoodStyle {
 
         p.sendMessage("");
         p.sendMessage(header(module));
-        p.sendMessage("");
 
         for (String line : lines) {
             p.sendMessage(normalizeChatLine(line));
         }
 
-        p.sendMessage("");
         p.sendMessage(footer());
     }
 
@@ -269,9 +267,19 @@ public final class MoodStyle {
                 p,
                 MODULE,
                 error(message),
-                "",
                 detail(detail)
         );
+    }
+
+    private static List<String> normalizeLore(List<String> lore) {
+
+        List<String> normalized = new ArrayList<>();
+
+        for (String line : lore) {
+            normalized.add(normalizeChatLine(line));
+        }
+
+        return normalized;
     }
 
     private static String normalizeChatLine(String line) {
@@ -280,17 +288,21 @@ public final class MoodStyle {
             return "";
         }
 
-        String trimmed = line.trim();
+        String trimmed = line.trim().replace("✘", "✖");
 
         if (trimmed.startsWith("§e➜")
                 || trimmed.startsWith("§a✔")
                 || trimmed.startsWith("§c✖")
-                || trimmed.startsWith("§c✘")
                 || trimmed.startsWith("§8•")
                 || trimmed.startsWith("§8-----")
                 || trimmed.startsWith("§8----------------")) {
 
-            return trimmed.replace("§c✘", "§c✖");
+            return trimmed;
+        }
+
+        if (trimmed.startsWith("§eClique")
+                || trimmed.startsWith("§eOuvrir")) {
+            return "§e➜ §f" + cleanPrefix(trimmed);
         }
 
         if (trimmed.startsWith("§a")) {
