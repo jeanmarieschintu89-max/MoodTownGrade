@@ -46,6 +46,10 @@ public final class MoodStyle {
         return "§6✦ §f" + name + " §6✦";
     }
 
+    public static String dangerButton(String name) {
+        return "§c✦ §f" + name + " §c✦";
+    }
+
     public static String header(String module) {
         return "§8----- §6✦ " + module + " ✦ §8-----";
     }
@@ -76,7 +80,7 @@ public final class MoodStyle {
             List<String> lore
     ) {
 
-        ItemStack item = new ItemStack(material);
+        ItemStack item = new ItemStack(normalizeMaterial(material, name));
         ItemMeta meta = item.getItemMeta();
 
         if (meta == null) {
@@ -117,30 +121,23 @@ public final class MoodStyle {
     }
 
     public static ItemStack glass() {
-        return item(
-                Material.BLACK_STAINED_GLASS_PANE,
-                " ",
-                List.of()
-        );
+        return item(Material.BLACK_STAINED_GLASS_PANE, " ", List.of());
     }
 
     public static ItemStack backItem(String target) {
         return item(
-                Material.ARROW,
-                button("Retour"),
+                Material.BARRIER,
+                dangerButton("Retour"),
                 List.of(
                         detail("Retour au menu"),
                         detail(target + "."),
                         "",
-                        detail("Navigation")
+                        info("Revenir")
                 )
         );
     }
 
-    public static void fill(
-            Inventory inv,
-            int... slots
-    ) {
+    public static void fill(Inventory inv, int... slots) {
 
         ItemStack glass = glass();
 
@@ -149,10 +146,7 @@ public final class MoodStyle {
         }
     }
 
-    public static boolean titleEquals(
-            String current,
-            String expected
-    ) {
+    public static boolean titleEquals(String current, String expected) {
 
         String a = strip(current);
         String b = strip(expected);
@@ -181,11 +175,7 @@ public final class MoodStyle {
                 .trim();
     }
 
-    public static ItemStack tag(
-            ItemStack item,
-            String key,
-            String value
-    ) {
+    public static ItemStack tag(ItemStack item, String key, String value) {
 
         if (item == null || value == null) {
             return item;
@@ -207,10 +197,7 @@ public final class MoodStyle {
         return item;
     }
 
-    public static String tag(
-            ItemStack item,
-            String key
-    ) {
+    public static String tag(ItemStack item, String key) {
 
         if (item == null || Main.get() == null || !item.hasItemMeta()) {
             return null;
@@ -240,11 +227,7 @@ public final class MoodStyle {
         p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
     }
 
-    public static void send(
-            Player p,
-            String module,
-            String... lines
-    ) {
+    public static void send(Player p, String module, String... lines) {
 
         p.sendMessage("");
         p.sendMessage(header(module));
@@ -256,19 +239,9 @@ public final class MoodStyle {
         p.sendMessage(footer());
     }
 
-    public static void deny(
-            Player p,
-            String message,
-            String detail
-    ) {
-
+    public static void deny(Player p, String message, String detail) {
         denySound(p);
-        send(
-                p,
-                MODULE,
-                error(message),
-                detail(detail)
-        );
+        send(p, MODULE, error(message), detail(detail));
     }
 
     private static List<String> normalizeLore(List<String> lore) {
@@ -296,12 +269,10 @@ public final class MoodStyle {
                 || trimmed.startsWith("§8•")
                 || trimmed.startsWith("§8-----")
                 || trimmed.startsWith("§8----------------")) {
-
             return trimmed;
         }
 
-        if (trimmed.startsWith("§eClique")
-                || trimmed.startsWith("§eOuvrir")) {
+        if (trimmed.startsWith("§eClique") || trimmed.startsWith("§eOuvrir")) {
             return "§e➜ §f" + cleanPrefix(trimmed);
         }
 
@@ -313,12 +284,30 @@ public final class MoodStyle {
             return "§c✖ §f" + cleanPrefix(trimmed);
         }
 
-        if (trimmed.startsWith("§7")
-                || trimmed.startsWith("§8")) {
+        if (trimmed.startsWith("§7") || trimmed.startsWith("§8")) {
             return "§8• §7" + cleanPrefix(trimmed);
         }
 
         return "§e➜ §f" + cleanPrefix(trimmed);
+    }
+
+    private static Material normalizeMaterial(Material material, String name) {
+        if (isReturnButton(name)) {
+            return Material.BARRIER;
+        }
+        return material == null ? Material.BARRIER : material;
+    }
+
+    private static boolean isReturnButton(String name) {
+        if (name == null) {
+            return false;
+        }
+
+        String clean = name.replaceAll("§.", "").replace("✦", "").trim().toLowerCase();
+        return clean.equals("retour")
+                || clean.equals("fermer")
+                || clean.equals("annuler")
+                || clean.equals("revenir");
     }
 
     private static String cleanPrefix(String text) {
