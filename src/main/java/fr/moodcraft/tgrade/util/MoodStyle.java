@@ -54,6 +54,22 @@ public final class MoodStyle {
         return "§8-----------------------------";
     }
 
+    public static String info(String text) {
+        return "§e➜ §f" + cleanPrefix(text);
+    }
+
+    public static String success(String text) {
+        return "§a✔ §f" + cleanPrefix(text);
+    }
+
+    public static String error(String text) {
+        return "§c✖ §f" + cleanPrefix(text);
+    }
+
+    public static String detail(String text) {
+        return "§8• §7" + cleanPrefix(text);
+    }
+
     public static ItemStack item(
             Material material,
             String name,
@@ -113,10 +129,10 @@ public final class MoodStyle {
                 Material.ARROW,
                 button("Retour"),
                 List.of(
-                        "§7Retour au menu",
-                        "§7" + target + ".",
+                        detail("Retour au menu"),
+                        detail(target + "."),
                         "",
-                        "§8• §7Navigation"
+                        detail("Navigation")
                 )
         );
     }
@@ -235,7 +251,7 @@ public final class MoodStyle {
         p.sendMessage("");
 
         for (String line : lines) {
-            p.sendMessage(line);
+            p.sendMessage(normalizeChatLine(line));
         }
 
         p.sendMessage("");
@@ -252,9 +268,60 @@ public final class MoodStyle {
         send(
                 p,
                 MODULE,
-                "§c✘ §f" + message,
+                error(message),
                 "",
-                "§7" + detail
+                detail(detail)
         );
+    }
+
+    private static String normalizeChatLine(String line) {
+
+        if (line == null || line.isBlank()) {
+            return "";
+        }
+
+        String trimmed = line.trim();
+
+        if (trimmed.startsWith("§e➜")
+                || trimmed.startsWith("§a✔")
+                || trimmed.startsWith("§c✖")
+                || trimmed.startsWith("§c✘")
+                || trimmed.startsWith("§8•")
+                || trimmed.startsWith("§8-----")
+                || trimmed.startsWith("§8----------------")) {
+
+            return trimmed.replace("§c✘", "§c✖");
+        }
+
+        if (trimmed.startsWith("§a")) {
+            return "§a✔ §f" + cleanPrefix(trimmed);
+        }
+
+        if (trimmed.startsWith("§c")) {
+            return "§c✖ §f" + cleanPrefix(trimmed);
+        }
+
+        if (trimmed.startsWith("§7")
+                || trimmed.startsWith("§8")) {
+            return "§8• §7" + cleanPrefix(trimmed);
+        }
+
+        return "§e➜ §f" + cleanPrefix(trimmed);
+    }
+
+    private static String cleanPrefix(String text) {
+
+        if (text == null) {
+            return "";
+        }
+
+        return text
+                .replaceFirst("^§[0-9a-fk-or]", "")
+                .replaceFirst("^➜\\s*", "")
+                .replaceFirst("^✔\\s*", "")
+                .replaceFirst("^✘\\s*", "")
+                .replaceFirst("^✖\\s*", "")
+                .replaceFirst("^•\\s*", "")
+                .trim();
     }
 }
