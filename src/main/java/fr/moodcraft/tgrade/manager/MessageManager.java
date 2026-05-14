@@ -14,22 +14,14 @@ import java.util.Locale;
 
 public class MessageManager {
 
-    //
-    // 🎨 STYLE
-    //
-
     public static final String LINE =
-            "§8━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+            "§8-----------------------------";
 
     public static final String BIG_LINE =
-            "§0§m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+            "§8-----------------------------";
 
     public static final String PREFIX =
             "§6✦ §eMoodCraft §8• ";
-
-    //
-    // 🖼 GUI TITLES
-    //
 
     public static final String GUI_MAIN =
             "§8✦ Commission Urbaine";
@@ -49,23 +41,15 @@ public class MessageManager {
     public static final String GUI_REVIEW =
             "§8✦ Inspection Nationale";
 
-    //
-    // 📩 SIMPLE
-    //
-
     public static void send(
             Player p,
             String message
     ) {
 
         p.sendMessage(
-                PREFIX + "§7" + message
+                "§e➜ §7" + message
         );
     }
-
-    //
-    // ✅ SUCCESS
-    //
 
     public static void success(
             Player p,
@@ -73,21 +57,10 @@ public class MessageManager {
     ) {
 
         p.sendMessage("");
-
         p.sendMessage(LINE);
-
-        p.sendMessage(
-                "§a✦ " + message
-        );
-
+        p.sendMessage("§a✔ §f" + message);
         p.sendMessage(LINE);
-
-        p.sendMessage("");
     }
-
-    //
-    // ❌ ERROR
-    //
 
     public static void error(
             Player p,
@@ -95,21 +68,10 @@ public class MessageManager {
     ) {
 
         p.sendMessage("");
-
         p.sendMessage(LINE);
-
-        p.sendMessage(
-                "§c✦ " + message
-        );
-
+        p.sendMessage("§c✖ §f" + message);
         p.sendMessage(LINE);
-
-        p.sendMessage("");
     }
-
-    //
-    // ⚠ WARNING
-    //
 
     public static void warning(
             Player p,
@@ -117,21 +79,10 @@ public class MessageManager {
     ) {
 
         p.sendMessage("");
-
         p.sendMessage(LINE);
-
-        p.sendMessage(
-                "§e✦ " + message
-        );
-
+        p.sendMessage("§e➜ §7" + message);
         p.sendMessage(LINE);
-
-        p.sendMessage("");
     }
-
-    //
-    // 📢 INFO
-    //
 
     public static void info(
             Player p,
@@ -140,32 +91,14 @@ public class MessageManager {
     ) {
 
         p.sendMessage("");
-
-        p.sendMessage(LINE);
-
-        p.sendMessage(
-                "§6✦ " + title
-        );
-
-        p.sendMessage("");
+        p.sendMessage("§8----- §6✦ " + title + " §6✦ §8-----");
 
         for (String line : lines) {
-
-            p.sendMessage(
-                    "§7" + line
-            );
+            p.sendMessage("§e➜ §7" + line);
         }
 
-        p.sendMessage("");
-
         p.sendMessage(LINE);
-
-        p.sendMessage("");
     }
-
-    //
-    // 🌍 BROADCAST
-    //
 
     public static void broadcast(
             String title,
@@ -173,32 +106,14 @@ public class MessageManager {
     ) {
 
         Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(LINE);
-
-        Bukkit.broadcastMessage(
-                "§6✦ " + title
-        );
-
-        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage("§8----- §6✦ " + title + " §6✦ §8-----");
 
         for (String line : lines) {
-
-            Bukkit.broadcastMessage(
-                    "§7" + line
-            );
+            Bukkit.broadcastMessage("§e➜ §7" + line);
         }
 
-        Bukkit.broadcastMessage("");
-
         Bukkit.broadcastMessage(LINE);
-
-        Bukkit.broadcastMessage("");
     }
-
-    //
-    // 🏛 NATIONAL
-    //
 
     public static void national(
             String title,
@@ -206,38 +121,15 @@ public class MessageManager {
     ) {
 
         Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(BIG_LINE);
-
-        Bukkit.broadcastMessage(
-                "§6✦ Commission Urbaine Nationale"
-        );
-
-        Bukkit.broadcastMessage("");
-
-        Bukkit.broadcastMessage(
-                "§e" + title
-        );
-
-        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage("§8----- §6✦ Commission Urbaine Nationale ✦ §8-----");
+        Bukkit.broadcastMessage("§e➜ §e" + title);
 
         for (String line : lines) {
-
-            Bukkit.broadcastMessage(
-                    "§7" + line
-            );
+            Bukkit.broadcastMessage("§e➜ §7" + line);
         }
 
-        Bukkit.broadcastMessage("");
-
         Bukkit.broadcastMessage(BIG_LINE);
-
-        Bukkit.broadcastMessage("");
     }
-
-    //
-    // 💰 MONEY
-    //
 
     public static String money(
             int amount
@@ -253,10 +145,6 @@ public class MessageManager {
                 + "$";
     }
 
-    //
-    // ⭐ SCORE
-    //
-
     public static String score(
             int value,
             int max
@@ -268,40 +156,28 @@ public class MessageManager {
                 + max;
     }
 
-    //
-    // 🏆 PRESTIGE
-    //
-
     public static String prestige(
             int score
     ) {
 
         if (score >= 45) {
-
             return "§6Métropole légendaire";
         }
 
         if (score >= 38) {
-
             return "§eCapitale prospère";
         }
 
         if (score >= 30) {
-
             return "§aVille développée";
         }
 
         if (score >= 25) {
-
             return "§bVille émergente";
         }
 
         return "§cVille fragile";
     }
-
-    //
-    // 📜 LORE
-    //
 
     public static List<String> lore(
             String... lines
@@ -311,18 +187,11 @@ public class MessageManager {
                 new ArrayList<>();
 
         for (String line : lines) {
-
-            lore.add(
-                    "§7" + line
-            );
+            lore.add("§7" + line);
         }
 
         return lore;
     }
-
-    //
-    // 📜 DIVIDED LORE
-    //
 
     public static List<String> dividedLore(
             String... lines
@@ -331,139 +200,36 @@ public class MessageManager {
         List<String> lore =
                 new ArrayList<>();
 
-        lore.add("§8━━━━━━━━━━━━━━━━");
-
-        lore.add("");
+        lore.add("§8----------------");
 
         for (String line : lines) {
-
-            lore.add(
-                    "§7" + line
-            );
+            lore.add("§e➜ §7" + line);
         }
-
-        lore.add("");
 
         return lore;
     }
 
-    //
-    // 🔊 SUCCESS SOUND
-    //
-
-    public static void successSound(
-            Player p
-    ) {
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.UI_TOAST_CHALLENGE_COMPLETE,
-
-                1f,
-
-                1f
-        );
+    public static void successSound(Player p) {
+        p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
     }
 
-    //
-    // ❌ ERROR SOUND
-    //
-
-    public static void errorSound(
-            Player p
-    ) {
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.ENTITY_VILLAGER_NO,
-
-                1f,
-
-                1f
-        );
+    public static void errorSound(Player p) {
+        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
     }
 
-    //
-    // ⚠ WARNING SOUND
-    //
-
-    public static void warningSound(
-            Player p
-    ) {
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.BLOCK_NOTE_BLOCK_BASS,
-
-                1f,
-
-                0.8f
-        );
+    public static void warningSound(Player p) {
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 0.8f);
     }
 
-    //
-    // 🔘 CLICK SOUND
-    //
-
-    public static void clickSound(
-            Player p
-    ) {
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.UI_BUTTON_CLICK,
-
-                1f,
-
-                1.2f
-        );
+    public static void clickSound(Player p) {
+        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1.2f);
     }
 
-    //
-    // ✨ OPEN SOUND
-    //
-
-    public static void openSound(
-            Player p
-    ) {
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.BLOCK_ENDER_CHEST_OPEN,
-
-                0.8f,
-
-                1f
-        );
+    public static void openSound(Player p) {
+        p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 0.8f, 1f);
     }
 
-    //
-    // 🔒 CLOSE SOUND
-    //
-
-    public static void closeSound(
-            Player p
-    ) {
-
-        p.playSound(
-
-                p.getLocation(),
-
-                Sound.BLOCK_CHEST_CLOSE,
-
-                0.8f,
-
-                1f
-        );
+    public static void closeSound(Player p) {
+        p.playSound(p.getLocation(), Sound.BLOCK_CHEST_CLOSE, 0.8f, 1f);
     }
 }
