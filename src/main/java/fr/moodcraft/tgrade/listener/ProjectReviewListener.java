@@ -21,13 +21,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class ProjectReviewListener
-        implements Listener {
+public class ProjectReviewListener implements Listener {
 
     @EventHandler
-    public void click(
-            InventoryClickEvent e
-    ) {
+    public void click(InventoryClickEvent e) {
 
         if (!MoodStyle.titleEquals(e.getView().getTitle(), ProjectReviewGUI.TITLE)) {
             return;
@@ -44,32 +41,18 @@ public class ProjectReviewListener
         }
 
         if (!(e.getView().getTopInventory().getHolder() instanceof ProjectReviewHolder holder)) {
-
-            deny(
-                    p,
-                    "§cDossier introuvable.",
-                    "§7Le menu ne contient aucun dossier valide."
-            );
-
+            deny(p, "Dossier introuvable.", "Le menu ne contient aucun dossier valide.");
             return;
         }
 
-        TownSubmission submission =
-                refresh(holder.getSubmission());
+        TownSubmission submission = refresh(holder.getSubmission());
 
         if (submission == null) {
-
-            deny(
-                    p,
-                    "§cProjet introuvable.",
-                    "§7Le dossier n'existe plus dans les registres."
-            );
-
+            deny(p, "Projet introuvable.", "Le dossier n'existe plus dans les registres.");
             return;
         }
 
-        int slot =
-                e.getRawSlot();
+        int slot = e.getRawSlot();
 
         if (slot == 20) {
             teleportToProject(p, submission);
@@ -97,30 +80,18 @@ public class ProjectReviewListener
         }
 
         if (slot == 40) {
-
-            p.playSound(
-                    p.getLocation(),
-                    Sound.UI_BUTTON_CLICK,
-                    1f,
-                    1f
-            );
-
+            MoodStyle.click(p);
             PendingProjectsGUI.open(p);
         }
     }
 
-    private static TownSubmission refresh(
-            TownSubmission submission
-    ) {
+    private static TownSubmission refresh(TownSubmission submission) {
 
         if (submission == null) {
             return null;
         }
 
-        TownSubmission stored =
-                SubmissionStorage.get(
-                        submission.getId()
-                );
+        TownSubmission stored = SubmissionStorage.get(submission.getId());
 
         if (stored == null) {
             return submission;
@@ -129,234 +100,119 @@ public class ProjectReviewListener
         return stored;
     }
 
-    private static void teleportToProject(
-            Player p,
-            TownSubmission submission
-    ) {
+    private static void teleportToProject(Player p, TownSubmission submission) {
 
-        World world =
-                Bukkit.getWorld(
-                        submission.getWorld()
-                );
+        World world = Bukkit.getWorld(submission.getWorld());
 
         if (world == null) {
-
-            deny(
-                    p,
-                    "§cMonde introuvable.",
-                    "§7La zone du projet est inaccessible."
-            );
-
+            deny(p, "Monde introuvable.", "La zone du projet est inaccessible.");
             return;
         }
 
-        Location location =
-                new Location(
-                        world,
-                        submission.getX() + 0.5,
-                        submission.getY() + 1.0,
-                        submission.getZ() + 0.5
-                );
+        Location location = new Location(
+                world,
+                submission.getX() + 0.5,
+                submission.getY() + 1.0,
+                submission.getZ() + 0.5
+        );
 
         p.teleport(location);
 
-        p.playSound(
-                p.getLocation(),
-                Sound.ENTITY_ENDERMAN_TELEPORT,
-                1f,
-                1f
-        );
+        p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
 
-        p.sendMessage("");
-        p.sendMessage("§8----- §6✦ Commission Urbaine ✦ §8-----");
-        p.sendMessage("");
-        p.sendMessage("§fInspection du projet ouverte.");
-        p.sendMessage("");
-        p.sendMessage("§7Ville: §b" + submission.getTown());
-        p.sendMessage("§7Projet: §e" + submission.getBuildName());
-        p.sendMessage("");
-        p.sendMessage("§8• §7Téléportation vers la zone déclarée");
-        p.sendMessage("§8-----------------------------");
+        MoodStyle.send(
+                p,
+                MoodStyle.MODULE,
+                MoodStyle.info("Inspection du projet ouverte."),
+                MoodStyle.detail("Ville : §b" + submission.getTown()),
+                MoodStyle.detail("Projet : §e" + submission.getBuildName()),
+                MoodStyle.detail("Téléportation vers la zone déclarée")
+        );
     }
 
-    private static void approve(
-            Player p,
-            TownSubmission submission
-    ) {
+    private static void approve(Player p, TownSubmission submission) {
 
         if (submission.getStatus() == SubmissionStatus.APPROVED) {
-
-            deny(
-                    p,
-                    "§cDossier déjà validé.",
-                    "§7La phase de notation est déjà ouverte."
-            );
-
+            deny(p, "Dossier déjà validé.", "La phase de notation est déjà ouverte.");
             return;
         }
 
         if (submission.getStatus() == SubmissionStatus.FINISHED) {
-
-            deny(
-                    p,
-                    "§cDossier clôturé.",
-                    "§7Les votes sont déjà terminés."
-            );
-
+            deny(p, "Dossier clôturé.", "Les votes sont déjà terminés.");
             return;
         }
 
-        submission.setStatus(
-                SubmissionStatus.APPROVED
-        );
-
+        submission.setStatus(SubmissionStatus.APPROVED);
         SubmissionStorage.save(submission);
 
         p.closeInventory();
-
-        p.playSound(
-                p.getLocation(),
-                Sound.UI_TOAST_CHALLENGE_COMPLETE,
-                1f,
-                1f
-        );
+        p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
 
         broadcast(
-                "§a✔ §fDemande de projet validée.",
+                MoodStyle.success("Demande de projet validée."),
                 submission,
-                "§8• §7Le dossier rejoint la notation publique",
-                "§8• §7Il peut participer au classement hebdo"
+                MoodStyle.detail("Le dossier rejoint la notation publique"),
+                MoodStyle.detail("Il peut participer au classement hebdo")
         );
     }
 
-    private static void openStaffRate(
-            Player p,
-            TownSubmission submission
-    ) {
+    private static void openStaffRate(Player p, TownSubmission submission) {
 
         if (submission.getStatus() != SubmissionStatus.APPROVED) {
-
-            deny(
-                    p,
-                    "§cNotation impossible.",
-                    "§7La demande doit d'abord être validée."
-            );
-
+            deny(p, "Notation impossible.", "La demande doit d'abord être validée.");
             return;
         }
 
-        TownGrade grade =
-                GradeManager.get(
-                        submission.getTown()
-                );
+        TownGrade grade = GradeManager.get(submission.getTown());
 
-        if (grade != null
-                && grade.isLocked()) {
-
-            denyLocked(
-                    p,
-                    submission
-            );
-
+        if (grade != null && grade.isLocked()) {
+            denyLocked(p, submission);
             return;
         }
 
-        p.playSound(
-                p.getLocation(),
-                Sound.BLOCK_BEACON_ACTIVATE,
-                1f,
-                1f
-        );
+        p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 1f);
 
-        p.sendMessage("");
-        p.sendMessage("§8----- §6✦ Commission Urbaine ✦ §8-----");
-        p.sendMessage("");
-        p.sendMessage("§fNotation staff ouverte.");
-        p.sendMessage("");
-        p.sendMessage("§7Ville: §b" + submission.getTown());
-        p.sendMessage("§7Projet: §e" + submission.getBuildName());
-        p.sendMessage("");
-        p.sendMessage("§8• §7Barème national chargé");
-        p.sendMessage("§8-----------------------------");
-
-        RateGUI.open(
+        MoodStyle.send(
                 p,
-                submission.getTown()
+                MoodStyle.MODULE,
+                MoodStyle.info("Notation staff ouverte."),
+                MoodStyle.detail("Ville : §b" + submission.getTown()),
+                MoodStyle.detail("Projet : §e" + submission.getBuildName()),
+                MoodStyle.detail("Barème national chargé")
         );
+
+        RateGUI.open(p, submission.getTown());
     }
 
-    private static void closeVotes(
-            Player p,
-            TownSubmission submission
-    ) {
+    private static void closeVotes(Player p, TownSubmission submission) {
 
         if (submission.getStatus() != SubmissionStatus.APPROVED) {
-
-            deny(
-                    p,
-                    "§cClôture impossible.",
-                    "§7La demande doit d'abord être validée."
-            );
-
+            deny(p, "Clôture impossible.", "La demande doit d'abord être validée.");
             return;
         }
 
-        TownGrade grade =
-                GradeManager.get(
-                        submission.getTown()
-                );
+        TownGrade grade = GradeManager.get(submission.getTown());
 
         if (grade == null) {
-
-            deny(
-                    p,
-                    "§cDossier introuvable.",
-                    "§7La note nationale n'existe plus."
-            );
-
+            deny(p, "Dossier introuvable.", "La note nationale n'existe plus.");
             return;
         }
 
         if (grade.isLocked()) {
-
-            denyLocked(
-                    p,
-                    submission
-            );
-
+            denyLocked(p, submission);
             return;
         }
 
-        double staffScore =
-                NationalScoreCalculator.getStaffScore(
-                        submission.getTown()
-                );
+        double staffScore = NationalScoreCalculator.getStaffScore(submission.getTown());
 
         if (staffScore <= 0) {
-
-            deny(
-                    p,
-                    "§cClôture impossible.",
-                    "§7Aucune note staff enregistrée."
-            );
-
+            deny(p, "Clôture impossible.", "Aucune note staff enregistrée.");
             return;
         }
 
-        double finalScore =
-                NationalScoreCalculator.getFinalScore(
-                        submission.getTown()
-                );
-
-        double mayorScore =
-                NationalScoreCalculator.getMayorScore(
-                        submission.getTown()
-                );
-
-        double citizenScore =
-                NationalScoreCalculator.getCitizenScore(
-                        submission.getTown()
-                );
+        double finalScore = NationalScoreCalculator.getFinalScore(submission.getTown());
+        double mayorScore = NationalScoreCalculator.getMayorScore(submission.getTown());
+        double citizenScore = NationalScoreCalculator.getCitizenScore(submission.getTown());
 
         grade.setFinished(true);
         grade.setLocked(true);
@@ -364,115 +220,68 @@ public class ProjectReviewListener
 
         GradeManager.save(grade);
 
-        submission.setStatus(
-                SubmissionStatus.FINISHED
-        );
-
+        submission.setStatus(SubmissionStatus.FINISHED);
         SubmissionStorage.save(submission);
 
         p.closeInventory();
-
-        p.playSound(
-                p.getLocation(),
-                Sound.UI_TOAST_CHALLENGE_COMPLETE,
-                1f,
-                1f
-        );
+        p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
 
         broadcast(
-                "§6✦ §fClôture des votes validée.",
+                MoodStyle.success("Clôture des votes validée."),
                 submission,
-                "§8• §7Note finale: §e" + oneDecimal(finalScore) + "/50",
-                "§8• §7Staff §e" + oneDecimal(staffScore)
+                MoodStyle.detail("Note finale : §e" + oneDecimal(finalScore) + "/50"),
+                MoodStyle.detail("Staff §e" + oneDecimal(staffScore)
                         + " §8| §7Maires §e" + oneDecimal(mayorScore)
-                        + " §8| §7Citoyens §e" + oneDecimal(citizenScore)
+                        + " §8| §7Citoyens §e" + oneDecimal(citizenScore))
         );
     }
 
-    private static void reject(
-            Player p,
-            TownSubmission submission
-    ) {
+    private static void reject(Player p, TownSubmission submission) {
 
         if (submission.getStatus() == SubmissionStatus.FINISHED) {
-
-            deny(
-                    p,
-                    "§cDossier clôturé.",
-                    "§7Les votes sont déjà terminés."
-            );
-
+            deny(p, "Dossier clôturé.", "Les votes sont déjà terminés.");
             return;
         }
 
-        submission.setStatus(
-                SubmissionStatus.REJECTED
-        );
-
+        submission.setStatus(SubmissionStatus.REJECTED);
         SubmissionStorage.save(submission);
 
         p.closeInventory();
-
-        p.playSound(
-                p.getLocation(),
-                Sound.BLOCK_ANVIL_BREAK,
-                1f,
-                0.8f
-        );
+        p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1f, 0.8f);
 
         broadcast(
-                "§c✘ §fDemande de projet refusée.",
+                MoodStyle.error("Demande de projet refusée."),
                 submission,
-                "§8• §7Le dossier ne rejoint pas la notation publique",
-                "§8• §7La ville pourra déposer un nouveau dossier"
+                MoodStyle.detail("Le dossier ne rejoint pas la notation publique"),
+                MoodStyle.detail("La ville pourra déposer un nouveau dossier")
         );
     }
 
-    private static void denyLocked(
-            Player p,
-            TownSubmission submission
-    ) {
+    private static void denyLocked(Player p, TownSubmission submission) {
 
-        p.playSound(
-                p.getLocation(),
-                Sound.ENTITY_VILLAGER_NO,
-                1f,
-                1f
+        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+
+        MoodStyle.send(
+                p,
+                MoodStyle.MODULE,
+                MoodStyle.error("Votes déjà clôturés."),
+                MoodStyle.detail("Ville : §b" + submission.getTown()),
+                MoodStyle.detail("Projet : §e" + submission.getBuildName()),
+                MoodStyle.detail("Ce dossier ne reçoit plus de notes")
         );
-
-        p.sendMessage("");
-        p.sendMessage("§8----- §6✦ Commission Urbaine ✦ §8-----");
-        p.sendMessage("");
-        p.sendMessage("§cVotes déjà clôturés.");
-        p.sendMessage("");
-        p.sendMessage("§7Ville: §b" + submission.getTown());
-        p.sendMessage("§7Projet: §e" + submission.getBuildName());
-        p.sendMessage("");
-        p.sendMessage("§8• §7Ce dossier ne reçoit plus de notes");
-        p.sendMessage("§8-----------------------------");
     }
 
-    private static void deny(
-            Player p,
-            String message,
-            String detail
-    ) {
+    private static void deny(Player p, String message, String detail) {
 
-        p.playSound(
-                p.getLocation(),
-                Sound.ENTITY_VILLAGER_NO,
-                1f,
-                1f
+        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+
+        MoodStyle.send(
+                p,
+                MoodStyle.MODULE,
+                MoodStyle.error(message),
+                MoodStyle.detail(detail),
+                MoodStyle.detail("Service officiel de §aMood§6Craft")
         );
-
-        p.sendMessage("");
-        p.sendMessage("§8----- §6✦ Commission Urbaine ✦ §8-----");
-        p.sendMessage("");
-        p.sendMessage(message);
-        p.sendMessage(detail);
-        p.sendMessage("");
-        p.sendMessage("§8• §7Service officiel de §aMood§6Craft");
-        p.sendMessage("§8-----------------------------");
     }
 
     private static void broadcast(
@@ -483,25 +292,16 @@ public class ProjectReviewListener
     ) {
 
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§8----- §6✦ Commission Urbaine ✦ §8-----");
-        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage(MoodStyle.header(MoodStyle.MODULE));
         Bukkit.broadcastMessage(message);
-        Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§7Ville: §b" + submission.getTown());
-        Bukkit.broadcastMessage("§7Projet: §e" + submission.getBuildName());
-        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage(MoodStyle.detail("Ville : §b" + submission.getTown()));
+        Bukkit.broadcastMessage(MoodStyle.detail("Projet : §e" + submission.getBuildName()));
         Bukkit.broadcastMessage(line1);
         Bukkit.broadcastMessage(line2);
-        Bukkit.broadcastMessage("§8-----------------------------");
+        Bukkit.broadcastMessage(MoodStyle.footer());
     }
 
-    private static String oneDecimal(
-            double value
-    ) {
-
-        return String.format(
-                "%.1f",
-                value
-        );
+    private static String oneDecimal(double value) {
+        return String.format("%.1f", value);
     }
 }
