@@ -8,6 +8,7 @@ import fr.moodcraft.tgrade.model.SubmissionStatus;
 import fr.moodcraft.tgrade.model.TownSubmission;
 
 import fr.moodcraft.tgrade.storage.SubmissionStorage;
+import fr.moodcraft.tgrade.util.MoodStyle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -68,11 +69,12 @@ public class ProjectDepositChatListener
 
             ProjectDepositSessionManager.remove(p);
 
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§cDépôt annulé.");
-            p.sendMessage("§7Aucun dossier n'a été transmis.");
-            p.sendMessage("");
+            MoodStyle.send(
+                    p,
+                    MoodStyle.MODULE,
+                    MoodStyle.error("Dépôt annulé."),
+                    MoodStyle.detail("Aucun dossier n'a été transmis")
+            );
 
             return;
         }
@@ -81,22 +83,25 @@ public class ProjectDepositChatListener
 
             if (message.length() < 3) {
 
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cNom trop court.");
-                p.sendMessage("§7Minimum : §e3 caractères§7.");
-                p.sendMessage("");
+                MoodStyle.send(
+                        p,
+                        MoodStyle.MODULE,
+                        MoodStyle.error("Nom trop court."),
+                        MoodStyle.detail("Minimum : §e3 caractères"),
+                        MoodStyle.detail("Exemple : §eGare Centrale")
+                );
 
                 return;
             }
 
             if (message.length() > MAX_NAME_LENGTH) {
 
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cNom trop long.");
-                p.sendMessage("§7Maximum : §e" + MAX_NAME_LENGTH + " caractères§7.");
-                p.sendMessage("");
+                MoodStyle.send(
+                        p,
+                        MoodStyle.MODULE,
+                        MoodStyle.error("Nom trop long."),
+                        MoodStyle.detail("Maximum : §e" + MAX_NAME_LENGTH + " caractères")
+                );
 
                 return;
             }
@@ -104,13 +109,15 @@ public class ProjectDepositChatListener
             session.setProjectName(message);
             session.setStep(Step.DESCRIPTION);
 
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§fProjet : §e" + message);
-            p.sendMessage("§7Écrivez maintenant la §edescription §7dans le chat.");
-            p.sendMessage("§7Maximum : §e" + MAX_DESCRIPTION_LENGTH + " caractères§7.");
-            p.sendMessage("§8Tapez §cannuler §8pour arrêter.");
-            p.sendMessage("");
+            MoodStyle.send(
+                    p,
+                    MoodStyle.MODULE,
+                    MoodStyle.info("Nom enregistré."),
+                    MoodStyle.detail("Projet : §e" + message),
+                    MoodStyle.detail("Écrivez maintenant la description"),
+                    MoodStyle.detail("Maximum : §e" + MAX_DESCRIPTION_LENGTH + " caractères"),
+                    MoodStyle.detail("Tapez §cannuler §7pour quitter")
+            );
 
             return;
         }
@@ -119,23 +126,26 @@ public class ProjectDepositChatListener
 
             if (message.length() < 10) {
 
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cDescription trop courte.");
-                p.sendMessage("§7Minimum : §e10 caractères§7.");
-                p.sendMessage("");
+                MoodStyle.send(
+                        p,
+                        MoodStyle.MODULE,
+                        MoodStyle.error("Description trop courte."),
+                        MoodStyle.detail("Minimum : §e10 caractères"),
+                        MoodStyle.detail("Explique le style, le lieu ou l'objectif")
+                );
 
                 return;
             }
 
             if (message.length() > MAX_DESCRIPTION_LENGTH) {
 
-                p.sendMessage("");
-                p.sendMessage("§8----- §6Commission Urbaine §8-----");
-                p.sendMessage("§cDescription trop longue.");
-                p.sendMessage("§7Maximum : §e" + MAX_DESCRIPTION_LENGTH + " caractères§7.");
-                p.sendMessage("§7Actuel : §c" + message.length() + " caractères§7.");
-                p.sendMessage("");
+                MoodStyle.send(
+                        p,
+                        MoodStyle.MODULE,
+                        MoodStyle.error("Description trop longue."),
+                        MoodStyle.detail("Maximum : §e" + MAX_DESCRIPTION_LENGTH + " caractères"),
+                        MoodStyle.detail("Actuel : §c" + message.length() + " caractères")
+                );
 
                 return;
             }
@@ -167,23 +177,24 @@ public class ProjectDepositChatListener
             SubmissionStorage.save(sub);
             ProjectDepositSessionManager.remove(p);
 
-            p.sendMessage("");
-            p.sendMessage("§8----- §6Commission Urbaine §8-----");
-            p.sendMessage("§a✔ Projet déposé.");
-            p.sendMessage("§7Ville : §b" + sub.getTown());
-            p.sendMessage("§7Projet : §f" + sub.getBuildName());
-            p.sendMessage("§7ID : §f" + sub.getId());
-            p.sendMessage("§7Statut : §eInspection staff requise.");
-            p.sendMessage("");
+            MoodStyle.send(
+                    p,
+                    MoodStyle.MODULE,
+                    MoodStyle.success("Projet envoyé à la Commission Urbaine."),
+                    MoodStyle.detail("Ville : §b" + sub.getTown()),
+                    MoodStyle.detail("Projet : §e" + sub.getBuildName()),
+                    MoodStyle.detail("État : §eInspection staff"),
+                    MoodStyle.detail("Si le dossier est validé, les joueurs pourront voter")
+            );
 
             Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("§8----- §6Commission Urbaine §8-----");
-            Bukkit.broadcastMessage("§fNouveau projet déposé par §b" + p.getName());
-            Bukkit.broadcastMessage("§7Ville : §e" + sub.getTown());
-            Bukkit.broadcastMessage("§7Projet : §f" + sub.getBuildName());
-            Bukkit.broadcastMessage("§7Description : §f" + sub.getDescription());
-            Bukkit.broadcastMessage("§a✔ Dossier transmis à l'administration nationale.");
-            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage(MoodStyle.header(MoodStyle.MODULE));
+            Bukkit.broadcastMessage(MoodStyle.info("Nouveau projet déposé."));
+            Bukkit.broadcastMessage(MoodStyle.detail("Ville : §b" + sub.getTown()));
+            Bukkit.broadcastMessage(MoodStyle.detail("Projet : §e" + sub.getBuildName()));
+            Bukkit.broadcastMessage(MoodStyle.detail("En attente de validation staff"));
+            Bukkit.broadcastMessage(MoodStyle.detail("Les votes ouvriront après validation"));
+            Bukkit.broadcastMessage(MoodStyle.footer());
         }
     }
 }
