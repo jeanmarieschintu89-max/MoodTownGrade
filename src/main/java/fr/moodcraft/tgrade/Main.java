@@ -1,5 +1,6 @@
 package fr.moodcraft.tgrade;
 
+import fr.moodcraft.tgrade.command.UrbanismeAdminCommand;
 import fr.moodcraft.tgrade.command.UrbanismeCommand;
 import fr.moodcraft.tgrade.command.VProjetsResetCommand;
 
@@ -35,7 +36,6 @@ public class Main extends JavaPlugin {
     private static Main instance;
 
     public static Main get() {
-
         return instance;
     }
 
@@ -46,9 +46,7 @@ public class Main extends JavaPlugin {
 
         saveDefaultConfig();
 
-        if (Bukkit.getPluginManager()
-                .getPlugin("Towny") == null) {
-
+        if (Bukkit.getPluginManager().getPlugin("Towny") == null) {
             getLogger().severe("");
             getLogger().severe("----- MoodTownGrade -----");
             getLogger().severe("Towny introuvable.");
@@ -56,9 +54,7 @@ public class Main extends JavaPlugin {
             getLogger().severe("-------------------------");
             getLogger().severe("");
 
-            Bukkit.getPluginManager()
-                    .disablePlugin(this);
-
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
@@ -68,32 +64,12 @@ public class Main extends JavaPlugin {
 
         GradeManager.loadAll();
 
-        UrbanismeCommand urbanismeCommand =
-                new UrbanismeCommand();
+        UrbanismeCommand urbanismeCommand = new UrbanismeCommand();
 
-        if (getCommand("urbanisme") != null) {
-
-            getCommand("urbanisme")
-                    .setExecutor(
-                            urbanismeCommand
-                    );
-        }
-
-        if (getCommand("topville") != null) {
-
-            getCommand("topville")
-                    .setExecutor(
-                            urbanismeCommand
-                    );
-        }
-
-        if (getCommand("vprojetsreset") != null) {
-
-            getCommand("vprojetsreset")
-                    .setExecutor(
-                            new VProjetsResetCommand()
-                    );
-        }
+        registerCommand("urbanisme", urbanismeCommand);
+        registerCommand("topville", urbanismeCommand);
+        registerCommand("vprojetsreset", new VProjetsResetCommand());
+        registerCommand("urbanismeadmin", new UrbanismeAdminCommand());
 
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new RateGUIListener(), this);
@@ -108,22 +84,11 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CitizenTownListListener(), this);
         getServer().getPluginManager().registerEvents(new MayorVoteListener(), this);
         getServer().getPluginManager().registerEvents(new MayorTownListListener(), this);
+        getServer().getPluginManager().registerEvents(new ProjectDepositChatListener(), this);
 
-        getServer().getPluginManager().registerEvents(
-                new ProjectDepositChatListener(),
-                this
-        );
+        long week = 20L * 60L * 60L * 24L * 7L;
 
-        long week =
-                20L * 60L * 60L * 24L * 7L;
-
-        Bukkit.getScheduler()
-                .runTaskTimer(
-                        this,
-                        new WeeklyResetTask(),
-                        week,
-                        week
-                );
+        Bukkit.getScheduler().runTaskTimer(this, new WeeklyResetTask(), week, week);
 
         getLogger().info("");
         getLogger().info("----- MoodTownGrade -----");
@@ -133,6 +98,7 @@ public class Main extends JavaPlugin {
         getLogger().info("Conseil des maires actif.");
         getLogger().info("Classement national actif.");
         getLogger().info("Commande vprojetsreset active.");
+        getLogger().info("Commande urbanismeadmin active.");
         getLogger().info("Système de dépôt immersif actif.");
         getLogger().info("Grades chargés: " + GradeManager.getAll().size());
         getLogger().info("Towny détecté.");
@@ -144,11 +110,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        GradeManager.getAll()
-                .forEach(
-                        GradeManager::save
-                );
-
+        GradeManager.getAll().forEach(GradeManager::save);
         GradeManager.clearCache();
 
         getLogger().info("");
@@ -157,5 +119,14 @@ public class Main extends JavaPlugin {
         getLogger().info("Sauvegarde terminée.");
         getLogger().info("-------------------------");
         getLogger().info("");
+    }
+
+    private void registerCommand(
+            String name,
+            org.bukkit.command.CommandExecutor executor
+    ) {
+        if (getCommand(name) != null) {
+            getCommand(name).setExecutor(executor);
+        }
     }
 }
