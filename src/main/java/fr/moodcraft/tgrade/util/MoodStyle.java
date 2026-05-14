@@ -39,7 +39,7 @@ public final class MoodStyle {
     public static final String TAG_SUBMISSION_ID = "mood_submission_id";
 
     public static String title(String name) {
-        return "§6✦ §8" + name + " §6✦";
+        return "§6✦ §8§l" + name + " §6✦";
     }
 
     public static String button(String name) {
@@ -55,7 +55,7 @@ public final class MoodStyle {
     }
 
     public static String footer() {
-        return "§8-----------------------------";
+        return "§8----------- §6✦ §8-----------";
     }
 
     public static String info(String text) {
@@ -268,7 +268,7 @@ public final class MoodStyle {
                 || trimmed.startsWith("§c✖")
                 || trimmed.startsWith("§8•")
                 || trimmed.startsWith("§8-----")
-                || trimmed.startsWith("§8----------------")) {
+                || trimmed.startsWith("§8-----------")) {
             return trimmed;
         }
 
