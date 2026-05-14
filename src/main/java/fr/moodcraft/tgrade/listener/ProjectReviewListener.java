@@ -149,10 +149,10 @@ public class ProjectReviewListener implements Listener {
         p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
 
         broadcast(
-                MoodStyle.success("Demande de projet validée."),
+                MoodStyle.success("Projet validé par la Commission."),
                 submission,
-                MoodStyle.detail("Le dossier rejoint la notation publique"),
-                MoodStyle.detail("Il peut participer au classement hebdo")
+                MoodStyle.info("Vote ouvert : utilisez §e/urbanisme§f puis §eVoter§f."),
+                MoodStyle.detail("Votre vote aide le classement hebdomadaire")
         );
     }
 
